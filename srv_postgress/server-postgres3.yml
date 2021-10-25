@@ -1,0 +1,19 @@
+version: "3.6"
+
+# ok
+# https://www.elitizon.com/2021/08-01-postgres-up-and-running-with-docker-compose/
+
+# /usr/bin/docker-compose -f /home/demos/Git/docktest/server5/server-postgres3.yml up -d
+# /usr/bin/docker-compose -f /home/demos/Git/docktest/server5/server-postgres3.yml -p server5 stop db
+
+services:
+  db:
+    image: "postgres"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=admin2021
+      - POSTGRES_DB=todoapp

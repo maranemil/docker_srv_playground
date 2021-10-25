@@ -1,0 +1,2086 @@
+Difference between echo -e "<string>" and echo $"<string>"
+https://askubuntu.com/questions/537984/difference-between-echo-e-string-and-echo-string
+https://www.tecmint.com/echo-command-in-linux/
+https://unix.stackexchange.com/questions/189787/difference-between-echo-and-echo-e
+
+echo -e "Hello\nWorld"
+echo $"Hello\nWorld"
+
+# between the two, the \c extensions are incompatible.
+
+echo Options
+ Options	 Description
+ -n	 do not print the trailing newline.
+ -e	 enable interpretation of backslash escapes.
+ \b	 backspace
+ \\	 backslash
+ \n	 new line
+ \r	 carriage return
+ \t	 horizontal tab
+ \v	 vertical tab
+
+
+#########################################################
+ Configure Xdebug running in a Docker container
+#########################################################
+
+ https://www.jetbrains.com/help/idea/configuring-xdebug.html#configuring-xdebug-vagrant
+ https://www.jetbrains.com/help/idea/profiling-with-xdebug.html#analyze-xdebug-profiling-data
+ https://www.jetbrains.com/help/idea/run-with-profiler.html#stop-profiling
+ https://xdebug.org/docs/profiler
+ https://xdebug.org/docs/all_settings
+ https://2.xdebug.org/docs/all_settings
+ https://www.jetbrains.com/help/phpstorm/remote-debugging-via-ssh-tunnel.html#prepare-the-debugging-engine
+
+Xdebug Dockerfile
+
+Xdebug 2
+
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+    && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_host = host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+
+
+Xdebug 3
+
+
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+    && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.client_host = host.docker.internal" >>
+/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+
+
+#########################################################
+Xdebug features in Docker
+#########################################################
+
+ https://docs.docker.com/desktop/windows/networking/
+ https://docs.docker.com/desktop/mac/networking/
+ https://stackoverflow.com/questions/48546124/what-is-linux-equivalent-of-host-docker-internal
+ https://docs.docker.com/compose/compose-file/compose-file-v3/#extra_hosts
+ https://github.com/docker/for-linux/issues/264#issuecomment-784985736
+ https://medium.com/@TimvanBaarsen/how-to-connect-to-the-docker-host-from-inside-a-docker-container-112b4c71bc66
+ https://github.com/docker/for-linux/issues/264
+ https://www.cloudsavvyit.com/14114/how-to-connect-to-localhost-within-a-docker-container/
+ https://dev.to/natterstefan/docker-tip-how-to-get-host-s-ip-address-inside-a-docker-container-5anh
+ https://docs.docker.com/compose/compose-file/#extra_hosts
+ https://megamorf.gitlab.io/2020/09/19/access-native-services-on-docker-host-via-host-docker-internal/
+ https://stackoverflow.com/questions/65619042/xdebug-3-config-file
+
+
+docker run --rm -it alpine sh
+apk add curl
+curl http://host.docker.internal:8000
+exit
+
+
+docker run -d --add-host host.docker.internal:host-gateway my-container:latest
+
+...
+# docker-compose.yml
+version: '3.7'
+
+services:
+
+  fpm:
+    build:
+      context: .
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+...
+
+# docker-compose.yml
+version: '3.7'
+
+services:
+  app:
+    image: your-app:latest
+    ports:
+      - "8080:8080"
+    environment:
+      DB_UPSTREAM: http://${DOCKER_GATEWAY_HOST:-host.docker.internal}:3000
+
+# export DOCKER_GATEWAY_HOST=172.17.0.1
+
+/*
+xdebug.mode = debug
+xdebug.client_host = 127.0.0.1
+xdebug.client_port = 9003
+xdebug.start_with_request=yes
+xdebug.log="/var/log/nginx/xdebug.log"
+xdebug.idekey = PHPSTORM
+xdebug.discover_client_host=false
+*/
+
+
+
+https://docs.docker.com/compose/gettingstarted/
+https://docs.docker.com/engine/reference/commandline/compose/
+https://docs.docker.com/compose/reference/run/
+https://docs.docker.com/compose/reference/up/
+https://docs.docker.com/compose/reference/envvars/
+https://docs.docker.com/engine/reference/commandline/compose_up/
+https://docs.docker.com/compose/reference/restart/
+https://docs.docker.com/compose/reference/help/
+https://docs.docker.com/compose/reference/
+
+
+
+
+https://osdn.net/projects/linuxlite/storage/5.6/linux-lite-5.6-64bit.iso/
+https://mxlinux.org/download-links/
+
+
+
+
+https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html
+https://linuxtut.com/de/58d0f98a15656ed65136/
+https://mariadb.com/kb/en/server-system-variables/
+https://www.soudegesu.com/en/docker/docker-compose/mysql/
+https://github.com/boot2docker/boot2docker/issues/1300
+https://helperbyte.com/questions/450556/how-to-solve-the-problem-with-mysql-57-timestamp-with-implicit-default-value-is-deprecated-please-use-explicit_defaults_for_timestamp-server-option
+
+
+https://hub.docker.com/_/mysql
+
+version: '2'
+
+services:
+  db:
+    image: mariadb:10.2.14
+    environment:
+#     MYSQL_RANDOM_ROOT_PASSWORD: yes
+#     MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: app
+      MYSQL_USER: app
+      MYSQL_PASSWORD: test
+    user: "1000:1000"
+    command: --innodb-flush-method=O_DSYNC --innodb-use-native-aio=0 --log_bin=ON
+    volumes:
+      - ./db:/var/lib/mysql
+
+
+version: '3.3'
+services:
+  db:
+    command: --explicit-defaults-for-timestamp=ON --sql-mode=""
+    build: ./docker/mysql
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: sample_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3314:3306"
+    volumes:
+      - ./docker/mysql/initdb.d:/docker-entrypoint-initdb.d
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d
+      - ./log/mysql:/var/log/mysql
+
+
+
+
+Scripts in /docker-entrypoint-initdb.d/ are not executed at container start
+https://github.com/bitnami/bitnami-docker-mariadb/issues/156
+https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-user-on-first-run
+https://stackoverflow.com/questions/38504257/mysql-scripts-in-docker-entrypoint-initdb-are-not-executed/52715521
+https://stackoverflow.com/questions/26598738/how-to-create-user-database-in-script-for-docker-postgres
+
+
+Dockerfile
+
+FROM bitnami/mariadb:latest
+ENV ALLOW_EMPTY_PASSWORD=yes
+ENV MARIADB_USER=admin
+ENV MARIADB_PASSWORD=test
+ENV MARIADB_DATABASE=test_db
+COPY *.sql /docker-entrypoint-initdb.d/
+
+volumes:
+	- ./extern/db/docker-entrypoint-initdb.d:ro
+	- ./docker/mysql/scripts:/docker-entrypoint-initdb.d
+  	- ./mysql_data:/var/lib/mysql
+
+mariadb:
+    image: mariadb:10.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ********
+    volumes:
+    - ./storage/db:/var/lib/mysql:rw
+    - ./app/db/SQL:/docker-entrypoint-initdb.d/:rw
+    ports:
+    - 3306:3306/tcp
+
+
+https://docs.docker.com/storage/volumes/
+https://docs.docker.com/storage/bind-mounts/
+https://docs.docker.com/storage/troubleshooting_volume_errors/
+
+- readonly - ro
+- readwrite - rw
+
+ sudo docker run \
+  --volume=/:/rootfs:ro \
+  --volume=/var/run:/var/run:rw \
+  --volume=/sys:/sys:ro \
+  --volume=/var/lib/docker/:/var/lib/docker:ro \
+  --publish=8080:8080 \
+  --detach=true \
+  --name=cadvisor \
+  google/cadvisor:latest
+
+
+
+
+
+https://x-team.com/blog/docker-compose-php-environment-from-scratch/
+
+
+Dockerfile
+
+FROM mariadb:latest
+CMD ["mysqld"]
+EXPOSE 3306
+
+# nginx
+FROM nginx:alpine
+CMD ["nginx"]
+EXPOSE 80 443
+
+
+# php-fpm
+FROM php:fpm-alpine
+CMD ["php-fpm"]
+EXPOSE 9000
+
+
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+      - ../src:/var/www
+    ports:
+      - "80:80"
+      - "443:443"
+
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+      - ../src:/var/www
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/sites/:/etc/nginx/sites-available
+      - ./nginx/conf.d/:/etc/nginx/conf.d
+    depends_on:
+      - php-fpm
+
+
+Dockerfile
+FROM php:fpm-alpine
+RUN docker-php-ext-install pdo_mysql
+CMD ["php-fpm"]
+EXPOSE 9000
+
+
+database:
+    build:
+      context: ./database
+    environment:
+      - MYSQL_DATABASE=mydb
+      - MYSQL_USER=myuser
+      - MYSQL_PASSWORD=secret
+      - MYSQL_ROOT_PASSWORD=docker
+    volumes:
+      - ./database/data.sql:/docker-entrypoint-initdb.d/data.sql
+
+
+<?php
+
+$value = "World";
+
+$db = new PDO('mysql:host=database;dbname=mydb;charset=utf8mb4', 'myuser', 'secret');
+
+$databaseTest = ($db->query('SELECT * FROM dockerSample'))->fetchAll(PDO::FETCH_OBJ);
+
+?>
+
+<html>
+    <body>
+        <h1>Hello, <?= $value ?>!</h1>
+
+        <?php foreach($databaseTest as $row): ?>
+            <p>Hello, <?= $row->name ?></p>
+        <?php endforeach; ?>
+    </body>
+</html>
+
+
+https://semaphoreci.com/community/tutorials/dockerizing-a-php-application
+
+# Dockerfile
+
+FROM php:7-apache
+
+COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY start-apache /usr/local/bin
+RUN a2enmod rewrite
+
+# Copy application source
+COPY src /var/www/
+RUN chown -R www-data:www-data /var/www
+
+CMD ["start-apache"]
+
+RUN apt-get update && \
+    apt-get install nodejs
+
+
+https://www.pascallandau.com/blog/structuring-the-docker-setup-for-php-projects/
+
+
+
+
+https://stackoverflow.com/questions/62416578/build-image-with-php-and-use-it-in-production-with-docker-compose
+
+
+version: '3'
+services:
+  php:
+    # build:
+    #   context: .
+    #   target: test_php
+    image: mynickname/php
+  nginx:
+    # build:
+    #   context: .
+    #   target: test_nginx
+    image: mynickname/nginx
+    depends_on:
+      - php
+    volumes:
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+
+
+https://www.cloudbees.com/blog/using-docker-compose-for-php-development
+
+
+version: '2'
+services:
+  nginx:
+    image: nginx:1.11.10-alpine
+    ports:
+      - 3000:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+  web:
+    build: .
+    ports:
+      - 9000:9000
+    volumes:
+      - .:/app
+      - /app/vendor
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://todoapp@postgres/todos
+  postgres:
+    image: postgres:9.6.2-alpine
+    environment:
+      POSTGRES_USER: todoapp
+      POSTGRES_DB: todos
+
+
+https://blog.mayflower.de/10408-docker-php-applikationen.html
+
+docker-compose.yml
+
+version: '3'
+services:
+  nginx:
+    image: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - "./nginx.conf:/etc/nginx/nginx.conf"
+      - ".:/var/www/html"
+  php:
+    build:
+      context: wallabagContainer/
+    volumes:
+      - ".:/var/www/html"
+
+/*
+├── docker-compose.yml
+├── nginx.conf
+└── wallabagContainer
+    ├── Dockerfile
+    └── wallabag.sqlite
+*/
+
+
+Dockerfile
+
+# Image, auf dem wir aufbauen
+FROM php:5.6-fpm
+
+# Alter Composer für alte Applikation
+COPY --from=composer:1 /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_MEMORY_LIMIT=-1
+ENV SYMFONY_ENV=prod
+
+# Zeitzone (wichtig für unsere Applikation)
+ARG timezone='Europe/Paris'
+RUN echo "date.timezone="$timezone > /usr/local/etc/php/conf.d/date_timezone.ini
+
+# Externe Abhängigkeiten werden mit apt (Debian-Paketmanager) installiert
+RUN apt-get update && apt-get install -y \
+        libmcrypt-dev libicu-dev libpq-dev libxml2-dev git zip libgd3 libpng-dev \
+    && docker-php-ext-install \
+        iconv mcrypt mbstring intl pdo gd
+
+# Skript für nachträgliche Befehle im Container
+COPY run.sh /run.sh
+RUN chmod +x /run.sh
+
+# Befehle zum Bauen der Applikation
+RUN mkdir /app && cd /app && composer create-project wallabag/wallabag wallabag "2.0.0-beta.1" --no-dev
+
+CMD ["/run.sh"]
+
+https://softchris.github.io/pages/docker-five.html#environment-variables
+
+// docker-compose.yaml
+
+version: '3'
+services:
+ product-service:
+   build:
+     context: ./product-service
+   ports:
+     - "8000:3000"
+   environment:
+     - test=testvalue
+ inventory-service:
+   build:
+     context: ./inventory-service
+   ports:
+   - "8001:3000"
+
+------------
+
+// docker-compose.yaml
+
+version: '3'
+services:
+  product-service:
+    build:
+      context: ./product-service
+    ports:
+      - "8000:3000"
+    environment:
+      - test=testvalue
+    volumes:
+      - type: bind
+      source: ./product-service
+      target: /app
+  inventory-service:
+    build:
+      context: ./inventory-service
+    ports:
+      - "8001:3000"
+    volumes:
+      - my-volume:/var/lib/data
+
+volumes:
+  my-volume:
+
+
+
+
+
+# Adding a database
+// docker-compose.yaml
+
+product-db:
+  image: mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=complexpassword
+  ports:
+    - 8002:3306
+
+
+
+/product-service
+  wait-for-it.sh
+  Dockerfile
+  app.js
+  package.json
+
+
+# final
+# docker-compose.yaml
+
+version: '3.3'
+  services:
+    product-service:
+      depends_on:
+        - "db"
+      build:
+        context: ./product-service
+      command: ["/wait-for-it.sh", "db:8002", "--", "npm", "start"]
+    ports:
+      - "8000:3000"
+    environment:
+      - test=testvalue
+      - DATABASE_PASSWORD=complexpassword
+      - DATABASE_HOST=db
+    volumes:
+      - type: bind
+      source: ./product-service
+      target: /app
+    networks:
+      - products
+   db:
+     build: ./product-db
+       restart: always
+     environment:
+       - "MYSQL_ROOT_PASSWORD=complexpassword"
+       - "MYSQL_DATABASE=Products"
+     ports:
+       - "8002:3306"
+     networks:
+       - products
+   inventory-service:
+     build:
+       context: ./inventory-service
+     ports:
+       - "8001:3000"
+     volumes:
+       - my-volume:/var/lib/data
+
+volumes:
+ my-volume:
+
+networks:
+ products:
+
+
+// app.js
+
+const express = require('express')
+const mysql = require('mysql');
+const app = express()
+const port = process.env.PORT || 3000;
+const test = process.env.test;
+
+let attempts = 0;
+
+const seconds = 1000;
+
+function connect() {
+  attempts++;
+
+  console.log('password', process.env.DATABASE_PASSWORD);
+  console.log('host', process.env.DATABASE_HOST);
+  console.log(`attempting to connect to DB time: ${attempts}`);
+
+ const con = mysql.createConnection({
+   host: process.env.DATABASE_HOST,
+   user: "root",
+   password: process.env.DATABASE_PASSWORD,
+   database: 'Products'
+ });
+
+  con.connect(function (err) {
+   if (err) {
+     console.log("Error", err);
+     setTimeout(connect, 30 * seconds);
+   } else {
+     console.log('CONNECTED!');
+   }
+
+  });
+
+  conn.on('error', function(err) {
+    if(err) {
+      console.log('shit happened :)');
+      connect()
+    }
+  });
+
+}
+connect();
+
+app.get('/', (req, res) => res.send(`Hello product service, changed ${test}`))
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+
+---
+
+// docker-compose.yaml
+
+db:
+  build: ./product-db
+  restart: always
+  environment:
+    - "MYSQL_ROOT_PASSWORD=complexpassword"
+    - "MYSQL_DATABASE=Products"
+  ports:
+    - "8002:3306"
+  networks:
+    - products
+
+
+-------------
+
+https://hub.docker.com/_/php
+https://github.com/adhocore/docker-phpfpm
+https://github.com/docker-library/docs/blob/master/php/README.md
+
+
+# ./docker-compose.yml
+version: '3'
+
+services:
+  phpfpm:
+    image: adhocore/phpfpm:7.4
+    container_name: phpfpm
+    volumes:
+      - ./path/to/your/app:/var/www/html
+      # Here you can also volume php ini settings
+      # - /path/to/zz-overrides:/usr/local/etc/php/conf.d/zz-overrides.ini
+    ports:
+      - 9000:9000
+    environment:
+      # ...
+
+
+--
+Dockerfile
+
+FROM adhocore/phpfpm:8.0
+# Disable extensions you won't need. You can add as much as you want separated by space.
+RUN docker-php-ext-disable xdebug pcov ldap
+
+Dockerfile
+
+FROM php:7.4-cli
+COPY . /usr/src/myapp
+WORKDIR /usr/src/myapp
+CMD [ "php", "./your-script.php" ]
+
+
+Apache with a Dockerfile
+FROM php:7.2-apache
+COPY src/ /var/www/html/
+
+-------
+
+
+How to build a clean Docker Symfony 5.2 PHP8 PostegreSQL Nginx project
+
+https://dev.to/nicolasbonnici/how-to-build-a-clean-docker-symfony-5-2-php8-postegresql-nginx-project-3l5g
+
+
+PosgreSQL ./docker/docker-compose.yml
+
+version: '3.8'
+
+services:
+  db:
+    container_name: db
+    image: postgres:12
+    restart: always
+    environment:
+        POSTGRES_PASSWORD: password
+        POSTGRES_DB: testdb
+    ports:
+        - 15432:5432
+
+
+
+
+
+
+PHP8  ./docker/php-fpm/Dockerfile
+--------------------------------------------------------------
+
+
+FROM php:8.0-fpm
+
+COPY wait-for-it.sh /usr/bin/wait-for-it
+
+RUN chmod +x /usr/bin/wait-for-it
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libssl-dev zlib1g-dev curl git unzip netcat libxml2-dev libpq-dev libzip-dev && \
+    pecl install apcu && \
+    docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
+    docker-php-ext-install -j$(nproc) zip opcache intl pdo_pgsql pgsql && \
+    docker-php-ext-enable apcu pdo_pgsql sodium && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www
+
+CMD composer i -o ; wait-for-it db:5432 -- bin/console doctrine:migrations:migrate ;  php-fpm
+
+EXPOSE 9000
+
+
+
+
+
+
+./docker/docker-compose.yml
+--------------------------------------------------------------
+  php-fpm:
+    container_name: php-fpm
+    build:
+      context: ./php-fpm
+    depends_on:
+      - db
+    environment:
+      - APP_ENV=${APP_ENV}
+      - APP_SECRET=${APP_SECRET}
+      - DATABASE_URL=${DATABASE_URL}
+    volumes:
+      - ./../src/:/var/www
+
+
+ Nginx ./docker/nginx/Dockerfile
+
+FROM nginx:alpine
+
+WORKDIR /var/www
+
+CMD ["nginx"]
+
+EXPOSE 80 443
+
+./docker/nginx/Dockerfile
+user  nginx;
+worker_processes  4;
+daemon off;
+
+error_log  /var/log/nginx/error.log warn;
+pid        /var/run/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    access_log  /var/log/nginx/access.log;
+    #access_log /dev/stdout;
+    #error_log /dev/stderr;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    keepalive_timeout  65;
+
+    gzip  on;
+
+    include /etc/nginx/conf.d/*.conf;
+    include /etc/nginx/sites-available/*.conf;
+}
+
+
+./docker/nginx/conf.d/default.conf
+
+upstream php-upstream {
+    server php-fpm:9000;
+}
+
+./docker/nginx/sites/default.conf
+server {
+
+    listen 80 default_server;
+    listen [::]:80 default_server ipv6only=on;
+
+    server_name localhost;
+    root /var/www/public;
+    index index.php index.html index.htm;
+
+    location / {
+         try_files $uri $uri/ /index.php$is_args$args;
+    }
+
+    location ~ \.php$ {
+        try_files $uri /index.php =404;
+        fastcgi_pass php-upstream;
+        fastcgi_index index.php;
+        fastcgi_buffers 16 16k;
+        fastcgi_buffer_size 32k;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        #fixes timeouts
+        fastcgi_read_timeout 600;
+        include fastcgi_params;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/letsencrypt/;
+        log_not_found off;
+    }
+}
+
+
+./docker/docker-compose.yml
+
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+    volumes:
+      - ./../src/:/var/www
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/sites/:/etc/nginx/sites-available
+      - ./nginx/conf.d/:/etc/nginx/conf.d
+      - ./logs:/var/log
+    depends_on:
+      - php-fpm
+    ports:
+      - "80:80"
+      - "443:443"
+
+
+Symfony 5
+composer create-project symfony/skeleton ./src
+docker-compose up --build
+
+
+----------------------------------------------------
+
+AMP Docker setup with PHP 8 and
+MariaDB for Symfony projects
+
+https://www.bornfight.com/blog/blog-lamp-docker-setup-with-php-8-and-mariadb-for-symfony-projects/
+
+.
+├── codebase/
+├── docker/
+│   ├── db/
+│   │   └── mariadb/
+│   │       └── my.cnf
+│   └── server/
+│       ├── apache/
+│       │   └── sites-enabled/
+│       │       └── site.conf
+│       ├── php/
+│       │   └── php.ini
+│       └── Dockerfile
+├── .env
+└── docker-compose.yml
+
+
+.env
+
+APP_NAME=symfony_project_2021
+APP_PORT=8101
+APP_DB_ADMIN_PORT=8102
+DB_PORT=33016
+
+MYSQL_ROOT_PASS=superSecr3t
+MYSQL_USER=app_user
+MYSQL_PASS=t3rceS
+MYSQL_DB=symfony_project_2021
+
+docker-compose.yml
+
+
+version: '3.9'
+
+networks:
+  symfony_project_2021_net:
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: ./docker/server/Dockerfile
+    container_name: '${APP_NAME}-server'
+    ports:
+      - '${APP_PORT}:80'
+    working_dir: /var/www/html
+    environment:
+      - 'DATABASE_URL=mysql://${MYSQL_USER}:${MYSQL_PASS}@db_server:3306/${MYSQL_DB}?serverVersion=10.5'
+    volumes:
+      - ./codebase:/var/www/html
+      - ./docker/server/apache/sites-enabled:/etc/apache2/sites-enabled
+      - ./docker/server/php/php.ini:/usr/local/etc/php/conf.d/extra-php-config.ini
+    depends_on:
+      db_server:
+        condition: service_healthy
+    networks:
+      - symfony_project_2021_net
+
+  db_server:
+    image: mariadb:10.5.9
+    container_name: '${APP_NAME}-db'
+    restart: always
+    ports:
+      - '${DB_PORT}:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASS}'
+      MYSQL_USER: '${MYSQL_USER}'
+      MYSQL_PASSWORD: '${MYSQL_PASS}'
+      MYSQL_DATABASE: '${MYSQL_DB}'
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/db/mariadb/my.cnf:/etc/mysql/conf.d/my.cnf
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD
+      interval: 5s
+      retries: 5
+    networks:
+      - symfony_project_2021_net
+
+  db_admin:
+    image: phpmyadmin/phpmyadmin:5
+    container_name: '${APP_NAME}-db-admin'
+    ports:
+      - '${APP_DB_ADMIN_PORT}:80'
+    environment:
+      PMA_HOST: db_server
+    depends_on:
+      db_server:
+        condition: service_healthy
+    volumes:
+      - db_admin_data:/var/www/html
+    networks:
+      - symfony_project_2021_net
+
+volumes:
+  db_data:
+  db_admin_data:
+
+
+
+
+
+
+/docker/server/Dockerfile:
+
+FROM php:8.0-apache
+
+RUN a2enmod rewrite
+
+RUN apt-get update && apt-get install -y git unzip zip
+
+WORKDIR /var/www/html
+
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions gd pdo_mysql bcmath zip intl opcache
+
+COPY --from=composer:2.0 /usr/bin/composer /usr/local/bin/composer
+
+
+
+
+
+docker/server/apache/sites-enabled/site.conf:
+<VirtualHost *:80>
+  DocumentRoot /var/www/html/public
+  <Directory /var/www/html/public>
+      AllowOverride None
+      Order Allow,Deny
+      Allow from All
+
+      <IfModule mod_rewrite.c>
+          Options -MultiViews
+          RewriteEngine On
+          RewriteCond %{REQUEST_FILENAME} !-f
+          RewriteRule ^(.*)$ index.php [QSA,L]
+      </IfModule>
+  </Directory>
+</VirtualHost>
+
+Configurations
+/docker/db/mariadb/my.cnf
+
+upload_max_filesize = 30M
+post_max_size = 80M
+short_open_tag = Off
+memory_limit =  256M
+
+[mysqld]
+collation-server = utf8mb4_unicode_ci
+character-set-server = utf8mb4
+
+-------------------------------------------------------
+
+http://www.lib4dev.in/info/MDobak/php-common-stack/119297754
+https://bugs.php.net/search.php?cmd=display&search_for=&php_os=&php_os_not=&author_email=&bug_type=&boolean=0&bug_age=0&bug_updated=0&order_by=id&direction=ASC&limit=All&phpver=&assign=&status=Open&reorder_by=ts2
+https://github.com/rhamdeew/docker-php-8-fpm-alpine
+https://github.com/joseluisq/alpine-php-fpm
+
+https://hub.docker.com/_/php
+
+PHP Core Extensions
+
+FROM php:7.4-fpm
+RUN apt-get update && apt-get install -y \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libpng-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd
+
+
+##################################################################
+ PHP 8.0.0 FPM -  8.0.0-fpm-ext-alpine.Dockerfile
+ https://blog.sylo.space/created-php-8-0-0-fmp/
+##################################################################
+
+FROM php:8.0.0-fpm-alpine
+
+######## [PHP Modules] Default ########
+
+#### Core
+#### ctype
+#### curl
+#### date
+#### dom
+#### fileinfo
+#### filter
+#### ftp
+#### hash
+#### iconv
+#### json
+#### libxml
+#### mbstring
+#### mysqlnd
+#### openssl
+#### pcre
+#### PDO
+#### pdo_sqlite
+#### Phar
+#### posix
+#### readline
+#### Reflection
+#### session
+#### SimpleXML
+#### sodium
+#### SPL
+#### sqlite3
+#### standard
+#### tokenizer
+#### xml
+#### xmlreader
+#### xmlwriter
+#### zlib
+
+######## Composer.phar ########
+RUN curl -s https://getcomposer.org/installer | php \
+  # move composer into a bin directory you control:
+  && mv composer.phar /usr/local/bin/composer \
+  # double check composer works
+  && composer about
+
+RUN php -m && echo "============================================="
+
+######## Dependencies ########
+#### bzip2-dev: bz2
+#### enchant2-dev: enchant
+#### gd: libpng-dev
+#### gmp: gmp-dev
+#### imap: imap-dev
+#### intl: icu-dev
+#### ldap: openldap-dev
+#### pdo_dblib: freetds-dev
+#### pdo_pgsql: postgresql-dev
+#### pgsql: postgresql-dev
+#### pspell: aspell-dev
+#### snmp: net-snmp-dev
+#### soap: libxml2-dev
+#### tidy: tidyhtml-dev
+#### xsl: libxslt-dev
+#### zip: libzip-dev
+
+RUN apk add --no-cache --update \
+  bzip2-dev \
+  enchant2-dev \
+  libpng-dev \
+  gmp-dev \
+  imap-dev \
+  icu-dev \
+  openldap-dev \
+  freetds-dev \
+  postgresql-dev \
+  aspell-dev \
+  net-snmp-dev \
+  libxml2-dev \
+  tidyhtml-dev  \
+  libxslt-dev \
+  libzip-dev
+
+RUN docker-php-ext-install \
+  bcmath \
+  bz2 \
+  calendar \
+  dba \
+  enchant \
+  exif \
+  ffi \
+  gd \
+  gettext \
+  gmp \
+  imap \
+  intl \
+  ldap \
+  mysqli \
+  opcache \
+  pcntl \
+  pdo_dblib \
+  pdo_mysql \
+  pdo_pgsql \
+  pgsql \
+  pspell \
+  shmop \
+  snmp \
+  soap \
+  sockets \
+  sysvmsg \
+  sysvsem \
+  sysvshm \
+  tidy \
+  xsl \
+  zend_test \
+  zip
+
+######## PHP MODULES not working yet ########
+#### oci8
+#### odbc
+#### pdo_firebird
+#### pdo_oci
+#### pdo_odbc
+
+RUN rm -rf /tmp/* /var/cache/apk/* \
+  && echo "=============================================" \
+  && php -m
+
+
+
+
+
+
+
+
+https://stackoverflow.com/questions/37527803/how-to-install-extension-for-php-via-docker-php-ext-install
+
+  Dockerfile:
+
+FROM php:5.6-apache
+
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+    php -r "if (hash_file('SHA384', 'composer-setup.php') === '070854512ef404f16bac87071a6db9fd9721da1684cd4589b1196c3faf71b9a2682e2311b36a5079825e155ac7ce150d') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
+    php composer-setup.php && \
+    php -r "unlink('composer-setup.php');"
+
+
+RUN apt-get update && \
+    apt-get install vim git -y
+RUN docker-php-ext-install mysqli mysqlnd pdo pdo_mysql zip
+
+RUN  cd /  && \
+    git clone --depth=1 git://github.com/phalcon/cphalcon.git && \
+    cd cphalcon/build && \
+    ./install
+
+RUN echo "extension=phalcon.so" > /usr/local/etc/php/conf.d/phalcon.ini
+RUN a2enmod rewrite
+
+
+
+
+  Dockerfile:
+
+FROM php:5.6-cli
+RUN apt-get update && apt-get install -y libmemcached-dev zlib1g-dev \
+    && pecl install memcached-2.2.0 \
+    && docker-php-ext-enable memcached
+
+
+
+
+
+docker-php-ext-install.md
+
+https://gist.github.com/giansalex/2776a4206666d940d014792ab4700d80
+https://gist.github.com/hoandang/88bfb1e30805df6d1539640fc1719d12
+
+
+RUN apt update
+RUN apt upgrade -y
+RUN apt install -y apt-utils
+RUN a2enmod rewrite
+RUN apt install -y libmcrypt-dev
+RUN apt install -y libicu-dev
+RUN docker-php-ext-install -j$(nproc) intl
+RUN apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng12-dev
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+RUN docker-php-ext-install -j$(nproc) gd
+RUN apt install -y php-apc
+RUN apt install -y libldb-dev
+RUN apt install -y libldap2-dev
+RUN apt install -y libxml2-dev
+RUN apt install -y libssl-dev
+RUN apt install -y libxslt-dev
+RUN apt install -y libpq-dev
+RUN apt install -y postgresql-client
+RUN apt install -y mysql-client
+RUN apt install -y mariadb-client
+RUN apt install -y libsqlite3-dev
+RUN apt install -y libsqlite3-0
+RUN apt install -y libc-client-dev
+RUN apt install -y libkrb5-dev
+RUN apt install -y curl
+RUN apt install -y libcurl3
+RUN apt install -y libcurl3-dev
+RUN apt install -y firebird-dev
+RUN apt-get install -y libpspell-dev
+RUN apt-get install -y aspell-en
+RUN apt-get install -y aspell-de
+RUN apt install -y libtidy-dev
+RUN apt install -y libsnmp-dev
+RUN apt install -y librecode0
+RUN apt install -y librecode-dev
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+#RUN pecl install apc
+RUN docker-php-ext-install opcache
+RUN yes | pecl install xdebug \
+    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
+RUN docker-php-ext-install soap
+RUN docker-php-ext-install ftp
+RUN docker-php-ext-install xsl
+RUN docker-php-ext-install bcmath
+RUN docker-php-ext-install calendar
+RUN docker-php-ext-install ctype
+RUN docker-php-ext-install dba
+RUN docker-php-ext-install dom
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install session
+RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu
+RUN docker-php-ext-install ldap
+RUN docker-php-ext-install json
+RUN docker-php-ext-install hash
+RUN docker-php-ext-install sockets
+RUN docker-php-ext-install pdo
+RUN docker-php-ext-install mbstring
+RUN docker-php-ext-install tokenizer
+RUN docker-php-ext-install pgsql
+RUN docker-php-ext-install pdo_pgsql
+RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-install pdo_sqlite
+RUN docker-php-ext-install intl
+RUN docker-php-ext-install mcrypt
+RUN docker-php-ext-install mysqli
+RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl
+RUN docker-php-ext-install imap
+RUN docker-php-ext-install gd
+RUN docker-php-ext-install curl
+RUN docker-php-ext-install exif
+RUN docker-php-ext-install fileinfo
+RUN docker-php-ext-install gettext
+#RUN apt install -y libgmp-dev # idk
+#RUN docker-php-ext-install gmp # idk
+RUN docker-php-ext-install iconv
+RUN docker-php-ext-install interbase
+RUN docker-php-ext-install pdo_firebird
+RUN docker-php-ext-install opcache
+#RUN docker-php-ext-install oci8 # idk
+#RUN docker-php-ext-install odbc # idk
+RUN docker-php-ext-install pcntl
+#RUN apt install -y freetds-dev # idk
+#RUN docker-php-ext-install pdo_dblib  # idk
+#RUN docker-php-ext-install pdo_oci # idk
+#RUN docker-php-ext-install pdo_odbc # idk
+RUN docker-php-ext-install phar
+RUN docker-php-ext-install posix
+RUN docker-php-ext-install pspell
+#RUN apt install -y libreadline-dev # idk
+#RUN docker-php-ext-install readline # idk
+RUN docker-php-ext-install recode
+RUN docker-php-ext-install shmop
+RUN docker-php-ext-install simplexml
+RUN docker-php-ext-install snmp
+RUN docker-php-ext-install sysvmsg
+RUN docker-php-ext-install sysvsem
+RUN docker-php-ext-install sysvshm
+RUN docker-php-ext-install tidy
+RUN docker-php-ext-install wddx
+RUN docker-php-ext-install xml
+#RUN apt install -y libxml2-dev # idk
+#RUN docker-php-ext-install xmlreader # idk
+RUN docker-php-ext-install xmlrpc
+RUN docker-php-ext-install xmlwriter
+# idk bz2 enchant
+RUN apt install - y libbz2-dev
+RUN docker-php-ext-install bz2
+RUN docker-php-ext-install timezonedb
+
+RUN docker-php-ext-install mcrypt
+RUN apt install -y libxml2-dev
+
+
+
+
+lyberteam/php-fpm-7.1
+
+https://hub.docker.com/r/lyberteam/php-fpm-7.1/dockerfile
+
+
+
+Dockerfile
+
+# PHP7-FPM
+FROM php:7.1-fpm
+
+ADD lyberteam-message.sh /var/www/lyberteam/lyberteam-message.sh
+RUN chmod +x /var/www/lyberteam/lyberteam-message.sh
+RUN /var/www/lyberteam/lyberteam-message.sh
+
+
+MAINTAINER Lyberteam <lyberteamltd@gmail.com>
+LABEL Vendor="Lyberteam"
+LABEL Description="This is a new php-fpm image(version for now 7.1)"
+LABEL Version="1.4.9"
+
+ENV LYBERTEAM_TIME_ZONE Europe/Kiev
+ENV LYBERTEAM_VOLUME /var/www/lyberteam
+
+ENV HEALTHCHECK_INTERVAL_DURATION 40s
+ENV HEALTHCHECK_TIMEOUT_DURATION 40s
+ENV HEALTHCHECK_RETRIES 5
+
+ENV LYBERTEAM_STOPSIGNAL SIGINT
+
+RUN apt-get update && apt-get install -y \
+        libmcrypt-dev \
+        libicu-dev \
+        libpq-dev \
+        libbz2-dev \
+        php-pear \
+        git \
+        unzip \
+        mc \
+        vim \
+        wget \
+        libevent-dev \
+        librabbitmq-dev \
+    && docker-php-ext-install iconv \
+    && docker-php-ext-install mcrypt \
+    && docker-php-ext-install zip \
+    && docker-php-ext-install bz2 \
+    && docker-php-ext-install mbstring \
+    && docker-php-ext-install intl \
+    && docker-php-ext-install pgsql pdo pdo_pgsql \
+    && docker-php-ext-install pdo_mysql \
+    && docker-php-ext-install bcmath \
+    && docker-php-ext-install opcache \
+    && docker-php-ext-enable opcache
+
+# Install GD
+RUN apt-get install -y \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libpng12-dev \
+     && docker-php-ext-configure gd \
+          --enable-gd-native-ttf \
+          --with-freetype-dir=/usr/include/freetype2 \
+          --with-png-dir=/usr/include \
+          --with-jpeg-dir=/usr/include \
+    && docker-php-ext-install gd \
+    && docker-php-ext-enable gd
+
+
+## Install Xdebug
+RUN echo "Install xdebug by pecl"
+RUN yes | pecl install xdebug-2.5.0 \
+    && docker-php-ext-enable xdebug \
+#    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_enable=on\n" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_autostart=on\n" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+#    && echo "xdebug.default_enable=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_handler=dbgp\n" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_port=9001\n" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_connect_back=1\n" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
+## You can comment the next line if you don't want change xdebug configuration and build your own image
+#COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
+### Install Redis
+#RUN echo "Install redis by pecl"
+#RUN pecl install redis-3.1.0 \
+#    && docker-php-ext-enable redis
+
+# Change TimeZone
+RUN echo "Set LYBERTEAM_TIME_ZONE, by default - Europe/Kiev"
+RUN echo $LYBERTEAM_TIME_ZONE > /etc/timezone
+
+# Install composer globally
+RUN echo "Install composer globally"
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+
+RUN printf "\n" | pecl install apcu-beta && echo extension=apcu.so > /usr/local/etc/php/conf.d/10-apcu.ini
+RUN printf "\n" | pecl install apcu_bc-beta && echo extension=apc.so > /usr/local/etc/php/conf.d/apc.ini
+
+RUN printf "\n" | pecl install channel://pecl.php.net/amqp-1.7.0alpha2 && echo extension=amqp.so > /usr/local/etc/php/conf.d/amqp.ini
+
+RUN pecl install channel://pecl.php.net/ev-1.0.0RC3 && echo extension=ev.so > /usr/local/etc/php/conf.d/ev.ini
+
+RUN ln -sf /dev/stdout /var/log/access.log && ln -sf /dev/stderr /var/log/error.log
+
+## Now we copy will copy very simple php.ini file and change the timezone by ENV variable
+COPY php.ini /usr/local/etc/php/
+##RUN sed -i "/date.timezone/s/Europe\/Kiev/$LYBERTEAM_TIME_ZONE/g" /usr/local/etc/php/php.ini
+
+RUN /bin/bash -c 'rm -f /usr/local/etc/php-fpm.d/www.conf.default'
+ADD symfony.pool.conf /usr/local/etc/php-fpm.d/
+RUN rm -f /usr/local/etc/php-fpm.d/www.conf
+
+
+RUN usermod -u 1000 www-data
+
+CMD ["php-fpm"]
+
+## Let's set the working dir
+WORKDIR $LYBERTEAM_VOLUME
+
+## Now will customize the healthcheck command for icinga or zabbix service monitor
+ADD test-check.sh /usr/local/bin/test-check.sh
+RUN chmod +x /usr/local/bin/test-check.sh
+
+HEALTHCHECK CMD /usr/local/bin/test-check.sh
+
+
+#HEALTHCHECK CMD curl --fail http://localhost:9000 || exit 1
+#            ## --interval=$HEALTHCHECK_INTERVAL_DURATION \
+#           ## --timeout=$HEALTHCHECK_TIMEOUT_DURATION \
+#            ## --retries=$HEALTHCHECK_RETRIES \
+
+## Set the signal to stop the container
+STOPSIGNAL $LYBERTEAM_STOPSIGNAL
+
+EXPOSE 9000
+
+## Reconfigure timezones
+RUN  dpkg-reconfigure -f noninteractive tzdata
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+##ADD run.sh run.sh
+##RUN chmod +x run.sh
+##ENTRYPOINT ["./run.sh"]
+
+#
+######################################## Other extensions ########################################
+## Install opcache
+#RUN docker-php-ext-install opcache
+#
+## Install APCu
+#RUN pecl install apcu
+#RUN echo "extension=apcu.so" > /usr/local/etc/php/conf.d/apcu.ini
+#
+## Install bcmath
+#RUN docker-php-ext-install bcmath
+#
+## Install bz2
+#RUN apt-get install -y libbz2-dev
+#RUN docker-php-ext-install bz2
+#
+## Install calendar
+#RUN docker-php-ext-install calendar
+#
+## Install dba
+#RUN docker-php-ext-install dba
+#
+## Install GD
+#RUN apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng12-dev
+#RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+#RUN docker-php-ext-install gd
+#
+## Install mbstring
+#RUN docker-php-ext-install mbstring
+#
+## Install mcrypt
+#RUN apt-get install -y libmcrypt-dev
+#RUN docker-php-ext-install mcrypt
+#
+## Install PDO
+## RUN apt-get install -y freetds-dev php5-sybase
+## RUN docker-php-ext-install pdo
+#RUN docker-php-ext-install pdo_mysql
+## RUN docker-php-ext-install pdo_oci
+## RUN docker-php-ext-install pdo_odbc
+#RUN apt-get install -y libpq-dev
+#RUN docker-php-ext-install pdo_pgsql
+## RUN apt-get install -y libsqlite3-dev
+## RUN docker-php-ext-install pdo_sqlite
+#
+## Install phpredis 2.2.7
+#RUN apt-get install -y unzip
+#WORKDIR /root
+#COPY phpredis-2.2.7.zip phpredis-2.2.7.zip
+#RUN unzip phpredis-2.2.7.zip
+#WORKDIR phpredis-2.2.7
+#RUN phpize
+#RUN ./configure
+#RUN make && make install
+##RUN cp /root/phpredis-2.2.7/modules/redis.so /usr/local/lib/php/extensions/no-debug-non-zts-20151012/
+#RUN echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
+#
+## Install XSL
+#RUN apt-get install -y libxslt-dev
+#RUN docker-php-ext-install xsl
+#
+## Install xmlrpc
+#RUN docker-php-ext-install xmlrpc
+#
+#
+## Install memcached
+#COPY memcached-2.2.0.zip memcached-2.2.0.zip
+#RUN apt-get install -y libmemcached-dev zlib1g-dev libncurses5-dev
+#RUN mkdir /usr/src/php/ext/memcached-2.2.0
+#RUN unzip memcached-2.2.0.zip -d /usr/src/php/ext/memcached-2.2.0
+#RUN rm memcached-2.2.0.zip
+#RUN docker-php-ext-install memcached-2.2.0
+#
+## Install mongo
+##RUN pecl install mongodb-beta
+##RUN echo "extension=mongo.so" > /usr/local/etc/php/conf.d/mongo.ini
+#
+## Install ftp
+#RUN docker-php-ext-install ftp
+#
+## Install intl
+#RUN apt-get install -y libicu-dev
+#RUN pecl install intl
+#RUN docker-php-ext-install intl
+######################################## Other extensions ########################################
+
+
+
+
+
+
+
+
+
+
+
+php7.1-fpm dockerfile
+
+https://walkingsun.github.io/WindBlog/2020/06/01/dockerfile-php71/
+
+
+FROM php:7.1-fpm
+
+#
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+#
+RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak \
+    && echo 'deb http://mirrors.ustc.edu.cn/debian stable main contrib non-free' > /etc/apt/sources.list \
+    && echo 'deb-src http://mirrors.ustc.edu.cn/debian stable main contrib non-free' >> /etc/apt/sources.list \
+    && echo 'deb http://mirrors.ustc.edu.cn/debian stable-proposed-updates main contrib non-free' >> /etc/apt/sources.list \
+    && echo 'deb-src http://mirrors.ustc.edu.cn/debian stable-proposed-updates main contrib non-free' >> /etc/apt/sources.list \
+    && echo 'deb http://ftp.cn.debian.org/debian/ jessie main non-free' >> /etc/apt/sources.list
+
+#
+RUN apt-get update && apt-get install -y \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libpng-dev \
+        libbz2-dev \
+        libcurl4-gnutls-dev \
+        && docker-php-ext-install mysqli pdo pdo_mysql opcache json calendar bcmath  zip bz2 mbstring curl \
+        && rm -r /var/lib/apt/lists/*
+
+# GD
+RUN apt-get install -y --no-install-recommends libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
+    && rm -r /var/lib/apt/lists/* \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) gd
+
+# Redis、Xdebug
+RUN pecl install redis-5.1.1 \
+    && pecl install xdebug-2.8.1 \
+    && docker-php-ext-enable redis xdebug
+
+# amqp
+RUN apt-get update && apt-get install -y librabbitmq-dev libssl-dev \
+    && pecl install amqp \
+    && docker-php-ext-enable amqp
+
+
+## imagick
+#RUN export CFLAGS="$PHP_CFLAGS" CPPFLAGS="$PHP_CPPFLAGS" LDFLAGS="$PHP_LDFLAGS" \
+#    && apt-get install -y --no-install-recommends libmagickwand-dev \
+#    && rm -r /var/lib/apt/lists/* \
+#    && pecl install imagick-3.4.4 \
+#    && docker-php-ext-enable imagick
+
+# mcrypt
+#RUN apt-get install -y --no-install-recommends libmcrypt-dev \
+#    && rm -r /var/lib/apt/lists/* \
+#    && pecl install mcrypt-1.0.2 \
+#    && docker-php-ext-enable mcrypt
+
+# Memcached
+#RUN apt-get install -y --no-install-recommends libmemcached-dev zlib1g-dev \
+#    && rm -r /var/lib/apt/lists/* \
+#    && pecl install memcached-3.1.3 \
+#    && docker-php-ext-enable memcached
+
+# opcache
+RUN docker-php-ext-configure opcache --enable-opcache && docker-php-ext-install opcache
+
+#   Phalcon
+#RUN cd /home \
+#    && tar -zxvf cphalcon.tar.gz \
+#    && mv cphalcon-* phalcon \
+#    && cd phalcon/build \
+#    && ./install \
+#    && echo "extension=phalcon.so" > /usr/local/etc/php/conf.d/phalcon.ini
+
+#   Composer
+ENV COMPOSER_HOME /root/composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+ENV PATH $COMPOSER_HOME/vendor/bin:$PATH
+
+
+#WORKDIR /data
+##  Write Permission
+#RUN usermod -u 1000 www-data
+
+LABEL Author="walkingsun"
+LABEL Version="2020.06"
+LABEL Description="PHP 7.1"
+
+
+
+
+
+
+
+https://newbedev.com/how-to-install-mcrypt-on-docker
+
+FROM php:7.0-fpm
+RUN apt-get update && apt-get install -y \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libmcrypt-dev \
+        libpng-dev \
+    && docker-php-ext-install -j$(nproc) iconv mcrypt \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) gd
+
+
+
+
+
+https://www.it-swarm.com.de/de/docker/kann-ein-dockerfile-ein-anderes-erweitern/825133813/
+
+
+
+Dockerfile
+
+FROM php:7-fpm AS php_base
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && \
+    apt-get install -y git libicu-dev libmagickwand-dev libmcrypt-dev libcurl3-dev jpegoptim
+RUN pecl install imagick && \
+    docker-php-ext-enable imagick
+
+RUN docker-php-ext-install intl
+RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-install opcache
+RUN docker-php-ext-install mcrypt
+RUN docker-php-ext-install curl
+RUN docker-php-ext-install Zip
+
+FROM php_base AS php_test
+
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+
+
+
+docker-compose.yml
+
+version: '3.4'
+
+services:
+  php:
+    build:
+      context: ./
+      target: php_base
+
+  php_test:
+    build:
+      context: ./
+      target: php_test
+
+
+
+
+
+
+
+ ###################################
+https://easysolutionsit.de/artikel/warum-und-wie-phpfarm-bei-mir-abgel%C3%B6st-wurde.html
+https://easysolutionsit.de/artikel/warum-und-wie-phpfarm-bei-mir-abgel%C3%B6st-wurde.html
+###################################
+
+
+https://github.com/eS-IT/dev_env2018
+
+.
+├── docker-compose.yml
+├── .secret.env
+└── php
+    ├── Dockerfile56
+    ├── Dockerfile70
+    ├── Dockerfile71
+    ├── Dockerfile72
+    ├── Dockerfile73
+    ├── etc
+    │   ├── php-56.ini
+    │   ├── php-70.ini
+    │   ├── php-71.ini
+    │   ├── php-72.ini
+    │   └── php-73.ini
+    └── sites-enabled
+        ├── 8056-default.conf
+        ├── 8070-default.conf
+        ├── 8071-default.conf
+        ├── 8072-default.conf
+        └── 8073-default.conf
+
+
+
+.secret.env
+https://gist.github.com/eS-IT/9130556c7e0f458b845f20d7afc3b337#file-secret-env
+
+#
+# e@sy Solutions IT - Development Environment
+# ===========================================
+#
+# MariaDB-Zugangsdaten:
+# ---------------------
+#
+MYSQL_USER=
+MYSQL_PASSWORD=
+MYSQL_ROOT_PASSWORD=
+
+#
+# FIX: TERM environment variable not set
+# --------------------------------------
+# see https://github.com/dockerfile/mariadb/issues/3
+#
+TERM=dumb
+
+
+
+
+Docker-Compose docker-compose.yml
+https://gist.github.com/eS-IT/ad0dcb838fa67e4b818a136c7777a6e8#file-part_of_docker-compose-yml
+
+php72:
+    container_name: "dev_php72"
+    image: dev_php72:1.0.0
+    build:
+        context: "php/"
+        dockerfile: Dockerfile72
+        args:
+            - APACHE_RUN_USER=1000
+            - APACHE_RUN_GROUP=1000
+    ports: ["8072:8072"]
+    volumes: ["/mnt/easy.Projekte:/mnt/easy.Projekte"]
+    depends_on:
+        - mariadb
+    networks:
+        esit_net:
+            ipv4_address: 172.0.1.172
+
+
+
+
+Dockerfiles
+https://gist.github.com/eS-IT/f7bf2bc3712a8828b49ae5181dbedfac#file-dockerfile72
+
+##
+## PHP-Image festelegen
+##
+FROM php:7.2-apache
+
+##
+## Maintainer setzen
+##
+LABEL maintainer="patrick.froch@easySolutionsIT.de"
+
+##
+## ARGS
+##
+ARG APACHE_RUN_USER=1000
+ARG APACHE_RUN_GROUP=1000
+
+##
+## User und Gruppe mit den richtigen ids erstellen
+RUN groupmod -g $APACHE_RUN_GROUP www-data && usermod -u $APACHE_RUN_USER -g $APACHE_RUN_GROUP www-data
+
+##
+## Zeitzone setzen
+##
+RUN ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
+
+##
+## Abhängigkeiten installieren
+##
+RUN apt-get update && apt-get upgrade -y && apt-get install --no-install-recommends -y libbz2-dev libc-client-dev libfreetype6-dev libgpgme11-dev libicu-dev libjpeg62-turbo-dev libkrb5-dev libmcrypt-dev libpng-dev libxml2-dev
+
+##
+## Core-Erweiterungen installieren
+##
+
+# Install bcmath
+RUN docker-php-ext-install bcmath
+
+# Install bz2 (need libbz2-dev)
+RUN docker-php-ext-install bz2
+
+# Install calendar
+RUN docker-php-ext-install calendar
+
+# Install exif
+RUN docker-php-ext-install exif
+
+# Install (need libfreetype6-dev libjpeg62-turbo-dev libpng-dev)
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && docker-php-ext-install -j$(nproc) gd
+
+# Install gettext
+RUN docker-php-ext-install gettext
+
+# Install imap (need libc-client-dev libkrb5-dev)
+RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl && docker-php-ext-install imap
+
+# Install intl (need libicu-dev)
+RUN docker-php-ext-configure intl && docker-php-ext-install intl
+
+# Install mysqli
+RUN docker-php-ext-install mysqli
+
+# Install pcntl
+RUN docker-php-ext-install pcntl
+
+# Install pod
+RUN docker-php-ext-install pdo
+
+# Install pdo_mysql
+RUN docker-php-ext-install pdo_mysql
+
+# Install soap (need libxml2-dev)
+RUN docker-php-ext-install soap
+
+# Install sockets
+RUN docker-php-ext-install sockets
+
+# Install (need zlib1g-dev)
+RUN docker-php-ext-install zip
+
+##
+## PECL-Erweiterungen installieren
+##
+
+# Install mcrypt (need libmcrypt-dev)
+RUN pecl install mcrypt-1.0.1 && docker-php-ext-enable mcrypt
+
+# Install xdebug
+RUN pecl install xdebug-2.6.1
+
+# Install gnupg (need libgpgme11-dev)
+RUN pecl install gnupg-1.4.0
+
+##
+## php.ini auf Vorlage für Entwicklung umstellen
+##
+RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+
+##
+## php.ini einfügen
+##
+COPY etc/php-72.ini $PHP_INI_DIR/conf.d/
+
+##
+## Apache-Konfiguration einbinden
+##
+COPY sites-enabled/8072-default.conf /etc/apache2/sites-available/000-default.conf
+
+##
+## Enable vhosts
+##
+RUN a2enmod vhost_alias
+
+##
+## Enable mod_rewrite
+##
+RUN a2enmod rewrite
+
+##
+## Apache neu starten
+##
+RUN service apache2 restart
+
+
+
+
+
+
+PHP-INI
+https://gist.github.com/eS-IT/7117f23f0b4818202b041ff63f952b06#file-php-72-ini
+
+
+
+ [PHP]
+
+;;;;;;;;;;;;;;;;;;;
+; Resource Limits ;
+;;;;;;;;;;;;;;;;;;;
+
+; Maximum execution time of each script, in seconds
+; http://php.net/max-execution-time
+; Note: This directive is hardcoded to 0 for the CLI SAPI
+max_execution_time = 60
+
+; Maximum amount of time each script may spend parsing request data. It's a good
+; idea to limit this time on productions servers in order to eliminate unexpectedly
+; long running scripts.
+; Note: This directive is hardcoded to -1 for the CLI SAPI
+; Default Value: -1 (Unlimited)
+; Development Value: 60 (60 seconds)
+; Production Value: 60 (60 seconds)
+; http://php.net/max-input-time
+max_input_time = 60
+
+; How many GET/POST/COOKIE input variables may be accepted
+max_input_vars = 256
+
+; Maximum amount of memory a script may consume (128MB)
+; http://php.net/memory-limit
+memory_limit = 512M
+
+;;;;;;;;;;;;;;;;;
+; Data Handling ;
+;;;;;;;;;;;;;;;;;
+; Maximum size of POST data that PHP will accept.
+; Its value may be 0 to disable the limit. It is ignored if POST data reading
+; is disabled through enable_post_data_reading.
+; http://php.net/post-max-size
+post_max_size = 64M
+
+;;;;;;;;;;;;;;;;
+; File Uploads ;
+;;;;;;;;;;;;;;;;
+; Maximum allowed size for uploaded files.
+; http://php.net/upload-max-filesize
+upload_max_filesize = 64M
+
+; Maximum number of files that can be uploaded via a single request
+max_file_uploads = 20
+
+;;;;;;;;;;;;;;;;;;;
+; Module Settings ;
+;;;;;;;;;;;;;;;;;;;
+
+[Date]
+; Defines the default timezone used by the date functions
+; http://php.net/date.timezone
+date.timezone = Europe/Berlin
+
+;;;;;;;;;;;;;;;;;;;
+; xdebug Settings ;
+;;;;;;;;;;;;;;;;;;;
+
+; xdebug debugging on demand
+xdebug.remote_enable = 1
+xdebug.remote_connect_back = 1
+
+; xdebug profiling on demand
+xdebug.profiler_enable_trigger = 1
+xdebug.profiler_output_dir = "/mnt/easy.Projekte/tmp"
+xdebug.profiler_output_name = "xdebug.profile.%t.%R"
+
+; xdebug tracing on demand
+xdebug.trace_enable_trigger = 1
+xdebug.trace_output_dir = "/mnt/easy.Projekte/tmp"
+xdebug.trace_output_name = "xdebug.trace.%t.%R"
+xdebug.trace_format = 1
+
+; collect more data
+xdebug.show_mem_delta = 1
+xdebug.collect_params = 1  ; 2,4 => mmap() failed: [12] Cannot allocate memory
+xdebug.collect_return = 1
+
+; xdebug path
+zend_extension_debug = "/usr/local/lib/php/extensions/no-debug-non-zts-20170718/xdebug.so"
+zend_extension = "/usr/local/lib/php/extensions/no-debug-non-zts-20170718/xdebug.so"
+
+
+
+
+default.conf
+php/sites-enabled.
+https://gist.github.com/eS-IT/3fffb41cc965621519cb0e6d42cf7e47#file-8072-default-conf
+
+
+UseCanonicalName Off
+
+ServerName devserver.local
+
+ServerAdmin patrick.froch@easysolutionsit.de
+
+Listen 8072
+
+<VirtualHost *:8072>
+    VirtualDocumentRoot /mnt/easy.Projekte/%1/%2/%3/vhosts/%4/htdocs/web
+
+    LogLevel warn
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+    <Directory />
+        Options +FollowSymLinks +ExecCGI
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+
+
+

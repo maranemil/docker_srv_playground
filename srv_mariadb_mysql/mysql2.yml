@@ -1,0 +1,29 @@
+version: '3.3'
+
+# ok
+# https://hub.docker.com/_/mysql
+
+# docker ps
+# docker exec -it fdeb78d53d1e bash
+
+# /usr/bin/docker-compose -f /home/demos/Git/docktest/server8/mysql2.yml -p server8 restart db
+# /usr/bin/docker-compose -f /home/demos/Git/docktest/server8/mysql2.yml -p server8 stop db
+# /usr/bin/docker-compose -f /home/demos/Git/docktest/server8/mysql2.yml -p server8 down --remove-orphans
+
+services:
+  db:
+    command: --explicit-defaults-for-timestamp=ON --sql-mode=""
+    #build: ./docker/mysql
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: sample_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3314:3306"
+    volumes:
+      - ./docker/mysql/initdb.d:/docker-entrypoint-initdb.d
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d
+      - ./log/mysql:/var/log/mysql

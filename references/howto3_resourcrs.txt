@@ -1,0 +1,181 @@
+Docker can't connect to docker daemon
+
+https://stackoverflow.com/questions/21871479/docker-cant-connect-to-docker-daemon
+https://appuals.com/cannot-connect-to-the-docker-daemon-at-unix-var-run-docker-sock/
+https://appuals.com/fix-cannot-connect-docker-daemon/
+https://techoverflow.net/2019/03/16/how-to-fix-error-couldnt-connect-to-docker-daemon-at-httpdocker-localhost-is-it-running/
+
+
+docker info
+docker --version
+
+sudo groupadd docker
+sudo usermod -aG docker $(whoami)
+sudo usermod -a -G docker $USER
+sudo service docker start
+sudo service docker start
+ls -l /var/run/docker.sock
+sudo service docker restart
+
+# sudo docker -d --storage-opt dm.basesize=20G
+
+sudo systemctl unmask docker
+sudo systemctl start docker
+sudo systemctl status docker
+
+
+sudo su
+service docker stop
+cd /var/run/docker/libcontainerd
+rm -rf containerd/*
+rm -f docker-containerd.pid
+service docker start
+
+
+sudo dockerd
+sudo service --status-all
+sudo service docker start
+
+
+https://towardsdatascience.com/15-docker-commands-you-should-know-970ea5203421
+https://docs.linuxserver.io/general/understanding-puid-and-pgid
+https://medium.com/redbubble/running-a-docker-container-as-a-non-root-user-7d2e00f8ee15
+https://docs.docker.com/compose/environment-variables/
+https://vsupalov.com/docker-arg-env-variable-guide/
+https://stackoverflow.com/questions/48015731/running-docker-container-with-user
+https://docs.gitea.io/en-us/install-with-docker/#
+
+docker run --user 1000:1000
+
+environment:
+    - USER_UID=1000
+    - USER_GID=1000
+
+environment:
+      - ${UID}
+      - ${GID}
+
+user: "${UID}:${GID}"
+
+https://docs.solace.com/Configuring-and-Managing/SW-Broker-Specific-Config/Docker-Tasks/Config-Arbitrary-User.htm
+https://stackoverflow.com/questions/44026949/dynamically-pick-the-user-gui-and-uid-whos-running-docker-at-the-host-from-entr#44028098
+https://medium.com/@mccode/understanding-how-uid-and-gid-work-in-docker-containers-c37a01d01cf
+https://stackoverflow.com/questions/44026949/dynamically-pick-the-user-gui-and-uid-whos-running-docker-at-the-host-from-entr
+https://vsupalov.com/docker-shared-permissions/
+https://devops.stackexchange.com/questions/12713/docker-mounts-files-as-uid-1001
+https://dimmaski.com/env-files-docker/
+
+echo $UID
+
+env UID=${UID} GID=${GID} docker-compose run app id
+export UID=$(id -u)
+export GID=$(id -g)
+docker-compose run app id
+
+export UID=$(id -u)
+export GID=$(id -g)
+
+docker-compose run -u 1001:1001 app id
+
+# https://blog.giovannidemizio.eu/2021/05/24/how-to-set-user-and-group-in-docker-compose/
+
+UID=1001
+GID=1001
+
+--------------
+The image for the service you're trying to recreate has been removed.
+  If you continue, volume data could be lost. Consider backing up your data before continuing.
+
+pull access denied for madiadb, repository does not exist
+or may require 'docker login': denied: requested access to the resource is denied
+
+-------------------
+
+https://github.com/Yavin/docker-alpine-php-fpm
+https://github.com/akhomy/alpine-php-fpm
+
+
+# https://hub.docker.com/_/nginx/
+# https://hub.docker.com/_/nginx/
+# https://hub.docker.com/_/nginx
+# https://hub.docker.com/_/alpine/
+
+# https://ghost.rivario.com/docker-php-7-2-fpm-alpine-imagick/
+# https://hub.docker.com/_/php/
+
+# https://awesomeopensource.com/project/TrafeX/docker-wordpress
+# https://awesomeopensource.com/projects/alpine/dockerfile/nginx
+# https://awesomeopensource.com/project/webdevops/Dockerfile
+
+# https://github.com/ppdeassis/docker-node-nginx-alpine
+# https://cornercase.info/setup-nginx-alpine-docker-container-modsecurity-redis/
+# https://github.com/augustash/docker-alpine-nginx
+# https://github.com/matriphe/docker-alpine-nginx
+
+# docker run -d -p 80:80 --name my-apache-php-app -v "$PWD":/var/www/html php:7.2-apache
+
+#  web:
+#    image: nginx
+#    volumes:
+#     - ./templates:/etc/nginx/templates
+#    ports:
+#     - "8080:80"
+#    environment:
+#     - NGINX_HOST=foobar.com
+#     - NGINX_PORT=80
+
+Dockerfile is a spec to build a container image and is used by Docker:
+docker build --tag=${REPO}/${IMAGE}:${TAG} --file=./Dockerfile .
+
+https://docs.docker.com/compose/gettingstarted/
+touch Dockerfile
+
+wp
+https://buildvirtual.net/how-to-use-docker-compose-tutorial-with-examples/
+
+
+
+
+https://adamtheautomator.com/docker-compose-environment-variables/
+
+# Enviornmental Variables file .env.dev
+MYSQL_ROOT_PASSWORD="password_DEV"
+MYSQL_ALLOW_EMPTY_PASSWORD="password1"
+MYSQL_RANDOM_ROOT_PASSWORD="password1"
+
+
+
+# Version of Docker compose file
+version: "2.2"
+
+services:
+# Defining the service
+  mysql:
+# Defining the base image to be used
+    image: mysql:5.7
+    hostname: mysql
+    container_name: mysql
+# Defining the environmental variable
+# Defining the environmental variable using Hardcoded values in variables
+    environment:
+	  # Substitution ###
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+	  MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
+	  MYSQL_RANDOM_ROOT_PASSWORD:  ${MYSQL_RANDOM_ROOT_PASSWORD}
+    env_file:
+         - ./var.env
+
+var.env
+MYSQL_ROOT_PASSWORD="password_NEW"
+MYSQL_ALLOW_EMPTY_PASSWORD="password_NEW"
+MYSQL_RANDOM_ROOT_PASSWORD="password_NEW"
+
+docker-compose --env-file .env.dev up
+
+https://docs.docker.com/engine/reference/commandline/images/
+
+--------
+
+ sudo apt install virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-additions-iso  -y
+
+ sudo apt install nautilus -y

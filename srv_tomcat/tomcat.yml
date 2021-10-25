@@ -1,0 +1,14 @@
+version: '3'
+
+# ok
+# http://localhost:8081/
+
+# /usr/bin/docker-compose -f /home/demos/Git/docktest/server7/tomcat.yml up -d
+# /usr/bin/docker-compose -f /home/demos/Git/docktest/server7/tomcat.yml -p server7 stop app
+
+
+services:
+  app:
+    image: tomcat:9.0.12
+    ports:
+      - "8081:8080"

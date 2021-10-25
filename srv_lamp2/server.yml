@@ -1,0 +1,46 @@
+version: '3.7'
+services:
+
+  # https://www.cakedc.com/rochamarcelo/2020/07/20/a-quick-cakephp-local-environment-with-docker
+  # https://github.com/webdevops/Dockerfile
+  # https://webdevops.io/projects/dockerfiles/
+  # https://github.com/webdevops/Dockerfile/tree/master/docker
+
+  # http://localhost:8089/
+  adminer:
+    container_name: project_name_adminer
+    image: adminer
+    #environment:
+    #  - ${UID}
+    #  - ${GID}
+    restart: always
+    ports:
+      - "8089:8080"
+    links:
+      - mysql
+
+  php-fpm:
+    image: webdevops/php-nginx:7.4
+    container_name: myapp-webserver
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      - WEB_DOCUMENT_ROOT=/app/webroot
+    ports:
+      - "80:80"
+
+  mysql:
+    image: mysql:5.7
+    container_name: myapp-mysql
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ./tmp/data/mysql_db:/var/lib/mysql
+    #env_file:
+    #  - mysql.env
+    command: mysqld --character-set-server=utf8 --init-connect='SET NAMES UTF8;'
+    ports:
+      - "3306:3306"
+
+

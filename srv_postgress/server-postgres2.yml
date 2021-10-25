@@ -1,0 +1,30 @@
+version: '3'
+
+# ok
+# https://graspingtech.com/docker-compose-postgresql/
+
+#  docker ps
+# docker exec -it 45fe2ea2ff8c bash
+# /usr/bin/docker-compose -f /home/demos/Git/docktest/server5/server-postgres2.yml up -d --remove-orphans
+# /usr/bin/docker-compose -f /home/demos/Git/docktest/server5/server-postgres2.yml -p server5 stop postgres
+# /usr/bin/docker-compose -f /home/demos/Git/docktest/server5/server-postgres2.yml down --remove-orphans
+
+services:
+  postgres:
+    image: postgres
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+      - APP_DB_USER=docker
+      - APP_DB_PASS=docker
+      - APP_DB_NAME=docker
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/
+    ports:
+      - 5432:5432

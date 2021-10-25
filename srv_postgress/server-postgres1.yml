@@ -1,0 +1,16 @@
+
+version: '3.6'
+
+# ok
+# docker exec -it ef06a65bd152 bash
+
+# /usr/bin/docker-compose -f /home/demos/Git/docktest/server5/server.yml up -d
+# /usr/bin/docker-compose -f /home/demos/Git/docktest/server5/server.yml -p server5 stop postgres_db
+
+services:
+  postgres_db:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_HOST_AUTH_METHOD=trust
+

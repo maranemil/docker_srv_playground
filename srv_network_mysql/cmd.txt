@@ -1,0 +1,38 @@
+###################################################
+Docker Compose Explained
+###################################################
+https://medium.com/codex/docker-compose-explained-3954baf495ec
+
+
+docker network create mysql-network
+
+Create MySQL Docker container.
+
+docker run -d -p 3307:3306 \
+    -e MYSQL_ROOT_PASSWORD=password \
+    --name mysqldb \
+    --net mysql-network \
+    mysql
+
+Create phpMyAdmin Docker container.
+
+docker run -d -p 8082:80 \
+    -e PMA_HOST=mysqldb \
+    --name phpmyadmin \
+    --net mysql-network \
+    phpmyadmin:5.1-apache
+
+docker-compose -f mysql.yaml up -d
+docker-compose -f mysql.yaml down
+
+
+
+https://docs.docker.com/network/
+https://docs.docker.com/engine/reference/commandline/network/
+
+
+https://medium.com/@caysever/docker-compose-network-b86e424fad82
+https://docs.docker.com/compose/networking/
+
+
+

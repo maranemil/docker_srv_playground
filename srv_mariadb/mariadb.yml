@@ -1,0 +1,22 @@
+version: "3"
+
+# ok
+# /usr/bin/docker-compose -f /home/demos/Git/docktest/server9/mariadb.yml up -d
+# /usr/bin/docker-compose -f /home/demos/Git/docktest/server9/mariadb.yml -p server9 stop mariadb
+
+services:
+  mariadb:
+      image: mariadb:10.4
+      restart: unless-stopped
+      environment:
+        MYSQL_ROOT_PASSWORD: demo
+      volumes:
+      - ./storage/db:/var/lib/mysql:rw
+      - ./app/db/SQL:/docker-entrypoint-initdb.d/:rw
+      ports:
+      - "3306:3306/tcp"
+
+#    volumes:
+#        - ./extern/db/docker-entrypoint-initdb.d:ro
+#        - ./docker/mysql/scripts:/docker-entrypoint-initdb.d
+#        - ./mysql_data:/var/lib/mysql

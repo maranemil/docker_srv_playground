@@ -1,0 +1,364 @@
+###############################################
+# install docker
+###############################################
+sudo apt install docker docker.io docker-compose
+sudo apt install make
+
+echo $USER
+sudo adduser $USER docker
+id
+echo -e "UID=$(id -u)\nGID=$(id -g)"
+reboot
+
+-------------------------------------------------------------
+https://github.com/bitnami/bitnami-docker-keycloak
+-------------------------------------------------------------
+
+    KEYCLOAK_CREATE_ADMIN_USER: Create administrator user on boot. Default: true.
+    KEYCLOAK_ADMIN_USER: Administrator default user. Default: user.
+    KEYCLOAK_ADMIN_PASSWORD: Administrator default password. Default: bitnami.
+    KEYCLOAK_MANAGEMENT_USER: WildFly default management user. Default: manager.
+    KEYCLOAK_MANAGEMENT_PASSWORD: WildFly default management password. Default: bitnami1.
+
+-------------------------------------------------------------
+
+    KEYCLOAK_DATABASE_HOST: PostgreSQL host. Default: postgresql.
+    KEYCLOAK_DATABASE_PORT: PostgreSQL port. Default: 5432.
+    KEYCLOAK_DATABASE_NAME: PostgreSQL database name. Default: bitnami_keycloak.
+    KEYCLOAK_DATABASE_USER: PostgreSQL database user. Default: bn_keycloak.
+    KEYCLOAK_DATABASE_PASSWORD: PostgreSQL database password. No defaults.
+    KEYCLOAK_DATABASE_SCHEMA: PostgreSQL database schema. Default: public.
+    KEYCLOAK_JDBC_PARAMS: PostgreSQL database JDBC parameters (example: sslmode=verify-full&connectTimeout=30000). No defaults.
+
+-------------------------------------------------------------
+
+    KEYCLOAK_HTTP_PORT: Keycloak HTTP port. Default: 8080.
+    KEYCLOAK_HTTPS_PORT: Keycloak HTTPS port. Default: 8443.
+    KEYCLOAK_BIND_ADDRESS: Keycloak bind address. Default: 0.0.0.0.
+
+######################################################################
+#
+#   check authorization_endpoint && token_endpoint
+#
+######################################################################
+
+http://localhost:81/auth/realms/master/.well-known/openid-configuration
+
+# access wp admin
+http://localhost:9008/wp-admin/
+
+# access keycloak admin
+http://localhost:81/
+
+-------------------------------------------------------------
+
+https://hub.docker.com/r/bitnami/keycloak
+
+https://www.keycloak.org/getting-started/getting-started-docker
+# docker run -p 8080:8080 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin quay.io/keycloak/keycloak:15.0.2
+# docker run -p 8080:8080 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin quay.io/keycloak/keycloak:15.0.2
+
+https://www.keycloak.org/getting-started/getting-started-docker
+https://hub.docker.com/r/bitnami/keycloak
+https://hub.docker.com/r/bitnami/keycloak
+
+curl -LO https://raw.githubusercontent.com/bitnami/bitnami-docker-keycloak/master/docker-compose.yml
+$ docker-compose up
+docker pull bitnami/keycloak:latest
+
+https://hub.docker.com/_/redis
+https://hub.docker.com/_/arangodb
+https://hub.docker.com/r/ubuntu/redis
+https://hub.docker.com/r/ubuntu/memcached
+https://hub.docker.com/r/keycloak/keycloak-gatekeeper
+https://hub.docker.com/u/keycloak
+
+docker run --name some-redis -d redis redis-server --save 60 1 --loglevel warning
+docker run -it --network some-network --rm redis redis-cli -h some-redis
+
+https://github.com/keycloak/keycloak-containers
+https://hub.docker.com/r/jboss/keycloak/
+https://docs.docker.com/engine/reference/run/
+
+----------------------------------------------
+Confidential Client Credentials
+Do Keycloak Clients have a Client Secret?
+https://stackoverflow.com/questions/44752273/do-keycloak-clients-have-a-client-secret
+https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/topics/clients/oidc/confidential.html
+
+Keycloak -> Clients -> Credentials Tab
+----------------------------------------------
+
+keycloak client credentials missing
+Missing keycloak credentials
+https://github.com/thomasdarimont/spring-boot-admin-keycloak-example/issues/1
+https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/topics/clients/oidc/confidential.html
+If you’ve set the client’s access type to confidential in the client’s Settings tab,
+a new Credentials tab will show up.
+----------------------------------------------
+https://www.keycloak.org/docs/latest/securing_apps/
+https://www.keycloak.org/docs/6.0/server_admin/#features
+https://www.keycloak.org/docs/4.8/securing_apps/
+https://www.keycloak.org/docs/6.0/server_admin/
+----------------------------------------------
+https://stackoverflow.com/questions/44752273/do-keycloak-clients-have-a-client-secret
+https://newbedev.com/how-to-get-client-secret-via-keycloak-api
+
+How to get client secret via Keycloak API
+GET /admin/realms/{realm}/clients/{id}/client-secret
+GET /{realm}/clients
+
+# Get the token
+data = {"username": "username", "password": "password",
+        "client_id": "client_id", "client_secret": "client_secret",
+        "grant_type": "password"}
+
+token = request.post("https://{server-url}/"realms/{realm-name}/protocol/openid-connect/token", data=data)
+
+# Request to API
+response = requests.get("https://mylink.com/auth/admin/realms/{myrealm}/clients/{myclientid}/client-secret",
+data=data, headers= {"Authorization": "Bearer " + token.get('access_token'), "Content-Type": "application/json"})
+
+# https://www.keycloak.org/docs/6.0/server_admin/
+# The following template can be used to request a token using the Resource Owner Password Credentials Grant:
+
+###########################################################
+https://ravthiru.medium.com/keycloak-retrieve-custom-attributes-in-access-token-1a2d5aef0caa
+https://www.baeldung.com/keycloak-custom-user-attributes
+https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/topics/users/attributes.html
+http://www.mastertheboss.com/keycloak/managing-keycloak-user-metadata-and-custom-attributes/
+https://stackoverflow.com/questions/32678883/keycloak-retrieve-custom-attributes-to-keycloakprincipal
+https://www.keycloak.org/docs/latest/server_admin/index.html#user-attributes
+https://fixes.co.za/keycloak/adding-attributes-to-a-user-in-keycloak/
+https://www.sravi.com/2018/08/how-to-add-custom-user-attributes-in.html
+https://ravthiru.medium.com/keycloak-retrieve-custom-attributes-in-access-token-1a2d5aef0caa
+###########################################################
+
+Client App Mappers - Create protocol mappers
+
+username
+dob
+
+###########################################################
+#
+# try entry point by curl
+#
+###########################################################
+
+$ curl http://localhost:81/auth/realms/master/protocol/openid-connect/token \
+       --insecure \
+       --data "grant_type=password&scope=openid profile&username=&password=&client_id=CLIENT_ID&client_secret=CLIENT_SECRET" \
+       -E /path/to/client_cert.crt \
+       --key /path/to/client_cert.key
+
+
+curl --location --request POST 'http://localhost:81/auth/realms/appsdeveloperblog/protocol/openid-connect/token' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'client_id=photo-app-client-credentials' \
+--data-urlencode 'client_secret=91813ee4-0769-4a7f-9dd3-a12f1f67631e' \
+--data-urlencode 'scope=email' \
+--data-urlencode 'grant_type=client_credentials'
+
+https://www.appsdeveloperblog.com/keycloak-client-credentials-grant-example/
+
+curl --location --request POST 'http://localhost:81/auth/realms/demo/protocol/openid-connect/token' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--header 'Authorization: Basic ZGVtb2FwcDowMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDA=' \
+--data-urlencode 'grant_type=client_credentials'
+
+
+###########################################################
+#
+#   try entry point with python
+#
+###########################################################
+
+https://medium.com/@mihirrajdixit/getting-started-with-service-accounts-in-keycloak-c8f6798a0675
+https://docs.python-requests.org/en/master/
+
+import requests
+from requests.auth import HTTPBasicAuth
+url = "http://localhost:81/auth/realms/demo/protocol/openid-connect/token"
+payload = 'grant_type=client_credentials'
+headers = {
+    'Content-Type': 'application/x-www-form-urlencoded'
+}
+response = requests.request("POST", url, headers=headers, data=payload,
+            auth=HTTPBasicAuth("demoapp","0000-000-000-000-000-00"))
+print(response.text)
+
+
+
+import requests
+from requests.auth import HTTPBasicAuth
+import json
+
+def get_token():
+     url = "http://localhost:81/auth/realms/demo/protocol/openid-connect/token"
+     payload = 'grant_type=client_credentials'
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    response = requests.request("POST", url, headers=headers, data=payload,
+            auth=HTTPBasicAuth("demoapp","0000-000-000-000-000-00"))
+    token = json.loads(response.text)
+
+def get_users(token):
+    url = "http://localhost:81/auth/admin/realms/demo/users"
+    payload = {}
+    headers = { 'Autorization: 'Bearer ' + token  }
+    response = requests.request("GET", url, headers=headers, data = payload)
+    users = json.loads(response.text)
+
+print(get_users(get_token))
+
+
+
+################################################
+# 7.1.2. Keycloak Server OIDC URI Endpoints
+################################################
+/realms/{realm-name}/protocol/openid-connect/token
+/realms/{realm-name}/protocol/openid-connect/auth
+/realms/{realm-name}/protocol/openid-connect/logout
+/realms/{realm-name}/protocol/openid-connect/userinfo
+
+################################################
+# 6.6.2. Enable X.509 Client Certificate User Authentication
+################################################
+
+https://github.com/keycloak/keycloak-documentation/blob/master/securing_apps/topics/client-registration/client-registration-cli.adoc
+https://www.keycloak.org/docs/latest/authorization_services/
+
+https://www.itsfullofstars.de/2019/11/add-oauth-2-0-client-in-keycloak/
+https://www.itsfullofstars.de/2019/11/add-oauth-2-0-client-in-keycloak/
+
+Example:
+Client ID: oidclient
+Client Protocol: openid-connect
+
+----------
+
+https://stackoverflow.com/questions/28658735/what-are-keycloaks-oauth2-openid-connect-endpoints
+https://issues.redhat.com/browse/KEYCLOAK-571
+
+For Keycloak 1.2 the above information can be retrieved via the url
+
+http://keycloakhost:keycloakport/auth/realms/{realm}/.well-known/openid-configuration
+
+For example, if the realm name is demo:
+
+http://keycloakhost:keycloakport/auth/realms/demo/.well-known/openid-configuration
+
+An example output from above url:
+
+{
+    "issuer": "http://localhost:8080/auth/realms/demo",
+    "authorization_endpoint": "http://localhost:8080/auth/realms/demo/protocol/openid-connect/auth",
+    "token_endpoint": "http://localhost:8080/auth/realms/demo/protocol/openid-connect/token",
+    "userinfo_endpoint": "http://localhost:8080/auth/realms/demo/protocol/openid-connect/userinfo",
+    "end_session_endpoint": "http://localhost:8080/auth/realms/demo/protocol/openid-connect/logout",
+    "jwks_uri": "http://localhost:8080/auth/realms/demo/protocol/openid-connect/certs",
+    "grant_types_supported": [
+        "authorization_code",
+        "refresh_token",
+        "password"
+    ],
+    "response_types_supported": [
+        "code"
+    ],
+    "subject_types_supported": [
+        "public"
+    ],
+    "id_token_signing_alg_values_supported": [
+        "RS256"
+    ],
+    "response_modes_supported": [
+        "query"
+    ]
+}
+/auth/realms/{realm-name}/.well-known/openid-configuration
+/auth/realms/{realm}/.well-known/openid-configuration
+
+Authorization Endpoint: /auth/realms/{realm}/tokens/login
+Token Endpoint: /auth/realms/{realm}/tokens/access/codes
+
+In version 1.9.0 json with all endpoints is at address /auth/realms/{realm}
+Authorization Endpoint: /auth/realms/{realm}/account
+Token Endpoint: /auth/realms/{realm}/protocol/openid-connect
+
+keycloak version: 4.6.0
+TokenUrl: [domain]/auth/realms/{REALM_NAME}/protocol/openid-connect/token
+AuthUrl: [domain]/auth/realms/{REALM_NAME}/protocol/openid-connect/auth
+
+
+GET /.well-known/openid-configuration
+GET /{realm}/.well-known/openid-configuration
+
+##########################################################
+Initial Access and Registration Access Tokens
+##########################################################
+https://github.com/keycloak/keycloak-documentation/blob/master/securing_apps/topics/client-registration/client-registration-cli.adoc
+
+#Linux:
+$ kcreg.sh config initial-token $TOKEN
+$ kcreg.sh create -s clientId=myclient
+
+# or ... kcreg.sh create -s clientId=myclient -t $TOKEN
+
+#Creating a client configuration
+kcreg.sh create -f client-template.json -s clientId=myclient -s baseUrl=/myclient -s 'redirectUris=["/myclient/*"]' -o
+
+# Retrieving a client configuration
+kcreg.sh get myclient
+
+# retrieve the client configuration as an adapter configuration file
+kcreg.sh get myclient -e install > keycloak.json
+
+# Modifying a client configuration
+kcreg.sh get myclient > myclient.json
+$ vi myclient.json
+$ kcreg.sh update myclient -f myclient.json
+# kcreg.sh update myclient -s enabled=false -d redirectUris
+
+#  use a file that contains only changes to be applied
+kcreg.sh update myclient --merge -d redirectUris -f mychanges.json
+
+# Deleting a client configuration
+kcreg.sh delete myclient
+
+# Refreshing invalid Registration Access Tokens
+kcreg config registration-token
+
+
+$./kcadm.sh create users -r demo -s username=testadmin -s enabled=true
+$./kcadm.sh create users -r demo -s username=demoadmin -s enabled=true
+
+---------------------------------------------------------------
+https://stackoverflow.com/questions/56561554/keycloak-realm-vs-keycloak-client
+https://www.keycloak.org/docs/latest/getting_started/
+https://github.com/keycloak/keycloak-quickstarts
+
+Realm - A realm manages a set of users, credentials, roles, and groups.
+Clients are entities that can request Keycloak to authenticate a user.
+
+---------------------------------------------------------------
+https://www.keycloak.org/docs/6.0/server_admin/#user-credentials
+https://www.keycloak.org/docs/latest/server_admin/
+https://github.com/keycloak/keycloak-documentation/blob/master/securing_apps/topics/oidc/oidc-generic.adoc
+https://www.keycloak.org/docs/4.8/authorization_services/
+https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/topics/clients/oidc/confidential.html
+https://quarkus.io/guides/security-keycloak-authorization
+https://www.keycloak.org/docs/6.0/server_admin/
+https://www.keycloak.org/documentation.html
+https://connect2id.com/products/server/docs/api/token-introspection
+https://www.appsdeveloperblog.com/keycloak-client-credentials-grant-example/
+https://github.com/thomasdarimont/spring-boot-admin-keycloak-example
+https://www.keycloak.org/docs/latest/authorization_services/
+https://www.baeldung.com/postman-keycloak-endpoints
+https://www.keycloak.org/docs/4.8/securing_apps/
+https://stackoverflow.com/questions/48146410/unable-to-get-oauth-token-from-keycloak
+---------------------
+
+misc
+
+https://itsfoss.com/video-players-linux/

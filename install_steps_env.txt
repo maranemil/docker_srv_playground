@@ -1,0 +1,22 @@
+###############################################
+# install docker
+###############################################
+
+sudo apt install docker docker.io docker-compose
+sudo apt install make
+
+echo $USER
+sudo adduser $USER docker
+id
+echo -e "UID=$(id -u)\nGID=$(id -g)"
+reboot
+
+###############################################
+# install ide + docker plugin
+###############################################
+
+sudo snap install pycharm-community
+sudo snap install pycharm-educational
+
+get plugin to manage docker in pycharm
+https://plugins.jetbrains.com/plugin/7724-docker

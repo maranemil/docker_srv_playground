@@ -1,0 +1,102 @@
+version: '2.3'
+services:
+
+  # https://blog.sylo.space/guide-to-install-nginx-php-mariadb-phpmyadmin-in-docker/
+
+  web:
+    image: nginx:alpine
+    ports:
+      - "8091:8080"
+    volumes:
+      - ./app:/usr/share/nginx/html
+      - ./data/nginx/enabled:/etc/nginx/conf.d
+      - ./data/nginx/snippets:/nginx/snippets
+      - ./data/nginx/certificates:/nginx/certificates
+      - ./html:/var/www/html
+   #volumes_from:
+   #   - data
+
+  # nginx
+#  nginx:
+#    image: nginx:alpine
+#    user: "${UID}:${GID}"
+#    restart: always
+#    links:
+#      - 7-0-8-fpm
+#    ports:
+#      - "8077:80"
+#      - "443:443"
+#    volumes:
+#      - ./data/nginx/enabled:/etc/nginx/conf.d
+#      - ./data/nginx/snippets:/nginx/snippets
+#      - ./data/nginx/certificates:/nginx/certificates
+#    volumes_from:
+#      - data
+
+
+
+#    environment:
+#     - NGINX_HOST=foobar.com
+#     - NGINX_PORT=8077
+
+#  5-6-23-fpm:
+#    image: php:5.6.23-fpm-alpine
+#    restart: always
+#    volumes_from:
+#      - data
+
+#  7-0-8-fpm:
+#    image: php:7.0.8-fpm-alpine
+#    restart: always
+#    volumes_from:
+#      - data
+      
+#  8-0-0-fpm:
+#    image: php:8.0.0-fpm-alpine
+#    restart: always
+#    volumes_from:
+#      - data
+
+  # mariadb
+  db:
+    image: mariadb:10.4 #v10.5.8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./data/db:/var/lib/mysql
+
+  # phpmyadmin http://localhost:8070/
+  dbadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: db
+      PMA_USER: root # Remove line for production
+      PMA_PASSWORD: root # Remove line for production
+    depends_on:
+      - db
+    ports:
+       - "8070:80"
+
+  # adminer http://localhost:8089/
+  adminer:
+    container_name: project_name_adminer
+    image: adminer
+#    environment:
+#      - ${UID}
+#      - ${GID}
+    restart: always
+    ports:
+      - "8089:8080"
+    links:
+      - db
+  # http://localhost:8089/
+  # http://localhost:8089/?server=db&username=root # user: root / pass root
+
+  data:
+    image: alpine:latest
+    command: echo "READY!!!"
+    volumes:
+      - ./data/vhosts:/vhosts
+      - ./data/tmp:/tmp
