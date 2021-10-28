@@ -1,0 +1,157 @@
+https://github.com/sfx101/deck
+https://github.com/docker/compose/tags
+
+----------------------------------------------------------------------
+
+https://stackoverflow.com/questions/46434057/docker-curl-7-failed-to-connect-to-localhost-port-9089-connection-refused
+https://serverfault.com/questions/616767/how-do-you-name-a-docker-container
+https://serverfault.com/questions/716719/how-do-i-change-docker-host-name-after-the-image-creation
+https://forums.docker.com/t/change-hostname-of-an-existing-container/361/7
+https://githubmemory.com/repo/tiangolo/docker-with-compose/issues/16
+https://pythonspeed.com/articles/docker-connection-refused/######
+https://askubuntu.com/questions/423818/create-an-alias-for-localhost8080-as-www-my-domain-com
+
+
+-h, --hostname= Container host name
+set the hostname on the command line:
+
+docker run --rm -h "example.com" -t -i ubuntu bash
+
+
+naming your container
+sudo docker run --name="testname" image command
+
+curl -I http://localhost:8080
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+https://laracasts.com/discuss/channels/laravel/guzzlehttp-exception-connectexception-curl-error-7-failed-to-connect-to-localhost-port-8087-connection-refused
+--------------------------------------------------------------------------------------------
+https://runnable.com/docker/docker-compose-networking
+https://docs.docker.com/network/bridge/
+https://docs.docker.com/compose/networking/
+--------------------------------------------------------------------------------------------
+curl -I http://192.168.0.137:8080/
+--------------------------------------------------------------------------------------------
+
+http://localhost:8080/wp-admin/	# wp
+http://localhost:9011/auth	# keycloak
+
+curl -I http://localhost:9011
+curl -I http://localhost:8080
+cURL error 7: Failed to connect to localhost port 9011: Connection refused
+
+Documentation
+
+https://www.youtube.com/watch?v=w2_Dx8pd43w
+https://plugins.miniorange.com/keycloak-single-sign-on-wordpress-sso-oauth-openid-connect
+https://plugins.miniorange.com/keycloak-single-sign-on-wordpress-sso-saml
+
+--------------------------------------------------------------------------------------------
+DEBUG
+docker exec -it keyloack_wordpress_1 bash
+curl -I http://localhost:9011
+docker inspect keyloack_wordpress_1 | grep hostname
+
+--------------------------------------------------------------------------------------------
+Check KEYCLOAK openid-configuration:
+http://localhost:8080/auth/realms/somename/.well-known/openid-configuration
+
+--------------------------------------------------------------------------------------------
+
+Authorize Endpoint:     http://localhost:8080/auth/realms/somename/protocol/openid-connect/auth
+Access Token Endpoint:  http://localhost:8080/auth/realms/somename/protocol/openid-connect/token
+
+--------------------------------------------------------------------------------------------
+https://stackoverflow.com/questions/47508036/how-to-start-keycloak-2-0-on-8080-port
+
+keycloak options
+
+domain.sh -Djboss.http.port=80
+domain.sh --host-config=host-master.xml
+
+./standalone.sh
+
+# with ip
+./standalone.sh -b 192.168.0.12
+
+# with port
+./standalone.sh  -Djboss.socket.binding.port-offset=8089
+
+# with ip and port
+./standalone.sh -b 0.0.0.0 -Djboss.socket.binding.port-offset=1000
+
+http://localhost:8080/auth/
+
+Documentation
+
+https://www.keycloak.org/docs/latest/getting_started/index.html
+https://www.keycloak.org/docs-api/8.0/rest-api/index.html
+https://www.keycloak.org/docs/latest/getting_started/index.html
+https://www.keycloak.org/docs/latest/server_installation/index.html#hostname
+https://www.keycloak.org/downloads.html
+https://www.keycloak.org/docs/latest/server_installation/#_hostname
+
+
+https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/topics/roles/user-role-mappings.html
+https://www.keycloak.org/docs-api/5.0/rest-api/index.html
+https://www.keycloak.org/docs/latest/server_admin/
+
+--------------------------------------------------------------------------------------------
+
+Keycloak JS Only public client example
+https://gist.github.com/thomasdarimont/cb48b039d9fd5b1bd53684fcbaf9eee8
+https://github.com/keycloak/keycloak-documentation/blob/master/securing_apps/topics/oidc/javascript-adapter.adoc
+
+
+https://www.keycloak.org/securing-apps/vue
+https://medium.com/keycloak/secure-vue-js-app-with-keycloak-94814181e344
+
+https://www.keycloak.org/docs/latest/securing_apps/
+https://pypi.org/project/oic/
+https://www.keycloak.org/docs/latest/securing_apps/#_nodejs_adapter
+https://www.keycloak.org/docs/latest/securing_apps/#_javascript_adapter
+https://wjw465150.gitbooks.io/keycloak-documentation/content/securing_apps/topics/oidc/javascript-adapter.html
+https://www.npmjs.com/package/keycloak-js
+https://openbase.com/js/keycloak-js
+
+--------------------------------------------------------------------------------------------
+
+Client Debug Keycloak
+client id js-console
+Protocol openid-connect
+Root URL http://localhost:8000
+
+--------------------------------------------------------------------------------------------
+
+keycloak_create_realm_and_client.sh
+https://gist.github.com/lukaszbudnik/05425886bfb2fcca99f42da5c2b3ae54
+
+--------------------------------------------------------------------------------------------
+
+POSTMAN Debug x-wwww-form-urlencodeded
+
+http://192.168.0.137:8080/auth/realms/some/protocol/openid-connect/token
+
+key 		values
+username	demo
+password	demo
+grant_type	password
+client_id	rest-client
+
+Copy asscess Token and run
+
+http://localhost:8080/auth/admin/realms/some/users
+
+auth type Beader Token
+
+--------------------------------------------------------------------------------------------
+
+Test User
+http://localhost:8080/auth/realms/some/account/#/
+
+--------------------------------------------------------------------------------------------
+
+Keycloak-Konfiguration mit Terraform - Johanna Nolte
+https://blog.codecentric.de/2021/03/keycloak-konfiguration-mit-terraform/
+
+--------------------------------------------------------------------------------------------

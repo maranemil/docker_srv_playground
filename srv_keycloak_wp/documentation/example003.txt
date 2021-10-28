@@ -1,0 +1,53 @@
+
+https://stackoverflow.com/questions/36151981/local-hostnames-for-docker-containers
+
+
+#############################
+# Server
+#############################
+server:
+  container_name: server
+  domainname: server.dev
+  hostname: server
+  build: ./server
+  working_dir: /app
+  ports:
+    - "3000:3000"
+  volumes:
+    - ./server:/app
+  links:
+    - database
+
+#############################
+# Client
+#############################
+client:
+  container_name: client
+  domainname: client.dev
+  hostname: client
+  image: php:5.6-apache
+  ports:
+     - "80:80"
+  volumes:
+   - ./client:/var/www/html
+
+#############################
+# Database
+#############################
+database:
+  container_name: database
+  domainname: database.dev
+  hostname: database
+  image: postgres:9.4
+  restart: always
+  environment:
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=root
+    - POSTGRES_DB=dbdev
+    - PG_TRUST_LOCALNET=true
+  ports:
+    - "5432:5432"
+  volumes:
+    - ./database/scripts:/docker-entrypoint-initdb.d # init scripts
+
+
