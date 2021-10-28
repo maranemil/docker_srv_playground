@@ -17,7 +17,6 @@ set the hostname on the command line:
 
 docker run --rm -h "example.com" -t -i ubuntu bash
 
-
 naming your container
 sudo docker run --name="testname" image command
 
