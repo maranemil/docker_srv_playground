@@ -1,0 +1,73 @@
+
+----------------------------------------------
+Keycloak config test
+----------------------------------------------
+realm 			wordpress
+ROLE 			wordpress
+User 			wordpress
+Passwort 		wordpress
+Group 			wordpress
+User to Group
+User mapping
+OpenID client 		    wordpress (  openid-connect )
+Access type 		    confidentials
+Valid Redirect URIs	    http://wordpress:80
+Root URL		        ${authBaseUrl}
+Protocol Mapper 	    wordpres + Group Membership
+
+full group path, Add to ID token and Add to access token - off
+
+Client ID erstellen	    wordpres
+Client Secret
+Endpoints 		        http://localhost:8080/auth/realms/wordpress/.well-known/openid-configuration
+
+
+http://localhost:8080/auth/realms/wordpress/.well-known/openid-configuration
+http://localhost:8080/auth/
+http://wordpress/wp-admin/
+
+############################################################
+
+
+https://github.com/keycloak/keycloak-documentation/blob/master/securing_apps/topics/oidc/oidc-generic.adoc
+https://www.keycloak.org/docs/4.8/server_admin/
+https://www.keycloak.org/docs/4.8/authorization_services/
+https://medium.com/webeetle/keycloak-e-wordpress-555d0c2cfec7
+
+----------------------------------------------
+WordPress config test
+----------------------------------------------
+
+
+Client ID			            wordpress
+Client Secret Key
+OpenID Scope			        openid
+Login Endpoint URL		        http://localhost:8080/auth/realms/wordpress/protocol/openid-connect/auth
+Userinfo Endpoint URL		    http://localhost:8080/auth/realms/wordpress/protocol/openid-connect/userinfo
+Token Validation Endpoint URL	http://localhost:8080/auth/realms/wordpress/protocol/openid-connect/token
+End Session Endpoint URL	    http://localhost:8080/auth/realms/wordpress/protocol/openid-connect/logout
+Identity Key			        preferred_username
+
+
+
+
+Option 1 miniorange
+----------------------------------------------
+https://plugins.miniorange.com/keycloak-single-sign-on-wordpress-sso-saml
+https://plugins.miniorange.com/keycloak-single-sign-on-wordpress-sso-oauth-openid-connect
+https://plugins.miniorange.com/wordpress-single-sign-on-sso-oauth-openid-connect
+
+
+Option 2 - User Role Editor + OpenID Connect Generic Client
+----------------------------------------------
+User Role Editor
+https://it.wordpress.org/plugins/user-role-editor/
+https://de.wordpress.org/plugins/user-role-editor/
+
+OpenID Connect Generic Client
+https://it.wordpress.org/plugins/daggerhart-openid-connect-generic/
+
+
+
+
+
