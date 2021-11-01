@@ -9,7 +9,7 @@ services:
         POSTGRES_PASSWORD: password
         POSTGRES_DB: testdb
     ports:
-        - "15432:5432"
+        - "5432:5432"
 
   php-fpm:
     container_name: php-fpm
@@ -29,7 +29,7 @@ services:
     build:
       context: ./nginx
     volumes:
-      - ./../src/:/var/www
+#      - ./../src/:/var/www
 #      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
 #      - ./nginx/sites/:/etc/nginx/sites-available
 #      - ./nginx/conf.d/:/etc/nginx/conf.d
@@ -37,5 +37,5 @@ services:
     depends_on:
       - php-fpm
     ports:
-      - "80:80"
+      - "8081:8080"
       - "443:443"

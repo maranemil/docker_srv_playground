@@ -1,3 +1,6 @@
+# http://localhost:9008/wp-admin/install.php
+# OK
+
 version: "3"
 
 services:
@@ -35,7 +38,7 @@ services:
       #DEV_URL: http://dev.project1.com
     volumes:
       - ./src:/var/www/html
-      - ./docker/php.conf.ini:/usr/local/etc/php/conf.d/custom.ini
+    #  - ./docker/php.conf.ini:/usr/local/etc/php/conf.d/custom.ini
     #  - ./wp-content:/var/www/html/wp-content
 
   # MySQL Database image
@@ -48,8 +51,8 @@ services:
       MYSQL_DATABASE: my_wp_database
       MYSQL_USER: blabla
       MYSQL_PASSWORD: blabla
-    ports:
-      - "3306:3306"
+    #ports:
+    #  - "3306:3306"
     volumes:
       - mysql:/var/lib/mysql
 

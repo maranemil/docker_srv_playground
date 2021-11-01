@@ -30,8 +30,11 @@ tomcat                  9.0.12              0274861a259c   2 years ago     658MB
 docker rmi $(docker images -q)
 
 # Remove all containers - Delete all containers
+docker kill $(docker ps -q)
 docker rm $(docker ps -aq)
 docker rm -f $(docker ps -a -q)
+
+
 
 # delete all stopped containers
 docker container prune
@@ -45,4 +48,32 @@ docker volume ls --help
 docker volume ls -f 'dangling=true'
 
 docker exec -it ef06a65bd152 bash
+
+##############################################################
+#
+#   resources
+#
+##############################################################
+
+https://docs.docker.com/config/containers/resource_constraints/#:~:text=Limit%20a%20container's%20access%20to%20memory&text=The%20maximum%20amount%20of%20memory,is%206m%20(6%20megabyte).&text=The%20amount%20of%20memory%20this,See%20%2D%2Dmemory%2Dswap%20details.
+https://docs.docker.com/config/containers/resource_constraints/
+https://docs.docker.com/engine/reference/run/
+https://docs.docker.com/engine/reference/commandline/update/
+
+v3
+
+    deploy:
+      resources:
+        limits:
+          cpus: 2.50
+          memory: 512M
+        reservations:
+          cpus: 1.25
+          memory: 128M
+
+v2
+
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpuset: 0-3
 

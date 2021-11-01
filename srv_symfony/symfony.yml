@@ -2,9 +2,8 @@
 version: '3.5'
 
 # ok
-# phpmyadmin
-# http://localhost:8102/
-
+# phpmyadmin http://localhost:8102/
+# ? http://localhost:8101/
 networks:
   symfony_project_2021_net:
 

@@ -1,3 +1,6 @@
+# ok
+# http://localhost:8080/wp-admin/install.php
+
 version: '3.1'
 
 services:
@@ -7,7 +10,7 @@ services:
     # Restart mode: In case the container stops running
     restart: always
     ports:
-      - 8080:80
+      - "8080:80"
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: exampleuser
@@ -19,6 +22,8 @@ services:
   db:
     image: mysql:5.7
     restart: always
+    links:
+      - wordpress
     environment:
       MYSQL_DATABASE: exampledb
       MYSQL_USER: exampleuser

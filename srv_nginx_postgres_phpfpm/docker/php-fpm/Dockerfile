@@ -2,7 +2,6 @@
 FROM php:8.0-fpm
 
 #COPY wait-for-it.sh /usr/bin/wait-for-it
-
 #RUN chmod +x /usr/bin/wait-for-it
 
 RUN apt-get update && \

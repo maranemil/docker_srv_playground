@@ -1,3 +1,8 @@
+
+# http://localhost:8089/  adminer
+# http://localhost:8080/index.html nginx
+# OK
+
 version: '3.7'
 services:
 
@@ -6,8 +11,18 @@ services:
   # https://webdevops.io/projects/dockerfiles/
   # https://github.com/webdevops/Dockerfile/tree/master/docker
 
-  # http://localhost:8089/
+  # http://localhost:8089/  adminer
+
   adminer:
+    deploy:
+      resources:
+        limits:
+          cpus: 0.50
+          memory: 512M
+        reservations:
+          cpus: 0.25
+          memory: 128M
+    user: "1000:1000"
     container_name: project_name_adminer
     image: adminer
     #environment:
@@ -16,19 +31,15 @@ services:
     restart: always
     ports:
       - "8089:8080"
-    links:
-      - mysql
+
 
   php-fpm:
-    image: webdevops/php-nginx:7.4
     container_name: myapp-webserver
-    working_dir: /app
-    volumes:
-      - ./:/app
-    environment:
-      - WEB_DOCUMENT_ROOT=/app/webroot
+    image: nginx:alpine
     ports:
-      - "80:80"
+      - "8080:80"
+    volumes:
+      - ./app:/usr/share/nginx/html
 
   mysql:
     image: mysql:5.7
@@ -42,5 +53,7 @@ services:
     command: mysqld --character-set-server=utf8 --init-connect='SET NAMES UTF8;'
     ports:
       - "3306:3306"
+    links:
+      - adminer
 
 

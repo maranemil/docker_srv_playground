@@ -1,1 +1,5 @@
 .idea
+/srv_keycloak_wp/src/
+/srv_lamp/data/
+/srv_network_mysql/database/
+/srv_network_mysql/wp/

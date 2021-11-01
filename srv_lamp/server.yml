@@ -1,20 +1,47 @@
+
+# http://localhost:8070/   phpmyadmin
+# http://localhost:8089/  Adminer
+# UID=${UID} GID=${GID} docker-compose up
+# http://localhost:8080/index.html nginx
+
+#  /usr/bin/docker-compose -f /home/demos/GitDocker/docker_playground/srv_lamp/server.yml -p srv_lamp down --remove-orphans
+# OK
+
 version: '2.3'
 services:
 
   # https://blog.sylo.space/guide-to-install-nginx-php-mariadb-phpmyadmin-in-docker/
-
   web:
     image: nginx:alpine
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpuset: 0-3
     ports:
-      - "8091:8080"
+      - "8080:80"
     volumes:
       - ./app:/usr/share/nginx/html
-      - ./data/nginx/enabled:/etc/nginx/conf.d
-      - ./data/nginx/snippets:/nginx/snippets
-      - ./data/nginx/certificates:/nginx/certificates
-      - ./html:/var/www/html
-   #volumes_from:
-   #   - data
+
+#  web:
+#    #user: "${UID}:${GID}"
+#    #user: "1000:1000"
+#    container_name: project_name_nginx
+#    image: nginx:alpine
+#    ports:
+#      - "8066:8080"
+#
+#    build:
+#      context: .
+#      dockerfile: ./Dockerfile
+    #volumes:
+    #  - ./app:/usr/share/nginx/html
+#    volumes:
+#      - ./app:/usr/share/nginx/html
+#      - ./data/nginx/enabled:/etc/nginx/conf.d
+#      - ./data/nginx/snippets:/nginx/snippets
+#      - ./data/nginx/certificates:/nginx/certificates
+#      - ./html:/var/www/html
+#    volumes_from:
+#      - data
 
   # nginx
 #  nginx:
@@ -32,13 +59,9 @@ services:
 #      - ./data/nginx/certificates:/nginx/certificates
 #    volumes_from:
 #      - data
-
-
-
 #    environment:
 #     - NGINX_HOST=foobar.com
 #     - NGINX_PORT=8077
-
 #  5-6-23-fpm:
 #    image: php:5.6.23-fpm-alpine
 #    restart: always
@@ -59,6 +82,7 @@ services:
 
   # mariadb
   db:
+    container_name: project_name_mariadb
     image: mariadb:10.4 #v10.5.8
     restart: always
     environment:
@@ -68,6 +92,7 @@ services:
 
   # phpmyadmin http://localhost:8070/
   dbadmin:
+    container_name: project_name_phpmyadmin
     image: phpmyadmin/phpmyadmin
     restart: always
     environment:
@@ -94,9 +119,9 @@ services:
   # http://localhost:8089/
   # http://localhost:8089/?server=db&username=root # user: root / pass root
 
-  data:
-    image: alpine:latest
-    command: echo "READY!!!"
-    volumes:
-      - ./data/vhosts:/vhosts
-      - ./data/tmp:/tmp
+#  data:
+#    image: alpine:latest
+#    command: echo "READY!!!"
+    #volumes:
+    #  - ./data/vhosts:/vhosts
+    #  - ./data/tmp:/tmp

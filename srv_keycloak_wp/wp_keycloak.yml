@@ -50,13 +50,18 @@
 # docker info
 # netstat -a | grep LISTEN
 
+# http://localhost:9011/auth/
+# http://localhost:9008/wp-admin/install.php
+
+# OK
+
 version: "2"
 services:
 
   postgresql:
     image: "docker.io/bitnami/postgresql:11"
-    #links:
-    #  - keycloak
+    links:
+      - keycloak
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
       - POSTGRESQL_USERNAME=bn_keycloak
@@ -72,15 +77,15 @@ services:
     container_name: keycloak_container
     image: docker.io/bitnami/keycloak:latest
     ports:
-      - "5000:5000"
+      - "9011:8080"
     environment:
       - KEYCLOAK_CREATE_ADMIN_USER=true
       #- KEYCLOAK_ADMIN_USER=user
       #- KEYCLOAK_ADMIN_PASSWORD=bitnami
       #- KEYCLOAK_MANAGEMENT_USER=manager
       #- KEYCLOAK_MANAGEMENT_PASSWORD=bitnami1
-    depends_on:
-      - postgresql
+    #depends_on:
+    #  - postgresql
     networks:
       - keycloaknetwork
 
@@ -100,12 +105,12 @@ services:
   wordpress:
     #domainname: wordpress.local
     container_name: wordpress_container
-    hostname: wordpress
+    #hostname: wordpress
     image: wordpress
     restart: always
     ports:
     #  - "127.0.0.1:9008:80"
-      - "80:80"
+      - "9008:80"
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: exampleuser
@@ -113,10 +118,6 @@ services:
       WORDPRESS_DB_NAME: exampledb
     networks:
       - wordpressnetwork
-
-#networks:
-#  localnetwork:
-#    driver: bridge
 
 volumes:
   postgresql_data:

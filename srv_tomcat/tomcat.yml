@@ -10,5 +10,13 @@ version: '3'
 services:
   app:
     image: tomcat:9.0.12
+    deploy:
+      resources:
+        limits:
+          cpus: 2.50
+          memory: 512M
+        reservations:
+          cpus: 1.25
+          memory: 128M
     ports:
       - "8081:8080"
