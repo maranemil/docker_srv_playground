@@ -12,14 +12,13 @@ version: '3'
 services:
   db:
     image: mariadb:10.4
-    #container_name: mariadb
-    #restart: always
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: mydb
     ports:
       - "3306:3306"
-    #user: "1000:1000"
+    user: "1000:1000"
     #command: --innodb-flush-method=O_DSYNC --innodb-use-native-aio=0 --log_bin=ON
     #volumes:
     #  - ./db:/var/lib/mysql

@@ -5,7 +5,7 @@ services:
     ports:
       - "5000:5000"
   redis:
-    image: "redis:Alpine"
+    image: redis:alpine
 
 
 # docker-compose exec redis sh

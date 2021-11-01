@@ -25,13 +25,9 @@ services:
     user: "1000:1000"
     container_name: project_name_adminer
     image: adminer
-    #environment:
-    #  - ${UID}
-    #  - ${GID}
     restart: always
     ports:
       - "8089:8080"
-
 
   php-fpm:
     container_name: myapp-webserver
@@ -48,8 +44,6 @@ services:
     volumes:
       - .:/app
       - ./tmp/data/mysql_db:/var/lib/mysql
-    #env_file:
-    #  - mysql.env
     command: mysqld --character-set-server=utf8 --init-connect='SET NAMES UTF8;'
     ports:
       - "3306:3306"

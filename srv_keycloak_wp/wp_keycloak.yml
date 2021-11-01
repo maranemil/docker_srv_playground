@@ -126,5 +126,3 @@ volumes:
 networks:
   keycloaknetwork:
   wordpressnetwork:
-    #external:
-      #name: config_default
