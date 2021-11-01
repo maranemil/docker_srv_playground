@@ -18,5 +18,12 @@ reboot
 sudo snap install pycharm-community
 sudo snap install pycharm-educational
 
-get plugin to manage docker in pycharm
+###############################################
+get plugin to manage docker in pycharm and co
+###############################################
+
+https://plugins.jetbrains.com/plugin/13643-monokai-pro-theme
 https://plugins.jetbrains.com/plugin/7724-docker
+https://plugins.jetbrains.com/plugin/9333-makefile-language
+https://plugins.jetbrains.com/plugin/9333-makefile-language
+https://plugins.jetbrains.com/plugin/9525--env-files-support
