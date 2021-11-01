@@ -1,0 +1,13 @@
+# https://linuxtut.com/de/0c7995d8d7d33f99e9cd/
+
+version: '3'
+
+services:
+  node:
+    image: node:14.9.0-alpine3.10
+    container_name: node
+    volumes:
+      - ./node/app:/app
+    tty: true
+    ports:
+      - 3000:3000

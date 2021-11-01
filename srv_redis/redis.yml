@@ -1,0 +1,12 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+  redis:
+    image: "redis:Alpine"
+
+
+# docker-compose exec redis sh
+# docker-compose exec web sh

@@ -1,0 +1,16 @@
+
+version: '2'
+
+# ok
+# http://localhost:8000/
+
+services:
+  web:
+    image: nginx:alpine
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpuset: 0-3
+    ports:
+      - "8000:80"
+    volumes:
+      - ./app:/usr/share/nginx/html

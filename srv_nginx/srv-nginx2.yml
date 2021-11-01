@@ -1,0 +1,50 @@
+
+# Error starting userland proxy: listen tcp4 0.0.0.0:3306: bind: address already in use
+# sudo netstat -nlpt |grep 3306
+# sudo service mysql stop
+
+version: '3'
+services:
+
+  mysql:
+    image: mysql:5.7
+    container_name: myapp-mysql
+    #working_dir: /app
+    #volumes:
+    #  - .:/app
+    #  - ./tmp/data/mysql_db:/var/lib/mysql
+    #env_file:
+    #  - mysql.env
+    command: mysqld --character-set-server=utf8 --init-connect='SET NAMES UTF8;'
+    ports:
+      - "3306:3306"
+  php-fpm:
+    image: webdevops/php-nginx:7.4
+    container_name: myapp-webserver
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      - WEB_DOCUMENT_ROOT=/app/webroot
+    ports:
+      - "8080:80"
+  #Nginx Service
+  nginx:
+    image: nginx:latest
+    ports:
+      - "9010:9010"
+    volumes:
+      - .:/app
+      - ./config/nginx:/etc/nginx/conf.d
+      - ./static_cdn:/static
+    depends_on:
+      - php-fpm
+      - mysql
+    networks:
+      app-network:
+        #aliases:
+        #  - api.local
+
+
+networks:
+  app-network:

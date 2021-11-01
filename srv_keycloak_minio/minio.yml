@@ -1,0 +1,50 @@
+
+# MinIO is a High Performance Object Storage released under GNU Affero General Public License v3.0.
+# It is API compatible with Amazon S3 cloud storage service. Use MinIO to build high performance
+# infrastructure for machine learning, analytics and application data workloads.
+
+# https://stackoverflow.com/questions/62081315/minio-keycloak-integration-connection-refused
+# https://hub.docker.com/r/minio/minio/
+
+# http://localhost:8080/auth/
+# OK
+
+version: '2'
+services:
+
+  miniod:
+    image: minio/minio
+    restart: always
+    container_name: miniod
+    ports:
+      - "9000:9000"
+    #volumes:
+    #  - "C:/data:/data"
+    environment:
+      - "MINIO_ACCESS_KEY=access_key"
+      - "MINIO_SECRET_KEY=secret_key"
+    command: ["server", "/data"]
+    networks:
+      - minionw
+
+  mcd:
+    image: minio/mc
+    container_name: mcd
+    networks:
+      - minionw
+
+  kcd:
+    image: quay.io/keycloak/keycloak:10.0.1
+    container_name: kcd
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - "KEYCLOAK_USER=admin"
+      - "KEYCLOAK_PASSWORD=pass"
+    networks:
+      - minionw
+
+networks:
+  minionw:
+    driver: "bridge"

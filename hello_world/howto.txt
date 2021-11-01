@@ -1,0 +1,15 @@
+https://confluence.desy.de/display/linux/Docker+on+Green+Desktop
+https://hub.docker.com/_/hello-world
+https://docs.docker.com/compose/reference/
+https://docs.docker.com/engine/reference/commandline/compose/
+https://docs.docker.com/compose/
+https://docs.docker.com/compose/gettingstarted/
+https://docs.docker.com/compose/reference/run/
+https://docs.docker.com/storage/
+https://docs.docker.com/storage/storagedriver/
+
+docker ps -a
+
+docker run hello-world
+docker run -it ubuntu bash
+sudo docker run -d -p 80 hello-world

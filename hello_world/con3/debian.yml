@@ -1,0 +1,18 @@
+#  -i, --interactive Keep STDIN open even if not attached
+#  -t, --tty Allocate a pseudo-TTY
+
+# OK
+
+version: "2"
+
+services:
+  test-app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: busybox:stable
+    #restart: always
+    entrypoint: /bin/sh
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+

@@ -1,0 +1,29 @@
+# https://stackoverflow.com/questions/30063907/using-docker-compose-how-to-execute-multiple-commands
+# ok
+version: "3"
+
+services:
+
+  db:
+    image: postgres
+  web:
+    image: python:latest
+    command: python -m http.server 8888
+    volumes:
+      - .:/code
+    ports:
+      - "8888:8888"
+    links:
+      - db
+#    depends_on:
+#      - migration
+#  migration:
+#    build: .
+#    image: app
+#    command: python3 --version
+#    volumes:
+#      - .:/code
+#    links:
+#      - db
+#    depends_on:
+#      - db

@@ -1,0 +1,19 @@
+# Container 7613a24d9ba0  is not running
+# docker start 7613a24d9ba0
+# docker exec -it con2_test-app_1 sh
+
+# OK
+
+version: "2"
+
+services:
+  test-app:
+    build:
+      context: docker-alpine
+      dockerfile: ./Dockerfile
+    image: alpine:latest
+    #restart: always
+    entrypoint: /bin/sh
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+
