@@ -1,0 +1,16 @@
+# https://hub.docker.com/r/pytorch/pytorch
+# docker pull pytorch/pytorch
+# https://hub.docker.com/u/pytorch
+# https://github.com/anibali/docker-pytorch
+# https://hub.docker.com/r/bitnami/pytorch
+
+version: "2"
+
+# creates and 3GB image !!!
+services:
+  pytorch:
+    image: pytorch/pytorch
+    env_file:
+      - requirements.txt
+    volumes:
+      - ./app:/app"

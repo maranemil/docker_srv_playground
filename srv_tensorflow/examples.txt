@@ -1,0 +1,48 @@
+https://www.tensorflow.org/install/docker
+https://hub.docker.com/r/tensorflow/tensorflow/
+https://hub.docker.com/r/jupyter/tensorflow-notebook
+https://jupyter-docker-stacks.readthedocs.io/en/latest/index.html
+https://hub.docker.com/r/tensorflow/serving
+https://github.com/tensorflow/tensorflow/tree/master/tensorflow/tools/dockerfiles
+
+
+
+docker pull tensorflow/tensorflow                     # latest stable release
+docker pull tensorflow/tensorflow:devel-gpu           # nightly dev release w/ GPU support
+docker pull tensorflow/tensorflow:latest-gpu-jupyter  # latest release w/ GPU support and Jupyter
+
+docker run -it --rm tensorflow/tensorflow \
+   python -c "import tensorflow as tf; print(tf.reduce_sum(tf.random.normal([1000, 1000])))"
+
+
+docker run -it tensorflow/tensorflow bash
+docker run -it --rm -v $PWD:/tmp -w /tmp tensorflow/tensorflow python ./script.py
+docker run -it -p 8888:8888 tensorflow/tensorflow:nightly-jupyter
+
+
+
+docker run --gpus all --rm nvidia/cuda nvidia-smi
+docker run --gpus all -it --rm tensorflow/tensorflow:latest-gpu \
+   python -c "import tensorflow as tf; print(tf.reduce_sum(tf.random.normal([1000, 1000])))"
+docker run --gpus all -it tensorflow/tensorflow:latest-gpu bash
+
+
+docker run -it --rm tensorflow/tensorflow bash
+docker run -it --rm --runtime=nvidia tensorflow/tensorflow:latest-gpu python
+docker run -it --rm -v $(realpath ~/notebooks):/tf/notebooks -p 8888:8888 tensorflow/tensorflow:latest-jupyter
+
+
+# CPU-based images
+$ docker run -u $(id -u):$(id -g) -v $(pwd):/my-devel -it tf
+
+# GPU-based images,
+# 1) On Docker versions earlier than 19.03 (set up nvidia-docker2 first)
+$ docker run --runtime=nvidia -u $(id -u):$(id -g) -v $(pwd):/my-devel -it tf
+
+# 2) On Docker versions including and after 19.03 (with nvidia-container-toolkit)
+$ docker run --gpus all -u $(id -u):$(id -g) -v $(pwd):/my-devel -it tf
+
+# Images with Jupyter run on port 8888 and need a volume for your notebooks
+# You can change $(PWD) to the full path to a directory if your notebooks
+# live outside the current directory.
+$ docker run --user $(id -u):$(id -g) -p 8888:8888 -v $(PWD):/tf/notebooks -it tf

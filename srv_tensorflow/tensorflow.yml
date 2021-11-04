@@ -1,0 +1,10 @@
+version: "2"
+
+
+services:
+  tf:
+    image: tensorflow/tensorflow
+    ports:
+      - "8888:8888"
+    volumes:
+      - $(realpath ~/notebooks):/tf/notebooks

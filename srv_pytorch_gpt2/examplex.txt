@@ -1,0 +1,121 @@
+
+online demos textsynth gen
+https://watt-ai.github.io/demos/gpt2
+https://bellard.org/textsynth/
+https://app.inferkit.com/demo
+------------------------------------------------------------------------------------------------------------
+
+Write With Transformer
+https://transformer.huggingface.co/doc/distil-gpt2
+https://transformer.huggingface.co/doc/gpt2-large
+https://transformer.huggingface.co/doc/arxiv-nlp
+https://transformer.huggingface.co/doc/gpt2-xl
+https://transformer.huggingface.co/
+https://github.com/huggingface/transformers
+https://huggingface.co/
+https://huggingface.co/speechbrain
+https://huggingface.co/facebook
+https://huggingface.co/allenai
+https://huggingface.co/google
+https://github.com/ivanlai/Conditional_Text_Generation
+https://www.analyticsvidhya.com/blog/2019/07/openai-gpt2-text-generator-python/
+https://code.oursky.com/ai-text-generator-text-generation-with-a-gpt2-model/
+
+------------------------------------------------------------------------------------------------------------
+
+
+https://medium.com/@zaher88abd/pytorch-with-docker-b791edd67850
+https://hub.docker.com/r/anibali/pytorch
+https://hub.docker.com/r/rocm/pytorch
+https://hub.docker.com/r/bitnami/pytorch
+https://catalog.ngc.nvidia.com/orgs/nvidia/containers/pytorch
+https://stackoverflow.com/questions/65492490/how-to-install-cuda-enabled-pytorch-in-a-docker-container
+https://lambdalabs.com/blog/nvidia-ngc-tutorial-run-pytorch-docker-container-using-nvidia-container-toolkit-on-ubuntu/
+https://medium.com/wicds/custom-text-generation-using-gpt-2-6dad635da4b
+
+------------------------------------------------------------------------------------------------------------
+
+docker run --rm -it --init \
+  --runtime=nvidia \
+  --ipc=host \
+  --user="$(id -u):$(id -g)" \
+  --volume="$PWD:/app" \
+  -e NVIDIA_VISIBLE_DEVICES=0 \
+  anibali/pytorch python3 main.py
+
+Docker file
+RUN pip install package-name
+
+docker run -it --name pytorch -v /path/to/app:/app bitnami/pytorch \
+  sh -c "conda install -y --file requirements.txt && python script.py"
+
+docker run -it --name pytorch bitnami/pytorch
+docker run -it --name pytorch bitnami/pytorch
+docker pull bitnami/pytorch:latest
+docker build -t bitnami/pytorch 'https://github.com/bitnami/bitnami-docker-pytorch.git#master:1/debian-10'
+
+docker run -it --name pytorch -v /path/to/app:/app bitnami/pytorch \
+  python script.py
+
+
+------------------------------------------------------------------------------------------------------------
+
+Dockerfile
+
+# Use nvidia/cuda image
+FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04
+
+# set bash as current shell
+RUN chsh -s /bin/bash
+SHELL ["/bin/bash", "-c"]
+
+# install anaconda
+RUN apt-get update
+RUN apt-get install -y wget bzip2 ca-certificates libglib2.0-0 libxext6 libsm6 libxrender1 git mercurial subversion && \
+        apt-get clean
+RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh -O ~/anaconda.sh && \
+        /bin/bash ~/anaconda.sh -b -p /opt/conda && \
+        rm ~/anaconda.sh && \
+        ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+        echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
+        find /opt/conda/ -follow -type f -name '*.a' -delete && \
+        find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
+        /opt/conda/bin/conda clean -afy
+
+# set path to conda
+ENV PATH /opt/conda/bin:$PATH
+
+
+# setup conda virtual environment
+COPY ./requirements.yaml /tmp/requirements.yaml
+RUN conda update conda \
+    && conda env create --name camera-seg -f /tmp/requirements.yaml
+
+RUN echo "conda activate camera-seg" >> ~/.bashrc
+ENV PATH /opt/conda/envs/camera-seg/bin:$PATH
+ENV CONDA_DEFAULT_ENV $camera-seg
+
+
+requirements.yaml
+
+name: camera-seg
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.6
+  - pip
+  - numpy
+  - pillow
+  - yaml
+  - pyyaml
+  - matplotlib
+  - jupyter
+  - notebook
+  - tensorboardx
+  - tensorboard
+  - protobuf
+  - tqdm
+  - pip:
+    - torch
+    - torchvision
