@@ -57,10 +57,10 @@
 # docker inspect keycloak_container | grep IPAddress
 # "IPAddress": "172.27.0.4"
 
-# http://172.27.0.2/wp-admin/install.php
-# http://172.27.0.4:8080/auth/
+# http://172.20.0.2/wp-admin/install.php
+# http://172.20.0.4:8080/auth/
 
-version: "2"
+version: "3"
 services:
 
   postgresql:
@@ -78,14 +78,12 @@ services:
         ipv4_address: 172.20.0.5
 
   keycloak:
-    #domainname: keycloak.local
-    #hostname: keycloak
     container_name: keycloak_container
     image: docker.io/bitnami/keycloak:latest
     ports:
       - "9011:8080"
     environment:
-      - KEYCLOAK_CREATE_ADMIN_USER=truekeycloak_wordpress.yml
+      - KEYCLOAK_CREATE_ADMIN_USER=true
       #- KEYCLOAK_ADMIN_USER=user
       #- KEYCLOAK_ADMIN_PASSWORD=bitnami
       #- KEYCLOAK_MANAGEMENT_USER=manager
@@ -111,13 +109,11 @@ services:
         ipv4_address: 172.20.0.3
 
   wordpress:
-    #domainname: wordpress.local
     container_name: wordpress_container
     hostname: wordpress
     image: wordpress
     restart: always
     ports:
-    #  - "127.0.0.1:9008:80"
       - "8082:80"
     environment:
       WORDPRESS_DB_HOST: db
@@ -142,11 +138,20 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.26.0.0/16
-          ip_range: 172.25.5.0/24
+        - subnet: 172.25.0.0/16
+          ip_range: 172.25.0.0/24
+          gateway: 172.25.0.1
+
   static-network:
     driver: bridge
     ipam:
       config:
         - subnet: 172.20.0.0/16
-          ip_range: 172.20.5.0/24
+          gateway: 172.20.0.1
+         # ip_range: 172.20.0.0/24
+#  static-network:
+#    driver: bridge
+#    ipam:
+#      config:
+#        - subnet: 172.20.0.0/16
+#          ip_range: 172.20.0.1/24
