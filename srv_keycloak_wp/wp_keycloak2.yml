@@ -65,8 +65,7 @@ services:
 
   postgresql:
     image: "docker.io/bitnami/postgresql:11"
-    #links:
-    #  - keycloak
+    restart: always
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
       - POSTGRESQL_USERNAME=bn_keycloak
@@ -79,6 +78,7 @@ services:
 
   keycloak:
     container_name: keycloak_container
+    restart: always
     image: docker.io/bitnami/keycloak:latest
     ports:
       - "9011:8080"
@@ -104,6 +104,8 @@ services:
       MYSQL_USER: exampleuser
       MYSQL_PASSWORD: examplepass
       MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - db:/var/lib/mysql
     networks:
       static-network:
         ipv4_address: 172.20.0.3
@@ -126,6 +128,8 @@ services:
 
 
 volumes:
+  db:
+    driver: local
   postgresql_data:
     driver: local
 
@@ -155,3 +159,37 @@ networks:
 #      config:
 #        - subnet: 172.20.0.0/16
 #          ip_range: 172.20.0.1/24
+
+# mkdir backup
+#  docker ps -a
+# sudo docker save --output ./backup/srv_keycloak_wp_db_1.tar  mysql:5.7
+# sudo docker save --output ./backup/keycloak_container.tar bitnami/keycloak:latest
+# sudo docker save --output ./backup/wordpress_container.tar wordpress
+# sudo docker save --output ./backup/srv_keycloak_wp_postgresql_1.tar bitnami/postgresql:11
+
+# docker container ls -a
+# docker export --output="./backup/wordpress_container_export.tar" 08364b939d29
+
+# docker commit 08364b939d29  wordpress/testimage:version1
+# docker images
+
+#  docker load < ./backup/wordpress_container.tar
+#  docker images
+#  docker load --input ./backup/wordpress_container.tar
+#  docker load --input ./backup/srv_keycloak_wp_db_1.tar
+
+# docker commit 60752228d2f7  testmysql/testimage:version1
+# docker commit af722629faca  testwordpress/testimage:version1
+
+# docker image remove testmysql/testimage:version1
+# docker image remove testwordpress/testimage:version1
+
+# sudo docker ps -a
+
+# sudo docker commit ccdbc199fb3c testmysql/testimage:version2
+# sudo docker commit 47e537e8632b testwordpress/testimage:version2
+
+# sudo docker commit ccdbc199fb3c testmysql/testimage:version3
+# sudo docker commit 47e537e8632b testwordpress/testimage:version3
+
+# sudo docker images | grep testimage
