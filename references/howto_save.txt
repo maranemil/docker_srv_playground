@@ -1,0 +1,62 @@
+##############################################################
+
+How to save a Docker container state
+
+##############################################################
+
+https://stackoverflow.com/questions/44480740/how-to-save-a-docker-container-state
+https://docs.docker.com/engine/reference/commandline/image_save/
+https://docs.docker.com/engine/reference/commandline/import/
+https://docs.docker.com/engine/reference/commandline/load/
+https://docs.docker.com/engine/reference/commandline/save/
+
+
+# save
+sudo docker save --output ./backup/wordpress.tar wordpress
+sudo docker save --output ./backup/mysql.tar mysql
+ll -h backup/
+
+docker save busybox > busybox.tar
+docker save --output busybox.tar busybox
+docker save -o fedora-all.tar fedora
+docker save -o fedora-latest.tar fedora:latest
+docker save myimage:latest | gzip > myimage_latest.tar.gz
+docker save -o ubuntu.tar ubuntu:lucid ubuntu:saucy
+
+
+# export
+docker export red_panda > latest.tar
+docker export --output="latest.tar" red_panda
+
+
+cat exampleimage.tgz | docker import - exampleimagelocal:new
+cat exampleimage.tgz | docker import --message "New image imported from tarball" - exampleimagelocal:new
+docker import /path/to/exampleimage.tgz
+
+docker image ls
+docker load < busybox.tar.gz
+docker images
+docker load --input fedora.tar
+docker images
+
+docker ps
+ocker commit c3f279d17e0a  svendowideit/testimage:version3
+docker images
+
+
+https://phoenixnap.com/kb/how-to-commit-changes-to-docker-image
+
+sudo docker pull ubuntu
+sudo docker images
+sudo docker run -it cf0f3ca922e0 bin/bash
+apt-get install nmap
+nmap --version
+exit
+
+sudo docker ps -a
+sudo docker commit [CONTAINER_ID] [new_image_name]
+sudo docker commit deddd39fa163 ubuntu-nmap
+sudo docker images
+
+
+

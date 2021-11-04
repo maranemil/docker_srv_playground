@@ -1,0 +1,116 @@
+# docker exec -it web2 bash
+
+# curl -v http://localhost:8080/
+# curl -I http://localhost:8080/
+# curl: (7) Failed to connect to localhost port 8080: Connection refused
+
+# ok
+# http://localhost:8080/
+# http://localhost:8081/
+
+# curl -v http://localhost:8080/
+#   Trying 127.0.0.1:8080...
+# connect to 127.0.0.1 port 8080 failed: Connection refused
+#   Trying ::1:8080...
+# Immediate connect fail for ::1: Cannot assign requested address
+# Failed to connect to localhost port 8080: Connection refused
+# Closing connection 0
+# curl: (7) Failed to connect to localhost port 8080: Connection refused
+
+# curl -x "" http://localhost:8080/
+# curl -vvv http://localhost:8080/
+# curl -i http://localhost:8080/
+
+# netstat -tulpen | grep 8080
+# netstat -ln | grep 8080
+# sudo netstat -tulpn
+# sudo netstat -tulpn | grep 8080
+# sudo netstat -tnlp | grep :8080
+
+#tcp        0      0 0.0.0.0:8080            0.0.0.0:*               LISTEN      0          113340     15819/docker-proxy
+#tcp6       0      0 :::8080                 :::*                    LISTEN      0          121895     15825/docker-proxy
+
+# sudo tcpdump -n icmp
+
+# sudo apt-get install openssh-server
+# sudo service ssh status
+
+# bash: ifconfig: command not found
+# apt update
+# apt install net-tools
+# ifconfig -> http://172.25.0.3/
+
+
+# bash: ip: command not found
+# apt install iproute2
+# ip addr
+
+
+# docker inspect web1 -> "IPAddress": "172.25.0.2",
+# docker inspect web2 -> "IPAddress": "172.25.0.3",
+
+
+# curl -i http://172.25.0.3/
+# HTTP/1.1 200 OK
+# curl -i http://172.25.0.2/
+# HTTP/1.1 200 OK
+
+
+version: '2'
+
+
+
+services:
+  web:
+    image: php:7.3-apache
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpuset: 0-3
+    ports:
+      - "8080:80"
+    volumes:
+      - ./app:/var/www/html/
+    networks:
+      static-network:
+        ipv4_address: 172.25.0.2
+
+
+  web2:
+    image: php:7.3-apache
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpuset: 0-3
+    ports:
+      - "8081:80"
+    volumes:
+      - ./app:/var/www/html/
+    networks:
+      static-network:
+        ipv4_address: 172.25.0.3
+
+
+networks:
+  static-network:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 172.25.0.0/16
+         gateway: 172.25.0.1
+
+
+#networks:
+#  default:
+#    driver: bridge
+#    ipam:
+#      config:
+#        - subnet: 172.26.0.0/16
+#          ip_range: 172.25.5.0/24
+#  static-network:
+#    driver: bridge
+#    ipam:
+#      config:
+#        - subnet: 172.20.0.0/16
+#          ip_range: 172.28.5.0/24
+
+
+
