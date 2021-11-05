@@ -108,3 +108,27 @@ https://www.wpbeginner.com/beginners-guide/wordpress-user-roles-and-permissions/
 https://de.wordpress.org/plugins/user-role-editor/
 
 
+
+
+####################################################################
+WordPress is requiring FTP credentials before installing plugin
+####################################################################
+
+https://www.cyberciti.biz/faq/ubuntu-add-user-to-group-www-data/
+https://www.cyberciti.biz/faq/howto-linux-add-user-to-group/
+https://askubuntu.com/questions/365087/grant-a-user-permissions-on-www-data-owned-var-www
+https://wordpress.org/support/topic/wordpress-is-requiring-ftp-credentials-before-installing-plugin/
+
+add current user into ww-data
+
+useradd -g www-data vagrant
+usermod -a -G www-data vagrant
+
+# symlink - real - target
+sudo ln -s /home/vagrant/web/wordpress /srv/www/wordpress
+
+define('FS_METHOD','direct');
+chmod -R 777 /home/vagrant/web/wordpress/wp-content/plugins/
+
+
+
