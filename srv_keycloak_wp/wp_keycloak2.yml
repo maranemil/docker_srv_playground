@@ -115,6 +115,8 @@ services:
     hostname: wordpress
     image: wordpress
     restart: always
+    volumes:
+      - ./src:/var/www/html
     ports:
       - "8082:80"
     environment:

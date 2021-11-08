@@ -1,6 +1,7 @@
 https://github.com/sfx101/deck
 https://github.com/docker/compose/tags
-
+https://hub.docker.com/_/wordpress
+https://docs.docker.com/samples/wordpress/
 ----------------------------------------------------------------------
 
 https://stackoverflow.com/questions/46434057/docker-curl-7-failed-to-connect-to-localhost-port-9089-connection-refused

@@ -1,0 +1,132 @@
+Keycloak Admin API Rest Example: Get User
+https://stackoverflow.com/questions/55535440/how-to-get-users-from-keycloak-rest-api/55539390
+https://newbedev.com/how-can-i-get-other-users-info-username-firstname-by-id-keycloak
+https://gist.github.com/luciddreamz/83a888eedd9274b4045a3ab8af064faa
+https://documenter.getpostman.com/view/7294517/SzmfZHnd
+
+
+
+#Get an access token:
+curl \
+  -d "client_id=admin-cli" \
+  -d "username=admin" \
+  -d "password=secret" \
+  -d "grant_type=password" \
+  "http://localhost:8080/auth/realms/master/protocol/openid-connect/token"
+
+
+ # Get all users:
+curl \
+  -H "Authorization: bearer eyJhbGciOiJSUzI...." \
+  "http://localhost:8080/auth/admin/realms/master/users"
+
+# Get a user based by user id:
+
+curl \
+  -H "Authorization: bearer eyJhbGciOiJSU...." \
+  "http://localhost:8080/auth/admin/realms/master/users/349f67de-36e6-4552-ac54-e52085109616"
+
+  ---
+
+# get an access token
+curl -X POST \
+  https://<HOST>/auth/realms/master/protocol/openid-connect/token \
+  -H 'Accept: application/json' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -H 'cache-control: no-cache' \
+  -d 'grant_type=password&username=<USERNAME>l&password=<PASSWORD>&client_id=admin-cli'
+
+# get all users of gateway realm, use the token from above and use Bearer as prefix
+curl -X GET \
+  https://<HOST>/auth/admin/realms/gateway/users \
+  -H 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkI...' \
+  -H 'cache-control: no-cache'
+
+
+
+#!/bin/bash
+
+# requires https://stedolan.github.io/jq/download/
+
+# config
+KEYCLOAK_URL=http://localhost:8080/auth
+KEYCLOAK_REALM=realm
+KEYCLOAK_CLIENT_ID=clientId
+KEYCLOAK_CLIENT_SECRET=clientSecret
+USER_ID=userId
+
+export TKN=$(curl -X POST "${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token" \
+ -H "Content-Type: application/x-www-form-urlencoded" \
+ -d "username=${KEYCLOAK_CLIENT_ID}" \
+ -d "password=${KEYCLOAK_CLIENT_SECRET}" \
+ -d 'grant_type=password' \
+ -d 'client_id=admin-cli' | jq -r '.access_token')
+
+curl -X GET "${KEYCLOAK_URL}/admin/realms/${KEYCLOAK_REALM}/users/${$USER_ID}" \
+-H "Accept: application/json" \
+-H "Authorization: Bearer $TKN" | jq .
+
+
+
+
+curl -X POST http://localhost:8080/auth/realms/master/protocol/openid-connect/token \
+   --header "Content-Type: application/json" \
+   --data '{"grant_type": "password", "client_id": "admin-cli", "username": "admin", "password": "admin"}'
+
+
+https://keycloak.discourse.group/t/update-user-profile-through-api-without-admin-rights/1457/2
+https://keycloak.discourse.group/t/rest-api-create-user-no-user-identifier-in-response/1964/12
+https://suedbroecker.net/2020/08/04/how-to-create-a-new-realm-with-the-keycloak-rest-api/
+
+export ACCESS_TOKEN=$(curl -X POST 'http://localhost:10001/auth/realms/master/protocol/openid-connect/token' \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "username=admin" \
+  -d 'password=secret' \
+  -d 'grant_type=password' \
+  -d 'client_id=admin-cli' | jq -r '.access_token')
+
+curl -X GET 'http://localhost:10001/auth/admin/realms/development/users' \
+  -H "Accept: application/json" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" | jq .
+
+
+
+
+curl -i -H "Authorization: Bearer $ACCESS_TOKEN" http://localhost:8080/auth/admin/realms/testrealm/clients/fb0411ca-3637-4925-9325-9f979bb0e826/roles/a-new-role
+HTTP/1.1 200 OK
+curl -i -X POST --data '@role.json' -H 'Content-Type: application/json' -H "Authorization: Bearer $ACCESS_TOKEN" http://localhost:8080/auth/admin/realms/testrealm/clients/fb0411ca-3637-4925-9325-9f979bb0e826/roles
+
+
+  https://www.appsdeveloperblog.com/keycloak-rest-api-create-a-new-user/
+
+# Client Credentials Grant.
+curl --location --request POST 'http://localhost:8080/auth/realms/master/protocol/openid-connect/token' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'username=admin2' \
+--data-urlencode 'password=admin2' \
+--data-urlencode 'grant_type=password' \
+--data-urlencode 'client_id=admin-cli'
+
+curl --location --request POST 'http://localhost:8080/auth/realms/master/protocol/openid-connect/token' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'grant_type=client_credentials' \
+--data-urlencode 'client_id=admin-cli' \
+--data-urlencode 'client_secret=7fb49e15-2a86-4b7c-a648-27746c67895b'
+
+
+Create a New User Account
+curl --location --request POST 'http://localhost:8080/auth/admin/realms/appsdeveloperblog/users' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJFY2dlX3Y0c09fZUZ0TnhqYWJjT19QLTBhQ3p6S2VfMW02OU5mRjlBc1VzIn0.eyJleHAiOjE1OTI1Njc4OTEsImlhdCI6MTU5MjU2NzgzMSwianRpIjoiNjJiMWRlODEtNTBhMS00NzA2LWFmN2MtYzhhZTc1YTg1OTJhIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2F1dGgvcmVhbG1zL21hc3RlciIsInN1YiI6IjNmYjc1YTM4LTA4NjctNGZlYi04ZTBlLWYzMTkxZTZlODZlMSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFkbWluLWNsaSIsInNlc3Npb25fc3RhdGUiOiJhMDMwNGNiMS0xMzViLTQzODItYjYwMi0xNjNmNzgzYWNlN2IiLCJhY3IiOiIxIiwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJhZG1pbjIifQ.G9-OiyrGWk8cY4S3Ho255Y_euk_gTKDgYmGmU8RPBSeBNtFb_A68tuPFJxFKbzhZ1lipKJCXQsHbStoihvXAmmRsKzud5hDIvvnrD7CcVxAIpbd2wV5i6mB2wVLocV0_FCrE0-DNi_GPAKnazjFiVu3TxxM2L8Zsw7PHN9sb8Ux_lRvAFyNY5bT7NTbmEmt6LsO2An7iTZdBLScK9Lk9ZW8_0WG4eLMy9fatrpVV3MXhINW56gZD8WsWISY0m-cbIftDreZ1f2lzIjMGfkDrgCjy-VZjeIpbmffN-YGrUVywziymBRwA7FFLAxcf6jS5548HVxxKeMPIvNEfDG7eWw' \
+--data-raw '{"firstName":"Sergey","lastName":"Kargopolov", "email":"test@test.com", "enabled":"true", "username":"app-user"}'
+
+
+https://auth0.com/docs/authorization/flows/call-your-api-using-the-client-credentials-flow
+
+curl --request POST \
+  --url 'https://YOUR_DOMAIN/oauth/token' \
+  --header 'content-type: application/x-www-form-urlencoded' \
+  --data grant_type=client_credentials \
+  --data client_id=YOUR_CLIENT_ID \
+  --data client_secret=YOUR_CLIENT_SECRET \
+  --data audience=YOUR_API_IDENTIFIER

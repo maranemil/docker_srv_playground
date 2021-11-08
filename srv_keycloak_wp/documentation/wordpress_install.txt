@@ -130,5 +130,14 @@ sudo ln -s /home/vagrant/web/wordpress /srv/www/wordpress
 define('FS_METHOD','direct');
 chmod -R 777 /home/vagrant/web/wordpress/wp-content/plugins/
 
+sudo chown -Rv $USER:$USER .
+sudo chown -Rv 'www-data:www-data' src/
+
+changed ownership of '.' from www-data:www-data to demo:demo
+changed ownership of '.' from demo:demo to www-data:www-data
+
+sudo mkdir src/wp-content/plugins/keycloak_sync
+sudo chown -Rv $USER:$USER ./src/wp-content/plugins/keycloak_sync
+
 
 

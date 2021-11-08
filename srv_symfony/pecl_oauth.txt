@@ -1,0 +1,98 @@
+
+---------------------------------------------------------
+oauth  pecl
+---------------------------------------------------------
+
+https://stackoverflow.com/questions/13822406/fatal-error-class-oauth-not-found-in/37230615
+http://pecl.php.net/package/oauth
+
+sudo apt-get update
+sudo apt-get install php-oauth
+sudo service apache2 restart
+
+
+For php 5.6
+sudo apt-get update
+sudo apt-get install libpcre3-dev
+sudo apt-get install php-pear            # * see note below
+sudo apt-get install php5.6-dev          # for phpize
+sudo pecl install oauth-1.2.3
+
+
+// https://www.php.net/manual/en/oauth.examples.fireeagle.php
+// https://www.php.net/manual/en/oauth.getaccesstoken.php
+
+# PHP Fatal error:  Uncaught Error: Class "OAuth" not found
+# sudo pecl install oauth
+
+# PHP Fatal error:  Array and string offset access syntax with curly braces is no longer supported
+# https://github.com/laravel/sail/issues/173
+# https://issuehunt.io/r/laradock/laradock/issues/2738
+# https://githubmemory.com/repo/laravel/sail/issues/230
+# http://pecl.php.net/package/oauth
+/*Add this to the Dockerfile after the PHP block:
+
+    && wget http://pear.php.net/go-pear.phar \
+    && php go-pear.phar \
+    && pecl channel-update pecl.php.net \
+
+    wget http://pear.php.net/go-pear.phar && php go-pear.phar && pecl channel-update pecl.php.net
+
+#  to the Dockerfile
+RUN pecl install grpc
+
+RUN curl -O https://pear.php.net/go-pear.phar
+RUN php go-pear.phar
+RUN pecl install grpc -q
+*/
+
+
+#RUN wget https://pear.php.net/go-pear.phar \
+#    && php go-pear.phar \
+#    && pecl channel-update pecl.php.net \
+
+
+---------------------------------------------------------
+xdebug docker
+---------------------------------------------------------
+
+https://gist.github.com/hoandang/88bfb1e30805df6d1539640fc1719d12
+https://github.com/docker-library/php/issues/623
+https://stackoverflow.com/questions/47671108/docker-php-ext-install-mcrypt-missing-folder
+https://hub.docker.com/r/lyberteam/php-fpm-7.1/dockerfile####
+https://walkingsun.github.io/WindBlog/2020/06/01/dockerfile-php71/
+https://newbedev.com/how-to-install-mcrypt-on-docker####
+https://coderedirect.com/questions/396043/how-to-install-mcrypt-on-docker
+https://ostack.cn/?qa=953226/
+https://johnnn.tech/q/copy-failing-in-docker-compose-file/####
+
+RUN apt-get install libmcrypt-dev
+RUN pecl install mcrypt-1.0.1 && docker-php-ext-enable mcrypt
+
+FROM php:7.0-fpm
+RUN apt-get update && apt-get install -y \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libmcrypt-dev \
+        libpng-dev \
+    && docker-php-ext-install -j$(nproc) iconv mcrypt \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) gd
+
+## Install Xdebug
+RUN echo "Install xdebug by pecl"
+RUN yes | pecl install xdebug-2.5.0 \
+    && docker-php-ext-enable xdebug \
+#    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_enable=on\n" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_autostart=on\n" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+#    && echo "xdebug.default_enable=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_handler=dbgp\n" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_port=9001\n" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_connect_back=1\n" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
+## You can comment the next line if you don't want change xdebug configuration and build your own image
+#COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
+#FROM php:7.4.25-apache-buster
+#FROM php:8.0.12-apache-buster
