@@ -29,67 +29,77 @@
 #  -H 'cache-control: no-cache' \
 #  -d 'grant_type=password&username=wordpress&password=wordpress&client_id=wordpress&client_secret=e8158148-aa91-4cb4-8865-b2e9ade7d7ab'
 
-KECLOACK_CLIENT_ID="wordpress"
-KECLOACK_CLIENT_SECRET="e8178148-aa91-4cb4-8095-b2e9ade7d7ab"
-KECLOACK_ENDPOINT="http://172.18.0.13:8080/auth/realms/wordpress/protocol/openid-connect/auth"
-KECLOACK_ENDPOINT_TOKEN="http://172.18.0.13:8080/auth/realms/wordpress/protocol/openid-connect/token"
+KEYCLOAK_CLIENT_ID="wordpress"
+KEYCLOAK_CLIENT_SECRET="e8178148-aa91-4cb4-8095-b2e9ade7d7ab"
+# shellcheck disable=SC2034
+KEYCLOAK_ENDPOINT="http://172.18.0.13:8080/auth/realms/wordpress/protocol/openid-connect/auth"
+KEYCLOAK_ENDPOINT_TOKEN="http://172.18.0.13:8080/auth/realms/wordpress/protocol/openid-connect/token"
 # miniOrange Oauth
-KECLOACK_DOMAIN="http://172.18.0.13:8080"
+# shellcheck disable=SC2034
+KEYCLOAK_DOMAIN="http://172.18.0.13:8080"
+# shellcheck disable=SC2034
 KEYCLOAK_REALM="wordpress"
+# shellcheck disable=SC2034
 KEYCLOAK_SCOPE="openid"
-
 KEYCLOAK_USER="wordpress"
 KEYCLOAK_PASS="wordpress"
 
 # access token
-export KC_RESPONSE=$(curl -X POST $KECLOACK_ENDPOINT_TOKEN \
+# shellcheck disable=SC2155
+export KC_RESPONSE=$(curl -X POST $KEYCLOAK_ENDPOINT_TOKEN \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "username=$KEYCLOAK_USER" \
   -d "password=$KEYCLOAK_PASS" \
   -d 'grant_type=password' \
-  -d "client_secret=$KECLOACK_CLIENT_SECRET" \
-  -d "client_id=$KECLOACK_CLIENT_ID" | jq . )
+  -d "client_secret=$KEYCLOAK_CLIENT_SECRET" \
+  -d "client_id=$KEYCLOAK_CLIENT_ID" | jq . )
 
+# shellcheck disable=SC2034
 Response=$KC_RESPONSE
 #echo Response
 
-KC_ACCESS_TOKEN=$(echo $KC_RESPONSE| jq -r .access_token)
-KC_ID_TOKEN=$(echo $KC_RESPONSE| jq -r .id_token)
+KC_ACCESS_TOKEN=$(echo "$KC_RESPONSE"| jq -r .access_token)
+# shellcheck disable=SC2034
+KC_ID_TOKEN=$(echo "$KC_RESPONSE"| jq -r .id_token)
+# shellcheck disable=SC2034
+# shellcheck disable=SC2086
 KC_REFRESH_TOKEN=$(echo $KC_RESPONSE| jq -r .refresh_token)
 
-#curl -X POST $KECLOACK_ENDPOINT_TOKEN 2>/dev/null \
+#curl -X POST $KEYCLOAK_ENDPOINT_TOKEN 2>/dev/null \
 #  -H 'Accept: application/json' \
 #  -H 'Content-Type: application/x-www-form-urlencoded' \
 #  -H 'cache-control: no-cache' \
-#  -d "grant_type=password&username=$KEYCLOAK_USER&password=$KEYCLOAK_PASS&client_id=$KECLOACK_CLIENT_ID&client_secret=$KECLOACK_CLIENT_SECRET" | jq --raw-output '"\(.access_token), \(.session_state)"'
+#  -d "grant_type=password&username=$KEYCLOAK_USER&password=$KEYCLOAK_PASS&client_id=$KEYCLOAK_CLIENT_ID&client_secret=$KEYCLOAK_CLIENT_SECRET" | jq --raw-output '"\(.access_token), \(.session_state)"'
 
 
 # userinfo
-export USER_ID=$(curl -X GET 'http://172.18.0.13:8080/auth/realms/wordpress/protocol/openid-connect/userinfo' \
+# shellcheck disable=SC2155
+# shellcheck disable=SC2016
+export USER_ID=$(curl -X GET "$KEYCLOAK_DOMAIN/auth/realms/$KEYCLOAK_REALM/protocol/openid-connect/userinfo" \
   -H "Accept: application/json" \
   -H 'cache-control: no-cache' \
   -H "Authorization: Bearer $KC_ACCESS_TOKEN" | jq -r '.sub')
-echo $USER_ID
+echo "$USER_ID"
 
 # /realms/{realm-name}/protocol/openid-connect/auth
-# http://172.18.0.13:8080/auth/realms/wordpress/protocol/openid-connect/auth
+# http://172.18.0.13:8080/auth/realms/demo/protocol/openid-connect/auth
 
 # introspect
-#curl -k -v -X POST 'http://172.18.0.13:8080/auth/realms/wordpress/protocol/openid-connect/token/introspect' \
+#curl -k -v -X POST 'http://172.18.0.13:8080/auth/realms/demo/protocol/openid-connect/token/introspect' \
 #  -H "Accept: application/json" \
 #  -H 'cache-control: no-cache' \
 #  -d "token=$KC_ACCESS_TOKEN"  \
 #  -d "username=$KEYCLOAK_USER" \
-#  -d "client_secret=$KECLOACK_CLIENT_SECRET" \
-#  -d "client_id=$KECLOACK_CLIENT_ID" | jq .
+#  -d "client_secret=$KEYCLOAK_CLIENT_SECRET" \
+#  -d "client_id=$KEYCLOAK_CLIENT_ID" | jq .
 
 # certs
-#curl -L -X GET 'http://172.18.0.13:8080/auth/realms/wordpress/protocol/openid-connect/certs' | jq .
+#curl -L -X GET 'http://172.18.0.13:8080/auth/realms/demo/protocol/openid-connect/certs' | jq .
 
 
 # get all users of gateway realm, use the token from above and use Bearer as prefix
-curl -X GET \
-  http://172.18.0.13:8080/auth/admin/realms/wordpress/users \
+# shellcheck disable=SC2016
+curl -X GET "$KEYCLOAK_DOMAIN/auth/admin/realms/$KEYCLOAK_REALM/users" \
   -H "Authorization: Bearer $KC_ACCESS_TOKEN" \
   -H 'cache-control: no-cache' | jq .
 
@@ -102,7 +112,6 @@ curl -X GET \
 #curl -d "$data" -H "Content-Type: application/json" -X POST http://localhost:8080/explorer
 #
 # curl ipinfo.io/"1.1.1.1" 2>/dev/null | jq --raw-output '"\(.city), \(.region)"'
-
 # find -name *.php -print0 | xargs -0 ...do something
 
 

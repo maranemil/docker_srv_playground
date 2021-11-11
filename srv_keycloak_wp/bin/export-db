@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2046
 this_dir=$(cd `dirname $0` && pwd)
 file="$this_dir/../data/dump.sql"
  
 # Create dump file
+# shellcheck disable=SC2016
 cmd='exec mysqldump "$MYSQL_DATABASE" -uroot -p"$MYSQL_ROOT_PASSWORD"'
-docker-compose exec db sh -c "$cmd" > $file
+docker-compose exec db sh -c "$cmd" > "$file"
  
 # Remove password warning from the file
-sed -i '.bak' 1,1d $file && rm "$file.bak"
+sed -i '.bak' 1,1d "$file" && rm "$file.bak"

@@ -8,8 +8,8 @@ services:
   # WordPress image based on Apache
   wordpress:
     build:
-      context: ./docker
-      dockerfile: Dockerfile-wp
+      context: ../srv_keycloak_wp/docker
+      dockerfile: ../srv_keycloak_wp/docker/Dockerfile-wp
     depends_on:
       - my_database
     image: wordpress

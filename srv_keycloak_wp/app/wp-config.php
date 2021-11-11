@@ -1,3 +1,5 @@
+<?php
+
 /** The name of the database for WordPress */
 define('DB_NAME', $_SERVER['DB_NAME'] ?? $_ENV['DB_NAME'] ?? null);
  

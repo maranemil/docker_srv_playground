@@ -1,0 +1,56 @@
+# https://medium.com/@mihirrajdixit/getting-started-with-service-accounts-in-keycloak-c8f6798a0675
+
+version: "3.6"
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5434:5432"
+
+  keycloak:
+    image: jboss/keycloak
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PORT: "5432"
+      DB_PASSWORD: password
+      KEYCLOAK_USER: vagrant
+      KEYCLOAK_PASSWORD: vagrant
+    ports:
+      - "8088:8080"
+      - "8089:8443"
+    depends_on:
+      - postgres
+
+
+# docker run -p 8080:8080 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -e DB_VENDOR=H2 jboss/keycloak
+
+# Standard Flow Enabled - AuthorizationCode Grant Type
+# Implicit Flow Enabled - Implicit Grant Type
+# Direct Access Grants Enabled - Resource Owner Password Grant Type
+# Service Accounts Enabled - Client Credential Grant Type
+
+
+# docker exec -ti keyloack_keycloak_1 bash
+# cd /opt/jboss/keycloak/bin/
+# ./kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --password admin
+# ./kcadm.sh create realms -s realm=wordpress -s enabled=true
+# ./kcadm.sh create clients --realm wordpress -s clientId=wordpress -s enabled=true -s clientAuthenticatorType=client-secret -s secret=00000000–0000–0000–0000–000000000000
+# ./kcadm.sh get clients --realm wordpress --fields id,clientId --server http://localhost:8080/auth
+
+# No server specified. Use --server, or 'kcadm.sh config credentials or connection'.
+# ./kcadm.sh update clients/8fff6733-2788-492e-b9cb-7c8af46777c7 -r demo -s 'redirectUris=["*"]'  -s serviceAccountsEnabled=true
+# ./kcadm.sh create users --realm wordpress -s username=testadmin -s enabled=true --server http://localhost:8080/auth
+# ./kcadm.sh create users --realm wordpress -s username=demoadmin -s enabled=true --server http://localhost:8080/auth
+# null [HTTP 401 Unauthorized]
+
+# Go to Service Account Roles -> set realm-management -> view-users
+
+

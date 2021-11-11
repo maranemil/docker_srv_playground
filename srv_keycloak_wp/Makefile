@@ -6,8 +6,8 @@ SHELL = /bin/sh
 
 composer-up:
 	@echo "Starting Keycloak"
-	sudo docker-compose -f keycloak_debian.yml up -d --remove-orphans
+	sudo docker-compose -f keycloak1.yml up -d --remove-orphans
 
 composer-down:
 	@echo "Stopping Keycloak"
-	sudo docker-compose -f keycloak_debian.yml down --remove-orphans
+	sudo docker-compose -f keycloak1.yml down --remove-orphans

@@ -16,8 +16,8 @@ services:
       WORDPRESS_DB_USER: exampleuser
       WORDPRESS_DB_PASSWORD: examplepass
       WORDPRESS_DB_NAME: exampledb
-      WORDPRESS_CONFIG_EXTRA: |
-          define('WP_DEBUG', boolval(getenv('WP_DEBUG')));
+      #WORDPRESS_CONFIG_EXTRA: |
+      #    define('WP_DEBUG', boolval(getenv('WP_DEBUG')));
 
   db:
     image: mysql:5.7
