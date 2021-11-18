@@ -1,0 +1,282 @@
+
+Connection state changed (MAX_CONCURRENT_STREAMS == 250)!
+Connection state changed (MAX_CONCURRENT_STREAMS == 250)!
+404 status code for HTTP/2
+HTTP/2 403
+404 Not Found
+
+https://nestify.io/blog/http2-must-know/
+https://airbrake.io/blog/http-errors/404-not-found-error
+https://github.com/istio/istio/issues/26562
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404?retiredLocale=tr
+https://en.ryte.com/wiki/Http_Status_Code
+https://stackoverflow.com/questions/56842062/http2-request-returning-bad-request
+
+---------------------------------------------------------------------------
+wordpress sha256
+https://hub.docker.com/_/php?tab=description
+https://de.wordpress.org/download/releases/
+https://hub.docker.com/_/php?tab=tags&page=1&name=apache
+https://de.wordpress.org/download/releases/
+https://wordpress.org/download/releases/
+https://github.com/docker-library/wordpress/issues/494
+https://hub.docker.com/r/alphacodinghub/wordpress-fpm/tags
+https://hub.docker.com/layers/alphacodinghub/wordpress-fpm/5.4.1/images/sha256-c75c6de308f17686c7fe8d799533963ae7a47be1deffc7603fde72d7906767b5?context=explore
+https://hub.docker.com/layers/alphacodinghub/wordpress-fpm/5.4.2/images/sha256-5de3e9c4fc7179a0a2b77c32173a25fa2c44916deab4b6758d3eb3b1697fed7a?context=explore
+---------------------------------------------------------------------------
+
+curl-library
+Expire in 0 ms for 1 (transfer 0x7fb8da47d600)
+
+https://curl.se/mail/lib-2019-02/0053.html
+https://curl.se/mail/lib-2019-02/0053.html
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=941328
+https://stackoverflow.com/questions/63191648/curl-error-expire-in-1-ms-for-1-transfer-0x
+https://bugs.launchpad.net/ubuntu/+source/curl/+bug/1841088
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=941328
+https://blog.mornati.net/http2-some-basic-tests-to-check-if-it-is-working-on-your-website
+https://github.com/curl/curl/issues/674
+https://stackoverflow.com/questions/34571711/cant-run-curl-command-inside-my-docker-container
+https://linuxize.com/post/curl-command-examples/
+https://fossies.org/linux/curl/lib/transfer.c
+https://stackoverflow.com/questions/51761779/keycloak-403-forbidden-error-while-accessing-rest-resource-where-as-evaluate-api
+https://github.com/MohammadWaleed/keycloak-admin-client
+https://coderedirect.com/questions/21495/php-curl-script-works-from-browser-doesnt-work-as-cron-job
+
+
+# curl -Iv4 ya.ru
+* Expire in 0 ms for 6 (transfer 0x55cb96de7d00)
+* Expire in 1 ms for 1 (transfer 0x55cb96de7d00)
+
+curl -vso /dev/null https://blog.some.net
+curl --http1.1 -v https://blog.some.net
+curl --http2 -v https://blog.some.net
+curl --http2 -v "https://en.some.org" > /dev/null
+
+curl -v --http2 --output /dev/null https://twitter.com
+nghttp -nv https://twitter.com
+curl --http1.1 -I https://twitter/
+curl -V
+
+setsebool -P httpd_can_network_connect on
+
+
+Test if a Website Supports HTTP/2
+curl -I --http2 -s https://twitter.com/ | grep HTTP
+curl -I --http1.1 -s https://twitter.com/ | grep HTTP
+
+curl --limit-rate 1m -O https://somefile
+curl --verbose --negotiate -u : -o /dev/null http://localhost -s
+curl -v http://localhost --compressed
+---------------------------------------------------------------------------
+https://docs.apigee.com/api-platform/reference/policies/oauth-http-status-code-reference
+https://connect2id.com/products/server/docs/api/userinfo
+https://ordina-jworks.github.io/security/2019/08/22/Securing-Web-Applications-With-Keycloak.html
+https://keycloak.discourse.group/t/access-control-allow-origin-header-missing/328/25
+https://www.keycloak.org/docs-api/9.0/rest-api/index.html
+https://weichie.com/blog/php-curl-api-calls-authentication/
+https://stackoverflow.com/questions/51761779/keycloak-403-forbidden-error-while-accessing-rest-resource-where-as-evaluate-api
+---------------------------------------------------------------------------
+
+
+
+##########################################################
+curl-vs-httpie-http-apis
+##########################################################
+
+https://www.ctl.io/developers/blog/post/curl-vs-httpie-http-apis
+https://everything.curl.dev/http/auth
+
+[auth]
+curl -s -H "Content-Type: application/json" \
+   -X POST https://api.ctl.io/v2/authentication/login \
+   --data '{"username":"YOUR.USERNAME","password":"YOUR.PASSWORD"}'
+
+http POST https://api.ctl.io/v2/authentication/login \
+   'username=YOUR.USERNAME' 'password=YOUR.PASSWORD'
+
+
+[get data]
+curl -X GET -H 'Authorization: Bearer BEARER.TOKEN' \
+    https://api.ctl.io/v2/datacenters/XXX/WA1
+
+http GET https://api.ctl.io/v2/datacenters/XXX/WA1 \
+    'Authorization:Bearer BEARER.TOKEN'
+
+##########################################################
+cURL js
+##########################################################
+
+https://stackoverflow.com/questions/30539009/jquery-ajax-equivalent-of-curl-command-cors-spring-oauth-security
+https://stackoverflow.com/questions/30539009/jquery-ajax-equivalent-of-curl-command-cors-spring-oauth-security
+
+
+var str = client_id + ":" + client_secret;
+var enc = window.btoa(str);
+var cred = "grant_type=password&username="+ userName +"&password=" + password;
+
+$.ajax({
+        type: "POST",
+        url: _loginUrl,
+        headers:{
+            'Authorization':'Basic '+enc,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        processData: false,
+        data : cred,
+        success: function (data) {
+            console.log('login success ...' + JSON.stringify(data));
+        }
+    }
+);
+
+
+ $.ajax({
+    url: "http://localhost:8080/oauth/token",
+    method: "POST",
+    username: "test-rest",
+    password: "test-passwd",
+    contentType: "application/www-x-form-urlencoded",
+    crossDomain: true,
+    async: false,
+    cache: false,
+    data: {
+        "grant_type": "password",
+        "username": "admin",
+        "password": "admin"
+    },
+    success: function (data) {
+        console.log(data);
+        retrieveCases();
+    },
+    error: function () {
+        console.log("authorization failed");
+    }
+});
+
+---------------------------------------------------------------------------
+
+##########################################################
+cURL works from Terminal, but not from PHP
+##########################################################
+
+https://stackoverflow.com/questions/27088070/curl-works-from-terminal-but-not-from-php
+https://stackoverflow.com/questions/27088070/curl-works-from-terminal-but-not-from-php
+https://weichie.com/blog/php-curl-api-calls-authentication/
+https://stackoverflow.com/questions/36555908/php-curl-results-in-403-forbidden
+https://keycloak.discourse.group/t/api-call-received-unknown-error-403-forbidden/6992/2
+https://keycloak.discourse.group/t/create-or-list-users-did-not-work-well-responds-error-unknown-error/9206/4
+https://scalac.io/blog/user-authentication-keycloak-1/
+https://scalac.io/blog/user-authentication-keycloak-1/
+https://www.php.net/manual/en/function.curl-getinfo.php
+https://www.cyberciti.biz/faq/how-to-install-curl-command-on-a-ubuntu-linux/
+https://www.php.net/manual/en/function.curl-setopt.php
+
+curl 'http://moodle.tsrs.org/login/index.php'
+-H 'Pragma: no-cache'
+-H 'Origin: http://moodle.tsrs.org'
+-H 'Accept-Encoding: gzip, deflate'
+-H 'Accept-Language: en-US,en;q=0.8'
+-H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36'
+-H 'Content-Type: application/x-www-form-urlencoded'
+-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+-H 'Cache-Control: no-cache'
+-H 'Referer: http://moodle.tsrs.org/login/index.php'
+-H 'Cookie: MoodleSession=nigh028m37gm8gaffe07mvs7'
+-H 'Connection: keep-alive'
+
+function login() {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    if(!isset($_POST['username']) || !isset($_POST['password'])) {
+        echo "No login data received";
+        return;
+    }
+
+    $creq = curl_init();
+
+    $data = array('username' => $username, 'password' => $password, 'testcookies'=> '1');
+
+    $headers = array('Pragma: no-cache', 'Origin: http://moodle.tsrs.org', 'Accept-Encoding: ', 'Accept-Language: en-US,en;q=0.8', 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36', 'Content-Type: application/x-www-form-urlencoded', 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', 'Cache-Control: no-cache', 'Cookie: MoodleSession=ngcidh028m37gm8gbdfe07mvs7; MOODLEID_=%25F1%25CD%2519D%25B2k%25FE%251D%25EFH%25E5t%25B1%2503%258E; MoodleSessionTest=NhzaTNij6j; _ga=GA1.2.925953522.1416155774; _gat=1; __utmt=1; __utma=147409963.925953522.1416155774.1416642544.1416692798.3; __utmb=147409963.1.10.1416692798; __utmc=147409963; __utmz=147409963.1416155774.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)', 'Connection: keep-alive' );
+        curl_setopt_array($creq, array(
+        CURLOPT_URL => 'http://moodle.tsrs.org/login/index.php',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_ENCODING => '',
+        CURLINFO_HEADER_OUT => true,
+        #CURLOPT_POSTFIELDS => $data,
+        CURLOPT_POSTFIELDS => http_build_query($data),
+        CURLOPT_HTTPHEADER => $headers,
+        CURLOPT_FOLLOWLOCATION => false
+    ));
+
+    $output = curl_exec($creq);
+    echo print_r(curl_getinfo($creq));
+    echo "\n" . $output . "\n";
+}
+
+
+curl_setopt($curl, CURLOPT_DNS_CACHE_TIMEOUT, 60);
+curl_setopt($curl, CURLOPT_DNS_USE_GLOBAL_CACHE, 0);
+curl_setopt($curl, CURLOPT_MAXREDIRS, -1);
+curl_setopt($curl, CURLOPT_NOSIGNAL, 0);
+
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+curl_setopt($ch, CURLOPT_USERPWD, 'rrr@eee.co.uk' . ':' . 'my-api-token-here');
+
+---------------------------------------------------------------------------
+
+##########################################################
+docker-container curl
+##########################################################
+
+https://www.php.net/manual/en/function.shell-exec.php
+https://www.php.net/manual/en/function.exec.php
+https://github.com/php/php-src/blob/9f128ef5f4e294d76850b969c1f44551207307b9/ext/curl/interface.c#L1927
+https://stackoverflow.com/questions/27088070/curl-works-from-terminal-but-not-from-php
+https://stackoverflow.com/questions/34571711/cant-run-curl-command-inside-my-docker-container
+https://newbedev.com/can-t-run-curl-command-inside-my-docker-container
+https://coderedirect.com/questions/207520/cant-run-curl-command-inside-my-docker-container
+https://docs.docker.com/engine/api/sdk/examples/
+https://www.codegrepper.com/code-examples/shell/installing+docker+with+curl
+https://docs.github.com/en/rest/guides/getting-started-with-the-rest-api
+https://docs.github.com/en/rest/overview/other-authentication-methods
+https://www.buzzphp.com/posts/keycloak-get-users-returns-403-forbidden
+https://medium.com/@sudesh0101/keycloak-directs-to-403-forbidden-page-if-user-is-unauthorized-10249c4af2c9
+
+Alpine based image
+
+UN
+... \
+apk add --no-cache curl \
+curl ...
+
+
+https://www.keycloak.org/docs/latest/server_development/
+https://www.keycloak.org/docs/latest/server_admin/
+https://github.com/keycloak/keycloak-community/blob/main/design/rest-api-guideline.md#http-status-codes
+https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/topics/admin-cli.html
+https://www.keycloak.org/docs-api/12.0/rest-api/
+https://reqbin.com/req/c-haxm0xgr/curl-basic-auth-example
+
+---------------------------------------------------------------------------
+
+Docker - Ubuntu - bash: ping: command not found
+https://stackoverflow.com/questions/39901311/docker-ubuntu-bash-ping-command-not-found
+https://superuser.com/questions/718916/problems-installing-ping-in-docker
+
+apt-get update
+apt-get install iputils-ping
+
+
+FROM ubuntu
+RUN apt-get update && apt-get install -y iputils-ping
+CMD bash
+
+sudo docker run ubuntu apt-get install iputils-ping
+
+---------------------------------------------------------------------------
