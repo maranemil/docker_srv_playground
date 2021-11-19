@@ -1,0 +1,61 @@
+##########################################################
+How can you make the Docker container use extra '/etc/hosts' ip mapping
+##########################################################
+
+https://stackoverflow.com/questions/32079364/how-can-you-make-the-docker-container-use-the-host-machines-etc-hosts-file
+https://docs.docker.com/compose/compose-file/
+https://docs.docker.com/engine/reference/builder/
+https://docs.docker.com/network/
+https://docs.docker.com/config/containers/container-networking/
+https://forums.docker.com/t/how-to-build-the-docker-image-with-customized-ip-in-etc-hosts-file/674/5
+https://github.com/moby/moby/issues/10324
+https://www.thegeekdiary.com/how-to-add-new-host-entry-in-etc-hosts-when-a-docker-container-is-run/
+https://codeopolis.com/posts/add-a-host-entry-to-a-docker-container/
+https://www.cloudbees.com/blog/using-the-add-host-flag-for-dns-mapping-within-docker-containers
+
+--network=host
+
+docker run -it ubuntu cat /etc/hosts
+docker run -it --add-host foo:10.0.0.3 ubuntu cat /etc/hosts
+docker run -it --add-host foo:10.0.0.3 --add-host bar:10.7.3.21 ubuntu cat /etc/hosts
+docker exec -u 0 /bin/sh -c “echo '192.168.50.100 ’ >> /etc/hosts”
+docker run -it --add-host=:192.168.50.100 -v /etc/hosts:/etc/hosts ubuntu
+
+docker run -d \
+--name wordpress \
+-p 8080:80 \
+--add-host yourdomain.com:127.0.0.1 \
+wordpress
+
+
+docker-compose.yml:
+
+extra_hosts:
+ - "somehost:162.242.195.82"
+ - "otherhost:50.31.209.229"
+
+extra_hosts:
+  - "yourdomain.com:127.0.0.1"
+
+
+
+Dockerfile:
+
+FROM busybox
+RUN echo 8.8.8.8 foo > /etc/hosts; ping -c 4 foo
+
+
+##########################################################
+opcache
+##########################################################
+
+https://kinsta.com/blog/wordpress-caching-plugins/
+https://stackoverflow.com/questions/25747174/opcache-revalidate-freq-config-in-php-ini
+https://www.php.net/manual/en/opcache.configuration.php
+https://athemes.com/performance/best-wordpress-caching-plugins/
+https://www.php.net/manual/en/opcache.configuration.php#ini.opcache.revalidate-path
+https://tideways.com/profiler/blog/fine-tune-your-opcache-configuration-to-avoid-caching-suprises
+
+
+opcache.revalidate_freq=30
+opcache.validate_timestamps=1

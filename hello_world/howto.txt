@@ -13,3 +13,74 @@ docker ps -a
 docker run hello-world
 docker run -it ubuntu bash
 sudo docker run -d -p 80 hello-world
+
+
+##########################################################
+Top 8 Docker Best Practices for using Docker in Production
+##########################################################
+
+https://www.youtube.com/watch?v=8vXoMqWgbQQ####
+https://www.youtube.com/watch?v=FzwIs2jMESM####
+https://www.youtube.com/watch?v=_m9JYAvFB8s####
+https://www.youtube.com/watch?v=gAkwW2tuIqE####
+
+https://hub.docker.com/_/node
+https://hub.docker.com/_/php
+https://hub.docker.com/_/openjdk
+
+FROM node:17.0.1-alpine
+WORKDIR /app
+COPY myapp /app
+RUN npm install --production
+CMD["node","src/index,js"]
+
+.dockerignorefile
+
+FROM node:10-alpine
+..
+RUN chown -R node:node /app
+USER node
+CMD["node","index.js"]
+
+docker scan myapp:1.0 # snyk
+test Dockerfile with the --no-cache flag
+
+
+FROM node:12
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+
+----
+https://github.com/daliasheasha/HelloWorldDocker
+# HelloworldDocker
+public class Main{
+	public static void main(String[] args){
+		System.out.plrintln("Hello World")
+	}
+}
+
+FROM openjdk:11
+RUN mkdir /app
+COPY out/production/HelloworldDocker/ /app
+WORKDIR /app
+CMD java Main
+
+docker build -t hello world:1.0 .
+docker run hello world:1.0
+docker run -d hello world:1.0
+
+---
+Dockerfile
+
+FROM apline
+WORKDIR /app
+COPY HelloWorld.java /app
+RUN apk add openjdk8
+ENV JAVA_HOME /user/lib/jvm/java-1.8-openjdk
+ENV PATH $PATH:JAVA_HOME/bin
+RUN javac HelloWorld.java
+ENTRYPOINT java HelloWorld
+
+docker build .
+docker run containerid

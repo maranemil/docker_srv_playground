@@ -34,9 +34,9 @@ https://www.keycloak.org/docs/4.8/server_admin/
 https://www.keycloak.org/docs/4.8/authorization_services/
 https://medium.com/webeetle/keycloak-e-wordpress-555d0c2cfec7
 
-----------------------------------------------
+##########################################################
 WordPress config test
-----------------------------------------------
+##########################################################
 
 
 Client ID			            wordpress

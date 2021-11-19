@@ -228,7 +228,7 @@ curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
 curl_setopt($ch, CURLOPT_USERPWD, 'rrr@eee.co.uk' . ':' . 'my-api-token-here');
 
----------------------------------------------------------------------------
+
 
 ##########################################################
 docker-container curl
