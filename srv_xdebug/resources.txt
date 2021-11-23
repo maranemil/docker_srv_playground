@@ -1,0 +1,116 @@
+
+
+#####################################################################
+#
+#	xdebug docker
+#
+#####################################################################
+
+# sudo apt install php-xdebug
+
+Dockerfile
+
+https://stackoverflow.com/questions/55217610/xdebug-extenstion-does-not-install-with-php5-6-apache?noredirect=1&lq=1
+https://stackoverflow.com/questions/64766598/docker-compose-prevent-pecl-install-from-stopping-the-build-process
+https://stackoverflow.com/questions/64935299/enable-xdebug-in-php-project-under-debian9-slim-container
+https://github.com/canax/docker/blob/master/php74/cli/Dockerfile
+https://github.com/matiasdelellis/facerecognition/issues/160
+https://gist.github.com/chadrien/c90927ec2d160ffea9c4
+https://forums.docker.com/t/xdebug-extenstion-does-not-install-with-php-5-6-apache/71344
+https://githubmemory.com/repo/mlocati/docker-php-extension-installer/issues/341
+https://gist.github.com/chadrien/c90927ec2d160ffea9c4
+https://gist.github.com/chadrien/c90927ec2d160ffea9c4
+https://www.jetbrains.com/help/phpstorm/2021.2/zero-configuration-debugging.html
+
+# add xdebug3
+
+RUN yes | pecl install xdebug \
+	    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+	    && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
+	    && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini \
+
+
+pecl install xdebug && docker-php-ext-enable xdebug
+
+....
+
+
+Debug your PHP in Docker with Intellij/PHPStorm and Xdebug
+For your local dev, create a Dockerfile that is based on your production image and simply install xdebug into it. Exemple:
+FROM php:5
+
+RUN yes | pecl install xdebug \
+   && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+   && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
+   && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini \
+
+   && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/xdebug.ini \
+   && echo "xdebug.mode=profile,debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
+
+
+
+Get you local IP address (ifconfig or such)
+Start your container with the following environment variable: XDEBUG_CONFIG="remote_host={{YOUR_IP_ADDRESS}}"
+
+Simple docker run: docker run -e XDEBUG_CONFIG="remote_host={{YOUR_IP_ADDRESS}}" your-image
+
+
+With docker-compose:
+
+# docker-compose.yml
+foo:
+  build: path/to/Dockerfile
+  environment:
+    XDEBUG_CONFIG: remote_host={{YOUR_IP_ADDRESS}}
+In Intellij/PHPStorm go to: Languages & Frameworks > PHP > Debug > DBGp Proxy and set the following settings:
+Host: your IP address
+Port: 9000
+Then you're all set and can start listening for PHP Debug connections from your IDE. On the first run it will ask you to map your local directoryies to the docker directories, but after that nothing will be required anymore!
+
+Happy debugging!
+
+---
+
+
+
+
+
+xdebug.ini
+
+zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20180731/xdebug.so
+xdebug.remote_enable=on
+xdebug.cli_color=1
+xdebug.client_host = host.docker.internal
+xdebug.discover_client_host = 1
+xdebug.mode = develop,coverage,profile,trace,debug
+xdebug.start_with_request = 1
+
+cat /usr/local/etc/php/conf.d/xdebug.ini
+
+zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20180731/xdebug.so
+xdebug.remote_enable=on
+xdebug.remote_autostart=off
+xdebug.client_host = host.docker.internal
+
+
+RUN pecl install xdebug; \
+
+RUN { \
+      echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)"; \
+      echo "xdebug.remote_enable=on"; \
+      echo "xdebug.remote_autostart=off"; \
+      echo "xdebug.client_host=host.docker.internal"; \
+    } > /usr/local/etc/php/conf.d/xdebug.ini
+
+
+RUN sleep 60;
+
+FROM alpine
+CMD ["sleep", "10"]
+
+FROM alpine
+ENTRYPOINT ["sleep"]
+CMD ["10"]
+
+FROM ubuntu
+CMD sleep 10
