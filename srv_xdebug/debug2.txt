@@ -1,0 +1,246 @@
+#####################################################
+xdebug3
+#####################################################
+
+https://stackoverflow.com/questions/65255516/how-does-the-new-xdebug-3-configuration-work
+https://xdebug.org/docs/all_settings
+https://xdebug.org/docs/upgrade_guide
+https://xdebug.org/docs/all_settings#mode
+https://xdebug.org/docs/profiler#kcachegrind
+http://manpages.ubuntu.com/manpages/bionic/man1/kcachegrind.1.html
+https://www.jetbrains.com/help/phpstorm/profiling-with-xdebug.html#enable-profiling-with-xdebug
+https://www.youtube.com/watch?v=8yUY063WgDg
+
+...
+
+sudo apt install kcachegrind -y
+
+
+xdebug.mode = debug,profile
+xdebug.start_with_request=trigger
+
+xdebug3
+RUN { \
+        echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)"; \
+        echo "xdebug.remote_enable=on"; \
+        echo "xdebug.remote_autostart=off"; \
+        echo "xdebug.client_host=host.docker.internal"; \
+        echo "xdebug.discover_client_host=1"; \
+        echo "xdebug.mode=profile"; \
+        echo "xdebug.start_with_request=yes"; \
+        echo "xdebug.client_host=host.docker.internal"; \
+    } > /usr/local/etc/php/conf.d/xdebug.ini
+
+
+
+DEBUG
+cat /usr/local/etc/php/conf.d/xdebug.ini
+
+zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20180731/xdebug.so
+xdebug.remote_enable=on
+xdebug.remote_autostart=off
+xdebug.client_host=host.docker.internal
+xdebug.discover_client_host=1
+xdebug.mode=debug
+xdebug.start_with_request=yes
+xdebug.client_host=host.docker.internal
+
+
+service apache2 reload
+
+#####################################################
+Install Xdebug 3 in the PHP container
+#####################################################
+
+https://medium.com/@sirajul.anik/install-and-configure-xdebug-3-in-a-docker-container-and-integrate-step-debugging-with-phpstorm-5e135bc3290a
+https://www.jetbrains.com/help/phpstorm/profiling-with-xdebug.html#enable-profiling-with-xdebug
+https://www.jetbrains.com/help/phpstorm/profiling-with-xdebug.html#analyze-xdebug-profiling-data
+https://dev.to/_mertsimsek/using-xdebug-with-docker-2k8o
+https://dev.to/selrahcd/faster-environment-with-xdebug-and-docker-366m
+https://matthewsetter.com/setup-step-debugging-php-xdebug3-docker/
+
+FROM php:7.4-fpm
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
+
+cat /usr/local/etc/php/conf.d/xdebug.ini
+
+[xdebug]
+xdebug.mode=develop,debug
+xdebug.client_host=host.docker.internal
+xdebug.start_with_request=yes
+
+[xdebug]
+xdebug.mode=develop,debug
+xdebug.client_host=host.docker.internal
+xdebug.start_with_request=yes
+xdebug.log=/tmp/xdebug.log
+
+
+cat /usr/local/etc/php/conf.d/xdebug.ini
+
+zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20180731/xdebug.so
+xdebug.remote_enable=on
+xdebug.remote_autostart=off
+xdebug.client_host=host.docker.internal
+xdebug.discover_client_host=1
+xdebug.mode=develop,debug
+xdebug.start_with_request=yes
+
+
+#xdebug3
+debug_info();exit;
+phpinfo(); exit;
+
+
+FROM php:7.2-fpm-alpine
+
+RUN apk update \
+    && apk add  --no-cache git mysql-client curl libmcrypt libmcrypt-dev openssh-client icu-dev \
+    libxml2-dev freetype-dev libpng-dev libjpeg-turbo-dev g++ make autoconf \
+    && docker-php-source extract \
+    && pecl install xdebug redis \
+    && docker-php-ext-enable xdebug redis \
+    && docker-php-source delete \
+    && docker-php-ext-install pdo_mysql soap intl zip \
+    && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_port=9001" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_connect_back=0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.idekey=mertblog.net" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_host=docker.for.mac.localhost" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && rm -rf /tmp/*
+
+CMD ["php-fpm", "-F"]
+WORKDIR /var/www/app
+EXPOSE 9000
+
+
+https://hackernoon.com/how-to-debug-php-container-with-xdebug-and-phpstorm-1b2k3yjo
+https://devdocs.magento.com/cloud/docker/docker-development-debug.html
+https://maxchadwick.xyz/blog/xdebug-profiler-files-not-in-output-dir
+https://stackoverflow.com/questions/64776338/xdebug-3-the-setting-xdebug-remote-has-been-renamed-see-the-upgrading-g
+https://github.com/docker/for-mac/issues/2965
+https://docs.docker.com/compose/compose-file/compose-file-v3/#extra_hosts
+https://github.com/docker/for-linux/issues/264
+https://coderedirect.com/questions/4547/xdebug-3-the-setting-xdebug-remote-has-been-renamed-see-the-upgrading-g
+https://stackoverflow.com/questions/64776338/xdebug-3-the-setting-xdebug-remote-has-been-renamed-see-the-upgrading-g
+https://blog.jetbrains.com/phpstorm/2020/11/phpstorm-2020-3-eap-6/
+
+....
+https://xdebug.org/docs/all_functions
+https://maxchadwick.xyz/blog/xdebug-profiler-files-not-in-output-dir
+https://riptutorial.com/php/example/12870/profiling-with-xdebug
+
+php -r 'var_dump(ini_get("xdebug.mode"));'
+Cannot load Xdebug - it was already loaded
+string(4) "/tmp"
+
+php
+request.php?XDEBUG_TRIGGER=1
+request.php?XDEBUG_PROFILE=1
+request.php?XDEBUG_PROFILE=1
+
+
+ERR_EMPTY_RESPONSE
+
+https://laravelquestions.com/2021/04/22/docker-on-laravel-8-for-programming-not-run-on-browser/
+
+
+export XDEBUG_SESSION=PHPSTORM
+service apache2 reload
+
+index.php
+echo xdebug_info();
+echo xdebug_get_profiler_filename(); exit;
+
+php index.php
+
+
+......
+
+
+[Step Debug] Creating socket for 'localhost:9000', poll success, but error: Operation now in progress (29).
+[Step Debug] Creating socket for 'localhost:9000', connect: Cannot assign requested address.
+[Step Debug] Could not connect to debugging client. Tried: localhost:9000 (through xdebug.client_host/xdebug.client_port) :-(
+
+
+https://stackoverflow.com/questions/48546124/what-is-linux-equivalent-of-host-docker-internal/61001152
+
+version: '3.7'
+
+services:
+
+  fpm:
+    build:
+      context: .
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
+
+
+
+cat /usr/local/etc/php/conf.d/xdebug.ini
+zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20180731/xdebug.so
+xdebug.remote_enable=on
+xdebug.remote_autostart=off
+xdebug.client_host=host.docker.internal
+
+;xdebug.mode=develop,debug,trace,coverage,gcstats
+;xdebug.start_with_request=yes
+;xdebug.idekey=PHPSTORM
+
+xdebug.mode               = develop,debug
+xdebug.start_with_request = yes
+
+;xdebug.client_port        = 9003
+;xdebug.idekey             = PHPSTORM
+
+
+
+https://github.com/docker/for-win/issues/2402
+
+apt-get update
+apt-get install iputils-ping
+
+ping host.docker.internal
+
+127.0.0.1 host.docker.internal
+127.0.0.1 gateway.docker.internal
+
+
+chmod 0777 /tmp/
+
+
+xdebug3 conf OK
+cat /usr/local/etc/php/conf.d/xdebug.ini
+
+zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20180731/xdebug.so
+xdebug.client_host=host.docker.internal
+xdebug.mode               = develop,debug,coverage,gcstats,trace,profile
+xdebug.start_with_request = yes
+xdebug.idekey             = PHPSTORM
+xdebug.log=/tmp/xdebug.log
+
+
+....
+
+https://blog.jetbrains.com/phpstorm/2020/11/phpstorm-2020-3-eap-6/
+
+
+FROM php:8.0-rc-cli
+RUN mkdir -p /usr/src/php/ext/xdebug && curl -fsSL https://pecl.php.net/get/xdebug | tar xvz -C "/usr/src/php/ext/xdebug" --strip 1 && docker-php-ext-install xdebug
+RUN docker-php-ext-enable xdebug
+
+version: '2'
+services:
+ debug:
+   build: .
+   volumes:
+     - ./:/var/www/html
+   environment:
+     XDEBUG_MODE: debug
