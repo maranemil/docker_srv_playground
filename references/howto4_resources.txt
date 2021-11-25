@@ -1,0 +1,341 @@
+configure: error: unrecognized options: --with-jpeg-dir, --with-png-dir
+
+https://www.php.net/manual/en/image.installation.php
+https://github.com/docker-library/php/issues/912
+https://github.com/docker-library/php/issues/912
+https://github.com/docker-library/php/issues/931
+https://github.com/docker-library/php/pull/910#issuecomment-559383597
+https://stackoverflow.com/questions/61228386/installing-gd-extension-in-docker
+https://github.com/Aloxaf/silicon/issues/62
+https://github.com/docker-library/php/issues/1080
+https://newbedev.com/installing-gd-in-docker
+https://forums.docker.com/t/problems-installing-gd-on-php7-2-with-docker-docker-version-18-09-7-build-2d0083d/78400/3
+https://pretagteam.com/question/trying-to-add-freetype-to-phpgd-in-docker-official-image
+https://laracasts.com/discuss/channels/general-discussion/docker-error-enable-modules
+https://stackoverflow.com/questions/39657058/installing-gd-in-docker
+
+
+
+gd has unrecognized options in PHP 7.4 #912
+
+As of PHP 7.4.0, --with-png-dir and --with-zlib-dir have been removed. libpng and zlib are required.
+
+To enable support for jpeg add --with-jpeg-dir=DIR. Jpeg 6b, 7 or 8 are supported. As of PHP 7.4.0, use --with-jpeg instead.
+
+
+PHP 7.3
+docker-php-ext-configure gd --with-jpeg-dir=/usr --with-png-dir=/usr \
+
+PHP 7.4
+docker-php-ext-configure gd --with-jpeg \
+
+
+
+Old
+RUN docker-php-ext-configure gd
+--with-png-dir=/usr/include/
+--with-jpeg-dir=/usr/include/
+--with-freetype-dir=/usr/include/
+
+New
+RUN docker-php-ext-configure gd
+--with-png=/usr/include/
+--with-jpeg=/usr/include/
+--with-freetype=/usr/include/
+
+-----------------------------------------------------
+
+
+
+FROM php:7.4-fpm
+RUN apt update && apt install -y zlib1g-dev libpng-dev && rm -rf /var/lib/apt/lists/*
+RUN docker-php-ext-install gd
+
+
+
+-----------------------------------------------------
+
+FROM php:5.6-apache
+RUN docker-php-ext-install mysql mysqli
+RUN apt-get update -y && apt-get install -y sendmail libpng-dev
+RUN apt-get update && apt-get install -y zlib1g-dev
+RUN docker-php-ext-install mbstring
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install gd
+
+
+-----------------------------------------------------
+
+FROM php:7.4-fpm-alpine
+RUN apk add --no-cache \
+      freetype \
+      libjpeg-turbo \
+      libpng \
+      freetype-dev \
+      libjpeg-turbo-dev \
+      libpng-dev \
+    && docker-php-ext-configure gd \
+      --with-freetype=/usr/include/ \
+      # --with-png=/usr/include/ \ # No longer necessary as of 7.4; https://github.com/docker-library/php/pull/910#issuecomment-559383597
+      --with-jpeg=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-enable gd \
+    && apk del --no-cache \
+      freetype-dev \
+      libjpeg-turbo-dev \
+      libpng-dev \
+    && rm -rf /tmp/*
+
+
+-----------------------------------------------------
+
+
+FROM php:7-fpm
+RUN docker-php-ext-install mysqli pdo pdo_mysql
+RUN apt-get update -y && apt-get install -y libwebp-dev libjpeg62-turbo-dev libpng-dev libxpm-dev \
+    libfreetype6-dev
+RUN apt-get update && \
+    apt-get install -y \
+        zlib1g-dev
+
+RUN docker-php-ext-install mbstring
+RUN apt-get install -y libzip-dev
+RUN docker-php-ext-install zip
+
+RUN docker-php-ext-configure gd --with-gd --with-webp-dir --with-jpeg-dir \
+    --with-png-dir --with-zlib-dir --with-xpm-dir --with-freetype-dir \
+    --enable-gd-native-ttf
+
+RUN docker-php-ext-install gd
+CMD ["php-fpm"]
+EXPOSE 9000
+
+
+
+
+
+FROM php:7.2-fpm
+RUN apt-get update && apt-get install -y \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libpng-dev \
+    && docker-php-ext-install -j$(nproc) iconv \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) gd
+
+    -----------------------------------------------------
+
+
+FROM php:7.4-fpm-alpine
+
+RUN apk add icu-dev musl-dev zip libzip-dev freetype-dev libpng libpng-dev libjpeg-turbo-dev libxml2 libxslt-dev libwebp-dev zlib-dev libxpm-dev --no-cache \
+    coreutils \
+    php7-fpm \
+    php7-apcu \
+    php7-ctype \
+    php7-curl \
+    php7-dom \
+    php7-gd \
+    php7-iconv \
+    php7-imagick \
+    openssh-client \
+    imagemagick \
+    imagemagick-libs \
+    imagemagick-dev \
+    php7-json \
+    php7-intl \
+    php7-mcrypt \
+    php7-fileinfo\
+    php7-mbstring \
+    php7-opcache \
+    php7-openssl \
+    php7-pdo \
+    php7-pdo_mysql \
+    php7-mysqli \
+    php7-xml \
+    php7-zlib \
+    php7-phar \
+    php7-tokenizer \
+    php7-session \
+    php7-simplexml \
+    php7-xdebug \
+    php7-zip \
+    php7-xmlwriter \
+    make \
+    curl
+RUN apk add --no-cache $PHPIZE_DEPS
+RUN apk add --update nodejs npm
+RUN apk add --update npm
+# Install PHP extensions
+RUN docker-php-ext-configure intl
+RUN docker-php-ext-install intl
+RUN docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
+    && docker-php-ext-install gd
+RUN docker-php-ext-install mysqli pdo pdo_mysql
+RUN docker-php-ext-configure zip
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install pcntl
+RUN docker-php-ext-install soap
+
+# Get latest Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Set working directory
+WORKDIR /var/www
+
+
+
+
+FROM php:7.4-apache
+RUN apt-get update && \
+  apt-get install -y zlib1g-dev libpng-dev && \
+  docker-php-ext-install -j$(nproc) gd
+
+
+
+-----------------------------------------------------
+
+https://gist.github.com/shov/f34541feae29afedd93208df4bf428f3
+
+
+FROM php:7.2-fpm
+
+# Replace shell with bash so we can source files
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
+# make sure apt is up to date
+RUN apt-get update --fix-missing
+RUN apt-get install -y curl
+RUN apt-get install -y build-essential libssl-dev zlib1g-dev libpng-dev libjpeg-dev libfreetype6-dev
+
+ENV NVM_DIR /usr/local/nvm
+ENV NODE_VERSION 9.2.0
+
+# Install nvm with node and npm
+RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash \
+    && source $NVM_DIR/nvm.sh \
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default
+
+ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+
+WORKDIR /var/www/html
+
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install gd
+
+RUN docker-php-ext-install pdo pdo_mysql mysqli
+RUN usermod -u 1000 www-data
+
+-----------------------------------------------------
+
+php 7.4 docker needs to be updated to:
+
+RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
+    && docker-php-ext-install gd
+
+
+--with-freetype instead of --with-freetype-dir
+
+[Error] : No package 'freetype2' found #62
+https://github.com/Aloxaf/silicon/issues/62
+https://stackoverflow.com/questions/53031260/trying-to-install-pygame-on-ubuntu-which-gives-error
+
+libfreetype6-dev
+libfontconfig1-dev?
+
+sudo apt install libfreetype6-dev
+
+
+-----------------------------------------------------
+
+Enable EXIF support when running Wordpress Docker container
+
+https://stackoverflow.com/questions/43560321/enable-exif-support-when-running-wordpress-docker-container
+
+FROM wordpress:latest
+RUN docker-php-ext-install exif
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["apache2-foreground"]
+
+-----------------------------------------------------
+
+Dockerfile for Imagick (PHP7.X)
+
+https://webapplicationconsultant.com/docker/how-to-install-imagick-in-php-docker/
+https://discuss.circleci.com/t/how-to-install-php-imagick-php-extension/19051/3
+
+
+FROM php:7.3-apache
+RUN apt-get update && apt-get install -y libmagickwand-dev --no-install-recommends && rm -rf /var/lib/apt/lists/*
+RUN printf "\n" | pecl install imagick
+RUN docker-php-ext-enable imagick
+
+
+
+FROM php:8.0.2-apache
+RUN apt-get update && apt-get install -y libmagickwand-dev --no-install-recommends && rm -rf /var/lib/apt/lists/*
+
+# install imagick
+# Version is not officially released https://pecl.php.net/get/imagick but following works for PHP 8
+RUN mkdir -p /usr/src/php/ext/imagick; \
+    curl -fsSL https://github.com/Imagick/imagick/archive/06116aa24b76edaf6b1693198f79e6c295eda8a9.tar.gz | tar xvz -C "/usr/src/php/ext/imagick" --strip 1; \
+    docker-php-ext-install imagick;
+
+
+RUN apt-get update && apt-get install -y \
+    libmagickwand-dev --no-install-recommends \
+    && pecl install imagick \
+	&& docker-php-ext-enable imagick
+
+
+
+configure: error: not found. Please provide a path to MagickWand-config or Wand-config program.
+ERROR: `/tmp/pear/temp/imagick/configure --with-php-config=/usr/local/bin/php-config --with-imagick' failed
+
+
+
+https://github.com/docker-library/php/issues/794
+https://serverfault.com/questions/57377/installing-imagick-php-extension-on-ubuntu
+https://github.com/Imagick/imagick/issues/289
+
+
+php:7.4
+sudo apt-get install libmagickwand-dev libmagickcore-dev
+
+
+php:7.2
+FROM php:7.2.14-fpm-alpine as fpm_base
+
+RUN apk add --no-cache --virtual .deps \
+                git \
+                icu-libs \
+                zlib \
+                openssh \
+                imagemagick \
+                imagemagick-libs \
+                imagemagick-dev
+
+ENV APCU_VERSION 5.1.8
+
+RUN set -xe \
+        && apk add --no-cache --virtual .build-deps \
+                $PHPIZE_DEPS \
+                icu-dev \
+                zlib-dev \
+        && docker-php-ext-install \
+                intl \
+                pdo_mysql \
+                zip \
+        && pecl install \
+                apcu-${APCU_VERSION} \
+                apcu_bc \
+                imagick \
+                redis \
+        && docker-php-ext-enable --ini-name 20-apcu.ini apcu \
+        && docker-php-ext-enable --ini-name 21-apc.ini apc \
+        && docker-php-ext-enable --ini-name 05-opcache.ini opcache \
+        && docker-php-ext-enable --ini-name 20-imagick.ini imagick \
+        && docker-php-ext-enable --ini-name 20-redis.ini redis
