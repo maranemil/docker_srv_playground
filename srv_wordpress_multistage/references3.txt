@@ -1,0 +1,82 @@
+
+
+
+#VOLUME /var/www/html
+
+#ENTRYPOINT /bin/bash
+
+#RUN echo "$WORDPRESS_SHA1 *wordpress.tar.gz" | sha1sum -c -; \
+#    mkdir -p /usr/src/wordpress; \
+#    mkdir -p /var/www/html/wordpress; \
+#    tar -xzf /usr/src/wordpress.tar.gz -C /usr/src; \
+#    rm /usr/src/wordpress.tar.gz
+
+#CMD echo "Hello world"
+#ENTRYPOINT echo "Hello world"
+
+#RUN file="$(ls -1 /usr/src)" && echo $file
+#RUN echo $(ls -1 /var/www/html/wordpress)
+
+#
+# step3
+
+
+#COPY ./docker-entrypoint.sh /
+#RUN chmod +x /docker-entrypoint.sh
+#ENTRYPOINT ["/docker-entrypoint.sh"]
+#CMD ["apache2-foreground"]
+
+
+#COPY --chown=www-data:www-data wp-config-docker.php /usr/src/wordpress/
+COPY docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["apache2-foreground"]
+
+#USER www-data
+#CMD ["wp", "shell"]
+
+
+#ENV name John Dow
+#ENTRYPOINT ["/bin/bash", "-c", "echo Hello, $name"]
+
+#CMD ["echo", "Hello Docker"]
+#ENTRYPOINT ["sleep"]
+#CMD ["2"]
+#ENTRYPOINT ["ls"]
+#CMD ["/var/www/html"]
+#CMD ["sleep", "5"]
+
+#RUN curl -o wordpress.tar.gz -fSL "https://wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz"; \
+#        echo "$WORDPRESS_SHA1 *wordpress.tar.gz" | sha1sum -c -; \
+#        tar -xzf wordpress.tar.gz -C /var/www/html; \
+#        #rm wordpress.tar.gz; \
+#        chown -R www-data:www-data /var/www/html
+
+
+#        mkdir wp-content; \
+#        for dir in /var/www/html/wordpress/wp-content/*/ cache; do \
+#            dir="$(basename "${dir%/}")"; \
+#            mkdir "wp-content/$dir"; \
+#        done; \
+#    chown -R www-data:www-data wp-content; \
+#    chmod -R 777 wp-content
+
+
+#CMD ls /usr/src
+
+#ADD src /var/www/html
+#RUN chown -R www-data:www-data /var/www/html/ /var/log
+
+# Custom content
+# Tools
+# RUN apt-get update && apt-get install -y nano less
+
+# WP Config
+#RUN mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
+#RUN rm /usr/local/etc/php/php.ini-development
+
+# WP Plugins
+#COPY --chown=www-data:www-data ./plugins /var/www/html/wp-content/plugins
+
+# WP Themes
+#COPY --chown=www-data:www-data ./themes /var/www/html/wp-content/themes

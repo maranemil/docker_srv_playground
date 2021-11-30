@@ -1,0 +1,79 @@
+############################################################
+Use multi-stage builds
+############################################################
+
+https://docs.docker.com/develop/develop-images/multistage-build/
+
+# syntax=docker/dockerfile:1
+FROM alpine:latest AS builder
+RUN apk --no-cache add build-base
+
+FROM builder AS build1
+COPY source1.cpp source.cpp
+RUN g++ -o /binary source.cpp
+
+FROM builder AS build2
+COPY source2.cpp source.cpp
+RUN g++ -o /binary source.cpp
+
+############################################################
+security-updates
+https://pythonspeed.com/articles/security-updates-in-docker/
+############################################################
+
+FROM debian:buster
+# Runs as root:
+RUN apt-get update && apt-get -y upgrade
+
+# Switch to non-root user:
+RUN useradd --create-home appuser
+WORKDIR /home/appuser
+USER appuser
+
+# Runs as non-root user:
+ENTRYPOINT ["whoami"]
+
+############################################################
+WORKDIR_instruction
+############################################################
+
+http://redhatgov.io/workshops/security_containers/exercise1.2/
+https://docs.docker.com/engine/install/linux-postinstall/
+https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
+https://docs.docker.com/engine/reference/builder/
+https://stackoverflow.com/questions/51066146/what-is-the-point-of-workdir-on-dockerfile
+https://www.educative.io/edpresso/what-is-the-workdir-command-in-docker
+https://dockerlabs.collabnix.com/beginners/dockerfile/WORKDIR_instruction.html
+https://serverfault.com/questions/900445/how-to-force-docker-to-rerun-apt-get-update
+
+
+FROM node:latest
+WORKDIR /usr/src/app
+COPY package.json .
+RUN npm install
+COPY . ./
+EXPOSE 3000
+CMD [ “npm”, “start” ]
+
+
+
+
+FROM ubuntu:16.04
+WORKDIR /project
+RUN npm install
+WORKDIR ../project2
+RUN touch file1.cpp
+
+
+
+FROM alpine:3.9.3
+LABEL maintainer="Collabnix"
+
+WORKDIR /opt
+RUN echo "Welcome to Docker Labs" > opt.txt
+WORKDIR folder1
+RUN echo "Welcome to Docker Labs" > folder1.txt
+WORKDIR folder2
+RUN echo "Welcome to Docker Labs" > folder2.txt
+
+

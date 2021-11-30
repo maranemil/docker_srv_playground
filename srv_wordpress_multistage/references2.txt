@@ -1,0 +1,45 @@
+https://github.com/tinify/wordpress-plugin/blob/master/config/Dockerfile-wordpress-51
+
+ENV WORDPRESS_VERSION 5.1
+ENV WORDPRESS_UPSTREAM_VERSION 5.1
+ENV WORDPRESS_SHA1 830eadf0afa15928d7f6856b1b85bf57b8e1f585
+
+...
+https://github.com/tinify/wordpress-plugin/blob/master/config/Dockerfile-wordpress-58
+
+ENV WORDPRESS_VERSION 5.8
+ENV WORDPRESS_UPSTREAM_VERSION 5.8.1
+ENV WORDPRESS_SHA1 21e50add5a51cd9a18610244c942c08f7abeccd8
+ENV WORDPRESS_DB_USER root
+ENV WORDPRESS_DB_PASSWORD root
+ENV WORDPRESS_DEBUG true
+
+---------------
+
+
+https://fossies.org/linux/www/wordpress-5.8.2.tar.gz/
+
+MD5 (wordpress-5.8.2.tar.gz): 1c6bfc773fd0dac60b1fbf6fcbf3599e
+SHA1 (wordpress-5.8.2.tar.gz): c3b1b59553eafbf301c83b14c5eeae4cf1c86044
+SHA256 (wordpress-5.8.2.tar.gz): a3d29e4e66574c7b6a6bf67628ea359fa815085ba76b8d9d16bbdff4e042f2ff
+
+---------
+
+https://github.com/GoogleCloudPlatform/wordpress-docker
+https://github.com/GoogleCloudPlatform/wordpress-docker/blob/master/versions.yaml
+
+packages:
+    wordpress:
+      sha1: 21e50add5a51cd9a18610244c942c08f7abeccd8
+      version: 5.8.1
+  repo: wordpress5-php7-apache
+
+
+------------
+https://github.com/docker-library/wordpress/issues/135
+https://github.com/docker-library/wordpress/issues/231
+https://forums.docker.com/t/official-wordpress-image-crash-when-used-with-compose/83985
+https://hub.docker.com/_/wordpress
+https://forums.docker.com/t/how-to-get-access-to-php-ini-file/68986/9
+
+
