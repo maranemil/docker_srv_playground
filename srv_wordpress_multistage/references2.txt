@@ -43,3 +43,16 @@ https://hub.docker.com/_/wordpress
 https://forums.docker.com/t/how-to-get-access-to-php-ini-file/68986/9
 
 
+##################
+ January 1, 1970.
+##################
+
+https://wpjohnny.com/disable-wp-cron-use-real-cron-job/
+https://rudrastyh.com/wordpress/wp_schedule_single_event.html
+
+
+
+define( 'DISABLE_WP_CRON', true);
+
+wp_schedule_single_event( $timestamp, $hook, $args = array() )
+wp_clear_scheduled_hook( 'rudr_hook_2', array( 5 ) );

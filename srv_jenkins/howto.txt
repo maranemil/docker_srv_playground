@@ -1,0 +1,103 @@
+https://www.jenkins.io/doc/book/pipeline/getting-started/
+https://hub.docker.com/r/jenkins/jenkins
+https://github.com/jenkinsci/docker/blob/master/README.md
+
+docker run -p 8080:8080 -p 50000:50000 jenkins/jenkins:lts-jdk11
+docker run -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home jenkins/jenkins:lts-jdk11
+docker run -d -v jenkins_home:/var/jenkins_home -p 8080:8080 -p 50000:50000 jenkins/jenkins:lts-jdk11
+
+
+https://www.jenkins.io/doc/pipeline/tour/tests-and-artifacts/
+https://www.jenkins.io/doc/book/pipeline/jenkinsfile/
+https://www.jenkins.io/doc/book/pipeline/syntax/
+https://www.jenkins.io/doc/book/pipeline/running-pipelines/
+https://www.jenkins.io/doc/book/pipeline/multibranch/
+https://www.guru99.com/create-builds-jenkins-freestyle-project.html
+https://www.tutorialspoint.com/jenkins/jenkins_setup_build_jobs.htm
+
+https://www.jenkins.io/doc/book/pipeline/
+https://www.jenkins.io/doc/pipeline/examples/
+https://www.jenkins.io/doc/pipeline/examples/
+https://www.jenkins.io/doc/book/pipeline/
+https://www.jenkins.io/doc/book/pipeline/getting-started/
+https://www.jenkins.io/doc/book/pipeline/syntax/
+
+
+-------------------------------------------------------------------------------------------------
+
+Jenkinsfile
+
+https://www.jenkins.io/doc/book/pipeline/syntax/#triggers
+https://www.jenkins.io/doc/book/pipeline/syntax/#options
+https://www.jenkins.io/doc/book/pipeline/getting-started/
+https://www.jenkins.io/doc/book/pipeline/jenkinsfile/#handling-credentials
+https://github.com/jenkinsci/docker/blob/master/README.md
+
+pipeline {
+	agent any
+	trigger{
+		pollSCM('* * * * *')
+	}
+	tools{
+		// jdk mvn gradle maven
+		maven 'Maven'
+		jdk 'Jdk12'
+	}
+	parameters{
+		string(name: 'VERSION', defaultValue: '', description: 'version to deploy')
+		choice(name: 'VERSION', choices: ['1.1.0','1.2.0'], description: '')
+		booleanParam(name: 'executeTest', defaultVlue: true, description: '')
+	}
+	environment{
+		NEW_VERSION = '1.3.0'
+	}
+	stages {
+		stage('hello'){
+			when {
+				expression {
+					BRANCH_NAME == 'dev' || params.executeTest == true
+				}
+			}
+			steps{
+				echo 'test';
+				echo "building version ${NEW_VERSION}"
+				echo "BUILD_NUMBER = ${env.BUILD_NUMBER}"
+				sh 'echo BUILD_NUMBER = $BUILD_NUMBER'
+
+
+				script{
+					env.USER_GROUP = 'users'
+				}
+				sh 'scho $USER_GROUP'
+
+				withEnv(["MYVAR=123"]){
+					echo "${env.MYVAR}"
+				}
+
+			}
+		}
+		stage('build'){
+			steps{
+				sh "printenv | sort"
+			}
+		}
+		stage('test'){
+
+		}
+		stage('deploy'){
+
+		}
+	}
+}
+
+-------------------------------------------------------------------------------------------------
+
+env vars
+BRANCH_NAME
+BUILD_NUMBER
+BUILD_ID
+JOB_NAME
+
+-------------------------------------------------------------------------------------------------
+
+git ls-remote

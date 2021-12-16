@@ -1,0 +1,54 @@
+
+
+# https://www.dogado.de/vps/vserver-anwendungsfaelle/cms-typo3-auf-vserver-installieren
+
+version: '2'
+services:
+
+    typo3-db:
+	  image: mariadb:latest
+	  container_name: typo3-db
+	  environment:
+        - MARIADB_USER=typo3
+        - MARIADB_DATABASE=typo3
+        - MARIADB_PASSWORD=sicher12!
+        - MARIADB_CHARACTER_SET=utf8mb4
+        - MARIADB_COLLATE=utf8mb4_unicode_ci
+        - MARIADB_RANDOM_ROOT_PASSWORD=1
+	  volumes:
+	    - ./database:/var`/lib/mysql
+	  networks:
+	    - default
+	  restart: unless-stopped
+
+    typo3:
+	  build: ./typo-build
+	  container_name: typo3
+	  restart: unless-stopped
+	  volumes:
+        - ./fileadmin:/var`/www/html/fileadmin
+        - ./typo3conf:/var`/www/html/typo3conf
+        - ./uploads:/var`/www/html/uploads
+	  networks:
+	    - default
+	    - proxy
+	  depends_on:
+	    - typo3-db
+	  labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.typo3.entrypoints=http"
+        - "traefik.http.routers.typo3.rule=Host('typo.euredomain.de')" # Hier eure URL eingeben #
+        - "traefik.http.middlewares.typo3-https-redirect.redirectscheme.scheme=https"
+        - "traefik.http.routers.typo3.middlewares=typo3-https-redirect"
+        - "traefik.http.routers.typo3-secure.entrypoints=https"
+        - "traefik.http.routers.typo3-secure.rule=Host('typo.euredomain.de')" # Hier eure URL eingeben #
+        - "traefik.http.routers.typo3-secure.tls=true"
+        - "traefik.http.routers.typo3-secure.tls.certresolver=http"
+        - "traefik.http.routers.typo3-secure.service=typo3"
+        - "traefik.http.services.typo3.loadbalancer.server.port=80"
+        - "traefik.docker.network=proxy"
+        - "traefik.http.routers.typo3-secure.middlewares=secHeaders@file"
+
+networks:
+proxy:
+external: true

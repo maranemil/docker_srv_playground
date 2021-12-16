@@ -1,0 +1,15 @@
+https://ext.dev/en/documentation/migrate-typo3-project-to-composer
+
+./.gitignore
+
+.DS_Store
+.idea
+/vendor
+/public/fileadmin
+/public/typo3
+/public/typo3conf/ext
+/public/typo3conf/l10n
+/public/typo3temp
+/public/index.php
+/public/uploads
+

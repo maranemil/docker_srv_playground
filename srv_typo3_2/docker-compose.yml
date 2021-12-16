@@ -1,0 +1,49 @@
+#./docker-compose.yml
+
+version: "3"
+services:
+  typo3:
+    build: docker/typo3
+    ports:
+      - "80:80"
+    volumes:
+      - ./config:/var/www/html/config:Z
+      - ./public:/var/www/html/public:Z
+      - ./vendor:/var/www/html/vendor:Z
+      - ./packages:/var/www/html/packages:Z
+    environment:
+      - TYPO3_CONTEXT=Development
+      - HOSTNAME=localhost
+      - APACHE_DOCUMENT_ROOT=/var/www/html/public
+    external_links:
+      - database:database
+    networks:
+      - backend
+  composer:
+    image: composer
+    volumes:
+      - .:/var/www/html:Z
+    working_dir: /var/www/html
+  database:
+    build: docker/database
+    command:
+      - --character-set-server=utf8
+      - --collation-server=utf8_unicode_ci
+      - --default-authentication-plugin=mysql_native_password
+    environment:
+      - "MYSQL_USER=typo3"
+      - "MYSQL_PASSWORD=typo3"
+      - "MYSQL_DATABASE=typo3"
+      - "MYSQL_ROOT_PASSWORD=root-password"
+    networks:
+      - backend
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    external_links:
+      - database:db
+    ports:
+      - "8080:80"
+    networks:
+      - backend
+networks:
+  backend:

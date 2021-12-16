@@ -1,0 +1,61 @@
+version: '3.7'
+
+services:
+  web:
+    container_name: mywebsite_web
+    depends_on:
+      - db
+    environment:
+      - PHP_SERVICE_NAME=mywebsite_utilities
+    image: kronova/typo3-apache
+    labels:
+      - "traefik.docker.network=web"
+      - "traefik.enable=true"
+      - "traefik.basic.frontend.rule=Host:domain.tld"
+      - "traefik.basic.port=80"
+      - "traefik.basic.protocol=http"
+    networks:
+      - private
+      - web
+    restart: always
+    volumes:
+      - htdocs:/usr/local/apache2/htdocs:ro
+  utilities:
+    container_name: mywebsite_utilities
+    depends_on:
+      - db
+    image: kronova/typo3-utilities
+    networks:
+      - private
+    ports:
+      - "2222:22"
+    restart: always
+    volumes:
+      - htdocs:/usr/local/apache2/htdocs
+      - ssh:/home/typo3/.ssh
+  db:
+    container_name: mywebsite_db
+    command:
+      - --character-set-server=utf8
+      - --collation-server=utf8_unicode_ci
+    environment:
+      - MYSQL_USER=typo3
+      - MYSQL_PASSWORD=badPasswordChangeIt
+      - MYSQL_DATABASE=typo3
+      - MYSQL_ROOT_PASSWORD=veryBadForRoot
+    image: mariadb:10.4
+    networks:
+      - private
+    restart: always
+    volumes:
+      - mysql:/var/lib/mysql
+networks:
+  private:
+  web:
+    external: true
+volumes:
+  htdocs:
+  mysql:
+  ssh:
+
+# # https://kronova.net/software/typo3-for-docker.html

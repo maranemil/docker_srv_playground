@@ -1,0 +1,21 @@
+{
+    "require": {
+        "typo3/minimal": "10.4",
+        "typo3/cms-about": "^10.4",
+        "typo3/cms-belog": "^10.4",
+        "typo3/cms-beuser": "^10.4",
+        "typo3/cms-fluid-styled-content": "^10.4",
+        "typo3/cms-reports": "^10.4",
+        "typo3/cms-rte-ckeditor": "^10.4",
+        "typo3/cms-tstemplate": "^10.4",
+        "typo3/cms-form": "^10.4",
+        "typo3/cms-lowlevel": "^10.4",
+        "extdev/extension_key": "@dev"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./packages/*"
+        }
+    ]
+}
