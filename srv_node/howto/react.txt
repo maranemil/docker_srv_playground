@@ -1,0 +1,300 @@
+https://mherman.org/blog/dockerizing-a-react-app/
+
+
+# pull official base image
+FROM node:13.12.0-alpine
+
+# set working directory
+WORKDIR /app
+
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
+
+# install app dependencies
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm install --silent
+RUN npm install react-scripts@3.4.1 -g --silent
+
+# add app
+COPY . ./
+
+# start app
+CMD ["npm", "start"]
+
+
+
+docker run \
+    -it \
+    --rm \
+    -v ${PWD}:/app \
+    -v /app/node_modules \
+    -p 3001:3000 \
+    -e CHOKIDAR_USEPOLLING=true \
+    sample:dev
+
+docker run \
+    -itd \
+    --rm \
+    -v ${PWD}:/app \
+    -v /app/node_modules \
+    -p 3001:3000 \
+    -e CHOKIDAR_USEPOLLING=true \
+    sample:dev
+
+version: '3.7'
+
+services:
+
+  sample:
+    container_name: sample
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - 3001:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+
+
+
+
+# build environment
+FROM node:13.12.0-alpine as build
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm ci --silent
+RUN npm install react-scripts@3.4.1 -g --silent
+COPY . ./
+RUN npm run build
+
+# production environment
+FROM nginx:stable-alpine
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+
+
+
+
+ React Router and Nginx
+
+
+ # build environment
+FROM node:13.12.0-alpine as build
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm ci --silent
+RUN npm install react-scripts@3.4.1 -g --silent
+COPY . ./
+RUN npm run build
+
+# production environment
+FROM nginx:stable-alpine
+COPY --from=build /app/build /usr/share/nginx/html
+# new
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+
+
+ server {
+
+  listen 80;
+
+  location / {
+    root   /usr/share/nginx/html;
+    index  index.html index.htm;
+    try_files $uri $uri/ /index.html;
+  }
+
+  error_page   500 502 503 504  /50x.html;
+
+  location = /50x.html {
+    root   /usr/share/nginx/html;
+  }
+
+}
+
+
+
+
+ ------------------------------------------------------
+
+ https://medium.com/geekculture/getting-started-with-docker-in-your-react-js-application-the-basics-6e5300cf749d
+
+
+ FROM node:latest
+WORKDIR /app
+COPY package.json ./
+RUN npm install
+COPY . .
+CMD ["npm", "start"]
+
+
+----------------------------------------------------------
+
+https://www.pluralsight.com/guides/using-react.js-with-docker
+
+
+ # pull the base image
+FROM node:alpine
+
+# set the working direction
+WORKDIR /app
+
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
+
+# install app dependencies
+COPY package.json ./
+
+COPY package-lock.json ./
+
+RUN npm install
+
+# add app
+COPY . ./
+
+# start app
+CMD ["npm", "start"]
+
+
+
+
+
+ $ docker run -it --rm \
+-v ${PWD}:/app \
+-v /app/node_modules \
+-p 3001:3000 \
+-e CHOKIDAR_USEPOLLING=true \
+ps-container:dev
+
+
+----------------------------------------------------------
+
+https://hub.docker.com/r/bayesimpact/react-base
+https://dev.to/karanpratapsingh/dockerize-your-react-app-4j2e
+https://www.robinwieruch.de/docker-react-development/
+https://github.com/StephenGrider/docker-react
+https://dzone.com/articles/how-to-dockerize-reactjs-app
+
+
+FROM node:14-alpine AS development
+ENV NODE_ENV development
+# Add a work directory
+WORKDIR /app
+# Cache and Install dependencies
+COPY package.json .
+COPY yarn.lock .
+RUN yarn install
+# Copy app files
+COPY . .
+# Expose port
+EXPOSE 3000
+# Start the app
+CMD [ "yarn", "start" ]
+
+
+
+version: "3.8"
+
+services:
+  app:
+    container_name: app-dev
+    image: app-dev
+    build:
+      context: .
+      target: development
+    volumes:
+      - ./src:/app/src
+    ports:
+      - 3000:3000
+
+
+
+
+# Step 1
+FROM node:10-alpine as build-step
+RUN mkdir /app
+WORKDIR /app
+COPY package.json /app
+RUN npm install
+COPY . /app
+RUN npm run build
+
+# Stage 2
+FROM nginx:1.17.1-alpine
+COPY --from=build-step /app/build /usr/share/nginx/html
+
+
+docker run -d -it  -p 80:80/tcp --name react-app sanjaysaini2000/react-app:
+latest
+
+
+---------------
+
+https://blog.miguelgrinberg.com/post/how-to-dockerize-a-react-flask-project
+https://www.bezkoder.com/docker-compose-react-nodejs-mysql/
+https://www.linkedin.com/pulse/your-first-react-app-docker-mahmoud-ali/
+https://www.sunayu.com/deploying-your-create-react-app-in-docker/
+https://docs.microsoft.com/en-us/visualstudio/containers/container-tools-react?view=vs-2022
+https://codefresh.io/docs/docs/learn-by-example/nodejs/react/
+https://www.bacancytechnology.com/blog/dockerize-react-app
+https://learn2torials.com/a/dockerize-reactjs-app
+https://typeofnan.dev/how-to-serve-a-react-app-with-nginx-in-docker/
+https://developer.okta.com/blog/2020/06/24/heroku-docker-react
+https://inthetechpit.com/2021/04/18/run-reactjs-app-in-docker-on-mac/
+https://dockertraining.readthedocs.io/en/latest/nodejs/react-mobx.html
+https://willschenk.com/articles/2020/developing_react_inside_docker/
+
+https://devlinduldulao.pro/react-in-docker/
+
+
+.dockerignore
+
+.git
+node_modules
+build
+
+
+Dockerfile
+
+# Stage 1
+FROM node:12.18.2-alpine as build
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm install
+COPY . ./
+RUN npm run build
+
+# Stage 2
+FROM nginx:stable-alpine
+COPY --from=build /app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,129 @@
+https://wkrzywiec.medium.com/build-and-run-angular-application-in-a-docker-container-b65dbbc50be8
+
+https://www.indellient.com/blog/how-to-dockerize-an-angular-application-with-nginx/
+https://dzone.com/articles/how-to-dockerize-angular-app
+https://www.section.io/engineering-education/containerizing-an-angular-app-featuring-nginx-web-server-using-docker/
+https://hub.docker.com/u/angular
+https://hub.docker.com/r/angular/ngcontainer/
+https://developer.okta.com/blog/2020/06/17/angular-docker-spring-boot
+https://mherman.org/blog/dockerizing-an-angular-app/
+
+Dockerfile
+
+
+# Stage 1: Compile and Build angular codebase
+
+# Use official node image as the base image
+FROM node:latest as build
+
+# Set the working directory
+WORKDIR /usr/local/app
+
+# Add the source code to app
+COPY ./ /usr/local/app/
+
+# Install all the dependencies
+RUN npm install
+
+# Generate the build of the application
+RUN npm run build
+
+
+# Stage 2: Serve app with nginx server
+
+# Use official nginx image as the base image
+FROM nginx:latest
+
+# Copy the build output to replace the default nginx contents.
+COPY --from=build /usr/local/app/dist/sample-angular-app /usr/share/nginx/html
+
+# Expose port 80
+EXPOSE 80
+
+--
+
+docker build -t krish186/sample-angular-app-image:latest  .
+
+
+-------------------
+
+Dockerfile
+
+# base image
+FROM node:12.2.0
+
+# install chrome for protractor tests
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+RUN apt-get update && apt-get install -yq google-chrome-stable
+
+# set working directory
+WORKDIR /app
+
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
+
+# install and cache app dependencies
+COPY package.json /app/package.json
+RUN npm install
+RUN npm install -g @angular/cli@7.3.9
+
+# add app
+COPY . /app
+
+# start app
+CMD ng serve --host 0.0.0.0
+
+
+
+---
+
+
+
+version: '3.7'
+
+services:
+
+example:
+container_name: example
+build:
+context: .
+dockerfile: Dockerfile
+volumes:
+- '.:/app'
+- '/app/node_modules'
+ports:
+- '4201:4200'
+
+---------------------------
+https://frontendfreunde.ms/assets/2017-05-23-Shootout/DockerFuerAngular-TestingUndDeployment.pdf
+
+---------------------------
+https://typeofnan.dev/how-to-serve-an-angular-app-with-nginx-in-docker/
+https://docs.aspnetzero.com/en/aspnet-core-angular/latest/Deployment-Angular-Docker
+https://blog.codecentric.de/en/2019/03/docker-angular-dockerize-app-easily/
+https://devlinduldulao.pro/angular-in-docker/
+https://github.com/DenysVuika/medium-angular-docker
+https://github.com/johnpapa/docker-angular-cli/blob/master/.dockerignore
+
+.dockerignore
+dist
+node_modules
+
+
+Dockerfile
+
+### STAGE 1: Build ###
+FROM node:12.18.2-alpine AS buildxyz
+WORKDIR /usr/src/app
+COPY package.json package-lock.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+### STAGE 2: Run ###
+FROM nginx:1.19-alpine
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY --from=buildxyz /usr/src/app/dist/angular-client-app /usr/share/nginx/html
+
+
+

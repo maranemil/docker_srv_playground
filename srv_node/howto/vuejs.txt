@@ -1,0 +1,307 @@
+https://cli.vuejs.org/guide/cli-service.html
+https://v2.vuejs.org/v2/cookbook/dockerize-vuejs-app.html
+https://docs.vuejs.id/v2/cookbook/dockerize-vuejs-app.html
+https://github.com/ramonov/docker-vuejs
+https://github.com/ledermann/docker-vue
+----------------------------
+
+
+docker run -it -p 8080:8080 --rm --name dockerize-vuejs-app-1 vuejs-cookbook/dockerize-vuejs-app
+
+Dockerfile
+
+FROM node:lts-alpine
+
+# install simple http server for serving static content
+RUN npm install -g http-server
+
+# make the 'app' folder the current working directory
+WORKDIR /app
+
+# copy both 'package.json' and 'package-lock.json' (if available)
+COPY package*.json ./
+
+# install project dependencies
+RUN npm install
+
+# copy project files and folders to the current working directory (i.e. 'app' folder)
+COPY . .
+
+# build app for production with minification
+RUN npm run build
+
+EXPOSE 8080
+CMD [ "http-server", "dist" ]
+
+
+----------------------------
+
+https://devlinduldulao.pro/vuejs-in-docker/
+
+.dockerignore
+/node_modules
+
+Dockerfile
+
+# build stage
+FROM node:latest as build-stage
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# production stage
+FROM nginx:latest as production-stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+
+----------------------------
+
+https://mherman.org/blog/dockerizing-a-vue-app/
+
+docker run -it -v ${PWD}:/app -v /app/node_modules -p 8081:8080 --rm my-app:dev
+
+
+version: '3.7'
+
+services:
+
+  my-app:
+    container_name: my-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - '8081:8080'
+
+
+docker-compose up -d --build
+
+---
+Dockerfile
+
+
+# build environment
+FROM node:12.2.0-alpine as build
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+COPY package.json /app/package.json
+RUN npm install --silent
+RUN npm install @vue/cli@3.7.0 -g
+COPY . /app
+RUN npm run build
+
+# production environment
+FROM nginx:1.16.0-alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+
+
+---
+
+# Vue Router and Nginx
+
+
+# build environment
+FROM node:12.2.0-alpine as build
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+COPY package.json /app/package.json
+RUN npm install --silent
+RUN npm install @vue/cli@3.7.0 -g
+COPY . /app
+RUN npm run build
+
+# production environment
+FROM nginx:1.16.0-alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.conf /etc/nginx/conf.d
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+
+
+nginx.conf:
+
+server {
+
+  listen 80;
+
+  location / {
+    root   /usr/share/nginx/html;
+    index  index.html index.htm;
+    try_files $uri $uri/ /index.html;
+  }
+
+  error_page   500 502 503 504  /50x.html;
+
+  location = /50x.html {
+    root   /usr/share/nginx/html;
+  }
+
+}
+
+-------------------------------------------------------------------
+https://medium.com/bb-tutorials-and-thoughts/vue-js-local-development-with-docker-compose-275304534f7c
+------------------
+API Dockerfile
+------------------
+
+FROM node:10
+
+WORKDIR /usr/src/app/api
+
+COPY package*.json ./
+
+RUN npm install
+
+EXPOSE 3080
+
+CMD ["npm", "run", "dev"]
+
+------------------
+UI Dockerfile
+------------------
+
+FROM node:10
+
+WORKDIR /usr/src/app/my-app
+
+COPY package*.json ./
+
+RUN npm install
+
+EXPOSE 8080
+
+CMD ["npm", "run", "serve"]
+
+------------------
+Docker Compose File
+------------------
+
+version: '3'
+services:
+  nodejs-server:
+    build:
+      context: ./api
+      dockerfile: Dockerfile-dev
+    ports:
+      - "3080:3080"
+    container_name: node-api
+    volumes:
+       - ./api:/usr/src/app/api
+       - /usr/src/app/api/node_modules
+  vue-ui:
+    build:
+      context: ./my-app
+      dockerfile: Dockerfile-dev
+    ports:
+      - "8080:8080"
+    container_name: vue-ui
+    volumes:
+       - ./my-app:/usr/src/app/my-app
+       - /usr/src/app/my-app/node_modules
+
+
+
+
+
+------------------
+vue.config.js
+
+------------------
+module.exports = {
+    devServer: {
+      proxy: {
+        '^/api': {
+          target: 'http://node-api:3080',
+          changeOrigin: true
+        },
+      }
+    }
+  }
+
+
+
+
+------------------------------------------
+https://hub.docker.com/r/6gosrl/vuejs
+
+docker run --name name-of-the-container -d -p 80:80 name-of-the-image
+
+
+------------------------------------------
+https://dev.to/tqbit/a-step-by-step-guide-to-vue-development-with-docker-part-one-5ap4
+
+Dockerfile
+
+
+FROM node:14
+
+WORKDIR /vue-setup
+
+RUN npm install -g @vue/cli
+
+# The following commands ensure access to our files
+# If we left them out, changing files on our local setup
+# would fail due to insufficient permissions.
+RUN userdel -r node
+
+ARG USER_ID
+
+ARG GROUP_ID
+
+RUN addgroup --gid $GROUP_ID user
+
+RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
+
+# Set the active user and open the interactive terminal
+USER user
+
+ENTRYPOINT [ "bash" ]
+
+
+
+vue create vue_app
+
+
+--------------------------------------------------------
+
+https://shekhargulati.com/2019/01/18/dockerizing-a-vue-js-application/
+
+
+# base image
+FROM node:10.15.0
+
+# set working directory
+RUN mkdir /usr/src/app
+WORKDIR /usr/src/app
+
+# add `/usr/src/app/node_modules/.bin` to $PATH
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
+
+# install and cache app dependencies
+COPY package.json /usr/src/app/package.json
+RUN npm install
+RUN npm install -g @vue/cli
+# start app
+CMD ["npm", "run", "serve"]
+
+
+--------------------------------------------------------
+
+https://linuxtut.com/en/09384726105eee53bbb6/
+https://www.section.io/engineering-education/how-to-build-a-vue-app-with-flask-sqlite-backend-using-docker/
+https://typeofnan.dev/how-to-serve-a-vue-app-with-nginx-in-docker/
+https://morioh.com/p/fdaab13c3bfe
+http://appsology.co.uk/dwt/vue-js-tutorial/
+
+
+
+
