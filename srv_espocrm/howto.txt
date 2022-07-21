@@ -18,3 +18,19 @@ https://docs.docker.com/compose/gettingstarted/
 https://docs.docker.com/compose/reference/
 https://docs.docker.com/engine/reference/commandline/compose_down/
 https://docs.docker.com/engine/reference/commandline/compose_up/
+
+---------------------------------------------------
+
+docker copy
+https://docs.docker.com/engine/reference/commandline/cp/
+
+docker cp container:/folder .
+docker cp folder container:/folder
+sudo chmod -R 777 html/
+
+docker exec -ti container bash
+docker kill -f container && docker rm -f container
+
+docker exec container mkdir -p /var/www/db/
+docker cp dump.sql container:/var/www/db/dump.sql
+docker exec container bash -c "/usr/bin/mysql -u root --password=1234 dbname < /var/www/db/dump.sql"
