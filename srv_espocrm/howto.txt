@@ -1,0 +1,20 @@
+##################################################
+start stop container
+##################################################
+
+docker-compose up -d
+docker-compose down -v --remove-orphans --rmi local
+
+# docker volume create --name=espocrm
+
+---------------------------------------------------
+
+https://docs.espocrm.com/
+https://hub.docker.com/r/espocrm/espocrm
+
+
+https://docs.docker.com/compose/
+https://docs.docker.com/compose/gettingstarted/
+https://docs.docker.com/compose/reference/
+https://docs.docker.com/engine/reference/commandline/compose_down/
+https://docs.docker.com/engine/reference/commandline/compose_up/
