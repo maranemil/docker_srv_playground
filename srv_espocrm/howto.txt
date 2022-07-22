@@ -7,8 +7,9 @@ docker-compose down -v --remove-orphans --rmi local
 
 # docker volume create --name=espocrm
 
----------------------------------------------------
-
+------------------------------------------------------
+Documentation
+------------------------------------------------------
 https://docs.espocrm.com/
 https://hub.docker.com/r/espocrm/espocrm
 
@@ -34,3 +35,88 @@ docker kill -f container && docker rm -f container
 docker exec container mkdir -p /var/www/db/
 docker cp dump.sql container:/var/www/db/dump.sql
 docker exec container bash -c "/usr/bin/mysql -u root --password=1234 dbname < /var/www/db/dump.sql"
+
+------------------------------------------------------
+files chmod chown
+------------------------------------------------------
+
+chmod -R 777 ../html/
+chown -R www-data:www-data ../html/
+
+find /var/www/html -type d -exec chmod 775 {} +
+find /var/www/html -type f -exec chmod 644 {} +
+chown -R www-data:www-data /var/www/html
+
+docker-compose down -v --remove-orphans --rmi local
+
+------------------------------------------------------
+PHPStorm - Multiple definitions exist for class
+------------------------------------------------------
+https://intellij-support.jetbrains.com/hc/en-us/community/posts/360001405180-Multiple-definitions-exist-for-class
+
+/** @noinspection PhpMultipleClassDeclarationsInspection */
+
+
+------------------------------------------------------
+Query and load entity by Entity Type Manager
+------------------------------------------------------
+https://docs.espocrm.com/development/orm/
+https://github.com/webmozart/doctrine-orm
+https://github.com/doctrine/orm
+https://github.com/doctrine/DoctrineBundle
+
+https://www.drupal.org/node/2849874
+https://api.drupal.org/api/drupal/core!lib!Drupal.php/function/Drupal%3A%3AentityTypeManager/8.2.x
+https://gist.github.com/DanLaufer/ae109c950cce1fc58f8208ef88e93f79
+https://hotexamples.com/de/examples/drupal.core.entity/EntityTypeManager/getStorage/php-entitytypemanager-getstorage-method-examples.html
+https://docs.w3cub.com/drupal~8/core-lib-drupal-core-entity-entitytypemanager.php/function/entitytypemanager-getstorage/8.1.x
+https://drupal.stackexchange.com/questions/250306/query-and-load-entity-by-entity-type-manager
+
+
+------------------------------------------------------
+Migration Refactoring
+------------------------------------------------------
+
+https://docs.espocrm.com/development/orm/
+
+https://github.com/espocrm/espocrm/blob/master/application/Espo/ORM/EntityManager.php
+
+https://www.doctrine-project.org/projects/doctrine-orm/en/2.11/reference/working-with-objects.html
+https://www.doctrine-project.org/projects/doctrine-orm/en/2.11/tutorials/getting-started.html
+
+$selectQuery = $entityManager
+    ->getQueryBuilder()
+    ->select(['column1', 'column2', 'someExpression'])
+    ->from('SomeTable')
+    ->order('column1', 'DESC')
+    ->limit(0, 10)
+    ->build();
+
+$pdoStatement = $entityManager
+    ->getQueryExecutor()
+    ->execute($selectQuery);
+
+---------------
+
+https://www.doctrine-project.org/projects/doctrine-orm/en/2.8/reference/query-builder.html
+https://www.doctrine-project.org/projects/doctrine-orm/en/2.11/reference/dql-doctrine-query-language.html
+
+$sql = 'PLAIN VANILLA SQL STATEMENT '
+$sth = $this->getEntityManager()->getSqlExecutor()
+->execute($sql);
+
+$sth =  (new EntityManager())->getSqlExecutor()
+->execute($sql);
+
+------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
