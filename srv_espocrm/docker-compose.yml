@@ -13,6 +13,7 @@ services:
       MYSQL_PASSWORD: database_password
     volumes:
       - mysql:/var/lib/mysql
+      - ./espocrm.sql:/docker-entrypoint-initdb.d/dump.sql
     restart: always
 
   espocrm:
@@ -27,7 +28,8 @@ services:
       ESPOCRM_SITE_URL: "http://localhost:8080"
     volumes:
       #- espocrm:/var/www/html
-      - ./espocrm_dir:/var/www/html
+      #- ./espocrm_dir:/var/www/html
+      - ./html:/var/www/html
     restart: always
     ports:
       - 8080:80
