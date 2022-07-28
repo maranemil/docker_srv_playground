@@ -344,6 +344,8 @@ https://www.browserling.com/tools/json-minify
 */
 
 /*
+https://docs.espocrm.com/development/select-manager/
+https://docs.espocrm.com/development/select-builder/
 https://docs.espocrm.com/administration/fields/
 https://docs.espocrm.com/administration/formula/
 https://docs.espocrm.com/development/acl/
