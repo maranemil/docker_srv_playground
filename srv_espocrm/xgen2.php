@@ -1,14 +1,24 @@
 <?php
+/** @noinspection SqlNoDataSourceInspection */
 
-include "bootstrap.php";
+/** @noinspection PhpMultipleClassDeclarationsInspection */
+
+/** @noinspection SqlDialectInspection */
+
+if (!str_starts_with(PHP_SAPI, 'cli')) {
+    exit;
+}
 
 use Espo\Core\{
     Application
 };
 
-use Espo\ORM\Entity;
-use Espo\ORM\EntityManager;
-use Espo\Modules\Crm\Entities\Account;
+#use Espo\ORM\Entity;
+#use Espo\ORM\EntityManager;
+#use Espo\Modules\Crm\Entities\Account;
+
+include "bootstrap.php";
+
 
 const FIRST_NAMES_MALE = [
     'James',
@@ -82,7 +92,7 @@ const COMPANY_NAMES = [
     'Ron-tech',
 ];
 
-const MAX_ACCOUNTS = 30;
+const MAX_ACCOUNTS = 3;
 const MAX_CONTACTS = 5;
 const MAX_LEADS = 300;
 
@@ -90,9 +100,10 @@ const MAX_LEADS = 300;
 try {
     // init app
     $app = (new Application());
+    $app->setupSystemUser();
     #$app = new \Espo\Core\Application();
     $entityManager = $app->getContainer()->get('entityManager');
-    $user = $entityManager->getEntity('User', 'system');
+    #$user = $entityManager->getEntity('User', 'system');
     #$app->getContainer()->setUser($user);
 
     // clean old data
@@ -109,7 +120,7 @@ try {
         createLeads($entityManager);
     }
     // add relationship accounts contacts
-    updateRelationsAccountsContacts($entityManager);
+    //updateRelationsAccountsContacts($entityManager);
 } catch (Exception $e) {
     echo $e->getMessage();
 }
@@ -117,18 +128,37 @@ try {
 /**
  * @throws Exception
  */
-function createContacts($entityManager)
+function createContacts($entityManager): void
 {
-    $collection = $entityManager
-        ->getRDBRepository('Account')
-        ->limit(0, 1000)
-        ->sth()
-        ->find();
-    foreach ($collection as $entity) {
-        $accountId = $entity->getId();
-        for ($i = 0; $i <= MAX_CONTACTS; $i++) {
-            createContact($entityManager, $accountId);
+    try {
+        /* $collection = $entityManager
+             ->getRDBRepository('Account')
+             //->limit(0, 1000)
+             ->sth()
+             ->find();*/
+
+        $collection = $entityManager
+            ->getRDBRepository('Account')
+            ->limit(0, 1000)
+            ->sth()
+            ->find();
+        $Ids = [];
+        foreach ($collection as $entity) {
+            $Ids[] = ["account_id" => $entity->getId()];
         }
+
+        //print_r($Ids);
+
+        foreach ($Ids as $entity) {
+            $accountId = $entity['account_id'];
+            echo "Account " . $accountId . PHP_EOL;
+            for ($i = 0; $i <= MAX_CONTACTS; $i++) {
+                echo "loop createContact " . $i . PHP_EOL;
+               createContact($entityManager, $accountId);
+            }
+        }
+    } catch (Exception $e) {
+        echo $e->getMessage();
     }
 }
 
@@ -136,7 +166,7 @@ function createContacts($entityManager)
  * @param $entityManager
  * @return void
  */
-function updateRelationsAccountsContacts($entityManager)
+function updateRelationsAccountsContacts($entityManager): void
 {
     /*$collection = $entityManager
         ->getRDBRepository('Account')
@@ -148,6 +178,7 @@ function updateRelationsAccountsContacts($entityManager)
         $accountIds[] = $entity->getId();
     }
     print_r($accountIds);*/
+
 
     $collectionContacts = $entityManager
         ->getRDBRepository('Contact')
@@ -192,7 +223,7 @@ function updateRelationsAccountsContacts($entityManager)
  * @param $entityManager
  * @return void
  */
-function cleanTestData($entityManager)
+function cleanTestData($entityManager): void
 {
     try {
         $sql = "SELECT * FROM `account`";
@@ -259,6 +290,10 @@ function getRandomCompanyName(): string
     return COMPANY_NAMES[random_int(0, count(COMPANY_NAMES) - 1)];
 }
 
+/**
+ * @param object $entityManager
+ * @return void
+ */
 function createAccounts(object $entityManager): void
 {
     try {
@@ -267,7 +302,7 @@ function createAccounts(object $entityManager): void
         // base64_encode(random_bytes(5))
         // bin2hex(random_bytes(5))
         $accountObject = $entityManager->getEntity('Account');
-        $accountObject->set("name", getRandomCompanyName().' '.bin2hex(random_bytes(5)));
+        $accountObject->set("name", getRandomCompanyName() . ' ' . bin2hex(random_bytes(5)));
         $accountObject->set("sicCode", random_int(1000000, 9000000));
         $accountObject->set("description", md5('test'));
         $entityManager->saveEntity($accountObject);
@@ -278,22 +313,13 @@ function createAccounts(object $entityManager): void
 
 /**
  * @param object $entityManager
- * @param $accountId
+ * @param string $accountId
  * @return void
  */
-function createContact(object $entityManager, $accountId): void
+function createContact(object $entityManager, string $accountId): void
 {
     try {
-        /*$account = $entityManager
-            ->getRDBRepository(Account::ENTITY_TYPE)
-            ->select(['id', 'name'])
-            ->where([
-                'type' => 'Customer',
-            ])
-            ->order('createdAt')
-            ->findOne();
-        $accountId = $account->getId();*/
-        //$random = substr(md5(time()), 0, 5);
+        echo $accountId . PHP_EOL;
 
         $userObject = $entityManager->getEntity('Contact');
         $userObject->set("firstName", getRandomFirstName());
@@ -301,16 +327,16 @@ function createContact(object $entityManager, $accountId): void
         $userObject->set("description", 'test');
         $userObject->set("accountId", $accountId);
         $entityManager->saveEntity($userObject);
-        $contactId = $userObject->id;
+        $contactId = $userObject->getId();
 
-        $mapper = $entityManager->getMapper();
-        $mapper->updateRelationColumn('Account', $accountId, 'contacts', $contactId, 'isInactive', false);
+        //$mapper = $entityManager->getMapper();
+        //$mapper->updateRelationColumn('Account', $accountId, 'contacts', $contactId, 'isInactive', false);
     } catch (Exception $e) {
         echo $e->getMessage();
     }
 }
 
-function createLeads(object $entityManager)
+function createLeads(object $entityManager): void
 {
     try {
         // https://github.com/espocrm/espocrm/issues/1393
@@ -344,32 +370,25 @@ https://www.browserling.com/tools/json-minify
 */
 
 /*
-https://docs.espocrm.com/administration/fields/
-https://docs.espocrm.com/administration/formula/
-https://docs.espocrm.com/development/acl/
 https://docs.espocrm.com/development/api/account/
-https://docs.espocrm.com/development/coding-rules/
+https://docs.espocrm.com/development/orm/
+https://docs.espocrm.com/development/orm/
 https://docs.espocrm.com/development/hooks/
 https://docs.espocrm.com/development/orm/
+https://docs.espocrm.com/development/acl/
+https://docs.espocrm.com/administration/fields/
+https://docs.espocrm.com/administration/formula/
+https://docs.espocrm.com/development/orm/
 https://docs.espocrm.com/development/select-builder/
+https://docs.espocrm.com/development/coding-rules/
+https://hotexamples.com/examples/espo.core.orm.repositories/RDB/-/php-rdb-class-examples.html
 https://hotexamples.com/de/examples/espo.orm/Entity/-/php-entity-class-examples.html
 https://hotexamples.com/de/examples/espo.orm/Entity/get/php-entity-get-method-examples.html
 https://hotexamples.com/de/examples/espo.orm/Entity/getEntityType/php-entity-getentitytype-method-examples.html
 https://hotexamples.com/de/examples/espo.orm/Entity/isNew/php-entity-isnew-method-examples.html
-https://hotexamples.com/examples/espo.core.orm.repositories/RDB/-/php-rdb-class-examples.html
 https://hotexamples.com/examples/espo.orm/Entity/get/php-entity-get-method-examples.html
-
-https://bestofphp.com/repo/espocrm-espocrm-php-web-applications
-https://devcrm.it/custom-filters
-https://docs.docker.com/engine/reference/commandline/volume/
-https://docs.docker.com/engine/reference/commandline/volume_create/
-https://docs.docker.com/storage/volumes/
-https://earthly.dev/blog/docker-volumes/
-https://github.com/espocrm/espocrm
-https://github.com/espocrm/ext-real-estate/releases
-https://www.slimframework.com/docs/v3/handlers/error.html
-
-
+https://hotexamples.com/examples/espo.orm/Entity/get/php-entity-get-method-examples.html
+https://hotexamples.com/de/examples/espo.orm/Entity/-/php-entity-class-examples.html
 
 https://github.com/espocrm/espocrm/issues/1393
 */

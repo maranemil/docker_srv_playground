@@ -1,4 +1,46 @@
 ##################################################
+Troubleshooting
+##################################################
+
+# set file rights
+chmod -R 777 ../html/
+
+# clear and build
+php command.php clearCache && php command.php rebuild
+
+# set passwd
+php command.php set-password admin
+password
+
+# chown -R www-data:www-data ../html/
+
+find . -type d -exec chmod 755 {} \;  # Change directory permissions rwxr-xr-x
+find . -type f -exec chmod 644 {} \;  # Change file permissions rw-r--r--
+
+tail -f data/logs/espo-2022-07-27.log
+
+mysqldump --no-tablespaces -u espocrm -h 172.28.0.3 -p espocrm > espocrm.sql
+database_password
+
+------------------------------
+
+SelectManager @deprecated Since v7.0. Use SelectBuilder instead.
+
+'logger' => [
+    'path' => 'data/logs/espo.log',
+    'level' => 'DEBUG',
+    'rotation' => true,
+    'maxFileNumber' => 30
+],
+
+docker cp espocrm:/var/www/html html
+
+------------------------------
+
+#docker volume create hello
+#docker run -d -v hello:/world busybox ls /world
+
+##################################################
 start stop container
 ##################################################
 
