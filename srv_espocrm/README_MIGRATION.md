@@ -836,3 +836,79 @@ NOW
 $this -> getSelectAttributeList($params);
 $this -> getSelectManager() -> getSelectAttributeList($params);
 ```
+
+#### ZendImap
+```
+
+BEFORE
+use Zend\Mail\Protocol\Imap as ZendImap;
+
+AFTER
+use Laminas\Mail\Protocol\Imap as ZendImap;
+```
+
+------------------------------
+#### getEntityManager
+
+```
+
+BEFORE
+$this->getEntityManager()
+->getQuery() # Method 'getQuery' is deprecated
+->createSelectQuery('Call', $selectParams); # Method 'createSelectQuery' is deprecated
+  
+AFTER
+$this->entityManager
+->getQueryBuilder()
+->select()
+->from('Call')
+->where($selectParams)
+->build();
+```
+
+
+------------------------------
+
+#### Class 'Base' is deprecated
+```
+
+BEFORE
+namespace Espo\Custom\SelectManagers;
+use Espo\Core\SelectManagers\Base;
+class CaseX extends Base{}
+
+AFTER
+use Espo\ORM\Query\SelectBuilder;
+use Espo\Core\Select\Primary\Filter;
+class CaseX implements Filter{}
+```
+
+-------------------------------
+
+#### Class 'SelectManager' is deprecated  @deprecated Since v7.0. 
+##### Use SelectBuilder instead.
+
+
+```
+
+https://github.com/espocrm/espocrm/blob/master/application/Espo/Core/SelectManagers/Base.php
+https://github.com/espocrm/espocrm/blob/master/application/Espo/Core/Select/SelectManager.php
+
+https://github.com/espocrm/documentation/tree/master/i18n/ro_RO/development
+https://github.com/espocrm/documentation/blob/master/i18n/ro_RO/development/orm.md
+
+https://docs.espocrm.com/administration/formula/
+https://docs.espocrm.com/development/services/
+https://docs.espocrm.com/development/select-manager/
+https://docs.espocrm.com/development/di/
+https://docs.espocrm.com/administration/troubleshooting/
+https://docs.espocrm.com/development/orm/
+
+https://forum.espocrm.com/forum/developer-help/77957-selectmanagers-to-v7-x
+https://forum.espocrm.com/forum/developer-help/52428-summ-records-grouped-by-field-of-current-record
+
+https://hotexamples.com/de/examples/espo.orm/Entity/getEntityType/php-entity-getentitytype-method-examples.html
+https://hotexamples.com/examples/espo.services/Record/-/php-record-class-examples.html
+```
+
+
