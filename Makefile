@@ -11,9 +11,12 @@ SHELL = /bin/sh
 
 clear-containers:
 	@echo "Removing Containers"
+	docker ps --filter status=running
 	#docker kill $(docker ps -q)
-	docker rm -f $(docker ps -aq)
 	#sudo docker ps -q | xargs docker kill
+	docker stop $(docker ps --filter status=running -q)
+	docker rm $(docker ps --filter status=exited -q)
+	docker rm -f $(docker ps -aq)
 
 remove-containers:
 	@echo "Removing stopped containers"
@@ -23,6 +26,10 @@ remove-containers:
 remove-volumes:
 	@echo "Removing all volumes"
 	docker volume rm $(docker volume ls -q)
+
+remove-images:
+	@echo "Removing all images"
+	docker rmi $(docker images -q)
 
 stop:
 	@echo "Stopping docker"
