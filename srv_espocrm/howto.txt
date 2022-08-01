@@ -114,6 +114,10 @@ https://hotexamples.com/de/examples/drupal.core.entity/EntityTypeManager/getStor
 https://docs.w3cub.com/drupal~8/core-lib-drupal-core-entity-entitytypemanager.php/function/entitytypemanager-getstorage/8.1.x
 https://drupal.stackexchange.com/questions/250306/query-and-load-entity-by-entity-type-manager
 
+https://docs.espocrm.com/administration/server-configuration/
+https://docs.espocrm.com/administration/apache-server-configuration/
+https://www.howtoforge.com/tutorial/debian-espocrm/
+https://docs.espocrm.com/user-guide/text-search/
 
 ------------------------------------------------------
 Migration Refactoring
