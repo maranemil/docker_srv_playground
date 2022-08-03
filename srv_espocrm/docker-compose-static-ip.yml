@@ -10,7 +10,7 @@ services:
       MYSQL_USER: espocrm
       MYSQL_PASSWORD: database_password
     volumes:
-      - ./espoDumpDev.sql:/docker-entrypoint-initdb.d/dump.sql
+      - ./espocrm.sql:/docker-entrypoint-initdb.d/dump.sql
     restart: always
     ports:
       - "3307:3306"
