@@ -414,27 +414,17 @@ https://github.com/espocrm/documentation/blob/master/docs/administration/bpm-dri
 https://github.com/espocrm/documentation/blob/master/docs/administration/bpm-activities.md
 https://github.com/espocrm/documentation/blob/master/docs/administration/bpm.md#manipulating
 --------------------------------------------------
-https://docs.espocrm.com/development/metadata/select-defs/
-https://docs.espocrm.com/development/di/
-https://docs.espocrm.com/development/services/
-https://docs.espocrm.com/development/di/
-https://docs.espocrm.com/development/select-builder/
-https://docs.espocrm.com/administration/formula/#record
-https://docs.espocrm.com/administration/import/
 https://docs.espocrm.com/administration/bpm-activities/
-https://docs.espocrm.com/development/select-manager/
-https://docs.espocrm.com/development/select-manager/#primary-filter
-https://docs.espocrm.com/development/select-builder/
-https://docs.espocrm.com/development/api-action/
-https://docs.espocrm.com/development/select-manager/
-https://docs.espocrm.com/development/metadata/client-defs/
 https://docs.espocrm.com/administration/config-params/
-https://docs.espocrm.com/development/coding-rules/
-https://docs.espocrm.com/administration/formula/
 https://docs.espocrm.com/administration/extensions/
-https://docs.espocrm.com/development/select-manager/
-https://docs.espocrm.com/development/select-manager/
+https://docs.espocrm.com/administration/formula/
+https://docs.espocrm.com/administration/import/
+https://docs.espocrm.com/development/api-action/
 https://docs.espocrm.com/development/coding-rules/
+https://docs.espocrm.com/development/di/
+https://docs.espocrm.com/development/metadata/select-defs/
+https://docs.espocrm.com/development/select-builder/
+https://docs.espocrm.com/development/select-manager/
 https://docs.espocrm.com/development/services/
 
 
@@ -1715,11 +1705,11 @@ https://github.com/espocrm/documentation/tree/master/i18n/ro_RO/development
 https://github.com/espocrm/documentation/blob/master/i18n/ro_RO/development/orm.md
 
 https://docs.espocrm.com/administration/formula/
-https://docs.espocrm.com/development/services/
-https://docs.espocrm.com/development/select-manager/
-https://docs.espocrm.com/development/di/
 https://docs.espocrm.com/administration/troubleshooting/
+https://docs.espocrm.com/development/di/
 https://docs.espocrm.com/development/orm/
+https://docs.espocrm.com/development/select-manager/
+https://docs.espocrm.com/development/services/
 
 https://forum.espocrm.com/forum/developer-help/77957-selectmanagers-to-v7-x
 https://forum.espocrm.com/forum/developer-help/52428-summ-records-grouped-by-field-of-current-record
