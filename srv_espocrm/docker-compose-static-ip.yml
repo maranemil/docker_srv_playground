@@ -1,0 +1,53 @@
+version: '3.5'
+services:
+  espocrmdb_fresh:
+    image: mysql:8
+    container_name: espocrmdb_fresh
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: espocrm
+      MYSQL_USER: espocrm
+      MYSQL_PASSWORD: database_password
+    volumes:
+      - ./espoDumpDev.sql:/docker-entrypoint-initdb.d/dump.sql
+    restart: always
+    ports:
+      - "3307:3306"
+    networks:
+      static-network:
+        ipv4_address: 172.22.0.2
+
+  espocrm_fresh:
+    image: espocrm/espocrm:7.1.9
+    container_name: espocrm_fresh
+    environment:
+      ESPOCRM_DATABASE_HOST: espocrmdb_fresh
+      ESPOCRM_DATABASE_USER: espocrm
+      ESPOCRM_DATABASE_PASSWORD: database_password
+      ESPOCRM_ADMIN_USERNAME: admin
+      ESPOCRM_ADMIN_PASSWORD: password
+      ESPOCRM_SITE_URL: "http://localhost:8083"
+      DISPLAY: ":0"
+    volumes:
+      - ./html:/var/www/html
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    restart: always
+    ports:
+      - "8083:80"
+    networks:
+      static-network:
+        ipv4_address: 172.22.0.3
+
+
+volumes:
+  espocrmdb_fresh:
+  espocrm_fresh:
+
+networks:
+  static-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16
+          gateway: 172.22.0.1
