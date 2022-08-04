@@ -1374,52 +1374,39 @@ class Esignature implements Di\ServiceFactoryAware, Di\EntityManagerAware
 ---
 ```
 
-BEFORE:
-PHP Code:
+BEFORE: PHP Code:
+
 namespace Espo\Modules\Chats\Services;
-
 use Espo\Core\Utils\Metadata;
-
 class ChatForumAdmin
 {
-
     protected $metadata;
-
      public function __construct(Metadata $metadata)
     {
         $this->metadata = $metadata;
     }
-
     public function createLinks() {
         // some code
-
         $existingSidePanelsInMetadata = $this->metadata->get('clientDefs.' . $linkPayload->parentEntity . '.sidePanels.detail');
-
         // more code
 
     }
 
 } 
-NOW
-PHP Code:
-namespace Espo\Modules\Chats\Services;
 
+NOW PHP Code:
+
+namespace Espo\Modules\Chats\Services;
 use Espo\Core\Di;
 
 class ChatForumAdmin implements Di\MetadataAware
 {
-
     use Di\MetadataSetter;
-
     public function createLinks() {
         // some code
-
         $existingSidePanelsInMetadata = $this->metadata->get('clientDefs.' . $linkPayload->parentEntity . '.sidePanels.detail');
-
         // more code
-
     }
-
 } 
 ```
 
@@ -1538,9 +1525,7 @@ namespace Espo\Custom\Services;
 use \Espo\Core\Exceptions\Error;
 use \Espo\Core\Exceptions\NotFound;
 use \Espo\Core\Exceptions\Forbidden;
-
 use \Espo\ORM\Entity;
-
 use \PDO;
 
 class Activities extends \Espo\Modules\Crm\Services\Activities
@@ -1549,11 +1534,8 @@ class Activities extends \Espo\Modules\Crm\Services\Activities
     public function getPopupNotifications($userId)
     {
         $pdo = $this->getPDO();
-
         $dt = new \DateTime();
-
         $pastHours = $this->getConfig()->get('reminderPastHours', self::REMINDER_PAST_HOURS);
-
         $now = $dt->format('Y-m-d H:i:s');
         $nowShifted = $dt->sub(new \DateInterval('PT'.strval($pastHours).'H'))->format('Y-m-d H:i:s');
 
@@ -1610,11 +1592,11 @@ class Activities extends \Espo\Modules\Crm\Services\Activities
 
 ```
 
+
 ----------------------
+
+### LDAP Auth not working - user found, but error is wrong username/password
 ```
-
-LDAP Auth not working - user found, but error is wrong username/password
-
 https://forum.espocrm.com/forum/installation-and-upgrade-help/54712-ldap-auth-not-working-user-found-but-error-is-wrong-username-password
 https://forum.espocrm.com/forum/general/62683-fallback-authentication-mechanism-when-ldap-fails
 https://docs.espocrm.com/administration/server-configuration/#permissions
@@ -1650,10 +1632,7 @@ $entityManager = $this->getEntityManager(); # new way
 $systemUser = $entityManager->getRepository('User')->get('system'); # old way
 $systemUser = $entityManager->getEntity('User', 'system'); # new way
 
-
-
 -----
-
 
 BEFORE
 use Zend\Mail\Protocol\Imap as ZendImap;
@@ -1675,12 +1654,13 @@ $this->entityManager
 ->from('Call')
 ->where($selectParams)
 ->build();
+```
 
 
 ------------------------------
 
-Class 'Base' is deprecated
-
+### Class 'Base' is deprecated
+```
 BEFORE
 namespace Espo\Custom\SelectManagers;
 use Espo\Core\SelectManagers\Base;
@@ -1693,11 +1673,10 @@ use Espo\Core\Select\Primary\Filter;
 class CaseX implements Filter{}
 ```
 
+
 -------------------------------
+### Class 'SelectManager' is deprecated  @deprecated Since v7.0. Use SelectBuilder instead.
 ```
-
-Class 'SelectManager' is deprecated  @deprecated Since v7.0. Use SelectBuilder instead.
-
 https://github.com/espocrm/espocrm/blob/master/application/Espo/Core/SelectManagers/Base.php
 https://github.com/espocrm/espocrm/blob/master/application/Espo/Core/Select/SelectManager.php
 
@@ -1720,6 +1699,27 @@ https://hotexamples.com/examples/espo.services/Record/-/php-record-class-example
 ```
 
 
+### Intellij Idea warning - "Promise returned is ignored" with aysnc/await
+```
+
+https://docs.espocrm.com/administration/log/
+https://docs.espocrm.com/administration/troubleshooting/
+https://docs.espocrm.com/development/orm/
+https://docs.espocrm.com/administration/server-configuration/
+
+
+https://docs.espocrm.com/development/view/
+
+
+
+
+// Create and render a child view.
+    this.createView('testKey', 'custom:test/my-another-custom-child-view', {
+        el: this.getSelector() + ' .another-test-container',
+        value: value,
+    })
+    .then(view => view.render());
+```
 
 
 
