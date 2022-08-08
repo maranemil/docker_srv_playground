@@ -161,6 +161,17 @@ https://www.fakexy.com/fake-address-generator-de
 cd html/public/
 sudo wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php
 
+------------------------------------------------------
+
+docker compose permission issue php7.4-apache chmod 775
+
+https://stackoverflow.com/questions/63792263/docker-compose-permission-issue
+https://github.com/10up/wp-php-fpm/blob/develop/Dockerfile
+https://unix.stackexchange.com/questions/361930/sshfs-mount-files-folder-are-created-as-root-disregarding-uid-gid-options
+https://hub.docker.com/layers/trurlmcbyte/php-fpm/fpm-alpine/images/sha256-54f5ae958df0e03df512e2225864a569f6f653c090a0c61b4267a43caa9b9676
+
+FIX data
+cd /var/www/html && find data -type d -exec chmod 775 {} + && chown -R 33:33 .
 
 
 
