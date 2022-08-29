@@ -1,0 +1,12 @@
+https://github.com/bitnami/bitnami-docker-minio
+https://docs.min.io/docs/deploy-minio-on-docker-compose.html
+https://hub.docker.com/r/minio/minio/
+https://docs.min.io/docs/minio-docker-quickstart-guide.html
+https://docs.docker.com/engine/install/linux-postinstall/
+
+
+sudo apt install docker.io docker -y
+sudo apt install docker-compose -y
+
+
+
