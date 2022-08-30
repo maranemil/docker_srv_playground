@@ -1,0 +1,24 @@
+
+
+# https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html
+# https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html
+# https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html
+# https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html
+# https://github.com/aws/aws-cli
+# https://hub.docker.com/r/amazon/aws-cli
+# https://docs.min.io/docs/aws-cli-with-minio.html
+
+python -m pip install awscli
+sudo python -m pip install awscli
+python -m pip install --user awscli
+python -m pip install --upgrade awscli
+
+aws configure
+aws configure --profile localstack
+
+AWS Access Key ID [None]: test
+AWS Secret Access Key [None]: test
+Default region name [None]: us-east-1
+Default output format [None]:
+
+aws --endpoint-url=http://localhost:4566 s3 ls

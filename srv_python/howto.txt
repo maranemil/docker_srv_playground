@@ -1,0 +1,94 @@
+##########################################################
+How to keep the docker container running if it stops immediately
+##########################################################
+
+https://sab-exp.medium.com/how-to-keep-the-docker-container-running-if-it-stops-immediately-9521c179bb43
+https://www.anycodings.com/1questions/5578800/python-and-docker-compose-container-stops
+https://www.cloudbees.com/blog/using-docker-compose-for-python-development
+
+version: '3'
+
+services:
+
+  python_env:
+    image: python:3.7
+    stdin_open: true
+    tty: true
+    # command: python3 --version
+    ports:
+      - "8000:5000"
+    networks:
+      - app-network
+
+-------------------------------------
+
+Dockerfile
+
+FROM python:3.7-alpine
+ADD . /code
+WORKDIR /code
+RUN pip install -r requirements.txt
+CMD [ "python", "./app.py" ]
+
+
+docker-compose.yml
+
+version: '3'
+services:
+    python_env:
+        build: .
+        stdin_open: true
+    	tty: true
+        ports:
+            - "5000:5000"
+        volumes:
+            - ".:/code"
+
+app.py
+
+x = 1
+if x == 1:
+    # indented four spaces
+    print("x is 1.")
+
+
+-------------------------------------
+
+FROM python:3.6.1-alpine
+RUN apk update \
+  &amp;&amp; apk add \
+    build-base \
+    postgresql \
+    postgresql-dev \
+    libpq
+RUN mkdir /usr/src/app
+WORKDIR /usr/src/app
+COPY ./requirements.txt .
+RUN pip install -r requirements.txt
+ENV PYTHONUNBUFFERED 1
+COPY . .
+
+
+version: '3'
+services:
+  web:
+    build: .
+    command: gunicorn -b 0.0.0.0:8000 todosapp.wsgi:application
+    depends_on:
+      - postgres
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgres://todoapp@postgres/todos
+  postgres:
+    image: postgres:9.6.2-alpine
+    environment:
+      POSTGRES_USER: todoapp
+      POSTGRES_DB: todos
+
+
+
+
+

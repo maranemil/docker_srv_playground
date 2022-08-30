@@ -1,0 +1,9 @@
+https://stackoverflow.com/questions/48690698/using-boto3-through-sam-local-to-interact-with-localstack-s3
+https://github.com/localstack/localstack/issues/604
+https://pypi.org/project/boto3/
+https://docs.localstack.cloud/integrations/sdks/python/
+https://hands-on.cloud/testing-python-aws-applications-using-localstack/#
+https://github.com/localstack/localstack-python-client
+https://pytest-localstack.readthedocs.io/en/latest/internals/contrib/boto3.html
+https://boto3.amazonaws.com/v1/documentation/api/latest/guide/session.html#
+https://pypi.org/project/boto3-fixtures/#
