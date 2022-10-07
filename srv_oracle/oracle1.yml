@@ -1,0 +1,94 @@
+
+###################################################################################
+# docker oracle11g mariadb adminer php-oracle
+###################################################################################
+
+
+version: '3.5'
+
+services:
+
+  #oracle2:
+  #  container_name: oracle11g2
+  #  image: tbparrish/oracle-12c
+  #  ports:
+  #    - "1521:1521"
+
+
+  # 5 GB
+  oracle:
+    container_name: oracle11g
+    image: iatebes/oracle_11g
+    ports:
+      - "1521:1521"
+
+  ## 380 MB
+  mariadb:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+
+  ## 91 MB
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+
+  # 656 MB
+  # https://github.com/davidgaya/docker-apache-php-oci
+  php-oracle:
+    image: davidgaya/apache-php-oci
+    ports:
+      - "8080:8080"
+
+
+
+
+
+
+
+
+#
+# https://hub.docker.com/r/iatebes/oracle_11g
+#
+# docker run -d -p 1521:1521 iatebes/oracle_11g
+#
+# OS users
+# root/install
+# oracle/install
+#
+# DB users
+# SYS/oracle
+#
+# SID
+# orcl
+#
+# Database location
+# /opt/oracle
+#
+#s  u - oracle
+# source oraenv
+# (Enter SID) orcl
+# The Oracle base for ORACLE_HOME=/opt/oracle/app/product/11.2.0/dbhome_1 is /opt/oracle/app
+# sqlplus / as sysdba
+#
+# Connected to:
+# Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+# With the Partitioning, Oracle Label Security, OLAP, Data Mining,
+# Oracle Database Vault and Real Application Testing options
+#
+# SQL> select username from dba_users order by 1; # 30 rows selected.
+# SQL> SELECT USERNAME FROM ALL_USERS ORDER BY USERNAME;
+# SQL> SELECT TABLESPACE_NAME FROM USER_TABLESPACES;
+#
+# TABLESPACE_NAME
+#------------------------------
+# SYSTEM
+# SYSAUX
+# UNDOTBS1
+# TEMP
+# USERS
+#
+# select * from dba_users order by 1;
