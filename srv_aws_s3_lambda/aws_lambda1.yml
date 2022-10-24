@@ -1,0 +1,100 @@
+
+version: "3.8"
+
+services:
+
+  aws-lambda-python_demo:
+      container_name: "aws-lambda-python_demo"
+      build:
+        context: ./aws-lambda-python_demo
+        dockerfile: Dockerfile
+      environment:
+        - LAMBDA_TASK_ROOT=/var/task
+        - AWS_LAMBDA_FUNCTION_VERSION=1
+        - AWS_LAMBDA_FUNCTION_NAME=aws-lambda-python_demo
+      #  - AWS_LAMBDA_FUNCTION_MEMORY_SIZE=3008M
+      ports:
+        - "9000:8080"
+      networks:
+        static-network:
+          ipv4_address: 172.20.0.4
+
+
+  localstack-s3:
+    container_name: localstack-s3
+    image: localstack/localstack-full
+    ports:
+      #- "127.0.0.1:4566:4566"            # LocalStack Gateway
+      #- "127.0.0.1:4510-4559:4510-4559"  # External services port range
+      - "4566-4599:4566-4599"
+    environment:
+      - AWS_ACCESS_KEY_ID=dummy
+      - AWS_DEFAULT_REGION=eu-central-1 # eu-central-1 eu-west-2
+      - AWS_SECRET_ACCESS_KEY=dummy
+      - DEBUG=1
+      - DEFAULT_REGION=eu-west-2
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - PORT_WEB_UI=9999
+      - SERVICES=s3
+    volumes:
+      - "./stubs/s3:/tmp/localstack"
+      - "./volume:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      static-network:
+        ipv4_address: 172.20.0.5
+
+#  awscli:
+#    image: amazon/aws-cli
+#    entrypoint: aws --endpoint-url http://dynamodb:8000
+#    command: --version
+#    environment:
+#      AWS_ACCESS_KEY_ID: dummy
+#      AWS_SECRET_ACCESS_KEY: dummy
+#      AWS_REGION: eu-west-1
+
+#  glue-service:
+#    image: amazon/aws-glue-libs:glue_libs_3.0.0_image_01
+#    #image: amazon/aws-glue-libs:glue_libs_2.0.0_image_01
+#    #image: amazon/aws-glue-libs:glue_libs_1.0.0_image_01
+#    container_name: "glue_ontainer_demo"
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8000:8000"
+#    volumes:
+#      - .:/opt
+#    links:
+#      - localstack-s3
+#    environment:
+#      S3_ENDPOINT: http://localstack:4566
+
+#  oracledb:
+#      image: chameleon82/oracle-xe-10g
+#      restart: always
+#      ports:
+#        - "49160:22"
+#        - "49161:1521"
+#        - "49162:8080"
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+          ip_range: 172.25.0.0/24
+          gateway: 172.25.0.1
+  static-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
+
+
+
+
+# Lambda trigger
+# curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{}'
