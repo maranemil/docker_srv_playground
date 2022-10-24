@@ -1,0 +1,626 @@
+sudo groupadd docker
+sudo usermod -aG docker $USER
+
+https://docs.docker.com/engine/install/linux-postinstall/
+
+
+-----------------------------------------------
+
+
+https://hub.docker.com/_/mysql
+
+
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+
+  db:
+    image: mysql
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+-----------------------------------------------
+
+https://hub.docker.com/_/alpine
+
+FROM alpine:3.14
+RUN apk add --no-cache mysql-client
+ENTRYPOINT ["mysql"]
+
+FROM ubuntu:20.04
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends mysql-client \
+    && rm -rf /var/lib/apt/lists/*
+ENTRYPOINT ["mysql"]
+
+
+-----------------------------------------------
+
+https://hub.docker.com/_/busybox
+
+
+docker run -it --rm busybox
+
+FROM busybox
+COPY ./my-static-binary /my-static-binary
+CMD ["/my-static-binary"]
+
+-----------------------------------------------
+https://hub.docker.com/_/ubuntu
+https://hub.docker.com/_/golang
+https://hub.docker.com/_/memcached
+https://hub.docker.com/_/node
+https://hub.docker.com/_/nginx
+https://hub.docker.com/_/sonarqube
+https://hub.docker.com/_/vault
+https://hub.docker.com/_/amazonlinux
+https://hub.docker.com/_/zookeeper
+https://hub.docker.com/_/couchdb
+https://hub.docker.com/_/jenkins
+https://hub.docker.com/_/logstash
+https://hub.docker.com/_/bash
+https://hub.docker.com/_/kibana
+https://hub.docker.com/_/logstash
+https://hub.docker.com/_/openjdk
+https://hub.docker.com/_/rethinkdb
+https://hub.docker.com/_/joomla
+-----------------------------------------------
+
+
+https://hub.docker.com/_/mongo
+
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+
+
+-----------------------------------------------
+
+https://hub.docker.com/_/postgres
+
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+-----------------------------------------------
+https://hub.docker.com/_/wordpress
+
+
+version: '3.1'
+
+services:
+
+  wordpress:
+    image: wordpress
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: exampleuser
+      WORDPRESS_DB_PASSWORD: examplepass
+      WORDPRESS_DB_NAME: exampledb
+    volumes:
+      - wordpress:/var/www/html
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: exampledb
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  wordpress:
+  db:
+-----------------------------------------------
+
+https://hub.docker.com/_/percona
+
+
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+
+  db:
+    image: percona
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+-----------------------------------------------
+
+https://hub.docker.com/_/owncloud
+
+# ownCloud with MariaDB/MySQL
+#
+# Access via "http://localhost:8080" (or "http://$(docker-machine ip):8080" if using docker-machine)
+#
+# During initial ownCloud setup, select "Storage & database" --> "Configure the database" --> "MySQL/MariaDB"
+# Database user: root
+# Database password: example
+# Database name: pick any name
+# Database host: replace "localhost" with "mysql"
+
+version: '3.1'
+
+services:
+
+  owncloud:
+    image: owncloud
+    restart: always
+    ports:
+      - 8080:80
+
+  mysql:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+
+
+-----------------------------------------------
+https://hub.docker.com/_/varnish
+https://hub.docker.com/_/rails
+https://hub.docker.com/_/rocket-chat
+-----------------------------------------------
+
+https://hub.docker.com/_/mediawiki
+
+
+# MediaWiki with MariaDB
+#
+# Access via "http://localhost:8080"
+#   (or "http://$(docker-machine ip):8080" if using docker-machine)
+version: '3'
+services:
+  mediawiki:
+    image: mediawiki
+    restart: always
+    ports:
+      - 8080:80
+    links:
+      - database
+    volumes:
+      - images:/var/www/html/images
+      # After initial setup, download LocalSettings.php to the same directory as
+      # this yaml and uncomment the following line and use compose to restart
+      # the mediawiki service
+      # - ./LocalSettings.php:/var/www/html/LocalSettings.php
+  # This key also defines the name of the database host used during setup instead of the default "localhost"
+  database:
+    image: mariadb
+    restart: always
+    environment:
+      # @see https://phabricator.wikimedia.org/source/mediawiki/browse/master/includes/DefaultSettings.php
+      MYSQL_DATABASE: my_wiki
+      MYSQL_USER: wikiuser
+      MYSQL_PASSWORD: example
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  images:
+  db:
+
+
+-----------------------------------------------
+https://hub.docker.com/_/archlinux
+https://hub.docker.com/_/arangodb
+-----------------------------------------------
+https://hub.docker.com/_/django
+https://hub.docker.com/_/python
+https://hub.docker.com/_/swarm
+https://hub.docker.com/_/rabbitmq
+https://hub.docker.com/_/neurodebian
+https://hub.docker.com/_/perl
+https://hub.docker.com/_/redis
+https://hub.docker.com/_/openjdk
+https://hub.docker.com/r/datadog/agent
+https://hub.docker.com/r/grafana/grafana
+
+-----------------------------------------------
+
+https://hub.docker.com/_/mongo
+
+
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+
+
+-----------------------------------------------
+
+https://hub.docker.com/_/postgres
+
+
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+-----------------------------------------------
+
+
+https://hub.docker.com/r/bitnami/postgresql
+
+
+version: '2'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  postgresql:
+    image: 'bitnami/postgresql:latest'
+    networks:
+      - app-tier
+  myapp:
+    image: 'YOUR_APPLICATION_IMAGE'
+    networks:
+      - app-tier
+
+
+-----------------------------------------------
+
+https://hub.docker.com/r/bitnami/redis
+
+version: '2'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - app-tier
+  myapp:
+    image: 'YOUR_APPLICATION_IMAGE'
+    networks:
+      - app-tier
+
+
+-----------------------------------------------
+https://hub.docker.com/r/portainer/portainer-ce
+https://hub.docker.com/r/portainer/portainer
+-----------------------------------------------
+https://hub.docker.com/r/bitnami/mongodb
+
+
+version: '2'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  mongodb:
+    image: 'bitnami/mongodb:latest'
+    networks:
+      - app-tier
+  myapp:
+    image: 'YOUR_APPLICATION_IMAGE'
+    networks:
+      - app-tier
+
+-----------------------------------------------
+
+https://hub.docker.com/r/bitnami/mariadb
+
+
+version: '2'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  mariadb:
+    image: 'bitnami/mariadb:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - app-tier
+  myapp:
+    image: 'YOUR_APPLICATION_IMAGE'
+    networks:
+      - app-tier
+
+
+-----------------------------------------------
+
+https://hub.docker.com/r/bitnami/rabbitmq
+
+version: '2'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  rabbitmq:
+    image: 'bitnami/rabbitmq:latest'
+    networks:
+      - app-tier
+  myapp:
+    image: 'YOUR_APPLICATION_IMAGE'
+    networks:
+      - app-tier
+
+
+-----------------------------------------------
+
+https://hub.docker.com/r/bitnami/minio
+
+docker run --name minio \
+    --publish 9000:9000 \
+    --publish 9001:9001 \
+    --volume /path/to/minio-persistence:/data \
+    bitnami/minio:latest
+
+
+version: '2'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  minio:
+    image: 'bitnami/minio:latest'
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    environment:
+      - MINIO_ROOT_USER=minio-root-user
+      - MINIO_ROOT_PASSWORD=minio-root-password
+    networks:
+      - app-tier
+  myapp:
+    image: 'YOUR_APPLICATION_IMAGE'
+    networks:
+      - app-tier
+    environment:
+      - MINIO_SERVER_ACCESS_KEY=minio-access-key
+      - MINIO_SERVER_SECRET_KEY=minio-secret-key
+
+-----------------------------------------------
+https://hub.docker.com/_/php
+
+
+docker run -d -p 80:80 --name my-apache-php-app -v "$PWD":/var/www/html php:7.2-apache
+
+-----------------------------------------------
+
+https://hub.docker.com/_/phpmyadmin
+
+version: '3.1'
+
+services:
+  db:
+    image: mariadb:10.6
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: notSecureChangeMe
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+
+-----------------------------------------------
+
+https://hub.docker.com/_/adminer
+
+# Use root/example as user/password credentials
+
+version: '3.1'
+
+services:
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  db:
+    image: mysql:5.6
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+
+
+-----------------------------------------------
+
+https://hub.docker.com/_/composer
+
+
+-----------------------------------------------
+
+https://hub.docker.com/_/httpd
+
+docker run -dit --name my-apache-app -p 8080:80 -v "$PWD":/usr/local/apache2/htdocs/ httpd:2.4
+
+docker run --rm httpd:2.4 cat /usr/local/apache2/conf/httpd.conf > my-httpd.conf
+
+-----------------------------------------------
+
+
+https://hub.docker.com/_/busybox
+
+docker run -it --rm busybox
+-----------------------------------------------
+
+
+https://hub.docker.com/r/ubuntu/nginx
+
+
+https://hub.docker.com/r/jetbrains/hub
+https://hub.docker.com/r/puppet/puppetdb
+https://hub.docker.com/r/bitnami/spark
+
+
+
+https://hub.docker.com/r/circleci/mariadb
+https://hub.docker.com/r/cimg/php
+https://hub.docker.com/r/bitnami/moodle
+https://hub.docker.com/r/jetbrains/teamcity-agent
+https://hub.docker.com/r/circleci/dynamodb
+https://hub.docker.com/r/kasmweb/chrome
+https://hub.docker.com/r/kasmweb/firefox
+https://hub.docker.com/r/circleci/mongo
+https://hub.docker.com/r/bitnami/node
+https://hub.docker.com/r/circleci/php
+https://hub.docker.com/r/cimg/postgres
+https://hub.docker.com/r/puppet/puppetserver
+https://hub.docker.com/r/bitnami/mariadb-galera
+https://hub.docker.com/r/atlassian/bitbucket-server
+https://hub.docker.com/r/bitnami/redis-cluster
+https://hub.docker.com/r/bitnami/git
+https://hub.docker.com/r/bitnami/apache
+https://hub.docker.com/r/percona/percona-server
+https://hub.docker.com/r/bitnami/kibana
+https://hub.docker.com/r/cimg/openjdk
+https://hub.docker.com/r/bitnami/oauth2-proxy
+https://hub.docker.com/r/bitnami/cassandra
+https://hub.docker.com/r/bitnami/phpmyadmin
+https://hub.docker.com/r/jetbrains/teamcity-server
+https://hub.docker.com/r/cimg/python
+https://hub.docker.com/r/circleci/openjdk
+https://hub.docker.com/r/bitnami/grafana
+https://hub.docker.com/r/circleci/postgres
+https://hub.docker.com/r/cimg/node
+https://hub.docker.com/r/bitnami/memcached
+https://hub.docker.com/r/bitnami/elasticsearch
+https://hub.docker.com/r/bitnami/mysql
+https://hub.docker.com/r/cockroachdb/cockroach
+https://hub.docker.com/r/amazon/aws-cli
+https://hub.docker.com/r/bitnami/nginx
+https://hub.docker.com/r/amazon/dynamodb-local
+https://hub.docker.com/r/circleci/python
+https://hub.docker.com/r/circleci/redis
+https://hub.docker.com/r/circleci/mysql
+https://hub.docker.com/r/circleci/node
+-----------------------------------------------
+https://hub.docker.com/r/bitnami/kafka
+
+version: '2'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    networks:
+      - app-tier
+  kafka:
+    image: 'bitnami/kafka:latest'
+    networks:
+      - app-tier
+  myapp:
+    image: 'YOUR_APPLICATION_IMAGE'
+    networks:
+      - app-tier
+
+
+-----------------------------------------------
+
+https://github.com/cakephp/cakephp/tags?after=3.9.7
+https://github.com/cakephp
+https://github.com/cakephp/app/tags?after=3.2.5
+https://codeigniter.com/userguide3/installation/downloads.html
