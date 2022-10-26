@@ -27,3 +27,22 @@ https://plugins.jetbrains.com/plugin/7724-docker
 https://plugins.jetbrains.com/plugin/9333-makefile-language
 https://plugins.jetbrains.com/plugin/9333-makefile-language
 https://plugins.jetbrains.com/plugin/9525--env-files-support
+
+######################################################
+set docker limit paralel connections pull
+######################################################
+
+https://stackoverflow.com/questions/43479614/docker-parallel-operations-limit
+https://docs.docker.com/config/daemon/
+https://docs.docker.com/engine/reference/commandline/dockerd/#on-windows
+https://www.docker.com/increase-rate-limits/
+
+/etc/docker/daemon.json
+
+{
+    "max-concurrent-uploads": 1,
+    "max-concurrent-downloads": 1,
+    "max-download-attempts": 5,
+}
+
+sudo service docker restart
