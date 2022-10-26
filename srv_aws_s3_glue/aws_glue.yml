@@ -1,0 +1,65 @@
+
+version: "3.8"
+
+services:
+  localstack-s3:
+    container_name: localstack-s3
+    #image: localstack/localstack-full
+    image: localstack/localstack:latest
+    ports:
+      #- "127.0.0.1:4566:4566"            # LocalStack Gateway
+      #- "127.0.0.1:4510-4559:4510-4559"  # External services port range
+      - "4566-4599:4566-4599"
+    environment:
+      - AWS_ACCESS_KEY_ID=dummy
+      - AWS_DEFAULT_REGION=eu-central-1 # eu-central-1 eu-west-2
+      - AWS_SECRET_ACCESS_KEY=dummy
+      - DEBUG=1
+      - DEFAULT_REGION=eu-west-2
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - PORT_WEB_UI=9999
+      - SERVICES=s3
+    volumes:
+      - "./stubs/s3:/tmp/localstack"
+      - "./volume:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      static-network:
+        ipv4_address: 172.20.0.15
+
+  glue_pyspark_jupyter:
+    container_name: glue_pyspark_jupyter
+    image: amazon/aws-glue-libs:glue_libs_3.0.0_image_01
+    ports:
+      - "8888:8888"
+      - "4040:4040"
+    environment:
+      - DISABLE_SSL="true"
+      - S3_ENDPOINT=http://localstack:4566
+    volumes:
+      - ./tmp:/home/glue_user/workspace/jupyter_workspace
+    links:
+      - localstack-s3
+    command:
+      - /home/glue_user/jupyter/jupyter_start.sh
+    networks:
+      static-network:
+        ipv4_address: 172.20.0.17
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+          ip_range: 172.25.0.0/24
+          gateway: 172.25.0.1
+  static-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
+
+
+
