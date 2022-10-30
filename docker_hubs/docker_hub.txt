@@ -1,3 +1,6 @@
+#########################################################
+docker hub
+#########################################################
 https://hub.docker.com/r/amazon/aws-lambda-python
 https://hub.docker.com/r/amazon/aws-cli
 https://hub.docker.com/r/amazon/aws-lambda-nodejs
@@ -17,5 +20,67 @@ https://hub.docker.com/r/amazon/aws-sam-cli-emulation-image-python2.7
 https://hub.docker.com/r/amazon/aws-secrets-manager-secret-rotator
 https://hub.docker.com/r/amazon/aws-glue-libs/tags
 https://hub.docker.com/search?q=lambda
+
+#########################################################
+BusyBox shell
+#########################################################
+
+https://hub.docker.com/_/busybox
+https://stackoverflow.com/questions/28721699/root-password-inside-a-docker-container
+https://docs.docker.com/engine/install/ubuntu/
+https://hub.docker.com/_/ubuntu
+https://hub.docker.com/_/ubuntu/tags
+https://hub.docker.com/_/debian
+https://hub.docker.com/_/centos/tags?page=2
+https://hub.docker.com/_/fedora/tags
+
+docker run -it --rm busybox
+docker run -it busybox
+
+Dockerfile
+
+RUN echo 'root:Docker!' | chpasswd
+RUN echo 'Docker!' | passwd --stdin root
+
+
+docker run -it --entrypoint /bin/bash  ubuntu
+passwd
+
+
+ping 127.0.0.1
+telnet 127.0.0.1 1521
+
+
+docker search busybox
+docker search ubuntu
+docker search --filter=stars=3 --no-trunc busybox
+
+
+docker run -it --entrypoint /bin/bash  ubuntu:14.04
+docker run -it --entrypoint /bin/bash  ubuntu:16.04
+docker run -it --entrypoint /bin/bash  ubuntu:18.04
+docker run -it --entrypoint /bin/bash  ubuntu:20.04
+docker run -it --entrypoint /bin/bash  ubuntu:22.04
+
+docker run -it --entrypoint /bin/bash  debian:10.13
+docker run -it --entrypoint /bin/bash  debian:10.13-slim
+docker run -it --entrypoint /bin/bash  debian:10-slim
+docker run -it --entrypoint /bin/bash  debian:oldstable
+docker run -it --entrypoint /bin/bash  debian:bullseye-slim
+docker run -it --entrypoint /bin/bash  debian:buster
+
+docker run -it busybox:latest
+docker run -it busybox
+
+docker run -it centos:latest
+docker run -it centos
+docker run -it centos:centos6
+docker run -it centos:8
+docker run -it centos:centos5
+
+docker run -it fedora:latest
+docker run -it fedora:37
+docker run -it fedora:36
+
 
 

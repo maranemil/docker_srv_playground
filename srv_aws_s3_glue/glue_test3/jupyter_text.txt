@@ -1,0 +1,26 @@
+!pip3 install --upgrade pip
+!pip3 install --user boto3
+!pip install --user sqlalchemy
+!pip install --user oracledb
+
+import glob
+import os
+import re
+import shutil
+import sys
+import time
+import pandas as pd
+import sqlalchemy
+import oracledb
+
+
+oracledb.version = "8.3.0"
+sys.modules["cx_Oracle"] = oracledb
+oracledb.init_oracle_client()
+
+engine = sqlalchemy.create_engine("oracle://system:oracle@172.25.0.2:1521/xe")
+print(engine)
+result = engine.execute('SELECT * FROM sales')
+print(result)
+row = result.fetchone()
+print(row)
