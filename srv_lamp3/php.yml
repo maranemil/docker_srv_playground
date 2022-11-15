@@ -1,0 +1,40 @@
+
+
+##########################################
+# php
+##########################################
+
+# https://hub.docker.com/_/php
+# https://hub.docker.com/_/mariadb
+# https://hub.docker.com/r/mariadb/server
+# https://hub.docker.com/_/node
+
+# Use root/example as user/password credentials
+version: '2.3'
+services:
+
+  db-mariadb:
+    image: mariadb:10
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+
+  adminer:
+    image: adminer:4.8.0
+    restart: always
+    ports:
+      - "8080:8080"
+
+  web:
+    image: php:7.4.23-apache
+    container_name: web
+    ports:
+      - "8081:80"
+    volumes:
+      - ./html:/var/www/html
+
+
+
+
+
+

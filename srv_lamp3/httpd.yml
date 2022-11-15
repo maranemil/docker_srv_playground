@@ -1,0 +1,20 @@
+##########################################
+# https://hub.docker.com/_/httpd
+##########################################
+
+version: '2.3'
+services:
+  bookingzone:
+    image: httpd:2.4
+    ports:
+      - "8080:80"
+    volumes:
+      - ./htdocs:/usr/local/apache2/htdocs/
+
+
+# Without a Dockerfile
+#docker run -dit --name my-apache-app -p 8080:80 -v "$PWD":/usr/local/apache2/htdocs/ httpd:2.4
+
+# With a Dockerfile
+#FROM httpd:2.4
+#COPY ./public-html/ /usr/local/apache2/htdocs/
