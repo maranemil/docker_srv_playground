@@ -1,0 +1,101 @@
+
+##################################################
+aws sam dummy test
+##################################################
+
+https://www.entechlog.com/blog/aws/aws-sam-in-docker-container/
+https://github.com/aws/aws-sam-cli/issues/2899
+https://docs.aws.amazon.com/cli/latest/reference/lambda/invoke.html
+
+https://github.com/cnadiminti/docker-aws-sam-local
+https://hub.docker.com/r/vsbmeza/sam
+https://github.com/aws/aws-sam-cli/issues/55
+
+sam init --name sam-lambda-api --runtime python3.9 --dependency-manager pip --app-template hello-world --no-interactive
+
+
+cd sam-lambda-api/
+
+sam validate
+
+sam build -u
+sam build -u --skip-pull-image
+sam local start-api
+
+
+# FIX  host.docker.internal
+https://medium.com/@TimvanBaarsen/how-to-connect-to-the-docker-host-from-inside-a-docker-container-112b4c71bc66
+
+docker run -it --add-host=host.docker.internal:host-gateway ubuntu bash
+apt update
+apt install inetutils-ping -y
+apt install curl -y
+ping host.docker.internal
+curl http://host.docker.internal:8080
+
+
+# check ip in alpine
+docker run -it alpine cat /etc/hosts
+
+sudo apt install net-tools
+netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}' # 192.168.0.1
+
+
+#docker run --add-host=docker-host:192.168.0.1
+#docker run --add-host=host.docker.internal:host-gateway
+#docker run --add-host=docker-host:`ip addr show docker0 | grep -Po 'inet #\K[\d.]+'` image_name
+docker network create host.docker.internal
+
+
+version: "3.8"
+services:
+
+  ubuntu:
+    image: ubuntu
+    container_name: ubuntu
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: sleep infinity
+
+ping host.docker.internal
+
+.
+.
+.
+.
+
+sam local invoke --container-host host.docker.internal
+sam local start-lambda --container-host host.docker.internal --host 0.0.0.0
+#  Running on http://192.168.0.11:3001/
+
+
+
+aws lambda invoke --function-name "HelloWorldFunction" --endpoint-url "http://localhost:3001" --no-verify-ssl lamda_output.txt && cat lamda_output.txt
+
+
+sam local start-api --container-host host.docker.internal --host 0.0.0.0
+
+http://localhost:3000/hello
+
+sam logs -n HelloWorldFunction --stack-name sam-lambda-api --tail
+
+
+
+
+# makefile
+--------------------
+build:
+	sam build -u
+
+start:
+	sam local start-api
+
+invoke:
+	sam local invoke
+
+start-lambda:
+	sam local start-lambda
+
+invoke2:
+	aws lambda invoke --function-name "HelloWorldFunction" --payload '{ "name": "Bob" }' --no-verify-ssl response.json --endpoint-url "http://localhost:3001"
+
