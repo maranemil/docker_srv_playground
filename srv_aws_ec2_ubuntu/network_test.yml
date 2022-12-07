@@ -1,0 +1,90 @@
+###############################################
+# text ping in network
+###############################################
+
+version: "2"
+
+services:
+  web:
+    image: alpine:latest
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    networks:
+      ec2:
+        ipv4_address: 192.168.1.3
+
+  foo:
+    image: busybox
+    user: root
+    environment:
+      - COMPOSE_PROJECT_NAME
+    command: top
+    volumes:
+      - cli-volume:/var/lib/backup/data:ro
+    networks:
+      ec2:
+        ipv4_address: 192.168.1.4
+
+  box:
+    image: debian:9-slim
+    tty: true
+    mem_limit: 300m
+    networks:
+      ec2:
+        ipv4_address: 192.168.1.5
+
+  oracledb:
+    image: chameleon82/oracle-xe-10g
+    restart: always
+    ports:
+      - "49160:22"
+      - "49161:1521"
+      - "49162:8080"
+    networks:
+      ec2:
+        ipv4_address: 192.168.1.6
+
+  ubuntu-dockerfile:
+    image: testbuntu
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      ec2:
+        ipv4_address: 192.168.1.7
+
+  ec2-php:
+    image: amazon/amazon-ecs-sample
+    tty: true
+    networks:
+      ec2:
+        ipv4_address: 192.168.1.8
+
+  ubuntu-img:
+    container_name: testbuntu
+    restart: on-failure
+    image: ubuntu:21.04
+    command:
+      - /bin/sh
+    networks:
+      ec2:
+        ipv4_address: 192.168.1.9
+
+volumes:
+  cli-volume:
+    { }
+
+networks:
+  ec2:
+    driver: bridge
+    driver_opts:
+      parent: enp0s3
+    ipam:
+      config:
+        - subnet: "192.168.1.0/24"
+          ip_range: "192.168.1.71/32"
+          gateway: "192.168.1.1"
+
+
+

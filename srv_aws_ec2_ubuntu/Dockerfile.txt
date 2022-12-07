@@ -1,0 +1,24 @@
+# Download base image ubuntu 20.04
+FROM ubuntu:22.10
+# https://www.howtoforge.com/tutorial/how-to-create-docker-images-with-dockerfile/
+# https://hub.docker.com/_/ubuntu/tags
+
+LABEL version="0.1"
+LABEL description="This is custom Docker Image"
+RUN apt update && DEBIAN_FRONTEND=noninteractive
+# Install nano from ubuntu repository
+RUN apt install -y nano htop  && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt clean
+# Expose Port for the Application
+EXPOSE 80 443
+CMD bash
+
+
+FROM python:3
+#WORKDIR /usr/src/app
+#COPY requirements.txt ./
+#RUN pip install --no-cache-dir -r requirements.txt
+#COPY . .
+#CMD [ "python", "./your-daemon-or-script.py" ]
+CMD [ "bash"]
