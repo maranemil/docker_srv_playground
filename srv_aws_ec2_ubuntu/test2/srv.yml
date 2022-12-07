@@ -1,0 +1,39 @@
+version: "2"
+
+services:
+
+  ec2ubuntu2:
+    image: testec2ubuntu2
+    build:
+      context: ./Ubuntu
+      dockerfile: DockerfileUbuntu
+
+  oracledb:
+    image: chameleon82/oracle-xe-10g
+    restart: always
+    ports:
+      - "49160:22"
+      - "49161:1521"
+      - "49162:8080"
+    networks:
+      test_net:
+        ipv4_address: 192.168.1.10
+
+networks:
+  customnetwork:
+    ipam:
+      config:
+        - subnet: 192.168.3.0/16
+  test_net:
+    driver: macvlan
+    #driver: overlay
+    #driver: bridge
+    driver_opts:
+      parent: wlp0s20f3
+    ipam:
+      config:
+        - subnet: "192.168.1.0/24"
+          ip_range: "192.168.1.71/32"
+          gateway: "192.168.1.1"
+  test_bridge:
+    driver: default
