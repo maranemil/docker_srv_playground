@@ -1,0 +1,45 @@
+version: "2"
+
+services:
+
+  testec2amazonlinux:
+    image: testec2amazonlinux
+    tty: true
+    build:
+      context: ./AmazonLinux
+      dockerfile: DockerfileAmazonLinux
+    networks:
+      ec2:
+        ipv4_address: 192.168.1.11
+
+  oracledb:
+    image: chameleon82/oracle-xe-10g
+    restart: always
+    ports:
+      - "49160:22"
+      - "49161:1521"
+      - "49162:8080"
+    networks:
+      ec2:
+        ipv4_address: 192.168.1.7
+
+volumes:
+  cli-volume:
+    { }
+
+networks:
+  ec2:
+    driver: bridge
+    driver_opts:
+      parent: enp0s3
+    ipam:
+      config:
+        - subnet: "192.168.1.0/24"
+          ip_range: "192.168.1.71/32"
+          gateway: "192.168.1.1"
+
+
+
+
+# docker exec -it amazonlinux_testec2amazonlinux_1 bash
+# docker cp pytest.py amazonlinux_testec2amazonlinux_1:/home
