@@ -1,0 +1,122 @@
+version: "2"
+
+services:
+
+
+  # httpd
+  # ----------------------------------
+  # export DEBIAN_FRONTEND=noninteractive   --- ENV ARG
+  # apt search php7.4 | grep -i php7
+  # apt update
+  # apt install php php-cli php-json php-mbstring php-mysql php-opcache php-readline php-sqlite3 php-tidy php-xml php-xsl php-zip nano -y
+  # cd /home
+  # touch index.html index.php
+  # echo "<?php echo time();" > index.php
+  # php -S localhost:8888
+
+  # Alpine
+  # ----------------------------------
+  # apk update
+  # apk add  php php-cli php-json php-mbstring php-opcache php-sqlite3 php-tidy php-xml php-xsl php-zip nano
+  # cd htdocs/
+  # touch index.html index.php
+  # http://192.168.1.71/index.html
+  # apk add php php-fpm php-opcache
+  # apk add php-gd php-mysqli php-zlib php-curl
+  # apk search php8 | more
+  # apk search php8 | grep -i gd
+  # ls /usr/local/apache2/conf/extra/
+  # apk add bash curl openvpn iptables openrc
+  # rc-service nginx restart
+  # rc-service --list
+  # rc-service php-fpm81 restart
+
+  # php:8.0-apache
+  # ----------------------------------
+  # cd /var/www/html
+  # touch index.html index.php
+  # echo "<?php echo time();" > index.php
+  # php -S localhost:8888
+  # http://localhost:8000/index.html
+  # http://localhost:8000/index.php
+
+  # https://www.section.io/engineering-education/dockerized-php-apache-and-mysql-container-development-environment/
+  # https://hub.docker.com/_/adminer/
+  # https://hub.docker.com/_/php
+
+  # FROM php:8.0-apache
+  # RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
+  # RUN apt-get update && apt-get upgrade -y
+
+  web-php:
+    image: php:8.0-apache
+    tty: true
+    ports:
+      - "8000:80"
+    volumes:
+      - ./html:/var/www/html:ro
+    networks:
+      ec2:
+
+#  db:
+#    container_name: db
+#    image: mysql:5.7.40-debian
+#    restart: always
+#    environment:
+#        MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+#        MYSQL_DATABASE: MY_DATABASE
+#        MYSQL_USER: MYSQL_USER
+#        MYSQL_PASSWORD: MYSQL_PASSWORD
+#    ports:
+#        - "9906:3306"
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example # Usr: root
+
+  # http://localhost:8080/?server=db&username=root PW: example
+  adminer:
+    image: adminer:4.3
+    restart: always
+    ports:
+      - "8080:8080"
+
+  httpd:
+    image: httpd:alpine
+    tty: true
+    ports:
+      - "8080:80"
+    networks:
+      ec2:
+
+#  alpine3:
+#    image: php:7.4.25-alpine3.14
+#    stdin_open: true # docker run -i
+#    tty: true        # docker run -t
+#    networks:
+#      ec2:
+
+#  debian9:
+#    image: debian:9-slim
+#    tty: true
+#    mem_limit: 300m
+#    networks:
+#      ec2:
+#        ipv4_address: 192.168.1.6
+
+volumes:
+  cli-volume:
+    {}
+
+networks:
+  ec2:
+    driver: bridge
+    driver_opts:
+      parent: enp0s3
+    ipam:
+      config:
+        - subnet: "192.168.1.0/24"
+          ip_range: "192.168.1.71/32"
+          gateway: "192.168.1.1"
