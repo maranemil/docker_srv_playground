@@ -1,0 +1,35 @@
+# Use root/example as user/password credentials
+version: '2'
+services:
+
+  eopp-mariadb:
+    image: mariadb:10
+    container_name: eopp-mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+    volumes:
+      - ./html/db.sql:/docker-entrypoint-initdb.d/db.sql:ro
+
+  eopp-adminer:
+    image: adminer
+    tty: true
+    container_name: eopp-adminer
+    restart: always
+    ports:
+      - "8080:8080"
+
+
+  eopp-web:
+    container_name: eopp-web
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - eopp-mariadb
+    ports:
+      - "8081:80"
+    volumes:
+      - ./html:/var/www/html
+      - ./logs:/var/log/apache2
