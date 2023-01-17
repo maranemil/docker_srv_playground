@@ -1,0 +1,101 @@
+
+version: '3.1'
+
+# /usr/bin/docker-compose -f docker-compose.yml -p untitled stop web3-php
+
+services:
+
+  # http://localhost:8081/
+  # PHP 5.4.16 (cli) (built: Sep  1 2018 05:47:37)
+#  web-php:
+#    image: amazon/amazon-ecs-sample
+#    volumes:
+#      - ./html:/var/www/html
+#    ports:
+#      - "8081:80"
+
+#  web2-php:
+#    image: php:7.4.23-apache
+#    tty: true
+#    volumes:
+#      - ./html:/var/www/html
+#    ports:
+#      - "8081:80"
+
+#  web3-php:
+#    image: debian:11.6
+#    volumes:
+#      - ./html:/var/www/html
+#    tty: true
+#    ports:
+#      - "8081:80"
+
+
+  # http://localhost:8080/
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+
+  db:
+    image: mysql:5.6
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+
+
+# /usr/bin/docker-compose -f docker-compose.yml -p untitled stop web2-php --remove-orphans
+
+
+# https://hub.docker.com/_/adminer/
+# wget https://codeload.github.com/bcit-ci/CodeIgniter/zip/3.1.12
+# unzip CodeIgniter-3.1.12.zip
+# chmod -R 777 html/
+
+# IMG amazon/amazon-ecs-sample
+# yum install iputils -y
+# php -v  # PHP 5.4.16 (cli) (built: Sep  1 2018 05:47:37)
+# yum install php-mysql -y
+# yum install php-mysqlnd -y
+
+
+
+# IMG php:7.4.23-apache
+# apt update
+# apt install nano -y
+# apt install  php7.4*
+# php -v  # PHP 7.4.23 (cli) (built: Sep  3 2021 17:53:08) ( NTS )
+# apt-get install software-properties-common
+# apt install mariadb-client
+# apt install sqlite3 gpg
+# apt-get autoclean
+# apt-add-repository ppa:ondrej/php
+# apt update
+
+
+
+# IMG debian:11.6
+# mkdir -p /var/www/html
+# cd /var/www/html
+# apt update
+# apt install php
+# php -v  # PHP 7.4.33 (cli) (built: Nov  8 2022 11:40:37) ( NTS )
+# apt install libapache2-mod-php curl nano wget unzip
+# service apache2 restart
+# apt purge libapache2-mod-php7.4 libapache2-mod-php -y
+# apt install libapache2-mod-php libapache2-mod-php7.4 -y
+# a2enmod php7.4
+# apt install p7zip-full
+# apt install fastjar
+
+# wget https://codeload.github.com/bcit-ci/CodeIgniter/zip/3.1.12 -O ci.zip
+# unzip ci.zip -d .
+# fastjar xfv ci.zip
+# 7z x ci.zip
+
+
+
+# https://www.pair.com/support/kb/paircloud-downloading-files-with-wget/
+# https://linuxize.com/post/how-to-install-php-on-ubuntu-20-04/
+# https://www.serverlab.ca/tutorials/linux/web-servers-linux/installing-php-for-apache-on-ubuntu/
