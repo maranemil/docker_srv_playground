@@ -31,6 +31,10 @@ remove-images:
 	@echo "Removing all images"
 	docker rmi $(docker images -q)
 
+remove-everything:
+	@echo "Removing everything"
+	docker system prune -a -f
+
 stop:
 	@echo "Stopping docker"
 	#sudo service docker stop

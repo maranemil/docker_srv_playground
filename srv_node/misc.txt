@@ -1,0 +1,22 @@
+Node.js docker
+
+FROM node:16
+ENV NPM_CONFIG_LOGLEVEL info
+EXPOSE 8888
+
+docker build -t my-nodejs-app .
+docker run -it --rm --name my-running-app my-nodejs-app
+docker-compose up -d
+
+docker run -it --rm --name my-running-script -v "$PWD":/usr/src/app -w /usr/src/app node:8 node your-daemon-or-script.js
+
+docker run node npm --loglevel=warn ...
+
+https://hub.docker.com/_/node
+https://docs.docker.com/language/nodejs/build-images/
+https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
+https://v2.vuejs.org/v2/cookbook/dockerize-vuejs-app.html
+https://docs.docker.com/samples/vuejs/
+https://github.com/nodejs/docker-node
+https://code.visualstudio.com/docs/containers/quickstart-node
+https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
