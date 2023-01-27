@@ -1,0 +1,17 @@
+version: '2'
+services:
+
+  app:
+    container_name: app
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:80"
+    volumes:
+      - ./html:/var/www/html
+      - ./logs:/var/log/apache2
+
+
+# http://localhost:8081/index.php

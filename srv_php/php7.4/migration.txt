@@ -1,0 +1,119 @@
+#####################################################
+Docker Migration PHP 5.6 to PHP 7.4 
+#####################################################
+
+
+
+
+E: Package 'mysql-client' has no installation candidate in php
+
+https://stackoverflow.com/questions/57048428/e-package-mysql-client-has-no-installation-candidate-in-php-fpm-image-build-u
+https://github.com/changeweb/Unifiedtransform/issues/192
+
+FIX: user default-mysql-client instead of mysql-client
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E: Package 'libcurl3' has no installation candidate in ubuntu21.04?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://askubuntu.com/questions/1363847/e-package-libcurl3-has-no-installation-candidate-in-ubuntu21-04
+https://stackoverflow.com/questions/56581163/docker-build-php-on-alpine-image-with-curl-support-failed-how-i-can-solve-it
+
+FIX:  replace with libcurl4 / apt-get install libcurl4
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+PHP 7.4 configure error Package requirements (libcurl >= 7.15.5) were not met
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://blog.cpming.top/p/package-requirements-libcurl-7-15-5-were-not-met
+
+FIX:  apt-get install libcurl4-openssl-dev
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+configure: error: Package requirements (libzip >= 0.11 libzip != 1.3.1 libzip != 1.7.0)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://stackoverflow.com/questions/45775877/configure-error-please-reinstall-the-libzip-distribution
+https://blog.cpming.top/p/package-requirements-libzip-0-11-were-not-met
+https://github.com/agentejo/cockpit/issues/958
+
+FIX:  apt-get install libzip-dev
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+No package 'oniguruma' found
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://blog.cpming.top/p/package-requirements-oniguruma-were-not-met
+
+FIX:  sudo apt-get install libonig-dev
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+configure: error: unrecognized options: --with-freetype-dir, --with-jpeg-dir
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://github.com/docker-library/php/issues/931
+https://github.com/docker-library/php/issues/912
+https://stackoverflow.com/questions/58355740/error-creating-service-web-with-unrecognized-option-with-freetype-dir-usr-in
+
+Old
+RUN docker-php-ext-configure gd
+--with-png-dir=/usr/include/
+--with-jpeg-dir=/usr/include/
+--with-freetype-dir=/usr/include/
+
+New
+RUN docker-php-ext-configure gd
+--with-jpeg=/usr/include/
+--with-freetype=/usr/include/
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+add imagick to 7.4
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+https://stackoverflow.com/questions/69507747/adding-imagemagick-into-my-php-7-4-docker-raised-error
+https://systemadminspro.com/setting-up-a-lemp-server-with-docker-for-simple-projects-part-three-docker-compose-dockerfile/
+https://stackoverflow.com/questions/58623596/failed-to-get-imagick-load-for-php7-4
+
+
+FROM php:7.4.1-apache
+
+RUN apt-get update \
+ && apt-get install --assume-yes --no-install-recommends --quiet \
+    build-essential \
+    libmagickwand-dev \
+ && apt-get clean all
+
+RUN pecl install imagick \
+ && docker-php-ext-enable imagick
+
+# RUN docker-php-ext-install exif
+# RUN apt-get install libmagickwand-dev libmagickcore-dev -y
+# RUN pecl install imagick
+# RUN docker-php-ext-enable imagick
+
+---
+
+FROM php:8.1.5-fpm
+
+WORKDIR /var/www
+
+RUN apt update
+RUN docker-php-ext-install exif
+RUN apt-get install libmagickwand-dev libmagickcore-dev -y
+RUN pecl install imagick
+RUN docker-php-ext-enable imagick
+RUN PHP_OPENSSL=yes
+RUN docker-php-ext-install xml
+RUN docker-php-ext-install filter
+RUN apt-get install libzip-dev -y
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install bcmath
+RUN apt install libwebp-dev
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
+RUN docker-php-ext-install gd
+RUN docker-php-ext-install intl
+
+CMD ["php-fpm"]
+
+
+
+
