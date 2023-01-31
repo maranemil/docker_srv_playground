@@ -1,0 +1,8 @@
+keycloak docker
+
+https://hub.docker.com/r/jboss/keycloak/
+https://www.keycloak.org/getting-started/getting-started-docker
+
+
+docker run -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:20.0.3 start-dev
+
