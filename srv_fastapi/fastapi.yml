@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  fastapi:
+    container_name: fastapi
+    ports:
+      - "3000:5000"
+
+
+
+
+#docker build -t fastapi .
+#docekr run -p 3000:5000 fastapi
