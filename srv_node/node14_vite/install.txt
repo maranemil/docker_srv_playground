@@ -1,0 +1,16 @@
+yarn init
+
+npm install -g @vue/cli
+yarn add @vue/cli -D
+
+
+npm init vue@latest
+
+  cd testapp
+  npm install
+  npm run lint
+  npm run dev
+
+FIX
+yarn dev --host 0.0.0.0 --port 3000
+http://localhost:3000/
