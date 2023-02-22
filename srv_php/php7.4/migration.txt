@@ -114,6 +114,100 @@ RUN docker-php-ext-install intl
 
 CMD ["php-fpm"]
 
+########################################################
+PHP intl extension in Docker container
+########################################################
+
+https://stackoverflow.com/questions/48674297/php-intl-extension-in-docker-container
+
+
+RUN apt-get -y update \
+&& apt-get install -y libicu-dev \ ### <-- Added space here
+&& docker-php-ext-configure intl \
+&& docker-php-ext-install intl
+
+-------
+
+ARG PHP_VERSION=5.6
+FROM php:${PHP_VERSION}-fpm-jessie
+
+apt-get install -y zlib1g-dev libicu-dev g++ \
+&& docker-php-ext-configure intl \
+&& docker-php-ext-install intl
+
+########################################################
+php install extensions intl
+########################################################
+
+FROM php:7.4.32-apache-buster
+RUN set -ex; \
+	\
+	savedAptMark="$(apt-mark showmanual)"; \
+	\
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+		libjpeg-dev \
+		libpng-dev \
+		libzip-dev \
+        zlib1g-dev \
+        libfreetype6-dev \
+        imagemagick \
+        libmagickwand-dev \
+        libmagickcore-dev \
+        nano \
+	; \
+	\
+	pecl install imagick; \
+	docker-php-ext-configure gd --with-freetype=/usr --with-jpeg=/usr; \
+	docker-php-ext-install exif gd mysqli opcache zip pdo pdo_mysql; \
+    docker-php-ext-enable imagick; \
+
+
+
+
+
+
+FROM php:7.4.32-apache-buster
+RUN set -ex; \
+	\
+	savedAptMark="$(apt-mark showmanual)"; \
+	\
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+		libjpeg-dev  \
+        libicu-dev \
+		libpng-dev \
+		libzip-dev \
+        zlib1g-dev \
+        libfreetype6-dev \
+        imagemagick \
+        libmagickwand-dev \
+        libmagickcore-dev \
+        nano \
+	; \
+	\
+	docker-php-ext-configure gd \
+		--with-freetype \
+		--with-jpeg \
+	; \
+	docker-php-ext-install -j "$(nproc)" \
+		bcmath \
+		exif \
+		gd \
+		intl \
+        opcache \
+        pdo \
+        pdo_mysql \
+		mysqli \
+		zip \
+	; \
+    # https://pecl.php.net/package/imagick
+	pecl install imagick; \
+	docker-php-ext-enable imagick; \
+	rm -r /tmp/pear; \
+	\
+
+
 
 
 
