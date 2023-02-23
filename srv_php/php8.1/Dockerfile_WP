@@ -1,0 +1,41 @@
+
+FROM php:8.1-apache
+RUN set -ex; \
+	\
+	savedAptMark="$(apt-mark showmanual)"; \
+	\
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+		libjpeg-dev  \
+        libicu-dev \
+		libpng-dev \
+		libzip-dev \
+        zlib1g-dev \
+        libfreetype6-dev \
+        imagemagick \
+        libmagickwand-dev \
+        libmagickcore-dev \
+        nano \
+	; \
+	\
+	docker-php-ext-configure gd \
+		--with-freetype \
+		--with-jpeg \
+	; \
+	docker-php-ext-install -j "$(nproc)" \
+		bcmath \
+		exif \
+		gd \
+		intl \
+        opcache \
+        pdo \
+        pdo_mysql \
+		mysqli \
+		zip \
+	; \
+    # https://pecl.php.net/package/imagick
+	pecl install imagick; \
+	docker-php-ext-enable imagick; \
+	rm -r /tmp/pear; \
+	\
+

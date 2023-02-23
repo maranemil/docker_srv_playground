@@ -25,3 +25,214 @@ php -i | grep -i reflection
 php -i | grep -i token
 php -i | grep -i json
 php -i | grep -i mcrypt
+
+
+
+################################################################
+WordPress 6.0 class-wp-widget.php fatal errors in PHP 8.1.6
+################################################################
+
+https://wordpress.stackexchange.com/questions/406260/wordpress-6-0-class-wp-widget-php-fatal-errors-in-php-8-1-6
+https://codex.wordpress.org/Widgets_API
+https://www.php.net/migration80
+
+update the line 61 of wp-includes/class-wp-widget-factory.php this way :
+$this->widgets[ $widget ] = new $widget( $widget, $widget );
+
+
+################################################################
+WordPress Debugging
+################################################################
+
+https://stackoverflow.com/questions/1080679/php-and-wordpress-debugging
+https://wordpress.org/documentation/article/debugging-in-wordpress/
+https://themeisle.com/blog/wordpress-error-log-debug/
+https://stackoverflow.com/questions/9369866/how-to-display-php-errors-in-a-more-readable-format
+https://stackoverflow.com/questions/32266155/definewp-debug-true-does-not-show-errors
+
+define( 'WP_DEBUG', true );
+#define( 'WP_DEBUG_LOG', true );
+#define( 'WP_DEBUG_LOG', '/tmp/wp-errors.log' );
+define( 'WP_DEBUG_DISPLAY', true );
+define( 'SCRIPT_DEBUG', true );
+define( 'SAVEQUERIES', true );
+
+#define( 'WP_DEBUG_DISPLAY', false );
+#@ini_set( 'display_errors', 0 );
+
+@ini_set('html_errors', 'On');
+@ini_set( 'display_errors', 1 );
+
+
+################################################################
+Function create_function Has Been Removed in PHP 8.0
+
+PHP 8.0 issue: deprecated create_function() throws Fatal error
+'create_function' was removed in 8.0 PHP version
+################################################################
+
+https://wordpress.org/support/topic/php-8-0-issue-deprecated-create_function-throws-fatal-error/
+https://www.php.net/manual/en/function.create-function.php
+https://lindevs.com/function-create_function-has-been-removed-in-php-8-0/
+https://stackoverflow.com/questions/72810169/replacing-create-function-with-something-else-for-php8
+https://github.com/seblucas/doT-php/issues/2
+https://www.php.net/releases/8.0/de.php
+https://hub.docker.com/_/php
+
+
+Warning
+This function has been DEPRECATED as of PHP 7.2.0, and REMOVED as of PHP 8.0.0. Relying on this function is highly discouraged.
+
+# before
+$func = create_function('$x,$y', 'return $x * $y;');
+echo $func(4, 5);
+
+# after
+$func = function (int $x, int $y) {
+    return $x * $y;
+};
+echo $func(4, 5);
+
+# before
+$newfunc = create_function('$a,$b', 'return "ln($a) + ln($b) = " . log($a * $b);');
+echo $newfunc(2, M_E) . "\n";
+
+# after
+$newfunc = function($a,$b) { return "ln($a) + ln($b) = " . log($a * $b); };
+echo $newfunc(2, M_E) . "\n";
+
+
+################################################################
+chmod
+################################################################
+https://wiki.archlinux.org/title/SFTP_chroot
+https://stackoverflow.com/questions/18352682/correct-file-permissions-for-wordpress
+https://help.ubuntu.com/community/WordPress
+https://websolutionstogo.de/blog/wordpress-dateiberechtigungen-server-anpassen/
+
+chmod -R 755 wp-content
+
+# IDE Edit
+# sudo chmod 777 wp-config.php
+# sudo chmod 777 src/
+# sudo chown $USER:$USER src/wp-config.php
+sudo chmod -R 777 src/
+
+# Upload
+chown www-data:www-data  -R * # Let Apache be owner
+find . -type d -exec chmod 755 {} \;  # Change directory permissions rwxr-xr-x
+find . -type f -exec chmod 644 {} \;  # Change file permissions rw-r--r--
+
+chown <username>:<username>  -R * # Let your useraccount be owner
+chown www-data:www-data wp-content # Let apache be owner of wp-content
+
+
+
+
+################################################################
+#[NoReturn] void annotation
+################################################################
+
+https://wiki.php.net/rfc/noreturn_type
+https://php.watch/versions/8.1/never-return-type
+https://phpinternals.news/81
+https://stackoverflow.com/questions/68529614/what-is-never-return-type-in-php-8-1
+https://riptutorial.com/php/example/20542/type-hinting-no-return-void-
+https://phpstan.org/writing-php-code/phpdoc-types
+https://docs.hhvm.com/hack/built-in-types/noreturn
+https://blog.jetbrains.com/phpstorm/2020/10/phpstorm-2020-3-eap-4/
+
+What attributes will be available in PhpStorm 2020.3?
+Several attributes will be available in PhpStorm 2020.3 under \JetBrains\PhpStorm\ namespace.
+#[ExpectedValues] and #[NoReturn] are more advanced descendants of .phpstorm.meta.php functions. And #[ArrayShape] is a highly anticipated evolution of PHPDoc’s array description. There also will be #[Deprecated], #[Pure], and #[Immutable].
+
+
+#[NoReturn] public function add(): void
+
+
+################################################################
+Warning: fileowner(): stat failed for 0777 in
+################################################################
+
+https://stackoverflow.com/questions/33020405/php-require-permission-denied-even-with-777-permissions-and-correct-group-on-fil
+https://drupal.stackexchange.com/questions/180490/when-trying-to-install-a-new-module-receive-errors-how-to-fix-that
+https://www.php.net/manual/en/function.fileowner.php
+
+################################################################
+Warning: Undefined array key "HTTP_ORIGIN"  [HTTP_ORIGIN] is missing
+################################################################
+
+https://www.drupal.org/project/seckit/issues/2567661
+https://3v4l.org/oq58j
+https://stackoverflow.com/questions/41231116/serverhttp-origin-doesnt-work
+https://github.com/dingo/api/issues/1583
+https://bugs.webkit.org/show_bug.cgi?id=144333
+https://gist.github.com/Stanback/7145487
+https://code.djangoproject.com/ticket/33360?cversion=0&cnum_hist=4
+https://keycloak.discourse.group/t/access-control-allow-origin-header-missing/328/27?page=2
+https://serverfault.com/questions/958965/nginx-enabling-cors-for-multiple-subdomains
+https://www.stackhawk.com/blog/fixing-no-access-control-allow-origin-header-present/
+
+$origin = isset($_SERVER['HTTP_ORIGIN'])?:$_SERVER['HTTP_REFERER'];
+
+################################################################
+WordPress
+################################################################
+
+https://github.com/docker-library/wordpress
+https://developer.wordpress.org/
+https://wordpress.org/documentation/
+https://github.com/WordPress/Documentation-Issue-Tracker
+https://github.com/WordPress/wordpress-develop
+https://github.com/WordPress/WordPress
+https://github.com/WordPress/WordPress/tags
+
+
+
+
+################################################################
+Environment variable in PHP-docker container
+################################################################
+
+https://stackoverflow.com/questions/35479304/environment-variable-in-php-docker-container
+https://jtreminio.com/blog/docker-php-php-fpm-configuration-via-environment-variables/
+https://docs.docker.com/compose/compose-file/
+https://docs.docker.com/compose/compose-file/#environment
+https://www.php.net/manual/en/reserved.variables.environment.php
+https://www.php.net/manual/en/function.getenv.php
+https://dockerfile.readthedocs.io/en/latest/content/DockerImages/dockerfiles/php.html
+
+print "env is: ".$_ENV['USER'];
+print "env is: ".getenv("USER")."\n";
+CMD ["env >> /path/to/project/.env"]
+
+docker run -it --rm \
+    -e MYSQL_DATABASE=dbname \
+    -e MYSQL_USER=dbuser \
+    -e MYSQL_PASSWORD=dbpassword \
+    mariadb
+
+
+environment:
+  RACK_ENV: development
+  SHOW: "true"
+  USER_INPUT:
+
+environment:
+  - RACK_ENV=development
+  - SHOW=true
+  - USER_INPUT
+
+
+################################################################
+WP Super Cache
+################################################################
+
+https://wordpress.org/plugins/wp-super-cache/
+https://wordpress.org/plugins/w3-total-cache/
+https://wordpress.org/documentation/article/optimization/#Caching
+https://wordpress.org/documentation/article/optimization/#persistent-object-cache
+
+
+
+
