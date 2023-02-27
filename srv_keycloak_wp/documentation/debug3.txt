@@ -1,0 +1,188 @@
+
+##################################################
+Cant access keycloak rest API methods *404*
+##################################################
+
+https://docs.ansible.com/ansible/latest/collections/community/general/keycloak_client_module.html
+https://docs.docker.com/engine/reference/commandline/run/
+https://docs.docker.com/engine/reference/run/
+https://docs.linuxfabrik.ch/monitoring-plugins/keycloak-version.html
+https://hub.docker.com/r/jboss/keycloak/
+https://issues.redhat.com/browse/KEYCLOAK-7439
+https://issues.redhat.com/browse/KEYCLOAK-7966
+https://itecnote.com/tecnote/cant-access-keycloak-rest-api-methods-404/#
+https://keycloak.discourse.group/t/admin-api-get-all-users-with-custom-attributes/14726/3
+https://keycloak.discourse.group/t/rest-api-with-client-credential-grant-returns-404-403/11686/6
+https://linuxdatahub.com/keycloak-rest-api-commands-cheat-sheet-with-examples/#Get_User_from_Realm
+https://medium.com/@hasnat.saeed/setup-keycloak-server-on-ubuntu-18-04-ed8c7c79a2d9
+https://medium.hexadefence.com/keycloak-admin-rest-api-63a294814e1b
+https://phoenixnap.com/kb/docker-run-command-with-examples
+https://pypi.org/project/python-keycloak/
+https://stackoverflow.com/questions/33365529/trying-to-log-in-to-keycloak-admin-ws/35345291#35345291
+https://stackoverflow.com/questions/48507224/cant-access-keycloak-rest-api-methods-404
+https://stackoverflow.com/questions/70577004/keycloak-could-not-find-resource-for-full-path/71634718#71634718
+https://www.keycloak.org/docs-api/11.0/rest-api/index.html#_users_resource
+https://www.novatec-gmbh.de/en/blog/keycloak-with-quarkus-better-together/
+
+
+
+docker exec -it kc /opt/jboss/keycloak/bin/standalone.sh \
+    -Djboss.socket.binding.port-offset=100 \
+    -Dkeycloak.migration.action=export \
+    -Dkeycloak.migration.provider=singleFile \
+    -Dkeycloak.migration.realmName=my_realm \
+    -Dkeycloak.migration.usersExportStrategy=REALM_FILE \
+    -Dkeycloak.migration.file=/tmp/my_realm.json
+
+docker run -d -p 8180:8080 -e KEYCLOAK_USER=admin -e \
+    KEYCLOAK_PASSWORD=admin -v $(pwd):/tmp --name kc \
+    jboss/keycloak
+
+docker run -p 8180:8080 jboss/keycloak
+
+----------------------------------------------------------------
+
+# start docker instance
+docker run -d -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin --name localkeycloak -p 8180:8080 jboss/keycloak
+
+# Get token
+curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \
+    -d 'username=admin&password=admin&client_id=admin-cli&grant_type=password' \
+    http://localhost:9080/auth/realms/master/protocol/openid-connect/token
+
+# Get clients
+curl -X GET -H 'Authorization: Bearer <access_token_goes_here>' \
+    http://localhost:9080/auth/admin/realms/master/clients
+
+# Get User Count from Realm
+curl -k -X GET http://<ip>:<port>/admin/realms/<realm>/users/count -H "Content-Type: application/json" -H "Authorization: bearer $mastertoken"
+
+# Get Representation of the User
+curl -k -X GET http://<ip>:<port>/admin/realms/<realm-name>/users/<id of user> -H "Content-Type: application/json" -H "Authorization: bearer $mastertoken"
+
+# Get List of Groups of a User
+curl -k -X GET http://<ip>:<port>/admin/realms/<realm>/users/<user-id>/groups -H "Content-Type: application/json" -H "Authorization: bearer $mastertoken"
+
+# Query user based on Username
+curl -k -X GET "http://<ip>:<port>/admin/realms/<realm>/users?q=username:"<query-value>"&exact=true" -H "Content-Type: application/json" -H "Authorization: bearer $mastertoken"
+
+# Query User based on User Attributes
+curl -k -X GET "http://<ip>:<port>/admin/realms/<realm>/users?q=<query-parameter>:"<query-value>"&exact=true" -H "Content-Type: application/json" -H "Authorization: bearer $mastertoken"
+
+----------------------------------------------------------------
+
+# http://localhost:8080/admin/realms/{realm name}/clients
+# https://myhost.com/auth/admin/realms/myrealm/users/
+
+
+curl -k -H "Content-Type: application/x-www-form-urlencoded" -d "client_id=your-client" -d "username=some-user" -d "password=hardpassword" -d "grant_type=password" -X POST https://your.fqdn.server:8443/realms/yourrealm/protocol/openid-connect/token
+
+
+curl -H "Authorization: bearer YOUR_ACCESS_TOKEN" https://myhost.com/auth/admin/realms/myrealm/users/"
+
+##################################################
+Keycloak 404 issue with Strapi V3
+##################################################
+https://forum.strapi.io/t/v3-keycloak-auth-provider-returns-404/12221
+
+bootstrap.js
+
+    keycloak: {
+      enabled: true,
+      icon: 'key',
+      key: '',
+      secret: '',
+      oauth: 2,
+      authorize_url: `https://auth.example.com/auth/realms/Example/protocol/openid-connect/auth`,
+      access_url:    `https://auth.example.com/auth/realms/Example/protocol/openid-connect/token`,
+      callback: `${strapi.config.server.url}/auth/keycloak/callback`,
+      scope: ['openid']
+    },
+
+
+    providers.js
+
+    case 'keycloak': {
+      const keycloak = new Purest({
+        provider: 'keycloak',
+        config: {
+          'keycloak': {
+            'http://auth.example.com/auth/realms/Example/': {
+              '__domain': {
+                'auth': {
+                  'auth': {
+                    'bearer': '[0]'
+                  }
+                }
+              },
+              '{endpoint}': {
+                '__path': {
+                  'alias': '__default'
+                }
+              }
+            }
+          }
+        }
+      });
+
+
+      server.js
+
+module.exports = ({ env }) => ({
+  host: env('HOST', '0.0.0.0'),
+  port: env.int('PORT', 1337),
+  url: env('', 'https://cms.example.com'),
+  admin: {
+    auth: {
+      secret: env('ADMIN_JWT_SECRET', 'xx'),
+    },
+  },
+});
+
+
+docker strapi/strapi:latest
+https://hub.docker.com/r/strapi/strapi
+
+# Running a project
+docker run -it -p 1337:1337 -v `pwd`/project-name:/srv/app strapi/strapi
+# Running a project from your host machine
+docker run -it -p 1337:1337 -v `pwd`:/srv/app strapi/strapi
+
+docker run -it \
+  -e DATABASE_CLIENT=postgres \
+  -e DATABASE_NAME=strapi \
+  -e DATABASE_HOST=0.0.0.0 \
+  -e DATABASE_PORT=5432 \
+  -e DATABASE_USERNAME=strapi \
+  -e DATABASE_PASSWORD=strapi \
+  -p 1337:1337 \
+  -v `pwd`/project-name:/srv/app \
+  strapi/strapi
+
+ docker run -it \
+  -e DATABASE_NAME=strapi \
+  -e DATABASE_HOST=0.0.0.0 \
+  -e DATABASE_PORT=1234 \
+  -e DATABASE_USERNAME=strapi \
+  -e DATABASE_PASSWORD=strapi \
+  -p 1337:1337 \
+  -v `pwd`/project-name:/srv/app \
+  strapi/strapi
+
+
+##################################################
+Set WP Admin
+##################################################
+https://kinsta.com/knowledgebase/sorry-you-are-not-allowed-to-access-this-page-error-in-wordpress/
+https://www.wpbeginner.com/wp-tutorials/how-to-add-an-admin-user-to-the-wordpress-database-via-mysql/
+https://codex.wordpress.org/Database_Description
+
+user_id 1
+wp_usermeta Table
+meta_key wp_capabilties
+meta_value a:1:{s:13:"administrator";s:1:"1";}
+
+https://stackoverflow.com/questions/30160327/what-is-the-meaning-of-1-in-user-status-field-of-wp-users-in-wordpress-cms
+https://stackoverflow.com/questions/48674297/php-intl-extension-in-docker-container
+
+
