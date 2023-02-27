@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  web:
+    environment:
+      - ./html:/home/test
+    tty: true
+    ports:
+      - "3000:3000"
+      - "9000:9000"
+    build:
+      dockerfile: Dockerfile
+      context: html
