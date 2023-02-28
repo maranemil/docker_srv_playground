@@ -1,0 +1,1301 @@
+##########################################################
+keycloak endpoints quarkus
+##########################################################
+
+https://help.akana.com/content/current/cm/api_oauth/oauth_discovery/m_oauth_getOpenIdConnectWellknownConfiguration.htm
+https://www.baeldung.com/postman-keycloak-endpoints
+https://wjw465150.gitbooks.io/keycloak-documentation/content/securing_apps/topics/oidc/oidc-generic.html
+https://www.mongodb.com/community/forums/t/call-realm-administration-api-with-application-id-results-in-404-not-found/12448/15
+https://docs.influxdata.com/influxdb/v1.8/administration/authentication_and_authorization/
+https://docs.rs/keycloak/latest/keycloak/struct.KeycloakAdmin.html
+https://www.keycloak.org/docs/latest/server_development/#admin-rest-api
+https://www.keycloak.org/docs/latest/server_development/#admin-rest-api
+https://quarkus.io/guides/security-openid-connect-web-authentication
+https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/oauth_provider/
+https://www.keycloak.org/docs/15.1/release_notes/index.html
+https://suedbroecker.net/2020/08/04/how-to-create-a-new-realm-with-the-keycloak-rest-api/
+https://keycloak.ch/keycloak-tutorials/tutorial-1-installing-and-running-keycloak/
+https://tyk.io/docs/tyk-developer-portal/tyk-portal-classic/keycloak-dcr/
+https://supabase.com/docs/guides/auth/social-login/auth-keycloak
+https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/topics/admin-cli.html
+https://groups.google.com/g/keycloak-user/search?q=404
+https://groups.google.com/g/keycloak-user/c/4faNXwfb4T8/m/0K0Q1__DEgAJ
+https://www.keycloak.org/docs-api/19.0.0/rest-api/
+https://www.keycloak.org/docs-api/19.0.1/rest-api/
+https://github.com/keycloak/keycloak-documentation/blob/main/authorization_services/topics/service-protection-policy-api.adoc#querying-permission
+https://ultimatesecurity.pro/post/2fa-api/
+https://artifacthub.io/packages/helm/codecentric/keycloak
+https://faq.miniorange.com/knowledgebase/i-cannot-find-domain-and-realm-in-keycloak-admin-interface/
+https://docs.software-univention.de/keycloak-app/latest/configuration.html
+https://quay.io/repository/keycloak/keycloak
+https://jsreport.net/blog/single-sign-on-with-keycloak
+https://www.appsdeveloperblog.com/keycloak-authorization-code-grant-example/
+https://ordina-jworks.github.io/security/2019/08/22/Securing-Web-Applications-With-Keycloak.html
+https://subscription.packtpub.com/book/cloud-and-networking/9781800562493/2/ch02lvl1sec06/discovering-the-keycloak-admin-and-account-consoles
+https://documenter.getpostman.com/view/7294517/SzmfZHnd
+https://docs.ansible.com/ansible/latest/collections/community/general/keycloak_realm_module.html
+
+------------------------------------------------------------------------
+
+http://localhost:8180/auth/realms/master
+http://localhost:8180/auth/realms/master/.well-known/openid-configuration
+http://localhost:8180/auth/admin/master/console/#/realms/master
+
+/realms/{realm-name}/.well-known/openid-configuration
+/realms/{realm-name}/protocol/openid-connect/auth
+/realms/{realm-name}/protocol/openid-connect/token
+/realms/{realm-name}/protocol/openid-connect/userinfo
+/realms/{realm-name}/protocol/openid-connect/logout
+
+
+curl \
+  -d "client_id=myclient" \
+  -d "client_secret=40cc097b-2a57-4c17-b36a-8fdf3fc2d578" \
+  -d "username=user" \
+  -d "password=password" \
+  -d "grant_type=password" \
+  "http://localhost:8080/auth/realms/master/protocol/openid-connect/token"
+  
+------------------------------------------------------------------------
+
+https://www.keycloak.org/2022/07/keycloak-1900-released.html
+https://www.keycloak.org/2022/02/adapter-deprecation
+https://www.keycloak.org/2022/04/keycloak-1800-released
+
+
+Keycloak 19.0.0 released
+July 27 2022
+
+Release notes
+OpenID Connect and SAML Adapters End-of-life
+Some Keycloak OpenID Connect adapters have reached end-of-life and are not included in this release.
+
+------------------------------------------------------------------------
+https://github.com/keycloak/keycloak
+https://github.com/quarkusio/quarkus/issues/24991
+https://github.com/keycloak/keycloak-nodejs-connect
+https://github.com/keycloak/keycloak-nodejs-admin-client
+https://github.com/keycloak/keycloak-documentation
+
+
+docker run --rm -p 8180:8080 -e KEYCLOAK_ADMIN=admin -e KC_HTTP_ENABLED=true -e \
+KEYCLOAK_ADMIN_PASSWORD=admin -e KC_HOSTNAME_STRICT=false --name kc \
+quay.io/keycloak/keycloak:17.0.1 start
+
+docker run --rm -p 8180:8080 -e KEYCLOAK_ADMIN=admin -e KC_HTTP_ENABLED=true -e KEYCLOAK_ADMIN_PASSWORD=admin -e KC_HOSTNAME_STRICT=false --name kc quay.io/keycloak/keycloak:17.0.1 start-dev
+
+docker run quay.io/keycloak/keycloak start-dev
+
+------------------------------------------------------------------------
+https://stackoverflow.com/questions/61142611/keycloak-failed-to-load-urls-in-spring-boot-application
+https://community.grafana.com/t/connection-to-keycloak-broken-possibly-due-to-a-grafana-upgrade/75718
+https://keycloak.discourse.group/t/how-to-set-database-address/14600
+https://www.keycloak.org/server/db
+https://github.com/keycloak/keycloak-community/blob/main/design/keycloak.x/configuration.md
+https://hub.docker.com/r/ownage/keycloak-x-postgres
+https://keycloak.ch/keycloak-tutorials/tutorial-custom-keycloak/
+https://scalingo.com/blog/guide-to-deploy-keycloak-on-scalingo
+
+
+ keycloak:
+    image: quay.io/keycloak/keycloak:18.0
+    restart: on-failure
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KC_DB_URL: jdbc:postgresql://database:5432/keycloak
+      #KC_DB_URL: jdbc:postgresql://localhost:5432/keycloak
+    command:
+      - "start-dev"
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+      
+      
+ keycloak:
+    image: quay.io/keycloak/keycloak:18.0
+    restart: on-failure
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: mariadb
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KC_DB_URL: jdbc:mariadb://ip or container name:3306/keycloak
+    command:
+      - "start-dev"
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+      
+https://github.com/keycloak/keycloak-containers/issues/388
+      
+ENV KC_DB_URL=jdbc:postgresql://host.docker.internal:5432/keycloak
+ENV KC_DB_USERNAME=XXXXX
+ENV KC_DB_PASSWORD=XXXXX
+ENV KC_HOSTNAME=localhost
+
+docker build . -t prebuilt_keycloak
+docker run --name keycloak --net database-network -p 8443:8443 prebuilt_keycloak
+      
+      
+      
+      
+grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: myPassword
+      GF_SERVER_DOMAIN: "grafana.myDomain.com"
+      GF_SERVER_ROOT_URL: "https://grafana.myDomain.com"
+      GF_AUTH_GENERIC_OAUTH_ENABLED: "true"
+      GF_AUTH_GENERIC_OAUTH_NAME: "SingleSignOn"
+      GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP: "true"
+      GF_AUTH_GENERIC_OAUTH_CLIENT_ID: "Grafana"
+      GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: "mySecret"
+      GF_AUTH_GENERIC_OAUTH_SCOPES: profile
+      GF_AUTH_GENERIC_OAUTH_AUTH_URL: "https://iam.myDomain.com/realms/myDomain/protocol/openid-connect/auth"
+      GF_AUTH_GENERIC_OAUTH_TOKEN_URL: "https://iam.myDomain.com/realms/myDomain/protocol/openid-connect/token"
+      GF_AUTH_GENERIC_OAUTH_API_URL: "https://iam.myDomain.com/realms/myDomain/protocol/openid-connect/userinfo"
+      GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH: "contains(roles[*], 'admin') && 'Admin' || contains(roles[*], 'editor') && 'Editor' || 'Viewer'"
+      
+
+https://github.com/adorsys/keycloak-config-cli/issues/292
+
+docker run \
+    -e KEYCLOAK_URL=http://<your keycloak host>:8080/auth \
+    -e KEYCLOAK_USER=<keycloak admin username> \
+    -e KEYCLOAK_PASSWORD=<keycloak admin password> \
+    -e KEYCLOAK_AVAILABILITYCHECK_ENABLED=true \
+    -e KEYCLOAK_AVAILABILITYCHECK_TIMEOUT=120s \
+    -e IMPORT_PATH=/config \
+    -e IMPORT_FORCE=false \
+    -v <your config path>:/config \
+    adorsys/keycloak-config-cli:latest
+    
+https://keycloak.discourse.group/t/how-should-kc-db-url-be-formatted-for-postgres/18626
+    
+docker run --name db --net keycloak-network -e POSTGRES_USER=<REDACTED> -e POSTGRES_PASSWORD=<REDACTED> -e POSTGRES_DB=keycloakdb -d docker.io/library/postgres:latest
+
+
+
+------------------------------------------------------------------------
+https://www.keycloak.org/docs-api/19.0.1/rest-api/index.html
+https://www.jerney.io/secure-apis-kong-keycloak-1/
+https://hub.docker.com/_/kong
+
+
+docker run -d --name kong \
+    -e "KONG_DATABASE=off" \
+    -e "KONG_PROXY_ACCESS_LOG=/dev/stdout" \
+    -e "KONG_ADMIN_ACCESS_LOG=/dev/stdout" \
+    -e "KONG_PROXY_ERROR_LOG=/dev/stderr" \
+    -e "KONG_ADMIN_ERROR_LOG=/dev/stderr" \
+    -e "KONG_ADMIN_LISTEN=0.0.0.0:8001, 0.0.0.0:8444 ssl" \
+    -p 8000:8000 \
+    -p 8443:8443 \
+    -p 8001:8001 \
+    -p 8444:8444 \
+    kong
+
+version: '3.4'
+
+networks: 
+  kong-net:
+
+volumes:
+  kong-datastore:
+
+services:
+  kong-db:
+    image: postgres:9.6
+    volumes:
+      - kong-datastore:/var/lib/postgresql/data
+    networks:
+      - kong-net
+    ports:
+      - "15432:5432"
+    environment:
+      POSTGRES_DB:       api-gw
+      POSTGRES_USER:     kong
+      POSTGRES_PASSWORD: 
+
+  kong:
+    image: kong:0.14-centos-oidc
+    depends_on:
+      - kong-db
+    networks:
+      - kong-net
+    ports:
+      - "8000:8000" # Listener
+      - "8001:8001" # Admin API
+      - "8443:8443" # Listener  (SSL)
+      - "8444:8444" # Admin API (SSL)
+    environment:
+      KONG_DATABASE:         postgres
+      KONG_PG_HOST:          kong-db
+      KONG_PG_PORT:          5432
+      KONG_PG_DATABASE:      api-gw
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG:  /dev/stderr
+      KONG_ADMIN_ERROR_LOG:  /dev/stderr
+      KONG_PROXY_LISTEN:     0.0.0.0:8000, 0.0.0.0:8443 ssl
+      KONG_ADMIN_LISTEN:     0.0.0.0:8001, 0.0.0.0:8444 ssl
+      KONG_PLUGINS:          oidc
+      
+  keycloak-db:
+    image: postgres:9.6
+    volumes: 
+      - keycloak-datastore:/var/lib/postresql/data
+    networks:
+      - keycloak-net
+    ports:
+      - "25432:5432"
+    environment:
+      POSTGRES_DB:       keycloak
+      POSTGRES_USER:     keycloak
+      POSTGRES_PASSWORD: password
+      
+  keycloak:
+    image: jboss/keycloak:4.5.0.Final
+    depends_on:
+      - keycloak-db
+    networks:
+      - keycloak-net
+    ports:
+      - "8180:8080"
+    environment:
+      DB_VENDOR:   POSTGRES
+      DB_ADDR:     keycloak-db
+      DB_PORT:     5432
+      DB_DATABASE: keycloak
+      DB_USER:     keycloak
+      DB_PASSWORD: password
+      KEYCLOAK_USER:     admin
+      KEYCLOAK_PASSWORD: admin
+      
+
+
+$ HOST_IP=$(ipconfig getifaddr en0)
+$ CLIENT_SECRET=<client_secret_from_keycloak>
+$ curl -s -X POST http://localhost:8001/plugins \
+  -d name=oidc \
+  -d config.client_id=kong \
+  -d config.client_secret=${CLIENT_SECRET} \
+  -d config.discovery=http://${HOST_IP}:8180/auth/realms/master/.well-known/openid-configuration \
+  | python -mjson.tool
+
+
+------------------------------------------------------------------------
+KEYCLOAK - Implementing Custom REST Resources (endpoints) | Niko Köbler (@dasniko)
+
+https://www.n-k.de/2022/01/keycloak-custom-rest-resources.html
+
+https://www.youtube.com/watch?v=eZYGLuUrUp4
+https://www.youtube.com/watch?v=KXZ9JDcSHU0
+https://www.youtube.com/watch?v=1UklqPPjcRY
+https://www.youtube.com/watch?v=ZTFlc-3pG1M
+https://www.youtube.com/watch?v=FEbIW23RoXk
+https://www.youtube.com/watch?v=F_VbzqqqRq8
+https://www.youtube.com/watch?v=2cNNdnM2sT0
+https://www.youtube.com/watch?v=Rh8LstBPBOE
+https://www.youtube.com/watch?v=PwyI3kXr_IM
+https://www.youtube.com/watch?v=FHJ5WOx1es0
+https://www.youtube.com/watch?v=GQi19817fFk
+
+
+------------------------------------------------------------------------
+https://documenter.getpostman.com/view/7294517/SzmfZHnd#e917ce53-69ea-49f3-9a94-4f6c0962c199
+
+http://127.0.0.1:8080/admin/realms/heroes/users
+http://127.0.0.1:8080/admin/realms/heroes/users/83c72e88-7ac9-4fc7-a7fb-97736d67d261
+http://127.0.0.1:8080/admin/realms/heroes/users/83c72e88-7ac9-4fc7-a7fb-97736d67d261/credentials
+
+http://localhost:8180/auth/realms/master/.well-known/openid-configuration
+
+------------------------------------------------------------------------
+
+API keycloak
+
+https://github.com/ccouzens/keycloak-openapi
+https://github.com/fschmtt/keycloak-rest-api-client-php
+https://stackoverflow.com/questions/51132711/introspection-endpoint-of-keycloak-server
+https://github.com/keycloak/keycloak-documentation/blob/main/authorization_services/topics/service-rpt-token-introspection.adoc
+https://docs.nginx.com/nginx-management-suite/acm/tutorials/introspection-keycloak/
+https://www.postman.com/credshare/workspace/keycloak-sso/request/14351307-1527c230-5191-45f5-94b0-600e0a65e311
+
+curl -L -X GET http://192.0.2.5:8080/realms/nginx/.well-known/openid-configuration | jq
+
+curl -L -X POST 'http://192.0.2.5:8080/realms/nginx/protocol/openid-connect/token/introspect' \
+   -H "Authorization: Basic bmdpbngtcGx1czo1M2Q2YzdlNy1iNDJjLTRiNjktODQwNC0zODIwMzg1ZWQ0MWE=" \
+   -H "Accept: application/json" \
+   -H "Content-Type: application/x-www-form-urlencoded" \
+   --data-urlencode 'token=$TOKEN' \
+   | jq
+   
+
+GET /admin/realms/{realm}/clients	ClientCollection	Clients::all()
+GET /admin/realms/{realm}/groups	ClientCollection	Groups::all()
+GET /admin/realms/{realm}/users	UserCollection	Users::all()
+POST /admin/realms/{realm}/users	n/a	Users::create()
+GET /admin/realms/{realm}/users	UserCollection	Users::search()
+
+
+curl -v --data "client_secret=YOUR_SECRET9&client_id=product- 
+app&username=user&token=YOUR_TOKEN" 
+http://localhost:8080/auth/realms/springdemo/protocol/openid- 
+connect/token/introspect
+
+curl --location --request POST 'https://HOST_KEYCLOAK/realms/master/protocol/openid-connect/token/introspect' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'client_id=oficina-virtual' \
+--data-urlencode 'client_secret=4ZeE2v' \
+--data-urlencode 
+
+'token=eyJhbGciKq4n_8Bn2vvy2WY848toOFxEyWuKiHrGHuJxgoU2DPGr9Mmaxkqq5Kg'
+
+------------------------------------------------------------------------
+https://www.reddit.com/r/docker/comments/w94gri/import_database_in_postgres_docker_image/
+https://docker.opencellsoft.com/docker-compose.yml
+
+version: '2.1'
+services:
+
+  postgres:
+    image: postgres:alpine
+    container_name: postgres-wildfly
+    environment:
+      POSTGRES_USER: opencell_db_user
+      POSTGRES_PASSWORD: opencell_db_password
+      POSTGRES_DB : opencell_db
+      POSTGRES_PORT : 5432
+    volumes:
+       - ./input-files/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+       - ./input-files/import-postgres.sql:/docker-entrypoint-initdb.d/import-postgres.sql
+
+  opencell:
+    image: opencell/wildfly-opencell-standalone:14.0.0
+    container_name: opencell
+    depends_on:
+      - postgres
+      - keycloak
+    environment:
+      KEYCLOAK_URL: http://${OPENCELL_HOST:-keycloak}:9090/auth
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./input-files/opencell.war:/opt/jboss/wildfly/standalone/deployments/opencell.war
+      - ./input-files/opencell-admin.properties:/opt/jboss/wildfly/standalone/configuration/opencell-admin.properties
+
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:20.0.3
+    container_name: keycloak
+    depends_on:
+      - postgres
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres-wildfly:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: 0pence!!
+      KC_HOSTNAME_URL: http://${OPENCELL_HOST:-localhost}:9090/auth
+      KC_HOSTNAME_PORT: 9090
+      KC_HTTP_PORT: 9090
+      KC_PROXY: none
+      KC_HTTP_RELATIVE_PATH: /auth
+    command: 
+      - start-dev 
+      - --import-realm
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./input-files/opencell-realm-and-users.json:/opt/keycloak/data/import/realm.json
+
+------------------------
+
+https://codebeautify.org/yaml-beautifier
+https://jsonformatter.org/yaml-formatter
+https://onlineyamltools.com/prettify-yaml
+https://www.atatus.com/tools/yaml-beautifier
+https://www.345tool.com/formatter/yaml-formatter
+
+
+version: "2.1"
+services:
+  postgres:
+    image: <private>/postgresql:14.3-1
+    volumes:
+      - ./sqlFile/keycloak_db.sql:/docker-entrypoint-initdb.d/dump.sq:ro
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+  keycloak:
+    container_name: keycloak_quay
+    image: quay.io/keycloak/keycloak:18.0.2
+    entrypoint: /opt/keycloak/bin/kc.sh
+    command:
+      - start-dev
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB_URL: jdbc:postgresql://postgres/keycloak
+      KC_DB: postgres
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: password
+      KC_HOSTNAME: localhost
+volumes:
+  postgres_data:
+  name: postgres_data
+  driver: local
+
+------------------------
+
+https://community.fly.io/t/run-keycloak-with-fly/5454/14
+
+Dockerfile:
+
+FROM quay.io/keycloak/keycloak:18.0.2 as builder
+
+ENV KC_HEALTH_ENABLED=true
+ENV KC_METRICS_ENABLED=true
+ENV KC_DB=postgres
+RUN curl -sL https://github.com/aerogear/keycloak-metrics-spi/releases/download/2.5.3/keycloak-metrics-spi-2.5.3.jar -o /opt/keycloak/providers/keycloak-metrics-spi-2.5.3.jar
+RUN /opt/keycloak/bin/kc.sh build
+
+FROM quay.io/keycloak/keycloak:18.0.2
+COPY --from=builder /opt/keycloak/ /opt/keycloak/
+WORKDIR /opt/keycloak
+RUN keytool -genkeypair -storepass password -storetype PKCS12 -keyalg RSA -keysize 2048 -dname "CN=server" -alias server -ext "SAN:c=DNS:localhost,IP:127.0.0.1" -keystore conf/server.keystore
+ENV KC_HTTP_ENABLED=true
+ENV KC_HOSTNAME_STRICT=false
+ENV JAVA_OPTS_APPEND="-Djava.net.preferIPv4Stack=false"
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--proxy", "edge"]
+
+
+Fly.toml
+
+app = "test-keycloak"
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[metrics]
+  path = "/metrics"
+  port = 8080
+
+[env]
+  KC_DB_URL = "jdbc:postgresql://DATABASE_HOST/DATABASE"
+  KC_DB_USERNAME = "DB_USER"
+  KC_DB_PASSWORD = "DB_PASSWORD"
+  KEYCLOAK_ADMIN = "admin"
+  KEYCLOAK_ADMIN_PASSWORD = "adminpassword"
+
+[experimental]
+  allowed_public_ports = []
+  auto_rollback = true
+
+[[services]]
+  internal_port = 8080
+  processes = ["app"]
+  protocol = "tcp"
+  script_checks = []
+
+  [[services.http_checks]]
+    grace_period = "5s"
+    interval = 10000
+    method = "get"
+    path = "/health"
+    protocol = "http"
+    restart_limit = 0
+    timeout = 2000
+    tls_skip_verify = false
+    [services.http_checks.headers]
+
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+    
+    ......
+    
+[[services.http_checks]]
+    method = "get"
+    path = "/health"
+    protocol = "http"
+    tls_skip_verify = false
+
+------------------------------------------------------------------------
+
+https://gruchalski.com/posts/2022-02-20-keycloak-1700-with-tls-behind-envoy/
+
+FROM quay.io/keycloak/keycloak:17.0.0 as builder
+
+ENV KC_METRICS_ENABLED=true
+ENV KC_FEATURES=token-exchange
+ENV KC_DB=postgres
+RUN /opt/keycloak/bin/kc.sh build
+
+FROM quay.io/keycloak/keycloak:17.0.0
+COPY --from=builder /opt/keycloak/lib/quarkus/ /opt/keycloak/lib/quarkus/
+WORKDIR /opt/keycloak
+ENV KEYCLOAK_ADMIN=admin
+ENV KEYCLOAK_ADMIN_PASSWORD=admin
+# change these values to point to a running postgres instance
+ENV KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak?ssl=allow
+ENV KC_DB_USERNAME=keycloak
+ENV KC_DB_PASSWORD=keycloak
+ENV KC_HOSTNAME=idp-dev.gruchalski.com
+ENV KC_HOSTNAME_STRICT=false
+ENV KC_HTTP_ENABLED=true
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start"]
+
+docker exec dev_keycloak \
+    /opt/jboss/keycloak/bin/add-user-keycloak.sh \
+    -u admin \
+    -p admin \
+&& docker restart dev_keycloak
+
+cd .docker/keycloak
+docker build -t local/keycloak:17.0.0 .
+cd -
+
+
+cd etc/envoy
+docker run --rm \
+    -v $(pwd):/lego \
+    -v ${HOME}/.aws/credentials:/root/.aws/credentials \
+    -e AWS_PROFILE=lego \
+    -ti goacme/lego \
+    --accept-tos \
+    --domains=idp-dev.gruchalski.com \
+    --server=https://acme-v02.api.letsencrypt.org/directory \
+    --email=radek@gruchalski.com \
+    --path=/lego \
+    --dns=route53 run
+
+
+compose.yml looks like this:
+
+version: '3.9'
+
+networks:
+  keycloak-internal:
+    name: keycloak-internal
+  keycloak-public:
+    name: keycloak-public
+
+services:
+  envoy:
+    image: envoyproxy/envoy:v1.21.0
+    restart: unless-stopped
+    command: /usr/local/bin/envoy -c /etc/envoy/envoy-keycloak.yaml -l debug
+    ports:
+      - 443:443
+      - 8001:8001
+    volumes:
+      - type: bind
+        source: ./etc/envoy
+        target: /etc/envoy
+    networks:
+        - keycloak-internal
+        - keycloak-public
+
+  postgres:
+    image: postgres:13.2
+    command: -c ssl=off
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    networks:
+      - keycloak-internal
+      
+  keycloak:
+    depends_on:
+      - postgres
+    container_name: dev_keycloak
+    image: local/keycloak:17.0.0
+    restart: unless-stopped
+    networks:
+      - keycloak-internal
+
+docker compose -f compose.yml up
+
+
+------------------------------------------------------------------------
+https://issues.redhat.com/projects/KEYCLOAK/issues/KEYCLOAK-19951?filter=allissues
+https://stackoverflow.com/questions/48056418/keycloak-returns-404-not-found-page
+https://www.comakeit.com/blog/quick-guide-using-keycloak-identity-access-management/
+
+version: '3.8'
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:19.0.1
+    command: ['start-dev --import-realm --http-relative-path=/auth']
+    volumes:
+      - ./realm-config:/opt/keycloak/data/import
+    environment:
+      - KC_DB=dev-file
+      - KEYCLOAK_ADMIN=administrator
+      - KEYCLOAK_ADMIN_PASSWORD=not-my-password
+      - KC_FEATURES=scripts
+      - KC_HTTP_PORT=9080
+      - KC_HTTPS_PORT=9443
+    ports:
+      - 127.0.0.1:9080:9080
+      - 127.0.0.1:9443:9443
+
+
+
+------------------------------------------------------------------------
+
+https://www.admin-magazine.com/Archive/2022/69/Single-sign-on-like-the-big-guys
+https://www.admin-magazine.com/Archive/2022/69/Single-sign-on-like-the-big-guys/(offset)/3
+https://www.clever-cloud.com/blog/features/2022/05/11/how-to-deploy-keycloak-on-clever-cloud/
+
+Deploying Keycloak
+
+version: '2.4'
+services:
+   keycloak:
+       container_name: keycloak
+       image: quay.io/keycloak/keycloak:17.0.1
+       ports:
+        - 8080:8080
+       environment:
+         - KEYCLOAK_ADMIN=admin
+         - KEYCLOAK_ADMIN_PASSWORD=SOME_PASSWORD
+         - KC_DB=postgres
+         - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak
+         - KC_DB_USERNAME=postgres
+         - KC_DB_PASSWORD=SOME_DB_PASSWORD
+       command: ["start-dev"]
+    postgres:
+       container_name: postgres
+       image: postgres:14
+       environment:
+           - POSTGRES_PASSWORD=SOME_DB_PASSWORD
+           - POSTGRES_DB=keycloak
+           - PGDATA=/var/lib/postgresql/data/pgdata
+       volumes:
+           - pgdata:/var/lib/postgresql/data/pgdata
+volumes:
+   pgdata:
+
+------------------------------------------------------------------------
+      
+Test the login
+https://janikvonrotz.ch/2020/10/20/openid-connect-with-nextcloud-and-keycloak/
+      
+      
+# Setttings
+KEYCLOAK_HOST=login.example.com
+KEYCLOAK_USERNAME=<Keycloak username>
+KEYCLOAK_PASSWORD=<Keycloak password>
+KEYCLOAK_REALM=<Keycloak realm name>
+KEYCLOAK_CLIENT_SECRET=<Keycloak client secret>
+CLIENT_ID=nextcloud.example.com
+
+# Get token
+TOKEN=$(curl -s \
+-d "client_id=$CLIENT_ID" \
+-d "client_secret=$KEYCLOAK_CLIENT_SECRET" \
+-d "username=$KEYCLOAK_USERNAME" \
+-d "password=$KEYCLOAK_PASSWORD" \
+-d "grant_type=password" \
+"https://$KEYCLOAK_HOST/auth/realms/$KEYCLOAK_REALM/protocol/openid-connect/token" | jq -r '.access_token')
+
+# Use token to get userinfo
+curl \
+-H "Authorization: bearer $TOKEN" \
+https://$KEYCLOAK_HOST/auth/realms/$KEYCLOAK_REALM/protocol/openid-connect/userinfo  
+      
+-----------------------------------------------------------------------
+      
+OpenLDAP container with demo data
+https://documentation.abas.cloud/en/abas-keycloak/setup-user-federation-ldap.html
+
+docker pull rroemhild/test-openldap
+docker run --privileged -d -p 389:389 -p 636:636 rroemhild/test-openldap
+      
+-----------------------------------------------------------------------
+https://unix.stackexchange.com/questions/647610/keycloak-account-management-console-not-working-with-nginx-reverse-proxy
+
+docker run -d -p 8080:8080 \
+-e KEYCLOAK_USER=admin\
+-e KEYCLOAK_PASSWORD=admin\
+-e PROXY_ADDRESSFORWARDING=true\
+-t quay.io/keycloak/keycloak:12.0.4\
+        -b 0.0.0.0 \
+        -Dkeycloak.frontendUrl=https://keycloak.domain.org/auth/
+                
+                
+                
+netstat -tln|grep 8080    
+lsof -i -P -n|grep LISTEN|grep 8080
+
+
+------------------------------------------------------------------------
+
+https://support.openanalytics.eu/t/shinyproxy-docker-with-keycloak-failed-to-start/2033
+
+docker-compose.yml
+
+version: '3.8'
+services:
+  # shinyproxy
+  shinyproxy:
+    build: 
+      context: .
+    image: shinyproxy-example
+    container_name: shinyproxy-ex
+    ports:
+      - '8020:8080'
+    group_add:
+      - 1001 # docker cannot be used here in version 3+
+    networks:
+      - sp-net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  # Keycloak
+  keycloak:
+    image: jboss/keycloak
+    container_name: keycloak
+    ports:
+      - 8010:8080
+    networks:
+      - sp-net
+    volumes:
+      # Make this writeable for group docker
+      # do not use ~ 
+      - /home/dieter/keycloak/data/:/opt/jboss/keycloak/standalone/data/     
+    environment:
+    # Only on first run
+    # https://stackoverflow.com/a/61071811
+#      - KEYCLOAK_USER=admin 
+#      - KEYCLOAK_PASSWORD=admin
+      - PROXY_ADDRESS_FORWARDING=true
+      - TZ=Europe/Berlin 
+
+networks:
+   sp-net:
+     name: sp-net
+     
+     
+https://github.com/codecentric/helm-charts/issues/271#issuecomment-920600882
+https://github.com/codecentric/helm-charts/issues/271
+     
+version: "3.9"
+services:
+  postgres:
+      ....
+  keycloak:
+    container_name: keycloak
+    image: "jboss/keycloak:15.0.2"
+    restart: always
+    depends_on:
+      - "postgres"
+    environment:
+      DB_VENDOR: postgres
+      DB_ADDR: postgres
+      DB_PORT: 5432
+      DB_DATABASE: keycloak
+      DB_USER: postgres
+      DB_PASSWORD: <MASKED>
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: <MASKED>
+      PROXY_ADDRESS_FORWARDING: "true"
+      KEYCLOAK_FRONTEND_URL: https://{DOMAIN_NAME}/auth
+    ports:
+      - 8080:8080
+      - 8443:8443
+      - 8787:8787 # debug port
+      
+      
+------------------------------------------------------------------------
+      
+      
+https://ordina-jworks.github.io/security/2019/08/22/Securing-Web-Applications-With-Keycloak.html
+      
+      
+$export TOKEN=$(curl -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "client_id=spa-heroes" \
+  -d "username=jeroen" \
+  -d "password=1234" \
+  -d "grant_type=password" \
+  -X POST http://localhost:8080/auth/realms/heroes/protocol/openid-connect/token | jq -r .access_token)
+$echo $TOKEN
+      
+      
+$ curl -i -X GET -H "Authorization: Bearer $TOKEN" http://localhost:9090/api/heroes
+     
+------------------------------------------------------------------------
+     
+https://keycloak.discourse.group/t/keycloak-admin-rest-api-returns-could-not-find-resource-for-full-path/17214
+      
+      
+TOKEN=$(curl --silent  --data "client_id=rest-client" --data "client_secret=1122333444"  --data "username=admin"  --data "password=demo" --data "grant_type=password" "http://localhost:8081/realms/master/protocol/openid-connect/token"  | jq -r ."access_token") 
+curl --silent  -H "Authorization: bearer $TOKEN" "http://localhost:8081/master/users"
+
+{"error":"RESTEASY003210: Could not find resource for full path: http://localhost:8081/master/users"}
+  
+------------------------------------------------------------------------
+      
+https://quarkus.io/guides/security-keycloak-authorization
+      
+docker run --name keycloak -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin -p 8543:8443 \
+	 -v "$(pwd)"/config/keycloak-keystore.jks:/etc/keycloak-keystore.jks quay.io/keycloak/keycloak:{keycloak.version} start \
+	   --hostname-strict=false --https-key-store-file=/etc/keycloak-keystore.jks
+
+curl --insecure -X POST https://localhost:8543/realms/quarkus/protocol/openid-connect/token \
+    --user backend-service:secret \
+    -H 'content-type: application/x-www-form-urlencoded' \
+    -d 'username=alice&password=alice&grant_type=password' | jq --raw-output '.access_token'
+
+curl -v -X GET \
+  http://localhost:8080/api/users/me \
+  -H "Authorization: Bearer "$access_token
+
+curl -v -X GET \
+   http://localhost:8080/api/admin \
+   -H "Authorization: Bearer "$access_token
+
+curl --insecure -X POST https://localhost:8543/realms/quarkus/protocol/openid-connect/token \
+    --user backend-service:secret \
+    -H 'content-type: application/x-www-form-urlencoded' \
+    -d 'username=admin&password=admin&grant_type=password' | jq --raw-output '.access_token' 
+
+
+
+------------------------------------------------------------------------
+
+Using Keycloak.X in dev mode
+https://blog.codecentric.de/keycloak-keycloak-x
+
+# Start in Dev Mode
+    docker run \
+    -it \
+    --rm \
+    --name kcx \
+    -e KEYCLOAK_ADMIN=admin \
+    -e KEYCLOAK_ADMIN_PASSWORD=admin \
+    -p 8080:8080 \
+    -v $PWD/data:/opt/keycloak/data:z \
+    $KC_IMAGE \
+    start-dev
+    
+    
+docker build -t mykeycloakx .
+
+FROM quay.io/keycloak/keycloak-x:15.1.1
+    RUN /opt/keycloak/bin/kc.sh build  --metrics-enabled=true
+ 
+docker run \
+    -it \
+    --rm \
+    --name kcx \
+    -e KEYCLOAK_ADMIN=admin \
+    -e KEYCLOAK_ADMIN_PASSWORD=admin \
+    -p 8080:8080 \
+    -v $PWD/data:/opt/jboss/keycloak/data:z \
+    mykeycloakx \
+    start --http-enabled=true
+    
+docker run \
+    -it \
+    --rm \
+    --name kcx \
+    -e KEYCLOAK_ADMIN=admin \
+    -e KEYCLOAK_ADMIN_PASSWORD=admin \
+    -p 8080:8080 \
+    -v $PWD/data:/opt/keycloak/data:z \
+    mykeycloakx \
+    start --http-enabled=true --http-port=8080 --http-host=0.0.0.0 --hostname=localhost:8080 --hostname-strict-https=false
+    
+# Start in Dev Mode with custom context-path
+    docker run \
+    -it \
+    --rm \
+    --name kcx \
+    -e KEYCLOAK_ADMIN=admin \
+    -e KEYCLOAK_ADMIN_PASSWORD=admin \
+    -p 8080:8080 \
+    -v $PWD/data:/opt/keycloak/data:z \
+    $KC_IMAGE \
+    start-dev --http-relative-path=auth
+    
+    
+Running with prod profile
+The following command shows how to run with HTTPS enabled using the created certificates.
+
+docker run \
+     -it \
+     --rm \
+     --name kcx \
+     -e KEYCLOAK_ADMIN=admin \
+     -e KEYCLOAK_ADMIN_PASSWORD=admin \
+     -e KC_DB_USERNAME=sa \
+     -e KC_DB_PASSWORD=keycloak \
+     -p 8080:8080 \
+     -p 8443:8443 \
+     -v $PWD/data:/opt/keycloak/data:z \
+     -v $PWD/id.keycloak.test+1.pem:/etc/x509/https/tls.crt:z \
+     -v $PWD/id.keycloak.test+1-key.pem:/etc/x509/https/tls.key:z \
+     $KC_IMAGE \
+     start \
+     --auto-build \
+     --hostname=id.keycloak.test:8443 \
+     --https-certificate-file=/etc/x509/https/tls.crt \
+     --https-certificate-key-file=/etc/x509/https/tls.key
+    
+    
+How to remote-debug Keycloak.X
+   
+ docker run \
+    -it \
+    --rm \
+    --name kcx \
+    -e KEYCLOAK_ADMIN=admin \
+    -e KEYCLOAK_ADMIN_PASSWORD=admin \
+    -e KC_DB_USERNAME=sa \
+    -e KC_DB_PASSWORD=keycloak \
+    -e DEBUG_PORT='*:8787' \
+    -p 8443:8443 \
+    -p 8787:8787 \
+    -v $PWD/data:/opt/keycloak/data:z \
+    -v $PWD/id.keycloak.test+1.pem:/etc/x509/https/tls.crt:z \
+    -v $PWD/id.keycloak.test+1-key.pem:/etc/x509/https/tls.key:z \
+    $KC_IMAGE \
+    start \
+    --auto-build \
+    --hostname=id.keycloak.test:8443 \
+    --https-certificate-file=/etc/x509/https/tls.crt \
+    --https-certificate-key-file=/etc/x509/https/tls.key \
+    --debug
+    
+How to use the JMX with Keycloak.X
+
+     -it \
+     --rm \
+     --name kcx \
+     -e KEYCLOAK_ADMIN=admin \
+     -e KEYCLOAK_ADMIN_PASSWORD=admin \
+     -e KC_DB_USERNAME=sa \
+     -e KC_DB_PASSWORD=keycloak \
+     -e JAVA_TOOL_OPTIONS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=8790 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dquarkus-log-max-startup-records=10000" \
+     -p 8443:8443 \
+     -p 8790:8790 \
+     -v $PWD/data:/opt/keycloak/data:z \
+     -v $PWD/id.keycloak.test+1.pem:/etc/x509/https/tls.crt:z \
+     -v $PWD/id.keycloak.test+1-key.pem:/etc/x509/https/tls.key:z \
+     $KC_IMAGE \
+     start \
+     --auto-build \
+     --hostname=id.keycloak.test:8443 \
+     --https-certificate-file=/etc/x509/https/tls.crt \
+     --https-certificate-key-file=/etc/x509/https/tls.key
+------------------------------------------------------------------------
+https://keycloak.discourse.group/t/access-to-keycloak-rest-api-fails/4881/8
+
+Option1
+
+curl --location --request POST 'http://localhost:8181/auth/admin/realms/education/users' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {{access_token}}' \
+--data-raw '{
+        "createdTimestamp": 1588880747548,
+        "username": "samir",
+        "enabled": true,
+        "totp": false,
+        "emailVerified": true,
+        "firstName": "fName",
+        "lastName": "Lname",
+        "email": "someemail@gmail.com",
+        "disableableCredentialTypes": [],
+        "requiredActions": [],
+        "notBefore": 0,
+        "access": {
+            "manageGroupMembership": true,
+            "view": true,
+            "mapRoles": true,
+            "impersonate": true,
+            "manage": true
+        },
+        "realmRoles": [	"mb-user" ]
+    }'
+
+curl --location --request GET 'http://localhost:8181/auth/admin/realms/education/users' \
+--header 'Authorization: Bearer {{access_token}}'
+
+
+Option2
+
+Get token request :
+
+curl --location --request POST 'http://localhost:8181/auth/realms/education/protocol/openid-connect/token' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--header 'Authorization: Basic base64(clientId:clientSecret)' \
+--data-urlencode 'grant_type=password' \
+--data-urlencode 'username=uname' \
+--data-urlencode 'password=pass'
+
+fetch the users using the same token.
+
+curl --location --request GET 'http://localhost:8181/auth/admin/realms/fyrefish-dev/users' \
+--header 'Authorization: Bearer {{access_token}}'
+
+------------------------------------------------------------------------
+https://www.keycloak.org/docs-api/12.0/rest-api/#_users_resource
+
+$KEYCLOAK_HOST/auth/admin/realms/$REALM_NAME/users/?username=admin
+$KEYCLOAK_HOST/auth/admin/realms/$REALM_NAME/users/?search=admin
+
+------------------------------------------------------------------------
+https://stackoverflow.com/questions/55535440/how-to-get-users-from-keycloak-rest-api-keycloak-api-response-403
+https://docs.cbioportal.org/deployment/authorization-and-authentication/authenticating-and-authorizing-users-via-keycloak/
+https://docs.cbioportal.org/deployment/authorization-and-authentication/authenticating-and-authorizing-users-via-keycloak/
+
+# get an access token
+curl -X POST \
+  https://<HOST>/auth/realms/master/protocol/openid-connect/token \
+  -H 'Accept: application/json' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -H 'cache-control: no-cache' \
+  -d 'grant_type=password&username=<USERNAME>l&password=<PASSWORD>&client_id=admin-cli'
+
+# get all users of gateway realm, use the token from above and use Bearer as prefix
+curl -X GET \
+  https://<HOST>/auth/admin/realms/gateway/users \
+  -H 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkI...' \
+  -H 'cache-control: no-cache'
+
+
+
+------------------------------------------------------------------------
+
+https://docs.wildfly.org/19.1/Admin_Guide.html#examples-in-this-guide
+https://www.keycloak.org/docs-api/15.0/rest-api/index.html
+https://www.keycloak.org/docs-api/9.0/rest-api/index.html
+https://www.keycloak.org/docs-api/18.0/rest-api/
+https://www.keycloak.org/docs-api/19.0.1/rest-api/index.html
+https://www.keycloak.org/docs-api/12.0/rest-api/
+
+https://github.com/keycloak/keycloak-community/blob/main/design/rest-api-guideline.md
+
+/{realm}/apis/admin/users/v1?first=1&max=20
+Link: <http://{host}:{port}/auth/{realm}/apis/admin/users/v1?first=20&max=20>; rel="next"
+/{realm}/apis/admin/users/v1?group=users1
+/{realm}/apis/admin/users/v1
+/{realm}/apis/admin/users/v1/123
+
+curl -k -X GET $KEYCLOAK_HOST/auth/admin/realms/$REALM_NAME/clients?clientId=$CLIENT_ID \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $ACCESS_TOKEN"
+
+
+------------------------------------------------------------------------
+
+https://github.com/silentrobi/keycloak-custom-api-searchby-attr
+https://github.com/MohammadWaleed/keycloak-admin-client
+https://dev.to/silentrobi/keycloak-custom-rest-api-search-by-user-attribute-keycloak-3a8c
+https://gist.github.com/silentrobi/1fdfcbe9290ff2f6a148c5e0f5440019#file-docker-compose-yml
+
+version: '3'
+# from: https://github.com/keycloak/keycloak-containers/blob/master/docker-compose-examples/keycloak-postgres.yml
+
+volumes:
+  postgres_data:
+      driver: local
+
+services:
+  postgres:
+      image: postgres
+      container_name: postgres
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+      environment:
+        POSTGRES_DB: keycloak
+        POSTGRES_USER: keycloak
+        POSTGRES_PASSWORD: password
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    ports:
+      - "5050:80"
+    restart: unless-stopped
+    
+  keycloak:
+      image: jboss/keycloak:7.0.1
+      container_name: keycloak
+      environment:
+        DB_VENDOR: POSTGRES
+        DB_ADDR: postgres
+        DB_DATABASE: keycloak
+        DB_USER: keycloak
+        DB_SCHEMA: public
+        DB_PASSWORD: password
+        KEYCLOAK_USER: admin
+        KEYCLOAK_PASSWORD: Pa55w0rd
+      ports:
+        - 8090:8080
+      depends_on:
+        - postgres
+
+
+
+curl --location --request GET 'http://localhost:8090/auth/realms/demo/userapi-rest/users/search-by-attr?attr=merchant_id&value=1'
+
+------------------------------------------------------------------------
+
+
+https://www.meetri.in/KeyCloak.html
+
+
+version: '3.6'
+services:
+  keycloak:
+    image: jboss/keycloak
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: "database_address"
+      DB_DATABASE: "database_name"
+      DB_USER: "db_name"
+      DB_PASSWORD: "db_pass"
+      KEYCLOAK_USER: "keycloak_username"
+      KEYCLOAK_PASSWORD: "keycloak_password"
+      # JAVA_OPTS: "-Dkeycloak.profile=preview -Dkeycloak.profile.feature.admin_fine_grained_authz=enabled"
+   ports:
+      - "8088:8080"
+   volumes:
+      - ./themes/puretalent:/opt/jboss/keycloak/themes/puretalent
+
+------------------------------------------------------------------------
+https://dmc.datical.com/administer/configure-keycloak-ldap.htm
+https://pypi.org/project/python-keycloak/
+https://ioansurariu.ro/2020/10/19/users-and-roles-management-using-keycloak-java-apis/
+https://registry.terraform.io/providers/mrparkers/keycloak/latest/docs/resources/user_roles
+https://www.npmjs.com/package/@keycloak/keycloak-admin-client
+https://stackoverflow.com/questions/48394410/how-to-get-the-list-of-users-from-keycloak-by-using-httppost-rest-api
+https://www.keycloak.org/docs-api/15.0/rest-api/index.html#_users_resource
+https://pm4ml.github.io/documents/payment_manager_oss/latest/user_access_management/configuring_user_access.html
+https://issues.redhat.com/browse/KEYCLOAK-6134
+https://www.tabnine.com/code/java/methods/org.keycloak.admin.client.resource.RealmResource/users
+
+
+GET /admin/realms/{realm}/users
+{{keycloak_url}}/admin/realms/{{keycloak_realm}}/users
+https://<IP ADDRESS>/<PORT>/admin/realms/<REALM NAME>/users?q=username=<USER NAME>ASC&email=<EMAIL ID>&limit=<RECORD LIMIT>&page=<PAGE NO>
+
+
+
+------------------------------------------------------------------------
+Keycloak get client by clientId
+https://gist.github.com/thomasdarimont/59cfa9ea629718f123ad22fbe319b946
+https://www.keycloak.org/docs-api/19.0.1/rest-api/index.html#_clients_resource
+https://www.keycloak.org/docs-api/19.0.1/rest-api/index.html
+
+KC_CLIENT_ID=admin-cli
+KC_SERVER=http://localhost:8080/auth
+
+KC_REALM=master
+KC_ISSUER=$KC_SERVER/realms/$KC_REALM
+KC_USERNAME=admin
+KC_PASSWORD=admin
+
+# Fetch ACCESS_TOKEN
+KC_RESPONSE=$( \
+ curl \
+ -d "client_id=$KC_CLIENT_ID" \
+ -d "username=$KC_USERNAME" \
+ -d "password=$KC_PASSWORD" \
+ -d "grant_type=password" \
+ -d "scope=profile roles" \
+ "$KC_ISSUER/protocol/openid-connect/token" \
+ )
+echo $KC_RESPONSE | jq -C .
+KC_ACCESS_TOKEN=$(echo $KC_RESPONSE | jq -r .access_token)
+
+# Query clients by clientId
+KC_CLIENT_RESPONSE=$( \
+ curl -v \
+ -H "Authorization: Bearer $KC_ACCESS_TOKEN" \
+ "$KC_SERVER/admin/realms/demo/clients?clientId=svc-demo&viewableOnly=true" \
+ )
+echo $KC_CLIENT_RESPONSE | jq -C .
+
+------------------------------------------------------------------------
+
+OpenID Connect with Keycloak 
+https://community.openproject.org/topics/10148
+
+docker run --rm -p 8090:80 --name openproject -e SECRET_KEY_BASE=secret \
+  -v /var/lib/openproject/pgdata:/var/lib/postgresql/9.6/main \
+  -v /var/lib/openproject/logs:/var/log/supervisor \
+  -v /var/lib/openproject/static:/var/db/openproject \
+  -e EMAIL_DELIVERY_METHOD=smtp \
+  -e SMTP_ADDRESS=smtp.sendgrid.net \
+  -e SMTP_PORT=587 \
+  -e SMTP_DOMAIN=my.domain.com \
+  -e SMTP_AUTHENTICATION=login \
+  -e SMTP_ENABLE_STARTTLS_AUTO=true \
+  -e SMTP_USER_NAME="apikey" \
+  -e SMTP_PASSWORD="apikey" \
+  openproject/community:8
+
+
+
+------------------------------------------------------------------------
+
+https://www.appsdeveloperblog.com/keycloak-rest-api-create-a-new-user/
+
+curl --location --request POST 'http://localhost:8080/auth/realms/master/protocol/openid-connect/token' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'username=admin2' \
+--data-urlencode 'password=admin2' \
+--data-urlencode 'grant_type=password' \
+--data-urlencode 'client_id=admin-cli'
+
+curl --location --request POST 'http://localhost:8080/auth/realms/master/protocol/openid-connect/token' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'grant_type=client_credentials' \
+--data-urlencode 'client_id=admin-cli' \
+--data-urlencode 'client_secret=7fb49e15-2a86-4b7c-a648-27746c67895b'
+
+curl --location --request POST 'http://localhost:8080/auth/admin/realms/appsdeveloperblog/users' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer $TOKEN \
+--data-raw '{"firstName":"Sergey","lastName":"Kargopolov", "email":"test@test.com", "enabled":"true", "username":"app-user"}'
+
+
+http://localhost:8080/auth/realms/appsdeveloperblog/account

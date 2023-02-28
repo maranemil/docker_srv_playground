@@ -1,0 +1,620 @@
+########################################################################
+SSO with Quarkus, Angular and Keycloak
+########################################################################
+
+https://b-nova.com/en/home/content/sso-with-quarkus-angular-and-keycloak
+
+
+version: "2"
+
+services:
+
+  keycloak:
+    image: jboss/keycloak
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      DB_VENDOR: postgres
+      DB_ADDR: keycloak-db
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: keycloak
+    depends_on:
+      - keycloak-db
+    ports:
+      - 8180:8080
+      - 8543:8443
+
+  keycloak-db:
+    image: postgres:alpine
+    environment:
+      POSTGRES_PASSWORD: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_DB: keycloak
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+
+
+npm install keycloak-angular keycloak-js
+
+app.module.ts.
+
+import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { AppComponent } from './app.component';
+import { TopBarComponent } from './top-bar/top-bar.component';
+import { ProductListComponent } from './product-list/product-list.component';
+import { ProductAlertsComponent } from './product-alerts/product-alerts.component';
+import { KeycloakAngularModule, KeycloakService } from "keycloak-angular";
+
+function initializeKeycloak(keycloak: KeycloakService) {
+  return () =>
+      keycloak.init({
+        config: {
+          url: 'http://localhost:8180/auth',
+          realm: 'b-nova',
+          clientId: 'productlist-frontend',
+        },
+        initOptions: {
+            onLoad: 'login-required'
+        },
+        bearerExcludedUrls: ['/assets']
+      });
+}
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    ReactiveFormsModule,
+    RouterModule.forRoot([
+      { path: '', component: ProductListComponent },
+    ]),
+    KeycloakAngularModule
+  ],
+  declarations: [
+    AppComponent,
+    TopBarComponent,
+    ProductListComponent,
+    ProductAlertsComponent
+  ],
+  bootstrap: [
+    AppComponent
+  ],
+  providers: [
+      {
+          provide: APP_INITIALIZER,
+          useFactory: initializeKeycloak,
+          multi: true,
+          deps: [KeycloakService],
+      },
+  ]
+})
+export class AppModule { }
+
+
+app.component.ts
+
+import {Component, OnInit} from '@angular/core';
+import {KeycloakProfile} from "keycloak-js";
+import {KeycloakService} from "keycloak-angular";
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+  public isLoggedIn = false;
+  public userProfile: KeycloakProfile | null = null;
+
+  constructor(private readonly keycloak: KeycloakService) { }
+
+  public async ngOnInit() {
+    this.isLoggedIn = await this.keycloak.isLoggedIn();
+
+    if (this.isLoggedIn) {
+      this.userProfile = await this.keycloak.loadUserProfile();
+    }
+  }
+}
+
+
+product-list.component.ts as follows.
+
+export class ProductListComponent {
+  products = products;
+
+  constructor(private http: HttpClient) {
+  }
+
+  hello() {
+    this.http.get("/api/hello").subscribe(res => alert(res));
+  }
+
+  secure() {
+    this.http.get("/api/secured").subscribe(res => alert(res));
+  }
+
+  share() {
+    this.http.get("/api/share").subscribe(res => alert(res));
+  }
+
+  onNotify() {
+    this.http.get("/api/notify").subscribe(res => alert(res));
+  }
+}
+
+
+product-list.component.html we add the corresponding buttons for hello and secure.
+
+  <p><button (click)="hello()">Hello</button></p>
+  <p><button (click)="secure()">Secure</button></p>
+  <p><button (click)="share()">Share</button></p>
+  <app-product-alerts (notify)="onNotify()" [product]="product"></app-product-alerts>
+
+
+------------------------------------------------------------------------
+########################################################################
+angular oauth2
+########################################################################
+
+https://ordina-jworks.github.io/security/2019/08/22/Securing-Web-Applications-With-Keycloak.html
+
+npm i angular-oauth2-oidc --save
+
+import { HttpClientModule } from '@angular/common/http';
+import { OAuthModule } from 'angular-oauth2-oidc';
+
+@NgModule({
+  imports: [
+    ...
+    HttpClientModule,
+    OAuthModule.forRoot({
+      resourceServer: {
+          allowedUrls: ['http://localhost:9090/api'],
+          sendAccessToken: true
+      }
+  })
+
+
+app.component.html.
+
+<button class="btn btn-default" (click)="login()">
+  Login
+</button>
+<button class="btn btn-default" (click)="logoff()">
+  Logout
+</button>
+
+
+app.component.ts:
+
+import { Component } from '@angular/core';
+import { OAuthService, AuthConfig } from 'angular-oauth2-oidc';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  title = 'Tour of Heroes';
+
+  constructor(private oauthService: OAuthService) {
+    this.configure();
+  }
+
+  authConfig: AuthConfig = {
+    issuer: 'http://localhost:8080/auth/realms/heroes',
+    redirectUri: window.location.origin + "/heroes",
+    clientId: 'spa-heroes',
+    scope: 'openid profile email offline_access heroes',
+    responseType: 'code',
+    // at_hash is not present in id token in older versions of keycloak.
+    // use the following property only if needed!
+    // disableAtHashCheck: true,
+    showDebugInformation: true
+  }
+
+  public login() {
+    this.oauthService.initLoginFlow();
+  }
+
+  public logoff() {
+    this.oauthService.logOut();
+  }
+
+  private configure() {
+    this.oauthService.configure(this.authConfig);
+    this.oauthService.loadDiscoveryDocumentAndTryLogin();
+  }
+}
+
+
+
+
+
+
+########################################################################
+keycloak-authentication React
+########################################################################
+
+https://blog.logrocket.com/implement-keycloak-authentication-react/
+https://snyk.io/advisor/npm-package/keycloak-js/example
+https://github.com/react-keycloak/react-keycloak/issues/150
+https://github.com/react-keycloak/react-keycloak
+
+npx create-react-app <app-name>
+cd <app-name>
+npm start
+
+npm install --save keycloak-js @react-keycloak/web react-router-dom
+
+
+components/Nav.js
+----------------
+import React from "react";
+
+const Nav = () => {
+ return (
+   <div>
+     <div className="top-0 w-full flex flex-wrap">
+       <section className="x-auto">
+         <nav className="flex justify-between bg-gray-200 text-blue-800 w-screen">
+           <div className="px-5 xl:px-12 py-6 flex w-full items-center">
+             <h1 className="text-3xl font-bold font-heading">
+               Keycloak React AUTH.
+             </h1>
+             <ul className="hidden md:flex px-4 mx-auto font-semibold font-heading space-x-12">
+               <li>
+                 <a className="hover:text-blue-800" href="/">
+                   Home
+                 </a>
+               </li>
+               <li>
+                 <a className="hover:text-blue-800" href="/secured">
+                   Secured Page
+                 </a>
+               </li>
+             </ul>
+             <div className="hidden xl:flex items-center space-x-5">
+               <div className="hover:text-gray-200">
+                 <h1>Login</h1>
+               </div>
+             </div>
+           </div>
+         </nav>
+       </section>
+     </div>
+   </div>
+ );
+};
+export default Nav;
+
+pages/Homepage.js file.
+----------------
+import React from 'react';
+const Home = () => {
+ return (
+   <div>
+     <h1 className="text-green-800 text-4xl">Welcome to the Homepage</h1>
+   </div>
+ );
+};
+export default Home;
+
+
+pages/Securedpage.js file.
+----------------
+import React from 'react';
+const Secured = () => {
+ return (
+   <div>
+     <h1 className="text-black text-4xl">Welcome to the Protected Page.</h1>
+   </div>
+ );
+};
+export default Secured;
+
+
+
+
+App.js code with the following code.
+----------------
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Nav from "./components/Nav";
+import WelcomePage from "./pages/Homepage";
+import SecuredPage from "./pages/Securedpage";
+function App() {
+ return (
+   <div>
+     <Nav />
+     <BrowserRouter>
+       <Routes>
+         <Route exact path="/" element={<WelcomePage />} />
+         <Route path="/secured" element={<SecuredPage />} />
+       </Routes>
+     </BrowserRouter>
+   </div>
+ );
+}
+export default App;
+
+
+Setting up Keycloak in React
+
+src/Keycloak.js
+----------------
+import Keycloak from "keycloak-js";
+const keycloak = new Keycloak({
+ url: "http://localhost:8080/auth",
+ realm: "Keycloak-react-auth",
+ clientId: "React-auth",
+});
+export default keycloak;
+
+Update App.js
+----------------
+import React from "react";
+import { ReactKeycloakProvider } from "@react-keycloak/web";
+import keycloak from "./Keycloak"
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Nav from "./components/Nav";
+import WelcomePage from "./pages/Homepage";
+import SecuredPage from "./pages/Securedpage";
+
+function App() {
+ return (
+   <div>
+     <ReactKeycloakProvider authClient={keycloak}>
+       <Nav />
+       <BrowserRouter>
+         <Routes>
+           <Route exact path="/" element={<WelcomePage />} />
+           <Route path="/secured" element={<SecuredPage />} />
+	</Routes>
+       </BrowserRouter>
+       </ReactKeycloakProvider>
+   </div>
+ );
+}
+export default App;
+
+
+Setting up React ProtectedRoute
+----------------
+helpers/PrivateRoute.js file.
+
+import { useKeycloak } from "@react-keycloak/web";
+const PrivateRoute = ({ children }) => {
+ const { keycloak } = useKeycloak();
+ const isLoggedIn = keycloak.authenticated;
+ return isLoggedIn ? children : null;
+};
+export default PrivateRoute;
+
+
+
+
+Update the routes in your App.js
+----------------
+import React from "react";
+import { ReactKeycloakProvider } from "@react-keycloak/web";
+import keycloak from "./Keycloak";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Nav from "./components/Nav";
+import WelcomePage from "./pages/Homepage";
+import SecuredPage from "./pages/Securedpage";
+import PrivateRoute from "./helpers/PrivateRoute";
+function App() {
+ return (
+   <div>
+     <ReactKeycloakProvider authClient={keycloak}>
+       <Nav />
+       <BrowserRouter>
+         <Routes>
+           <Route exact path="/" element={<WelcomePage />} />
+           <Route
+             path="/secured"
+             element={
+               <PrivateRoute>
+                 <SecuredPage />
+               </PrivateRoute>
+             }
+           />
+         </Routes>
+       </BrowserRouter>
+     </ReactKeycloakProvider>
+   </div>
+ );
+}
+export default App;
+
+
+Update the code snippets in your components/Nav.js file to the following:
+----------------
+import React from "react";
+import { useKeycloak } from "@react-keycloak/web";
+const Nav = () => {
+ const { keycloak, initialized } = useKeycloak();
+	return (
+   <div>
+     <div className="top-0 w-full flex flex-wrap">
+       <section className="x-auto">
+         <nav className="flex justify-between bg-gray-200 text-blue-800 w-screen">
+           <div className="px-5 xl:px-12 py-6 flex w-full items-center">
+             <h1 className="text-3xl font-bold font-heading">
+               Keycloak React AUTH.
+             </h1>
+             <ul className="hidden md:flex px-4 mx-auto font-semibold font-heading space-x-12">
+               <li>
+                 <a className="hover:text-blue-800" href="/">
+                   Home
+                 </a>
+               </li>
+               <li>
+                 <a className="hover:text-blue-800" href="/secured">
+                   Secured Page
+                 </a>
+               </li>
+             </ul>
+             <div className="hidden xl:flex items-center space-x-5">
+               <div className="hover:text-gray-200">
+                 {!keycloak.authenticated && (
+                   <button
+                     type="button"
+                     className="text-blue-800"
+                     onClick={() => keycloak.login()}
+                   >
+                     Login
+                   </button>
+                 )}
+
+                 {!!keycloak.authenticated && (
+                   <button
+                     type="button"
+                     className="text-blue-800"
+                     onClick={() => keycloak.logout()}
+                   >
+                     Logout ({keycloak.tokenParsed.preferred_username})
+                   </button>
+                 )}
+               </div>
+             </div>
+           </div>
+         </nav>
+       </section>
+     </div>
+   </div>
+ );
+};
+export default Nav;
+
+
+
+########################################################################
+Secure a Vue.js App with KeyCloak
+########################################################################
+
+https://davidtruxall.com/secure-a-vue-js-app-with-keycloak/
+https://vuejs.org/guide/reusability/plugins.html
+
+npm install --save keycloak-js@12.0.4
+
+Create A Plugin
+----------------
+import Vue from 'vue'
+import Keycloak from 'keycloak-js'
+const options = {
+  url: 'http://localhost:8001/auth/',
+  realm: 'local-dev',
+  clientId: 'vue-demo'
+}
+const _keycloak = Keycloak(options)
+const Plugin = {
+  install(Vue) {
+    Vue.$keycloak = _keycloak
+  }
+}
+Plugin.install = Vue => {
+  Vue.$keycloak = _keycloak
+  Object.defineProperties(Vue.prototype, {
+    $keycloak: {
+      get() {
+        return _keycloak
+      }
+    }
+  })
+}
+
+Vue.use(Plugin)
+export default Plugin
+
+
+
+main.js
+----------------
+import Vue from 'vue'
+import App from './App.vue'
+import router from './router'
+import authentication from "@/plugins/authentication"
+
+Vue.config.productionTip = false
+Vue.use(authentication)
+
+Vue.$keycloak
+  .init({ checkLoginIframe: false })
+  .then(() => {
+    new Vue({
+      router,
+      render: h => h(App)
+    }).$mount('#app')
+  })
+
+
+
+
+Create A Navigation Guard
+----------------
+const routes = [
+  {
+    path: '/',
+    name: 'Home',
+    component: Home,
+    meta: {
+      isAuthenticated: false
+    }
+  },
+  {
+    path: '/secured',
+    name: 'Secured',
+    meta: {
+      isAuthenticated: true
+    },
+    component: () => import('../views/Secured.vue')
+  },
+  {
+    path: '/unauthorized',
+    name: 'Unauthorized',
+    meta: {
+      isAuthenticated: false
+    },
+    component: () => import('../views/Unauthorized.vue')
+  }
+]
+
+
+Vue router
+----------------
+router.beforeEach((to, from, next) => {
+  if (to.meta.isAuthenticated) {
+    // Get the actual url of the app, it's needed for Keycloak
+    const basePath = window.location.toString()
+    if (!Vue.$keycloak.authenticated) {
+      // The page is protected and the user is not authenticated. Force a login.
+      Vue.$keycloak.login({ redirectUri: basePath.slice(0, -1) + to.path })
+    } else if (Vue.$keycloak.hasResourceRole('vue-demo-user')) {
+      // The user was authenticated, and has the app role
+      Vue.$keycloak.updateToken(70)
+        .then(() => {
+          next()
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    } else {
+      // The user was authenticated, but did not have the correct role
+      // Redirect to an error page
+      next({ name: 'Unauthorized' })
+    }
+  } else {
+    // This page did not require authentication
+    next()
+  }
+})
+
+
