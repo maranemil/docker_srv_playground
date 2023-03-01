@@ -1,0 +1,408 @@
+
+###############################################################
+Keycloak Setup for running Keycloak Authorization Sample
+###############################################################
+https://www.helikube.de/part-1-setup-for-keycloak-authorization-sample/
+https://www.helikube.de/part-2-running-fine-grained-keycloak-authorization-feature-with-quarkus/
+https://www.helikube.de/part-3-running-an-odic-angular-app-to-test-keycloak-authorization-feature/
+https://www.helikube.de/part-1-quick-keycloak-setup-for-running-keycloak-authorization-sample/
+
+
+----------------------------------------------------------------------------------------
+
+https://www.keycloak.org/docs/latest/server_admin/index.html
+
+----------------------------------------------------------------------------------------
+###############################################################
+Create a Keycloak realm and realm admin
+###############################################################
+https://forum.decentci.ncsa.illinois.edu/t/create-a-keycloak-realm-and-realm-admin/20
+
+
+Create a new realm with the Add realm button in the realm selection box at the top left. Enter this new realm.
+Create regular user in a realm:
+	Go to users (sidebar) → add user (button on the right side)
+	Fill in required fields and press save button.
+	Open Credentials tab and set user password.
+	Open Role Mapping tab:
+		Select realm-management under Client Roles.
+		Select realm-admin and press Add selected.
+Go to https://$KEYCLOAK_DOMAIN/auth/admin/$REALM_NAME/console (replace $REALM_NAME with realm name in which you created the user) and login.
+You should see admin UI only for this realm.
+
+
+----------------------------------------------------------------------------------------
+###############################################################
+Keycloak server OIDC URI endpoints 2.2.1
+###############################################################
+
+https://www.keycloak.org/docs/13.0/getting_started/#creating-a-realm
+https://www.keycloak.org/docs/latest/server_admin/index.html#con-server-oidc-uri-endpoints_server_administration_guide
+
+
+/realms/{realm-name}/protocol/openid-connect/auth
+/realms/{realm-name}/protocol/openid-connect/token
+/realms/{realm-name}/protocol/openid-connect/logout
+/realms/{realm-name}/protocol/openid-connect/userinfo
+/realms/{realm-name}/protocol/openid-connect/revoke
+/realms/{realm-name}/protocol/openid-connect/certs
+/realms/{realm-name}/protocol/openid-connect/auth/device
+
+
+/auth/realms/demo/protocol/openid-connect/auth
+/auth/realms/demo/protocol/openid-connect/token
+/auth/realms/demo/protocol/openid-connect/userinfo
+/auth/realms/demo/protocol/openid-connect/certs
+
+
+/auth/admin/realms/
+/auth/admin/realms/{realm-name}/users?max=1
+/auth/admin/realms/{realm-name}/clients
+
+----------------------------------------------------------------------------------------
+
+https://docs.geoserver.org/2.22.x/en/user/community/keycloak/authentication.html
+https://docs.geoserver.org/2.22.x/en/user/community/keycloak/keycloak_role_service.html
+
+----------------------------------------------------------------------------------------
+
+https://qiita.com/dennistanaka/items/f7bd097e46eb2c13fe68
+
+docker run -d --name=keycloak --restart unless-stopped -p 8080:8080 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin quay.io/keycloak/keycloak:15.0.2
+
+----------------------------------------------------------------------------------------
+
+https://docs.camunda.io/docs/next/self-managed/identity/user-guide/connect-to-an-existing-keycloak/
+https://cloudnativereference.dev/related-repositories/keycloak/
+https://docs.open-metadata.org/deployment/security/keycloak
+https://www.redhat.com/architect/oauth-20-authentication-keycloak
+
+docker run -d -p 8085:8080 -e KEYCLOAK_USER=storefront -e KEYCLOAK_PASSWORD=passw0rd! quay.io/keycloak/keycloak:12.0.2
+podman run -p 8085:8080 -e KEYCLOAK_USER=storefront -e KEYCLOAK_PASSWORD=passw0rd! quay.io/keycloak/keycloak:12.0.2
+
+----------------------------------------------------------------------------------------
+
+https://keepgrowing.in/tools/keycloak-in-docker-4-how-to-define-user-privileges-and-roles/
+https://www.keycloak.org/docs/16.0/server_admin/#proc-managing-groups_server_administration_guide
+https://www.keycloak.org/docs/latest/server_admin/
+https://www.keycloak.org/docs/latest/server_admin/#configuring-realms
+https://www.keycloak.org/docs/latest/server_development/#admin-rest-api
+https://dev.vseth.ethz.ch/how-to-develop-on-the-sip/how-to-setup-local-keycloak
+https://docs.tetrate.io/service-bridge/1.4.x/en-us/howto/end_user_auth_keycloak
+https://www.baeldung.com/spring-boot-keycloak
+https://www.appsloveworld.com/springboot/100/18/export-users-roles-and-groupes-in-keycloak
+https://gitlab.fokus.fraunhofer.de/egav/keycloak-server
+https://stackoverflow.com/questions/55643277/how-can-i-get-other-users-infousername-firstname-by-id-keycloak
+https://www.keycloak.org/docs-api/15.0/rest-api/index.html#_users_resource
+https://github.com/keycloak/keycloak-nodejs-admin-client
+https://stackoverflow.com/questions/48507224/cant-access-keycloak-rest-api-methods-404
+https://www.keycloak.org/docs-api/17.0/rest-api/index.html
+https://auth.docs.cern.ch/user-documentation/oidc/oidc/
+https://github.com/keycloak/keycloak-documentation
+https://www.baeldung.com/postman-keycloak-endpoints
+
+
+admin/realms/master
+realms/master/protocol/openid-connect/token
+
+
+keycloak:
+  container_name: keycloak
+  image: jboss/keycloak:15.0.2
+  environment:
+    - KEYCLOAK_USER=keycloak
+    - KEYCLOAK_PASSWORD=keycloak
+    - DB_VENDOR=h2
+    - SIP_AUTH_OIDC_JWKS_URL=http://keycloak:8080/auth/realms/test/protocol/openid-connect/certs
+    - SIP_AUTH_BACKEND_CLIENT_ID=my-application-client
+  command: -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.file=/tmp/realm-export.json -Dkeycloak.migration.strategy=OVERWRITE_EXISTING
+  volumes:
+    - "$PWD/keycloak/realm-export.json:/tmp/realm-export.json"
+  ports:
+    - "8181:8080"
+
+
+
+docker exec -it keycloak /opt/jboss/keycloak/bin/standalone.sh -Djboss.socket.binding.port-offset=100 -Dkeycloak.migration.action=export -Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.usersExportStrategy=REALM_FILE -Dkeycloak.migration.file=/tmp/realm-export.json
+docker cp keycloak:/tmp/realm-export.json keycloak/realm-export.json
+
+
+curl    -d "client_id=admin-cli" \
+        -d "username=$ADMIN_NAME" \
+        -d "password=$ADMIN_PASSWORD" \
+        -d "grant_type=password" \
+        https://$KEYCLOAK_IP/auth/realms/master/protocol/openid-connect/token
+
+curl -X GET https://$KEYCLOAK_IP/auth/admin/realms/$REALM_NAME/users
+    -H "Content-Type: application/json" \
+    -H "Authorization: bearer $ACCESS_TOKEN"
+
+curl -X GET https://$KEYCLOAK_IP/auth/admin/realms/$REALM_NAME/roles
+    -H "Content-Type: application/json" \
+    -H "Authorization: bearer $ACCESS_TOKEN"
+
+curl \
+  -d "client_id=admin-cli" \
+  -d "username=admin" \
+  -d "password=secret" \
+  -d "grant_type=password" \
+  "http://localhost:8080/auth/realms/master/protocol/openid-connect/token"
+
+curl \
+  -H "Authorization: bearer eyJhbGciOiJSUzI...." \
+  "http://localhost:8080/auth/admin/realms/master/users"
+
+curl \
+  -H "Authorization: bearer eyJhbGciOiJSU...." \
+  "http://localhost:8080/auth/admin/realms/master/users/349f67de-36e6-4552-ac54-e52085109616"
+
+
+----------------------------------------------------------------------------------------
+
+https://trigodev.com/blog/how-to-customize-keycloak-themes
+https://www.keycloak.org/downloads
+https://www.keycloak.org/server/containers
+https://www.keycloak.org/getting-started/getting-started-docker
+https://hub.docker.com/r/jboss/keycloak/
+https://hub.docker.com/r/jboss/keycloak/tags
+https://github.com/keycloak/keycloak
+https://github.com/keycloak/keycloak-containers
+https://hub.docker.com/r/bitnami/keycloak/
+https://hub.docker.com/layers/jboss/keycloak/4.2.1.Final/images/sha256-d5ae757bfb0f081eeb67dfc606075efcbe2963713dcdfc05439ceda38d5251db
+https://github.com/keycloak/keycloak-documentation/blob/main/server_admin/topics/admin-cli.adoc
+https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/topics/admin-cli.html
+https://access.redhat.com/documentation/de-de/red_hat_single_sign-on/7.3/html/server_administration_guide/the_admin_cli
+https://access.redhat.com/documentation/en-us/red_hat_single_sign-on/7.1/html/server_administration_guide/admin_cli
+https://keycloak2.rssing.com/chan-63525313/article51.html
+https://www.keycloak.org/getting-started/getting-started-docker
+https://www.keycloak.org/server/containers
+https://quay.io/repository/keycloak/keycloak?tab=tags&tag=latest
+https://quay.io/repository/keycloak/keycloak?tab=tags&quot;&gt;Keycloak
+
+
+
+docker run -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:21.0.0 start-dev
+
+podman|docker run --name mykeycloak -p 3000:8443 \
+        -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=change_me \
+        mykeycloak \
+        start --optimized --hostname-port=3000
+
+
+podman|docker run --name mykeycloak -p 8080:8080 \
+        -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=change_me \
+        quay.io/keycloak/keycloak:latest \
+        start-dev
+
+
+podman|docker run --name keycloak_unoptimized -p 8080:8080 \
+        -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=change_me \
+        -v /path/to/realm/data:/opt/keycloak/data/import \
+        quay.io/keycloak/keycloak:latest \
+        start-dev --import-realm
+
+
+docker run --name keycloak -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin bitnami/keycloak:latest
+
+
+docker run --name keycloak \
+  -e KEYCLOAK_EXTRA_ARGS="-Dkeycloak.profile.feature.scripts=enabled" \
+  bitnami/keycloak:latest
+
+
+docker run --name keycloak \
+  -v /path/to/init-scripts:/docker-entrypoint-initdb.d \
+  bitnami/keycloak:latest
+
+
+version: '2'
+services:
+  postgresql:
+    image: docker.io/bitnami/postgresql:latest
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - POSTGRESQL_USERNAME=bn_keycloak
+      - POSTGRESQL_DATABASE=bitnami_keycloak
+    volumes:
+      - 'postgresql_data:/bitnami/postgresql'
+  keycloak:
+    image: docker.io/bitnami/keycloak:latest
+    ports:
+      - "80:8080"
+    environment:
+      - KEYCLOAK_CREATE_ADMIN_USER=true
+    depends_on:
+      - postgresql
+    volumes:
+      - './mynewtheme:/opt/bitnami/keycloak/themes/mynewtheme'
+volumes:
+  postgresql_data:
+    driver: local
+
+
+
+....
+
+
+
+###################################################
+keycloak:21.0.0
+###################################################
+http://localhost:8080/
+http://0.0.0.0:8080/admin/master/console/#/master/clients/643d34af-290d-4385-8a4a-766ec2f25700/serviceAccount
+
+API
+
+http://0.0.0.0:8080/realms/master
+http://0.0.0.0:8080/realms/master/protocol/openid-connect
+http://0.0.0.0:8080/realms/master/account
+
+http://0.0.0.0:8080/realms/master/protocol/openid-connect/auth
+http://0.0.0.0:8080/realms/master/protocol/openid-connect/token
+http://0.0.0.0:8080/realms/master/.well-known/openid-configuration
+http://0.0.0.0:8080/realms/master/protocol/openid-connect/userinfo
+http://0.0.0.0:8080/realms/master/protocol/openid-connect/logout
+
+
+---------------------
+keycloak:19.0.3
+---------------------
+https://github.com/keycloak/keycloak/issues/10559
+
+
+podman run --rm -it -p 8080:8080 -p 8443:8443 quay.io/keycloak/keycloak:17.0.0 start-dev --metrics-enabled=true
+podman run --rm -it -p 8080:8080 -p 8443:8443 quay.io/keycloak/keycloak:17.0.0 start --hostname=localhost:8080 --metrics-enabled=true
+podman run --rm -it -p 8080:8080 -p 8443:8443 quay.io/keycloak/keycloak:17.0.0 start-dev --metrics-enabled=true
+
+
+version: '2'
+services:
+  keycloackwpdev:
+    tty: true
+    image: quay.io/keycloak/keycloak:19.0.3
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    ports:
+      - "8080:8080"
+    command:
+      - start-dev --metrics-enabled=true
+
+
+curl -i 'http://localhost:8080/health'
+curl -i 'http://localhost:8080/metrics' # OK
+
+
+
+
+{
+"error": "RESTEASY003210: Could not find resource for full path: http://localhost:18080/auth/admin/realms/master/users"
+}
+
+
+/bin/kc.sh bin/kc.sh --features-disabled=admin-api,admin,admin2
+
+API
+
+http://0.0.0.0:8080/realms/master
+http://0.0.0.0:8080/realms/master/protocol/openid-connect
+http://0.0.0.0:8080/realms/master/account
+
+http://0.0.0.0:8080/realms/master/protocol/openid-connect/auth
+http://0.0.0.0:8080/realms/master/protocol/openid-connect/token
+http://0.0.0.0:8080/realms/master/.well-known/openid-configuration
+http://0.0.0.0:8080/realms/master/protocol/openid-connect/userinfo
+http://0.0.0.0:8080/realms/master/protocol/openid-connect/logout
+
+http://0.0.0.0:8080/realms/master/protocol/openid-connect/certs
+
+
+http://localhost:8080/admin/realms/master/users
+{
+  "error": "HTTP 401 Unauthorized"
+}
+
+
+curl http://localhost:8080/metrics
+
+
+
+
+https://developers.redhat.com/blog/2020/11/24/authentication-and-authorization-using-the-keycloak-rest-api#keycloak_connection_using_a_java_application
+https://www.keycloak.org/docs/14.0/authorization_services/
+https://www.keycloak.org/docs-api/17.0/rest-api/
+
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------------
+
+https://stackoverflow.com/questions/46882610/keycloak-api-always-returns-401
+https://itecnote.com/tecnote/getting-user-keycloak-not-found-exception/
+https://www.apiman.io/apiman-docs/user-guide/2.2.3.Final/gateway/policies.html
+https://doc.scheer-pas.com/display/APIMGMNT/Policies
+https://www.keycloak.org/docs-api/11.0/rest-api/index.html#_users_resource
+https://www.keycloak.org/server/all-config?q=relative#_metrics
+https://www.keycloak.org/docs-api/15.0/rest-api/index.html
+https://www.keycloak.org/docs-api/17.0/rest-api/
+https://www.marcus-povey.co.uk/2020/10/12/using-the-keycloak-accounts-management-api/
+https://developers.redhat.com/blog/2020/11/24/authentication-and-authorization-using-the-keycloak-rest-api#authentication_versus_authorization
+https://developers.redhat.com/blog/2020/11/24/authentication-and-authorization-using-the-keycloak-rest-api#keycloak_sso_demo
+https://www.keycloak.org/docs/latest/authorization_services/
+https://medium.com/@mihirrajdixit/getting-started-with-service-accounts-in-keycloak-c8f6798a0675
+https://developers.redhat.com/blog/2020/11/24/authentication-and-authorization-using-the-keycloak-rest-api#keycloak_connection_using_a_java_application
+https://datmt.com/backend/integrate-keycloak-with-spring-boot-step-by-step/
+https://www.appsloveworld.com/springboot/100/57/keycloak-http-401-unauthorized-while-creating-new-user-using-spring-boot-service
+https://github.com/keycloak/keycloak/issues/10556
+https://stackoverflow.com/questions/46882610/keycloak-api-always-returns-401
+https://keycloak.discourse.group/t/always-receiving-error-401-from-web-app-using-keycloak/3922/12
+https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/topics/clients/oidc/service-accounts.html
+https://stackoverflow.com/questions/52238839/access-keycloak-rest-admin-api-using-a-service-account-client-credential-grant
+https://www.keycloak.org/docs/latest/server_admin/index.html#_service_accounts
+https://www.keycloak.org/docs/latest/server_admin/index.html#_service_accounts
+https://www.keycloak.org/docs/latest/server_admin/
+https://www.todaystechnology.org/post/secure-spring-rest-api-using-openid-connect-and-keycloak-part-2
+https://www.todaystechnology.org/post/secure-spring-rest-api-using-openid-connect-and-keycloak-part-1
+https://docs.codenow.com/docs/java-spring-boot-complex-examples/secured-spring-boot-rest-api-with-keycloak
+https://blogs.oracle.com/coretec/post/sso-in-oracle-verrazzano-mit-keycloak
+
+
+https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/topics/sessions/timeouts.html
+https://github.com/keycloak/keycloak-documentation/blob/main/server_admin/topics/sessions/timeouts.adoc
+https://www.keycloak.org/docs/9.0/server_admin/
+https://docs.cloudblue.com/cbc/20.4/premium/content/Identity-Provider/Changing-ID-Token-Expiration-Period.htm
+https://documentation.abas.cloud/en/abas-keycloak/token-timeouts.html
+
+
+keycloak.access.token.timeout auf 30
+keycloak.refresh.token.timeout auf 60
+
+
+###############################################################
+Keycloak Integration in Angular Application
+###############################################################
+
+https://dev.to/anjnkmr/keycloak-integration-in-angular-application-5a43
+
+"keycloak-angular": "^8.4.0",
+"keycloak-js": "^15.0.2",
+
+"keycloak-angular": "^8.1.0",
+"keycloak-js": "^10.0.2",
+
+keycloak: 10.0.1
+
+
+npm i --save keycloak-js
+npm i --save keycloak-angular
+
+<script src="https://sso-blabla.com/auth/js/keycloak.js"></script>
+const Keycloak = window.Keycloak;
+
+
+

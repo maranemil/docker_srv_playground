@@ -1,0 +1,20 @@
+version: '2'
+services:
+  keycloack:
+    tty: true
+    image: quay.io/keycloak/keycloak:21.0.0
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    ports:
+      - "8080:8080"
+    command:
+      - start-dev
+
+#ERROR: You need local access to create the initial admin user.
+#https://keycloak.discourse.group/t/keycloak-17-impossible-to-create-initial-admin-user/14474
+#
+#FIX
+#/opt/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --client admin
+#KEYCLOAK_ADMIN=admin
+#KEYCLOAK_ADMIN_PASSWORD=admin
