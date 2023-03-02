@@ -9,12 +9,16 @@ services:
     ports:
       - "8080:8080"
     command:
-      - start-dev
+      - start-dev --log-level=DEBUG
 
-#ERROR: You need local access to create the initial admin user.
-#https://keycloak.discourse.group/t/keycloak-17-impossible-to-create-initial-admin-user/14474
+# ERROR: You need local access to create the initial admin user.
+# https://keycloak.discourse.group/t/keycloak-17-impossible-to-create-initial-admin-user/14474
 #
-#FIX
-#/opt/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --client admin
-#KEYCLOAK_ADMIN=admin
-#KEYCLOAK_ADMIN_PASSWORD=admin
+# FIX
+# /opt/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --client admin
+# KEYCLOAK_ADMIN=admin
+# KEYCLOAK_ADMIN_PASSWORD=admin
+#
+# start-dev --log-level=DEBUG
+# start-dev --http-port=8080 --hostname-path=/auth --hostname-admin=/auth
+# start-dev --https-port=8181 --hostname=localhost:8181

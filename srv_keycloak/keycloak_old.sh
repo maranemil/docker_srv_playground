@@ -1,29 +1,24 @@
+#!/bin/bash
 
 ###################################################################
-# Test Endpoint
+# Test Endpoint keycloak version < 17
 ###################################################################
-
-KEYCLOAK_REALM="master" # master
-KECLOACK_DOMAIN="http://0.0.0.0:8080"
-KECLOACK_DOMAIN_ADMIN="http://localhost:8080"
-KECLOACK_CLIENT_ID="test-openid"
-KECLOACK_CLIENT_SECRET="---"
 
 ISLOCAL=true
 if [ $ISLOCAL == true ]
 then
   KEYCLOAK_REALM="master" # master
-  KECLOACK_DOMAIN="http://0.0.0.0:8080"
-  KECLOACK_DOMAIN_ADMIN="http://localhost:8080"
-  KECLOACK_CLIENT_ID="test-openid"
-  KECLOACK_CLIENT_SECRET="---"
+  KECLOACK_DOMAIN="http://0.0.0.0:8081"
+  KECLOACK_DOMAIN="http://localhost:8081"
+  KECLOACK_CLIENT_ID="test-client"
+  KECLOACK_CLIENT_SECRET="d3b29b24-583c-4e71-9fb7-bd1ba71105b1"
 fi
 
 # shellcheck disable=SC2034
-KEYCLOAK_ENDPOINT="$KECLOACK_DOMAIN/realms/$KEYCLOAK_REALM/protocol/openid-connect/auth"
-KEYCLOAK_ENDPOINT_TOKEN="$KECLOACK_DOMAIN/realms/$KEYCLOAK_REALM/protocol/openid-connect/token"
-KEYCLOAK_CONFIG_API="$KECLOACK_DOMAIN/realms/$KEYCLOAK_REALM/.well-known/openid-configuration"
-# miniOrange Oauth
+KEYCLOAK_ENDPOINT="$KECLOACK_DOMAIN/auth/realms/$KEYCLOAK_REALM/protocol/openid-connect/auth"
+KEYCLOAK_ENDPOINT_TOKEN="$KECLOACK_DOMAIN/auth/realms/$KEYCLOAK_REALM/protocol/openid-connect/token"
+KEYCLOAK_CONFIG_API="$KECLOACK_DOMAIN/auth/realms/$KEYCLOAK_REALM/.well-known/openid-configuration"
+
 # shellcheck disable=SC2034
 KEYCLOAK_SCOPE="openid"
 echo $KEYCLOAK_ENDPOINT
@@ -40,20 +35,24 @@ export KC_RESPONSE=$(curl -X POST $KEYCLOAK_ENDPOINT_TOKEN \
 # shellcheck disable=SC2034
 Response=$KC_RESPONSE
 KC_ACCESS_TOKEN=$(echo "$KC_RESPONSE"| jq -r .access_token)
-KC_ACCESS_TOKEN_REF=$(echo "$KC_RESPONSE"| jq -r .refresh_token)
-echo "$Response"
+#KC_ACCESS_TOKEN_REF=$(echo "$KC_RESPONSE"| jq -r .refresh_token)
+echo "$Response" | jq .
+
 
 #sleep 1
 echo "------------------------------------------------------"
-URLUSERS="$KECLOACK_DOMAIN_ADMIN/auth/admin/realms/$KEYCLOAK_REALM/users?max=3"
+URLUSERS="$KECLOACK_DOMAIN/auth/admin/realms/$KEYCLOAK_REALM/users"
 echo "$URLUSERS"
-curl -X GET "$URLUSERS"  -H "Content-Type: application/json" \
-  -H "Authorization: bearer $KC_ACCESS_TOKEN_REF" | jq .
+curl -X GET "$URLUSERS"  -H "Authorization: Bearer $KC_ACCESS_TOKEN" | jq .
 
 #sleep 1
 echo "------------------------------------------------------"
-URL_CLIENTS="$KECLOACK_DOMAIN_ADMIN/auth/admin/realms/$KEYCLOAK_REALM/count"
-URL_CLIENTS="$KECLOACK_DOMAIN_ADMIN/auth/admin/realms/$KEYCLOAK_REALM/clients"
-echo $URL_CLIENTS
-curl --location --request GET  "$URL_CLIENTS" -H "Authorization: Bearer $KC_ACCESS_TOKEN" | jq .
+URLUSERS="$KECLOACK_DOMAIN/auth/admin/realms/$KEYCLOAK_REALM/users/count"
+echo $URLUSERS
+curl --location --request GET  "$URLUSERS" -H "Authorization: Bearer $KC_ACCESS_TOKEN" | jq .
 
+
+# http://localhost:8081/auth/realms/master/protocol/openid-connect/auth
+# http://localhost:8081/auth/realms/master/protocol/openid-connect/token
+# http://localhost:8081/auth/realms/master/.well-known/openid-configuration
+# sudo apt-get install -y jq

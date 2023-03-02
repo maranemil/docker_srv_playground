@@ -378,10 +378,8 @@ https://www.keycloak.org/docs/9.0/server_admin/
 https://docs.cloudblue.com/cbc/20.4/premium/content/Identity-Provider/Changing-ID-Token-Expiration-Period.htm
 https://documentation.abas.cloud/en/abas-keycloak/token-timeouts.html
 
-
 keycloak.access.token.timeout auf 30
 keycloak.refresh.token.timeout auf 60
-
 
 ###############################################################
 Keycloak Integration in Angular Application
@@ -397,12 +395,134 @@ https://dev.to/anjnkmr/keycloak-integration-in-angular-application-5a43
 
 keycloak: 10.0.1
 
-
 npm i --save keycloak-js
 npm i --save keycloak-angular
 
 <script src="https://sso-blabla.com/auth/js/keycloak.js"></script>
 const Keycloak = window.Keycloak;
+
+
+
+
+------------------------------------------------------------
+
+https://github.com/keycloak/keycloak/
+https://www.keycloak.org/docs/latest/release_notes/
+https://www.keycloak.org/downloads
+https://www.keycloak.org/community
+
+https://ranchermanager.docs.rancher.com/v2.6/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/authentication-config/configure-keycloak-oidc
+
+https://github.com/keycloak/keycloak/issues/10277
+https://keycloak.discourse.group/t/keycloak-17-0-0-results-in-page-not-found-for-admin-url/13682/10
+https://www.keycloak.org/migration/migrating-to-quarkus
+https://www.keycloak.org/server/all-config
+
+bin/kc.[sh|bat] start-dev --http-relative-path /auth
+
+
+./kc.sh start-dev --log-level=DEBUG
+./kc.sh build --http-relative-path=/auth
+./kc.sh start-dev --http-port=8080 --hostname-admin=/auth
+./kc.sh start-dev --http-port=8080 --hostname-path=/auth
+./kc.sh start-dev --http-port=8080 --hostname-path=/auth --hostname-admin=/auth
+./kc.sh start --https-port=8181 --hostname=localhost:8181
+
+./kc.sh show-config
+./kc.sh start --spi-connections-jpa-default-migration-strategy=update
+
+
+    env:
+        KEYCLOAK_ADMIN: "admin"
+        KEYCLOAK_ADMIN_PASSWORD: "admin"
+        KC_DB_URL: "jdbc:mariadb://xxx:3306/keycloak"
+        KC_DB_USERNAME: "keycloak"
+        KC_DB_PASSWORD: "xxx"
+        KC_DB: "mariadb"
+        KC_HOSTNAME: "xxx"
+        KC_HTTPS_CERTIFICATE_FILE: "/etc/x509/https/tls.crt"
+        KC_HTTPS_CERTIFICATE_KEY_FILE: "/etc/x509/https/tls.key"
+        KC_HOSTNAME_ADMIN=<same-hostname>
+
+
+    env:
+        KEYCLOAK_ADMIN: "kc-admin"
+        KEYCLOAK_ADMIN_PASSWORD: "{{ kcpassword }}"
+        KC_DB_URL: "jdbc:mariadb://{{ sqlhost }}:3306/keycloak"
+        KC_DB_USERNAME: "keycloak"
+        KC_DB_PASSWORD: "{{ dbpassword }}"
+        KC_DB: "mariadb"
+        KC_HOSTNAME: "{{ certificate_name }}"
+        KC_HOSTNAME_STRICT: "false"
+        KC_PROXY: "passthrough"
+        KC_HTTP_HOST: "0.0.0.0"
+        KC_HTTP_PORT: "8080"
+        KC_HTTP_ENABLED: "true"
+        KC_HTTP_RELATIVE_PATH: "/auth" # <--fix
+
+    env:
+	JAVA_OPTS: "-Djava.security.egd=file:/dev/./urandom -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/home -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
+	KC_PROXY: "edge"
+	KEYCLOAK_ADMIN: "admin"
+	KEYCLOAK_ADMIN_PASSWORD: "xxx"
+	KC_DB_URL: "jdbc:mariadb://xxxx:3306/keycloak"
+	KC_DB_USERNAME: "xxx"
+	KC_DB_PASSWORD: "xxx"
+	KC_DB: "mariadb"
+	KC_HTTP_RELATIVE_PATH: "/"
+	KC_HOSTNAME: "xxx.com"
+	KC_HOSTNAME_ADMIN: "admin-xxx.com"
+	KC_HTTP_ENABLED: "true"
+
+
+-----------------------------------------------------------------------------
+
+https://github.com/camunda-community-hub/camunda-platform-7-keycloak/blob/master/README.md
+https://github.com/camunda-community-hub/camunda-platform-7-keycloak
+
+version: "3.3"
+
+services:
+  jboss.keycloak:
+    build: .
+    image: quay.io/keycloak/keycloak:19.0.3-legacy
+    restart: always
+    environment:
+      TZ: Europe/Berlin
+      KEYCLOAK_USER: keycloak
+      KEYCLOAK_PASSWORD: keycloak1!
+      DB_VENDOR: h2
+    ports:
+      - "8443:8443"
+
+Maven test setup
+
+KEYCLOAK_URL: https://localhost:8443/auth
+-----------------------------------------------------------------------------
+
+
+Error! An unexpected server error has occurred
+
+define( 'WP_DEBUG', false );
+define( 'WP_DEBUG_LOG', false);
+define( 'WP_DEBUG_DISPLAY', false );
+@ini_set("html_errors", false);
+@ini_set("error_reporting", false);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
