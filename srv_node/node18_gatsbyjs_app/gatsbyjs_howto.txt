@@ -1,0 +1,343 @@
+
+##########################################
+gatsbyjs nodejs18
+##########################################
+
+
+
+version: "3"
+
+services:
+    node-web-app:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      tty: true
+      stdin_open: true
+      volumes:
+        - ./app:/usr/src/app
+      ports:
+        - "8000:8000"
+
+
+FROM node:18
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+EXPOSE 8000
+
+
+
+
+https://www.gatsbyjs.com/docs/tutorial/part-0/
+https://www.gatsbyjs.com/docs/tutorial/part-1/
+https://www.gatsbyjs.com/docs/tutorial/part-2/
+https://www.gatsbyjs.com/gatsby-cheat-sheet.pdf
+https://www.gatsbyjs.com/plugins/@bond-london/simple-gatsby-source-graphcms/
+
+npm init -y
+npm install -g gatsby-cli
+gatsby --version
+gatsby --help
+
+
+gatsby new
+cd my-gatsby-site
+npm run develop
+
+gatsby develop -p 3000 -o
+gatsby develop
+gatsby develop -p 8001
+npx gatsby develop --port 80
+gatsby develop --host 0.0.0.0 --port 80 # On Your Network:  http://172.21.0.2:80/
+
+
+netstat -tulpn | grep :80
+kill -9 $(lsof -i TCP:8000 | grep LISTEN | awk '{print $2}')
+
+apt-get update
+apt-get install libcap2-bin
+setcap cap_net_bind_service=+ep `readlink -f \`which node\``
+
+..
+
+npm install
+
+// package 
+"gatsby": "^5.4.0"
+"gatsby-plugin-postcss": "^6.4.0",
+"postcss": "^8.4.21",
+"autoprefixer": "^10.4.13",
+"tailwindcss": "^3.2.4",
+
+
+
+# restart docker 
+rm -rf app/my-gatsby-site/.cache/
+
+
+-------------------------------------------------------------
+
+src/pages/index.js
+http://172.21.0.2/
+
+// Step 1: Import React
+import * as React from 'react'
+// Step 2: Define your component
+const IndexPage = () => {
+  return (
+    <main>
+      <h1>Welcome to my Gatsby site!</h1>
+      <p>I'm making this by following the Gatsby Tutorial.</p>
+    </main>
+  )
+}
+// You'll learn about this in the next task, just copy it for now
+export const Head = () => <title>Home Page</title>
+// Step 3: Export your component
+export default IndexPage
+
+-------------------------------------------------------------
+
+src/pages/about.js
+http://172.21.0.2/about/
+
+
+// Step 1: Import React
+import * as React from 'react'
+// Step 2: Define your component
+const AboutPage = () => {
+  return (
+    <main>
+      <h1>About Me</h1>
+      <p>Hi there! I'm the proud creator of this site, which I built with Gatsby.</p>
+    </main>
+  )
+}
+// export const Head = () => <title>About Me</title>
+export const Head = () => (
+  <>
+    <title>About Me</title>
+    <meta name="description" content="Your description" />
+  </>
+)
+// Step 3: Export your component
+export default AboutPage
+
+
+-------------------------------------------------------------
+
+# add links
+
+src/pages/index.js
+Copysrc/pages/index.js: copy code to clipboard
+import * as React from 'react'
+import { Link } from 'gatsby'
+
+const IndexPage = () => {
+  return (
+    <main>
+      <h1>Welcome to my Gatsby site!</h1>
+      <Link to="/">Index</Link> | <Link to="/about">About</Link>
+      <p>I'm making this by following the Gatsby Tutorial.</p>
+    </main>
+  )
+}
+
+export const Head = () => <title>Home Page</title>
+
+export default IndexPage
+
+-------------------------------------------------------------
+# Create a reusable layout component
+
+src/components/layout.js
+
+
+import * as React from 'react'
+import { Link } from 'gatsby'
+
+const Layout = ({ pageTitle, children }) => {
+  return (
+    <div>
+      <nav>
+        <ul>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/about">About</Link></li>
+        </ul>
+      </nav>
+      <main>
+        <h1>{pageTitle}</h1>
+        {children}
+      </main>
+    </div>
+  )
+}
+
+export default Layout
+-------------------------------------------------------------
+
+src/pages/gallery.js
+
+import React from 'react'
+import Frame from '../components/frame'
+
+const GalleryPage = () => {
+  return (
+    <Frame>
+      <p>This will be passed in as children</p>
+    </Frame>
+  )
+}
+
+export default GalleryPage
+-------------------------------------------------------------
+src/components/frame.js
+
+import React from 'react'
+
+const Frame = ({ children }) => {
+  return (
+    <div>
+      <h1>This is the page title</h1>
+      { children }
+    </div>
+  )
+}
+
+export default Frame
+
+-------------------------------------------------------------
+
+src/pages/index.js
+
+import * as React from 'react'
+import Layout from '../components/layout'
+
+const IndexPage = () => {
+  return (
+    <Layout pageTitle="Home Page">
+      <p>I'm making this by following the Gatsby Tutorial.</p>
+    </Layout>
+  )
+}
+
+export const Head = () => <title>Home Page</title>
+
+export default IndexPage
+
+-------------------------------------------------------------
+
+src/pages/about.js
+
+import * as React from 'react'
+import Layout from '../components/layout'
+
+const AboutPage = () => {
+  return (
+    <Layout pageTitle="About Me">
+      <p>Hi there! I'm the proud creator of this site, which I built with Gatsby.</p>
+    </Layout>
+  )
+}
+
+export const Head = () => <title>About Me</title>
+
+export default AboutPage
+
+-------------------------------------------------------------
+
+
+src/components/layout.module.css
+
+
+.container {
+  margin: auto;
+  max-width: 500px;
+  font-family: sans-serif;
+}
+.heading {
+  color: rebeccapurple;
+}
+.nav-links {
+  display: flex;
+  list-style: none;
+  padding-left: 0;
+}
+.nav-link-item {
+  padding-right: 2rem;
+}
+.nav-link-text {
+  color: black;
+}
+
+-------------------------------------------------------------
+
+src/components/layout.js
+
+import * as React from 'react'
+import { Link } from 'gatsby'
+import { container } from './layout.module.css'
+
+const Layout = ({ pageTitle, children }) => {
+  return (
+    <div className={container}>
+      <nav>
+        <ul>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/about">About</Link></li>
+        </ul>
+      </nav>
+      <main>
+        <h1>{pageTitle}</h1>
+        {children}
+      </main>
+    </div>
+  )
+}
+
+export default Layout
+
+-------------------------------------------------------------
+
+src/components/layout.js
+
+import * as React from 'react'
+import { Link } from 'gatsby'
+import {
+  container,
+  heading,
+  navLinks,
+  navLinkItem,
+  navLinkText
+} from './layout.module.css'
+
+const Layout = ({ pageTitle, children }) => {
+  return (
+    <div className={container}>
+      <nav>
+        <ul className={navLinks}>
+          <li className={navLinkItem}>
+            <Link to="/" className={navLinkText}>
+              Home
+            </Link>
+          </li>
+          <li className={navLinkItem}>
+            <Link to="/about" className={navLinkText}>
+              About
+            </Link>
+          </li>
+        </ul>
+      </nav>
+      <main>
+        <h1 className={heading}>{pageTitle}</h1>
+        {children}
+      </main>
+    </div>
+  )
+}
+
+export default Layout
+
+
+
+
