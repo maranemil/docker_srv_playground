@@ -1,0 +1,173 @@
+
+#######################################################
+React / GraphQL - MERN Stack 
+#######################################################
+
+https://www.youtube.com/watch?v=n1mdAPFq2Os
+https://github.com/hidjou/classsed-graphql-mern-apollo/tree/master
+https://www.youtube.com/watch?v=ldYcgPKEZC8
+https://github.com/ousecTic/pern-todo-app
+
+
+npm init -y
+touch index.js .gitignore
+git init
+npm install apollo-server graphql mongoose
+
+
+index.js
+--------------
+const { ApolloServer } = require("apollo-server");
+const gql = require("graphql-tag");
+const mongoose = require('mongoose');
+const { MONGODB } = require('./config.js')
+
+const typeDefs = gql'
+  type Query{
+     sayHi: String!  
+  }
+';
+
+const resolvers = {
+ Query: {
+   saiHy: () => 'Hello World'
+ }
+}
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers
+});
+
+mongoose.connect( MONGODB, { useNewUrlParser: true })
+  .then(() => {
+       return server.listen({ port: 5000})
+  })
+  .then(res => {
+       console.log("runing...$(res.url)")
+  });
+  
+
+/*server.listen({ port: 5000})
+ .then(res => {
+   console.log("runing...$(res.url)")
+ });*/
+ 
+ 
+ node index
+ localhost:5000
+ 
+ 
+ 
+ config.js
+ --------------
+ mondule.exports  = {
+   MONGODB: 'mongodb+srv://classed:passwd@cluster...mongodb.net/test?retryWrites=true'
+ }
+ 
+ 
+ 
+ 
+ 
+ models/User.js
+ --------------
+ const {model, Schema} = require("mongoose");
+ const userSchema = new Schema({
+ 	username: String
+ })
+ module.exports = model("User", userSchema);
+ 
+ 
+ 
+update  index.js
+ --------------
+const typeDefs = gql'
+  type User{
+     username: String!  
+  }
+';
+
+const resolvers = {
+ Query: {
+   async getUsers(){
+   	try{
+   	  const users = await User.find();
+   	  return users;
+   	}
+   	catch(err){
+   	  throw new Error(err);
+   	}  
+   
+   }
+ }
+}
+
+
+query users
+------------------------
+query{
+  getUsers{
+    username
+  }
+}
+
+
+
+npm -i -D  nodemon
+bpm start
+
+
+users.js
+------------------------
+...
+const token = jwt.sign({
+ id: res.id,
+ email: res.email,
+ username: res.username 
+}, SECRET_KEY, { expiresIn: '1h'});
+
+
+ 
+graphql register user
+------------------------
+mutation{
+  register(registerInput:{
+    username: "user1",
+    password: "123",
+    confirmPassword: "123",
+    email: "user214@email.com"
+  }){
+  	id
+  	email
+  	token
+  	username
+  	creatAt  
+  }
+}
+
+
+install client
+------------------------
+npm create-react-app client
+cd client
+npm start
+localhost:4000
+npm install @apollo/react-hooks apollo-cache-inmemory apollo-link-http apollo-client
+
+# create apollo provider for React
+# install Chrome extension "Apollo Client Developer Tools"
+
+npm install react-router-dom semantic-ui-css semantic-ui-react
+
+
+
+
+
+
+
+
+
+
+
+
+

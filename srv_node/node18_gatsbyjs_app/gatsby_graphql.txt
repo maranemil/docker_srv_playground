@@ -1,0 +1,224 @@
+
+
+
+#######################################################
+Gatsby grapthQL
+#######################################################
+
+https://www.gatsbyjs.com/plugins
+https://www.gatsbyjs.com/plugins/gatsby-plugin-sass/
+https://www.gatsbyjs.com/plugins/gatsby-plugin-material-ui/
+https://www.gatsbyjs.com/plugins/gatsby-source-stripe/
+https://www.youtube.com/watch?v=kzWIUX3CpuI
+https://www.youtube.com/watch?v=kIauoqkdDXQ
+
+
+
+gatsby-config.js
+-----------------
+module.exports = {
+  siteMetadata: {
+    title: "Some Text"
+  },
+  plugins: [
+    "gatsby-plugin-sass
+  ]
+}
+
+
+http://localhost:8000/___graphql
+-----------------
+query {
+  site {
+    siteMetadata {
+      title
+    }
+  }
+}
+
+
+import { graphql, useStaticQuery } from "gatsby"
+-----------------
+const data = useStaticQuery(graphql '
+	query {
+	  site {
+	    siteMetadata {
+	      title
+	    }
+	  }
+	}
+')
+
+<h3> {data.site.siteMetadata.title} </h3>
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+env
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://v3.gatsbyjs.com/docs/using-graphql-playground/
+https://www.gatsbyjs.com/docs/how-to/querying-data/running-queries-with-graphiql/
+https://github.com/gatsbyjs/gatsby-es/blob/master/docs/docs/using-graphql-playground.md
+https://css-tricks.com/using-graphql-playground-with-gatsby/
+https://www.gatsbyjs.com/docs/reference/release-notes/migrating-from-v4-to-v5/
+https://dev.to/sjcodebook/replace-graphiql-with-graphql-playground-using-these-simple-steps-5bdl
+https://snyk.io/advisor/npm-package/gatsby-graphiql-explorer/example
+https://github.com/graphql/graphql-playground
+
+# npm install --save-dev cross-env
+# yarn add env-cmd --dev // npm install --save-dev env-cmd
+# npm install dotenv
+
+.env.development
+GATSBY_GRAPHQL_IDE=playground
+GATSBY_GRAPHQL_IDE=playground gatsby develop
+
+package.json
+-----------------
+...
+"scripts": {
+  ...
+  "develop: "env-cmd .env.development gatsby develop"
+
+}
+npm run develop
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+convert md files into html content
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://www.gatsbyjs.com/plugins/gatsby-source-filesystem
+https://www.gatsbyjs.com/plugins/gatsby-transformer-remark/?=tra
+
+npm install gatsby-source-filesystem
+npm install gatsby-transformer-remark
+
+dummyfile.md
+--------------------
+~~~
+title: "some title"
+date: "some date"
+~~~
+
+
+import { graphql, useStaticQuery } from "gatsby"
+-----------------
+const data = useStaticQuery(graphql '
+	query {
+	  allMarkdownRemark {
+	    edge {
+	      node{
+	      	frontmatter{
+	      	   title
+	      	}
+	      }
+	    }
+	  }
+	}
+')
+
+<ol> 
+{data.allMarkdownRemark.edges.map(edge) =>{
+	return (
+	  <li>{edge.node.frontmatter.title}</li>	
+	)
+}} 
+</ol>
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+gatsbyjs API referene
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://www.gatsbyjs.com/docs/reference/
+https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/
+https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/#apis
+https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/#onCreateNode
+https://nodejs.org/api/path.html
+https://nodejs.org/api/path.html#pathbasenamepath-suffix
+https://www.gatsbyjs.com/docs/tutorial/part-6/
+
+
+gatsby-node.js
+-----------------
+const path = require('path')
+
+moduel.exports.onCreateNode = {{ node, actions }} => {
+  const { createNodeField } = action
+  console.log(JSON.stringify(node, undefined, 4))
+  
+  if(node.internal.type ==="MarkdownRemark"){
+  	const slug = path.basename(node.fileAbsolutePath,'.md')
+  	console.log('-----------------',slug)
+  	createNodefield({
+  	  node,
+  	  name: 'slug',
+  	  value: slug
+  	})
+  }
+}
+
+moduel.exports.createPages = ({graphql, actions}) => {
+  const { createPage } = actions
+  const blogTemplate = path.resolve('./src/templates/blog.js') 
+  const res = await graphql({
+    query {'
+    	allMarkdownRemark {
+	    edges {
+	      node{
+	        fields{
+	          slug
+	        }
+	      }
+	   }
+	}
+    '}
+  })
+  
+  res.data.allMarkdownRemark.edge.forEach(edge) => {
+    createPage({
+      component: blogTemplate,
+      path: '/blog${edge.node.fields.slug}',
+      context: {
+      	slug: edge.node.fields.slug
+      }
+    })
+  }
+}
+
+
+graphql get data by fields
+-----------------
+query {
+  
+    $slug: String
+  }
+  markdownRemark {
+    fields: {
+      slug: {
+        eq: $slug    
+      }
+    }
+  } {
+      frontmatter{
+        title
+      }
+  }
+}
+
+
+graphql query vars 
+-----------------
+{
+  "slug":"some name"
+}
+
+
+
+
+
+https://www.npmjs.com/package/gatsby-plugin-sharp
+https://www.gatsbyjs.com/plugins/gatsby-plugin-sharp/
+
+
+...
+
+https://www.gatsbyjs.com/plugins/gatsby-source-contentful/
+https://www.contentful.com/developers/docs/tutorials/general/rich-text-and-gatsby/
+https://www.contentful.com/blog/building-rise-of-the-robots-with-gatsby-and-contentful/

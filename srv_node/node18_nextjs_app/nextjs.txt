@@ -223,8 +223,16 @@ export function Index() {
   );
 }
 
+-------------------------------------------------------------------
 
+https://nextjs.org/
+https://vercel.com/solutions/nextjs
+https://github.com/vercel/next.js
 
+NextJs Hosts
+https://www.netlify.com/
+https://www.heroku.com/
+https://vercel.com/
 
 -------------------------------------------------------------------
 

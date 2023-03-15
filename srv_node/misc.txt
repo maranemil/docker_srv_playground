@@ -20,3 +20,37 @@ https://docs.docker.com/samples/vuejs/
 https://github.com/nodejs/docker-node
 https://code.visualstudio.com/docs/containers/quickstart-node
 https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
+
+
+
+
+
+--------------------------------------------------------------
+React and TypeScript
+https://github.com/facebook/create-react-app
+https://github.com/weibenfalk/react-shopping-cart
+--------------------------------------------------------------
+
+https://fakestoreapi.com/
+https://strapi.io/
+
+#########################################
+Webpack
+#########################################
+
+https://www.youtube.com/watch?v=MpGLUVbqoYQ
+https://github.com/Colt/webpack-demo-app
+
+#########################################
+MERN PERN stack 
+#########################################
+
+https://www.youtube.com/watch?v=7CqJlxBYj-M
+https://github.com/beaucarnes/mern-exercise-tracker-mongodb
+https://www.youtube.com/watch?v=mrHNSanmqQ4
+https://github.com/beaucarnes/restaurant-reviews
+https://www.youtube.com/watch?v=RLtyhwFtXQA
+https://www.youtube.com/watch?v=J01rYl9T3BU
+https://www.youtube.com/watch?v=ldYcgPKEZC8
+
+
