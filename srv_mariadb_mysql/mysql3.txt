@@ -1,0 +1,23 @@
+#####################################################################################
+ERROR 1045 (28000): Acces denied for user 'username'@ 'localhost' (using password: NO)
+#####################################################################################
+
+mariadb docker image has bug
+
+# clean everything
+docker-compose down --rmi all --volumes
+docker container prune --force
+docker system prune --all --volumes --force
+docker system prune -a -f
+docker system prune -a
+
+
+docker cp dump.sql mysql_1:/tmp/dump.sql
+docker exec -i -t mysql_1 sh
+
+# login to mysql
+mysql -u root -p
+# example
+
+use db;
+source dump.sql
