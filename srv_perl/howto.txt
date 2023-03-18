@@ -1,0 +1,95 @@
+
+#############################################################
+perl docker
+#############################################################
+https://hub.docker.com/_/perl
+https://metacpan.org/pod/Carton
+https://github.com/perl-carton/carton
+https://www.perl.org/get.html
+https://www.perl.org/learn.html
+https://learn.perl.org/
+https://www.perl.org/docs.html
+https://perldoc.perl.org/perl
+https://perldoc.perl.org/perl#Tutorials
+https://www.perl.org/cpan.html
+https://metacpan.org/
+
+Dockerfile
+FROM perl:5.34
+COPY . /usr/src/myapp
+WORKDIR /usr/src/myapp
+CMD [ "perl", "./your-daemon-or-script.pl" ]
+Then, build and run the Docker image:
+
+# buld and run
+docker build -t my-perl-app .
+docker run -it --rm --name my-running-app my-perl-app
+
+# run
+docker run -it --rm --name my-running-script -v "$PWD":/usr/src/myapp -w /usr/src/myapp perl:5.34 perl your-daemon-or-script.pl
+
+
+docker run -it --name sleeping_beauty --rm perl:5.34 perl -E 'sleep 300'
+docker exec sleeping_beauty kill 1
+
+......
+# Creating a reusable Carton image for Perl projects
+FROM perl:5.34
+RUN cpanm Carton \
+    && mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+ONBUILD COPY cpanfile* /usr/src/app
+ONBUILD RUN carton install
+ONBUILD COPY . /usr/src/app
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Carton - Perl module dependency manager (aka Bundler for Perl)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+SYNOPSIS
+# On your development environment
+> cat cpanfile
+requires 'Plack', '0.9980';
+requires 'Starman', '0.2000';
+
+> carton install
+> git add cpanfile cpanfile.snapshot
+> git commit -m "add Plack and Starman"
+
+# Other developer's machine, or on a deployment box
+> carton install
+> carton exec starman -p 8080 myapp.psgi
+
+# carton exec is optional
+> perl -Ilocal/lib/perl5 local/bin/starman -p 8080 myapp.psgi
+> PERL5LIB=/path/to/local/lib/perl5 /path/to/local/bin/starman -p 8080 myapp.psgi
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Installing Perl modules
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+http://www.cpan.org/modules/INSTALL.html
+https://www.ibm.com/docs/en/product-master/12.0.0?topic=perl-installing-modules
+https://stackoverflow.com/questions/65865/whats-the-easiest-way-to-install-a-missing-perl-module
+https://metacpan.org/dist/PPM/view/bin/ppm.pl
+https://perlhelp.web.cern.ch/Components/ppm.html
+https://www.activestate.com/products/perl/ppm-perl-modules/
+https://www.oreilly.com/library/view/perl-in-a/0596002416/ch02s04s03s02.html
+https://www.perl.com/pub/2007/01/11/painless-ppm.html/
+https://stackoverflow.com/questions/398221/how-do-you-manage-perl-modules-when-using-a-package-manager
+
+
+perl -MCPAN -e 'install Foo'
+perl –MCPAN –e 'install <module_name>'
+perl -MCPAN -e shell
+perl -MCPAN -e "CPAN::Shell->force(qw(install Foo::Bar));"
+
+cpan App::cpanminus
+cpan HTML::Parser
+curl -L http://cpanmin.us | perl - --sudo App::cpanminus
+
+
+cpanm HTML::Parser
+
+perl ppm.pl
+ppm install
+ppm remove package1
+ppm search

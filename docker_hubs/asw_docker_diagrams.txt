@@ -1,0 +1,53 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+aws docker architecture diagrams
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+https://github.com/docker/awesome-compose
+https://www.serverless.com/examples
+https://github.com/serverless/examples
+https://www.serverless.com/framework/docs/tutorial
+https://aws.amazon.com/de/architecture/
+https://aws.amazon.com/de/architecture/icons/
+https://aws.amazon.com/de/architecture/reference-architecture-diagrams/
+https://creately.com/diagram-community/popular/t/aws-diagram
+https://www.cloudcraft.co/
+https://aws-quickstart.github.io/templates-examples.html#cfn-templates
+https://templates.cloudonaut.io/en/stable/ecs/
+https://templates.cloudonaut.io/en/stable/
+https://containersonaws.com/introduction/infrastructure-as-code/
+https://swagger.io/
+https://framework.frictionlessdata.io/docs/schemes/aws.html
+https://github.com/aws-quickstart/quickstart-examples
+https://www.serverless.com/framework/docs/providers/aws/guide/serverless.yml
+https://www.serverless.com/framework/docs/examples-and-tutorials
+https://docs.docker.com/get-started/07_multi_container/
+https://docs.docker.com/get-started/08_using_compose/
+https://cloud.google.com/architecture/best-practices-for-building-containers?hl=de
+https://www.diagrams.net/blog/diagrams-docker-app
+http://agilemodeling.com/artifacts/deploymentDiagram.htm
+https://www.uml-diagrams.org/deployment-diagrams.html
+https://www.uml-diagrams.org/component-diagrams.html
+https://developer.ibm.com/articles/the-component-diagram/
+https://www.uml-diagrams.org/composite-structure-diagrams.html
+https://medium.com/@krishnakummar/creating-block-diagrams-from-your-docker-compose-yml-da9d5a2450b4
+https://aws.amazon.com/de/blogs/opensource/why-use-docker-containers-for-machine-learning-development/
+https://www.codeproject.com/Articles/1134611/Host-Multiple-Websites-on-a-Single-Host-with-Docke
+https://blog.neuvector.com/article/docker-swarm-container-networking
+https://docs.docker.com/compose/samples-for-compose/
+https://github.com/docker/awesome-compose/tree/master/official-documentation-samples
+https://doc.traefik.io/traefik/user-guides/docker-compose/basic-example/
+https://code.visualstudio.com/docs/containers/docker-compose
+
+
+docker run --rm -it --name dcv -v /home/user/blog:/input pmsipilot/docker-compose-viz render -m image --force docker-compose.yml --output-file=topology.png --no-volumes --no-ports --no-networks
+
+
+docker run — rm -it — name dcv -v /home/user/blog:/input pmsipilot/docker-compose-viz render -m image — force docker-compose.yml — output-file=topology-ports.png — no-volumes — no-networks
+
+docker run — rm -it — name dcv -v /home/user/blog:/input pmsipilot/docker-compose-viz render -m image — force docker-compose.yml — output-file=topology-volumes.png — no-ports — no-networks
+
+
+
+docker run -it --rm --name="draw" -p 8080:8080 -p 8443:8443 jgraph/drawio
+
+docker run -it -m1g -e LETS_ENCRYPT_ENABLED=true -e PUBLIC_DNS=drawio.example.com --rm --name="draw" -p 80:80 -p 443:8443 jgraph/drawio

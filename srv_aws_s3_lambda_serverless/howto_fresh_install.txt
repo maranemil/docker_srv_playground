@@ -99,3 +99,38 @@ start-lambda:
 invoke2:
 	aws lambda invoke --function-name "HelloWorldFunction" --payload '{ "name": "Bob" }' --no-verify-ssl response.json --endpoint-url "http://localhost:3001"
 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+aws docs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://docs.aws.amazon.com/ec2/?icmpid=docs_homepage_featuredsvcs
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html
+https://docs.aws.amazon.com/cli/latest/reference/ec2/
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/amazon-linux-ami-basics.html
+https://docs.aws.amazon.com/linux/index.html
+https://docs.aws.amazon.com/ec2/?icmpid=docs_homepage_compute
+https://docs.aws.amazon.com/batch/?icmpid=docs_homepage_compute
+https://docs.aws.amazon.com/imagebuilder/?icmpid=docs_homepage_compute
+https://docs.aws.amazon.com/lambda/?icmpid=docs_homepage_compute
+https://docs.aws.amazon.com/lambda/?icmpid=docs_homepage_serverless
+https://docs.aws.amazon.com/apigateway/?icmpid=docs_homepage_serverless
+https://docs.aws.amazon.com/eventbridge/?icmpid=docs_homepage_serverless
+https://docs.aws.amazon.com/sqs/?icmpid=docs_homepage_serverless
+https://docs.aws.amazon.com/s3/?icmpid=docs_homepage_serverless
+https://docs.aws.amazon.com/step-functions/?icmpid=docs_homepage_serverless
+https://docs.aws.amazon.com/cli/?icmpid=docs_homepage_mgmtgov
+https://docs.aws.amazon.com/config/?icmpid=docs_homepage_mgmtgov
+https://docs.aws.amazon.com/health/?icmpid=docs_homepage_mgmtgov
+https://docs.aws.amazon.com/smc/?icmpid=docs_homepage_mgmtgov
+https://docs.aws.amazon.com/apigateway/?icmpid=docs_homepage_networking
+https://docs.aws.amazon.com/route53/?icmpid=docs_homepage_networking
+https://docs.aws.amazon.com/vpc/?icmpid=docs_homepage_networking
+https://docs.aws.amazon.com/eventbridge/?icmpid=docs_homepage_appintegration
+https://docs.aws.amazon.com/code-library/?icmpid=docs_homepage_sdktoolkits
+https://docs.aws.amazon.com/cdk/?icmpid=docs_homepage_sdktoolkits
+https://docs.aws.amazon.com/cli/?icmpid=docs_homepage_sdktoolkits
+https://docs.aws.amazon.com/serverless-application-model/?icmpid=docs_homepage_sdktoolkits
+https://docs.aws.amazon.com/pythonsdk/?icmpid=docs_homepage_sdktoolkits
+https://docs.aws.amazon.com/sdk-for-php/?icmpid=docs_homepage_sdktoolkits
+https://docs.aws.amazon.com/toolkit-for-jetbrains/?icmpid=docs_homepage_sdktoolkits
+https://docs.aws.amazon.com/toolkit-for-vscode/?icmpid=docs_homepage_sdktoolkits
