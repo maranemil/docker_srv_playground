@@ -1,0 +1,184 @@
+
+##############################################################
+"root" execution of the PostgreSQL server is not permitted.
+##############################################################
+
+https://stackoverflow.com/questions/28311825/root-execution-of-the-postgresql-server-is-not-permitted
+https://itecnote.com/tecnote/postgresql-root-execution-of-the-postgresql-server-is-not-permitted/
+https://community.cisco.com/t5/edge-computing-infrastructure/iox-docker-root-issue/td-p/3886925
+https://www.2ndquadrant.com/en/blog/how-to-safely-change-the-postgres-user-password-via-psql/
+https://www.emqx.io/docs/en/v5.0/security/authn/postgresql.html#configuration
+https://chartio.com/resources/tutorials/how-to-set-the-default-user-password-in-postgresql/
+
+
+sudo -u postgres command
+sudo -u postgres postgres -D /usr/local/var/postgres
+sudo -u postgres -i
+
+
+postgres
+postgres -D /usr/local/var/postgres
+/usr/lib/postgresql/9.3/bin/postgres  -D /var/lib/postgresql/9.3/main -c config_file=/etc/postgresql/9.3/main/postgresql.conf
+
+docker-entrypoint.sh -c 'shared_buffers=256MB' -c 'max_connections=200'
+
+pg_dump -C -h localhost -U localuser dbname | psql -h remotehost -U remoteuser dbname
+pg_dump -C -h remotehost -U remoteuser dbname | psql -h localhost -U localuser dbname
+
+ls /usr/local/share/postgresql/
+
+
+postgres
+psql
+
+
+##############################################################
+pgAdmin
+##############################################################
+
+https://www.pgadmin.org/
+https://www.pgadmin.org/download/pgadmin-4-apt/
+https://www.postgresql.org/ftp/pgadmin/pgadmin4/
+https://qgep.github.io/docs/de/admin-guide/pgadmin/usage.html
+https://towardsdatascience.com/how-to-run-postgresql-and-pgadmin-using-docker-3a6a8ae918b5
+https://dykraf.com/blog/how-to-connect-pgadmin4-and-postgresql-server-on-docker-container
+https://dba.stackexchange.com/questions/16993/how-to-view-data-in-pgadmin-iii
+https://www.pgadmin.org/docs/pgadmin4/development/editgrid.html
+
+
+https://hub.docker.com/r/dpage/pgadmin4/
+https://www.pgadmin.org/download/pgadmin-4-container/
+https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html
+
+
+sudo apt install pgadmin4
+sudo apt install pgadmin4-desktop
+sudo apt install pgadmin4-web
+sudo /usr/pgadmin4/bin/setup-web.sh
+
+
+
+
+docker pull dpage/pgadmin4:latest
+
+docker pull dpage/pgadmin4
+docker run -p 80:80 \
+    -e 'PGADMIN_DEFAULT_EMAIL=user@domain.com' \
+    -e 'PGADMIN_DEFAULT_PASSWORD=SuperSecret' \
+    -d dpage/pgadmin4
+
+
+docker pull dpage/pgadmin4
+docker run -p 80:80 \
+    -e 'PGADMIN_DEFAULT_EMAIL=user@domain.com' \
+    -e 'PGADMIN_DEFAULT_PASSWORD=SuperSecret' \
+    -e 'PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION=True' \
+    -e 'PGADMIN_CONFIG_LOGIN_BANNER="Authorised users only!"' \
+    -e 'PGADMIN_CONFIG_CONSOLE_LOG_LEVEL=10' \
+    -d dpage/pgadmin4
+
+
+docker pull dpage/pgadmin4
+docker run -p 5050:80 \
+    -e "PGADMIN_DEFAULT_EMAIL=user@domain.com" \
+    -e "PGADMIN_DEFAULT_PASSWORD=SuperSecret" \
+    -d dpage/pgadmin4
+
+
+docker pull dpage/pgadmin4
+docker run --name "pgadmin4" \
+    -e "PGADMIN_DEFAULT_EMAIL=user@domain.com" \
+    -e "PGADMIN_DEFAULT_PASSWORD=SuperSecret" \
+    -e "SCRIPT_NAME=/pgadmin4" \
+    -l "traefik.frontend.rule=PathPrefix:/pgadmin4" \
+    -d dpage/pgadmin4
+
+
+docker pull dpage/pgadmin4
+docker run --name "pgadmin4" \
+    -e "PGADMIN_DEFAULT_EMAIL=user@domain.com" \
+    -e "PGADMIN_DEFAULT_PASSWORD=SuperSecret" \
+    -e "SCRIPT_NAME=/pgadmin4" \
+    -l "traefik.frontend.pgadmin4.rule=Host(`host.example.com`) && PathPrefix(`/pgadmin4`)" \
+    -d dpage/pgadmin4
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+version: '3.8'
+services:
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+version: '3.8'
+services:
+  db:
+    container_name: pg_container
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: test_db
+    ports:
+      - "5432:5432"
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+version: '3.3'
+services:
+  postgredb:
+    container_name: postgredb
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+
+networks:
+  default:
+    name: postgre-service_default
+
+
+docker-compose -f docker-compose.yml up -d
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+adminer
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://hub.docker.com/_/adminer
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+
+
+

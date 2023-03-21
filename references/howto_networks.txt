@@ -1,0 +1,136 @@
+##################################################
+Connect a container to a network
+##################################################
+
+https://docs.docker.com/network/
+https://docs.docker.com/engine/reference/commandline/network_connect/
+https://docs.docker.com/network/bridge/
+https://stackoverflow.com/questions/36035595/communicating-between-docker-containers-in-different-networks-on-the-same-host
+https://www.tutorialworks.com/container-networking/
+https://blog.oddbit.com/post/2014-08-11-four-ways-to-connect-a-docker/
+https://itnext.io/a-beginners-guide-to-networking-in-docker-ca5b822fb935
+https://stackoverflow.com/questions/34037795/add-docker-container-to-network-under-two-different-names/34038381#34038381
+https://docs.docker.com/engine/reference/commandline/ps/
+
+
+docker network connect
+docker network connect multi-host-network container1
+docker network connect --ip 10.10.36.122 multi-host-network container2
+docker network connect --link container1:c1 multi-host-network container2
+docker network connect --alias db --alias mysql multi-host-network container2
+
+docker network create --subnet 172.20.0.0/16 --ip-range 172.20.240.0/20 multi-host-network
+docker network connect --ip 172.20.128.2 multi-host-network container2
+
+docker network create my-net
+docker network rm my-net
+
+docker create --name my-nginx --network my-net --publish 8080:80  nginx:latest
+docker network connect my-net my-nginx
+docker network disconnect my-net my-nginx
+
+# Enable forwarding from Docker containers to the outside world
+sysctl net.ipv4.conf.all.forwarding=1
+sudo iptables -P FORWARD ACCEPT
+
+
+docker ps --size
+docker ps --no-trunc
+docker ps -a
+docker ps --filter "name=api"
+docker ps -a --filter 'exited=137'
+docker ps --filter status=running
+docker ps --filter status=paused
+docker ps --filter ancestor=ubuntu
+
+
+docker run -d --net=net1 --name=test1 ubuntu top
+docker run -d --net=net2 --name=test2 ubuntu top
+docker ps --filter network=net1
+docker network inspect --format "{{.ID}}" net1
+docker run -d --publish=80 busybox top
+docker run -d --expose=8080 busybox top
+docker ps -a
+docker ps --filter publish=80
+docker ps --filter expose=8000-8080/tcp
+docker ps --filter publish=80/udp
+docker ps --format json
+
+docker ps --filter network=bridge
+docker ps --filter network=host
+
+# reconnect
+docker inspect c1 -f "{{json .NetworkSettings.Networks }}"
+docker network disconnect test-net c1
+docker network connect test-net-2 c1
+docker network inspect test-net -f "{{json .Containers }}"
+
+
+docker network ls
+docker network inspect
+docker network inspect bridge
+docker container inspect <container>
+docker network create -d bridge mybridge
+
+hostname -i
+
+
+docker run --rm --name mynginx --detach nginx
+docker inspect mynginx | grep IPAddress
+sudo docker inspect mynginx | jq
+docker run -it busybox sh
+wget -q -O - 172.17.0.2:80
+
+docker network create tulip-net
+docker run --rm --net tulip-net --name tulipnginx -d nginx
+docker run --net tulip-net -it busybox sh
+wget -q -O - tulipnginx:80
+
+docker network connect --alias db --alias mysql multi-host-network container2
+docker network connect --link container1:c1 multi-host-network container2
+
+
+#!/bin/sh
+exec docker inspect --format '{{ .State.Pid }}' "$@"
+exec docker inspect --format '{{ .NetworkSettings.IPAddress }}' "$@"
+
+docker-pid web
+ip addr add 10.12.0.117/21 dev em1
+docker run -d --name web -p 10.12.0.117:80:80 larsks/simpleweb
+curl http://10.12.0.117/hello.html
+ip route del default
+ip route add default via 10.12.7.254 dev br-em1
+
+
+
+
+https://github.com/nicolaka/netshoot
+https://hub.docker.com/r/nicolaka/netshoot
+https://stackoverflow.com/questions/43904562/docker-how-to-find-the-network-my-container-is-in
+
+version: "3.6"
+services:
+  tcpdump:
+    image: nicolaka/netshoot
+    depends_on:
+      - nginx
+    command: tcpdump -i eth0 -w /data/nginx.pcap
+    network_mode: service:nginx
+    volumes:
+      - $PWD/data:/data
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - 80:80
+
+
+# test
+docker network create test-net
+docker run --net test-net --name nc-server -d nicolaka/netshoot nc -vl 8080
+docker run --net test-net --name nc-client -it --rm nicolaka/netshoot nc -vz nc-server 8080
+docker logs nc-server
+docker rm nc-server
+docker network rm test-net
+
+

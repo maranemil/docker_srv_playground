@@ -1,0 +1,14 @@
+################################################################
+mailcatcher docker
+################################################################
+
+https://hub.docker.com/r/schickling/mailcatcher/
+https://hub.docker.com/r/sj26/mailcatcher
+https://github.com/dockage/mailcatcher
+
+docker run -d -p 1080:1080 --name mailcatcher schickling/mailcatcher
+
+docker run --name='mailcatcher' -d \
+  --publish=1080:1080 \
+  --publish=1025:1025 \
+dockage/mailcatcher:0.8.2
