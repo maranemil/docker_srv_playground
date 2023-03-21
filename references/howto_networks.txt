@@ -134,3 +134,73 @@ docker rm nc-server
 docker network rm test-net
 
 
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+apt install bridge-utils
+brctl show
+docker run -it alpine sh
+docker run -it alpine sh
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+docker network ls
+docker network create -d overlay overnet
+docker service create --name myservice --network overnet alphine sleep 1d
+docker service ps myservice
+docker network inspect overnet
+docker network inspect bridge
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+docker run -it -d -p 8080:80 --name server1 nginx:alpine
+docker run -it -d -p 8081:80 --name server2 nginx:alpine
+docker exec -it server2 sh
+ping server1
+docker network create -d bridge mynet
+docker rm -f  server1
+docker rm -f  server2
+docker run -it -p 8080:80 --name server1 --network="mynet" nginx:alpine
+docker run -it -p 8081:80 --name server2 --network="mynet" nginx:alpine
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+docker network create -d bridge wserv
+docker inspect wserv
+docker run -dit --name client --network="wserv" alpine sh
+docker run -dit --name server --network="wserv" nginx sh
+docker attach client
+ping server
+apk add curl
+curl http://server:80
+ctrl p q
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+docker exec web1 apt-get update
+docker exec web1 apt-get install iputils-ping  -y
+docker exec web1 ping db1
+docker exec db1 apt-get install curl -y
+docker exec db1 curl web1
+docker run -dit --network frontend --name proxy ubuntu 14.04
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+nano /etc/resolve.conf
+nameserver 8.8.8.8
+nano /etc/docker/daemon.json
+{"dns":["8.8.8.8"]}
+nano /etc/default/docker
+DOCKER_OPTS="--dns 8.8.8.8 --dns 8.8.4.4"
+service docker restart
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+docker network create --subnet=192.168.0.0/23 --ip-range=192.168.1.0/24 --gateway=192.168.1.1 mynet
+docker run --net mynet --name serv1 -dit ubuntu
+docker run --net mynet --name serv2 -dit ubuntu
+docker ps
+docker inspect serv1 | grep IPAddress
+docker inspect serv2 | grep IPAddress
+docker exec -it serv1 bash
+netstat -plant
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sudo apt install net-tools
+ifconfig
+ip addr show
+docker network create -d macvlan --subnet=192.168.0.0/24 --gateway=192.168.1.1 --opt parent=wlp3s0 macnet
+docker run --net macnet --name serv1 -dit ubuntu
+docker run --net macnet --name serv2 -dit --ip 192.168.0.4 alpine
+ip -d -c link show wlp3s0 # promiscuity 0
+ip -d -c link set dev wlp3s0 promisc on
+ip -d -c link show wlp3s0 # promiscuity 1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
