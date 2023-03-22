@@ -54,3 +54,24 @@ https://www.youtube.com/watch?v=J01rYl9T3BU
 https://www.youtube.com/watch?v=ldYcgPKEZC8
 
 
+
+
+#########################################
+#########################################
+https://www.freecodecamp.org/news/how-to-get-started-with-docker-using-nodejs/
+https://www.jetbrains.com/help/webstorm/vue-js.html
+
+FROM node:latest
+WORKDIR /app
+COPY . /app
+RUN npm install
+EXPOSE 8000
+CMD ["npm","start"]
+
+npm install vue
+
+docker build -t node_with_docker:0.0.1 .
+docker container run -d --name docker_with_node -p 8000:8000 node_with_docker:0.0.1
+docker login
+docker push node_with_docker:0.0.1
+
