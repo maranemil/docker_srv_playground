@@ -1,0 +1,123 @@
+https://packagist.org/packages/api-platform/admin-meta
+https://packagist.org/packages/api-platform/api-pack
+https://packagist.org/packages/api-platform/admin-pack
+https://packagist.org/packages/api-platform/core
+https://packagist.org/packages/api-platform/schema-generator
+https://packagist.org/packages/api-platform/api-platform # This package is abandoned
+https://packagist.org/packages/api-platform/postman-collection-generator # # This package is abandoned
+https://packagist.org/packages/nelmio/api-doc-bundle
+https://packagist.org/packages/nelmio/cors-bundle
+https://packagist.org/packages/nelmio/
+https://packagist.org/packages/nelmio/api-doc-bundle
+https://packagist.org/packages/nelmio/cors-bundle
+https://packagist.org/packages/nelmio/esi-debug-bundle
+https://packagist.org/packages/nelmio/js-logger-bundle
+https://packagist.org/packages/nelmio/security-bundle
+https://packagist.org/packages/nelmio/solarium-bundle
+
+----------------------------------------------------------------------
+https://symfonycasts.com/screencast/api-platform/install
+https://api-platform.com/docs/distribution/
+https://api-platform.com/docs/core/configuration/
+https://api-platform.com/docs/core/getting-started/
+https://api-platform.com/docs/core/getting-started/
+https://symfony.com/doc/current/console.html
+https://symfonycasts.com/screencast/api-platform/api-resource?cid=apip
+https://api-platform.com/docs/core/getting-started/
+https://api-platform.com/docs/distribution/#introduction
+https://api-platform.com/docs/core/getting-started/
+----------------------------------------------------------------------
+composer init
+composer require api-platform/core
+composer require api-platform/api-pack  --with-all-dependencies
+composer require api-platform/admin-pack  --with-all-dependencies
+composer require nelmio/cors-bundle
+composer require nelmio/api-doc-bundle
+composer req  api-platform/api-platform --with-all-dependencies
+composer update
+
+{
+    "require": {
+        "api-platform/core": "^2.7",
+        "api-platform/admin-pack": "^1.1",
+        "api-platform/api-pack": "^1.3",
+        "nelmio/cors-bundle": "^2.3",
+        "nelmio/api-doc-bundle": "^4.11"
+    }
+}
+
+
+----------------------------------------------------------------------
+
+#### install ####
+curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash
+apt install symfony-cli -y
+
+symfony new bookshop-api
+cd bookshop-api
+symfony composer require api
+symfony console doctrine:database:create
+symfony console doctrine:schema:create
+symfony serve
+----------------------------------------------------------------------
+
+
+----------------------------------------------------------------
+
+
+#symfony serve
+#symfony composer require api
+
+symfony serve -d
+symfony serve --port=9001
+symfony local:server:stop
+symfony server:start
+symfony server:start --no-tls
+symfony server:ca:install
+
+php bin/console server:stop
+php bin/console server:start --force
+
+
+php bin/console list
+php app/console list
+
+php app/console server:run
+
+php app/console make:entity
+./bin/console make:entity
+php bin/console cache:clear
+
+http://172.19.0.1
+http://172.19.0.2:8000/docs
+---------------------------------------------
+
+{
+    "require": {
+        "php": ">=8.1",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "api-platform/core": "^3.0",
+        "doctrine/annotations": "^1.0",
+        "doctrine/doctrine-bundle": "^2.8",
+        "doctrine/doctrine-migrations-bundle": "^3.2",
+        "doctrine/orm": "^2.14",
+        "nelmio/cors-bundle": "^2.2",
+        "phpdocumentor/reflection-docblock": "^5.3",
+        "phpstan/phpdoc-parser": "^1.15",
+        "symfony/asset": "6.2.*",
+        "symfony/console": "6.2.*",
+        "symfony/dotenv": "6.2.*",
+        "symfony/expression-language": "6.2.*",
+        "symfony/flex": "^2",
+        "symfony/framework-bundle": "6.2.*",
+        "symfony/property-access": "6.2.*",
+        "symfony/property-info": "6.2.*",
+        "symfony/runtime": "6.2.*",
+        "symfony/security-bundle": "6.2.*",
+        "symfony/serializer": "6.2.*",
+        "symfony/twig-bundle": "6.2.*",
+        "symfony/validator": "6.2.*",
+        "symfony/yaml": "6.2.*"
+    }
+}
