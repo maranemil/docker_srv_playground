@@ -1,0 +1,126 @@
+#######################################################
+entrypoint cmd
+#######################################################
+
+https://www.bmc.com/blogs/docker-cmd-vs-entrypoint/
+https://aws.amazon.com/de/blogs/opensource/demystifying-entrypoint-cmd-docker/
+https://phoenixnap.com/kb/docker-cmd-vs-entrypoint
+https://stackoverflow.com/questions/21553353/what-is-the-difference-between-cmd-and-entrypoint-in-a-dockerfile
+https://refine.dev/blog/docker-entrypoint/
+https://www.atatus.com/blog/docker-cmd-vs-entrypoints/
+
+
+RUN         yum -y update
+RUN         yum -y install httpd
+COPY        ./index.html/var/www/index.html
+CMD         echo “Hello World”
+
+ENV name Darwin
+ENTRYPOINT /bin/echo "Welcome, $name"
+
+--------------------------
+
+RUN ["yum", "-y", "update"]
+CMD ["yum", "-y" "install" "httpd"]
+COPY ["./index.html/var/www/index.html"]
+
+ENV name Darwin
+ENTRYPOINT ["/bin/echo", "Welcome, $name"]
+
+ENV name Darwin
+ENTRYPOINT ["/bin/bash", “-c” "echo Welcome, $name"]
+
+--------------------------
+
+FROM centos:7
+RUN    apt-get update
+RUN     apt-get -y install python
+COPY ./opt/source code
+CMD ["echo", "Hello, Darwin"]
+
+FROM centos:7
+RUN    apt-get update
+RUN     apt-get -y install python
+COPY ./opt/source code
+ENTRYPOINT ["echo", "Hello"]CMD [“Darwin”]
+
+docker build -t darwin .
+docker run Darwin User_JDArwin
+
+--------------------------
+
+CMD echo "Hello World" (shell form)
+CMD ["echo", "Hello World"] (exec form)
+ENTRYPOINT echo "Hello World" (shell form)
+ENTRYPOINT ["echo", "Hello World"] (exec form)
+
+FROM ubuntu
+MAINTAINER sofija
+RUN apt-get update
+CMD ["echo", "Hello World"]
+
+sudo docker build .
+sudo docker images
+
+FROM ubuntu
+MAINTAINER sofija
+RUN apt-get update
+ENTRYPOINT ["echo", "Hello World"]
+
+sudo docker build .
+
+FROM ubuntu
+MAINTAINER sofija
+RUN apt-get update
+ENTRYPOINT ["echo", "Hello"]
+CMD ["World"]
+
+--------------------------
+
+docker run -i -t ubuntu bash
+
+FROM debian:wheezy
+ENTRYPOINT ["/bin/ping"]
+CMD ["localhost"]
+
+FROM debian:wheezy
+CMD ["/bin/ping", "localhost"]
+
+docker run -t -i --entrypoint="/bin/bash" ubuntu
+
+# no entrypoint
+docker run ubuntu /bin/cat /etc/passwd
+
+# with entry point, emulating cat command
+docker run --entrypoint="/bin/cat" ubuntu /etc/passwd
+
+FROM ubuntu
+ENTRYPOINT sleep
+docker run custom_sleep 20
+
+FROM ubuntu
+ENTRYPOINT ["sleep"]
+CMD ["10"]
+
+FROM centos:8.1.1911
+CMD ["echo", "Hello Docker"]
+
+FROM centos:8.1.1911
+ENTRYPOINT ["echo", "Hello Docker"]
+
+FROM centos:8.1.1911
+ENTRYPOINT ["echo", "Hello"]
+CMD ["Docker"]
+
+--------------------------
+
+FROM centos:7
+MAINTAINER Devopscube
+RUN yum -y update && \
+    yum -y install httpd-tools && \
+    yum clean all
+ENTRYPOINT ["ab" , "http://google.com/" ]
+
+docker build  .  –t testentrypoint
+Docker run testentrypoint
+
