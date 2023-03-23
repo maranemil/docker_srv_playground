@@ -1,9 +1,7 @@
 # https://www.cloudsavvyit.com/12978/how-to-quickly-deploy-wordpress-as-a-docker-container/
 # https://hub.docker.com/_/wordpress
 
-
 version: '3.5'
-
 services:
 
   wpblog:

@@ -56,3 +56,88 @@ define( 'DISABLE_WP_CRON', true);
 
 wp_schedule_single_event( $timestamp, $hook, $args = array() )
 wp_clear_scheduled_hook( 'rudr_hook_2', array( 5 ) );
+
+
+
+
+############################################################
+WP mysqldump — A Database Backup Program
+############################################################
+
+https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html
+
+mysqldump -u root -p db_name > dump.sql
+mysqldump -u root -p --databases db_name > dump.sql
+mysqldump -u root -p --all-databases > dump.sql
+
+
+############################################################
+WP estoration successful on new domain but everything redirects to old domain
+############################################################
+
+https://wordpress.org/support/topic/restoration-successful-on-new-domain-but-everything-redirects-to-old-domain/
+https://wordpress.stackexchange.com/questions/187574/redirecting-to-old-domain-after-migration
+https://stackoverflow.com/questions/20122583/website-in-wordpress-redirects-to-old-url-after-migration
+https://www.smashingmagazine.com/2013/04/moving-wordpress-website/
+https://wordpress.org/plugins/search-and-replace/
+
+define( 'WP_HOME', 'https://your-domain.here' );
+define( 'WP_SITEURL', 'https://your-domain.here' );
+
+UPDATE wp_options SET option_value = 'https://yournew.domain' WHERE option_name = 'siteurl';
+UPDATE wp_options SET option_value = 'https://yournew.domain' WHERE option_name = 'home';
+
+/* MySQL: */
+update wp_options set option_value = 'http://example.com' where option_name = 'siteurl';
+update wp_options set option_value = 'http://example.com' where option_name = 'home';
+
+define('WP_HOME','http://example.com');
+define('WP_SITEURL','http://example.com');
+
+define('WP_HOME','domain.com');
+define('WP_SITEURL','domain.com');
+
+chrome://settings/clearBrowserData
+
+echo "UPDATE wp_options SET option_value='http://domain' WHERE option_name IN ('siteurl', 'home');" >> dump.sql
+
+
+https://www.php.net/manual/de/function.error-reporting.php
+https://www.php.net/manual/de/errorfunc.configuration.php
+https://stackoverflow.com/questions/46987317/cant-display-html-tags-on-error-in-php-7
+
+ini_set("log_errors", 1);
+ini_set("display_startup_errors", 1);
+ini_set("error_log",APP_LOG);
+ini_set("error_reporting", E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
+ini_set("log_errors_max_len",1024);
+ini_set("docref_root","http://manual/en/");
+ini_set("html_errors",1);
+
+
+#ini_set("display_startup_errors", 1);
+#@ini_set("html_errors",true);
+#error_reporting(-1);
+
+define( 'WP_DEBUG',false);
+define( 'WP_HOME', 'http://localhost:8888' );
+define( 'WP_SITEURL', 'http://localhost:8888' );
+
+############################################################
+wordpress 6
+############################################################
+https://hub.docker.com/_/wordpress
+https://github.com/docker-library/wordpress/blob/master/latest/php8.1/apache/Dockerfile
+https://hub.docker.com/layers/arm64v8/wordpress/6.0-php8.1-apache/images/sha256-34fa0af9795a369f6d7425b89a5fbfe0a539695f96571cc9d6687f675902480f
+https://hub.docker.com/layers/library/wordpress/6.0.2-php8.1-apache/images/sha256-cd620b10f7a066483036e492c4240460fe8b3fec9d89480cc5992374706f394c?context=explore
+https://github.com/docker-library/wordpress/blob/7abee5418f61c0247efab5f736f1ecbf7486cb59/latest/php8.1/apache/Dockerfile
+https://stackoverflow.com/questions/71180315/how-to-docker-compose-up-official-wordpress-latest-image-in-php-version-8
+https://github.com/docker-library/wordpress/blob/master/latest/php8.1/apache/Dockerfile
+https://hub.docker.com/layers/arm64v8/wordpress/6.0-php8.1-apache/images/sha256-34fa0af9795a369f6d7425b89a5fbfe0a539695f96571cc9d6687f675902480f
+https://stackoverflow.com/questions/75523399/how-to-update-wordpress-dockerfile-to-use-php-8
+
+wordpress:6.0-php8.1-apache
+wordpress:6.0.2-php8.0-apache
+wordpress:6.0.2-php8.1-apache
+wordpress:6.0:php:8.0-apache
+wordpress:6.0-php8.0
