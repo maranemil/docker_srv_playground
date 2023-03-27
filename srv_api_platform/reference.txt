@@ -1,14 +1,13 @@
 https://packagist.org/packages/api-platform/admin-meta
-https://packagist.org/packages/api-platform/api-pack
 https://packagist.org/packages/api-platform/admin-pack
-https://packagist.org/packages/api-platform/core
-https://packagist.org/packages/api-platform/schema-generator
+https://packagist.org/packages/api-platform/api-pack
 https://packagist.org/packages/api-platform/api-platform # This package is abandoned
+https://packagist.org/packages/api-platform/core
 https://packagist.org/packages/api-platform/postman-collection-generator # # This package is abandoned
-https://packagist.org/packages/nelmio/api-doc-bundle
-https://packagist.org/packages/nelmio/cors-bundle
+https://packagist.org/packages/api-platform/schema-generator
 https://packagist.org/packages/nelmio/
 https://packagist.org/packages/nelmio/api-doc-bundle
+https://packagist.org/packages/nelmio/cors-bundle
 https://packagist.org/packages/nelmio/cors-bundle
 https://packagist.org/packages/nelmio/esi-debug-bundle
 https://packagist.org/packages/nelmio/js-logger-bundle
@@ -16,16 +15,14 @@ https://packagist.org/packages/nelmio/security-bundle
 https://packagist.org/packages/nelmio/solarium-bundle
 
 ----------------------------------------------------------------------
-https://symfonycasts.com/screencast/api-platform/install
-https://api-platform.com/docs/distribution/
+https://api-platform.com/docs/admin/getting-started/#creating-the-admin
 https://api-platform.com/docs/core/configuration/
 https://api-platform.com/docs/core/getting-started/
-https://api-platform.com/docs/core/getting-started/
+https://api-platform.com/docs/distribution/
+https://api-platform.com/docs/distribution/#introduction
 https://symfony.com/doc/current/console.html
 https://symfonycasts.com/screencast/api-platform/api-resource?cid=apip
-https://api-platform.com/docs/core/getting-started/
-https://api-platform.com/docs/distribution/#introduction
-https://api-platform.com/docs/core/getting-started/
+https://symfonycasts.com/screencast/api-platform/install
 ----------------------------------------------------------------------
 composer init
 composer require api-platform/core

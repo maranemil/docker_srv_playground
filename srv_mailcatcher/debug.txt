@@ -1,0 +1,468 @@
+###############################################################
+Set the 'ServerName' directive globally to suppress this message
+###############################################################
+
+https://unix.stackexchange.com/questions/155150/where-in-apache-2-do-you-set-the-servername-directive-globally
+https://www.digitalocean.com/community/tutorials/apache-configuration-error-ah00558-could-not-reliably-determine-the-server-s-fully-qualified-domain-name
+https://github.com/phpmyadmin/docker/issues/293
+
+apache2ctl configtest
+cat /etc/hosts
+hostname
+# sudo apache2ctl -S
+
+FIX 1
+# apachectl -t -D DUMP_INCLUDES
+sudo nano /etc/apache2/apache2.conf
+ServerName localhost
+ServerName 10.0.0.113
+apachectl configtest
+
+FIX 2
+echo 'ServerName 127.0.0.1' >> /etc/apache2/apache2.conf
+apachectl configtest # Syntax OK
+cat /etc/apache2/apache2.conf | grep ServerName
+
+
+sudo service apache2 restart
+sudo systemctl reload apache2
+sudo systemctl status apache2.service -l --no-pager
+
+find /etc/apache2 -type f -exec grep -s ServerName {} \;
+
+###############################################################
+Mailcatcher does not catch any mails
+###############################################################
+
+https://github.com/sj26/mailcatcher/issues/193
+https://mailcatcher.me/
+https://mailtrap.io/blog/mailcatcher-guide/
+https://spaquet.medium.com/mailcatcher-to-the-rescue-4ba438dc98c2
+
+config.action_mailer.smtp_settings = {
+  address: 'localhost',
+  port: 1025
+}
+config.action_mailer.delivery_method = :smtp
+
+mailcatcher --foreground
+mailcatcher -f -v
+mailcatcher --ip 0.0.0.0
+mailcatcher --foreground --ip=0.0.0.0
+mailcatcher --help
+
+mailcatcher
+Starting MailCatcher
+==> smtp://127.0.0.1:1025
+==> http://127.0.0.1:1080
+
+
+if DEBUG:
+    EMAIL_HOST = '127.0.0.1'
+    EMAIL_HOST_USER = ''
+    EMAIL_HOST_PASSWORD = ''
+    EMAIL_PORT = 1025
+    EMAIL_USE_TLS = False
+
+
+docker-compose.yml
+version: "3.9"
+services:
+  mail:
+    image: schickling/mailcatcher
+    ports:
+       - 1080:1080
+
+
+docker run --rm -it -p 1080:1080 -p 1025:1025 --name mailcatcher stpaquet/alpinemailcatcher
+docker run --rm -p 1080:1080 -p 1025:1025 --name mailcatcher stpaquet/alpinemailcatcher
+docker run -d -p 1080:1080 -p 1025:1025 --name mailcatcher stpaquet/alpinemailcatcher
+
+
+version: "3.9"
+services:
+  mailcatcher:
+    container_name: mailcatcher
+    restart: on-failure:10
+    image: stpaquet/alpinemailcatcher:latest
+    environment:
+      - MAIL_LIMIT=70 # docker image default is 50
+      - TIMEZONE=America/Los_Angeles # docker image default is UTC
+    ports:
+      - "1080:1080"
+      - "1025:1025"
+
+
+###############################################################
+mailcatcher SMTP Error: Could not connect to SMTP host
+###############################################################
+
+https://netcorecloud.com/tutorials/phpmailer-smtp-error-could-not-connect-to-smtp-host/
+https://stackoverflow.com/questions/3477766/phpmailer-smtp-error-could-not-connect-to-smtp-host
+https://stackoverflow.com/questions/3477766/phpmailer-smtp-error-could-not-connect-to-smtp-host
+https://www.courier.com/error-solutions/smtp-error-could-not-connect-to-smtp-host/
+https://serverfault.com/questions/1107569/could-not-connect-to-smtp-host
+https://github.com/sj26/mailcatcher/issues/376
+https://community.traefik.io/t/smtp-route-not-working-for-mailcatcher-docker-container/16068
+https://zhiminzhan.medium.com/mailcatcher-in-docker-185bc9dd6992
+https://vladimir-ivanov.net/how-to-install-mailcatcher-on-centos-7-and-configure-it-for-php/
+https://halon.io/blog/how-to-test-smtp-servers-using-the-command-line
+https://mailtrap.io/blog/how-to-test-smtp-server/
+https://mail250.com/knowledge-base/how-to-check-if-smtp-is-working-from-commandline-linux/
+https://tecadmin.net/send-email-using-php-script-from-smtp/
+https://www.developpez.net/forums/d1308598/php/langage/phpmailer-language-string-failed-to-load-file_access/
+https://code.google.com/archive/a/apache-extras.org/p/phpmailer/wikis/UsefulTutorial.wiki
+https://stackoverflow.com/questions/6209064/smtp-error-could-not-connect-to-smtp-host
+https://devel0p.net/php-phpmailer-could-not-access-file
+https://github.com/PHPMailer/PHPMailer/issues/1645
+https://github.com/PHPMailer/PHPMailer/issues/1645
+https://stackoverflow.com/questions/11280485/phpmailer-could-not-access-file
+https://stackoverflow.com/questions/67672620/using-phpmailer-v6-with-docker-compose
+https://stackoverflow.com/questions/4914750/how-to-zip-a-whole-folder-using-php
+https://www.php.net/manual/en/class.ziparchive.php
+
+~~~~~~~~~~
+Dockerfile
+~~~~~~~~~~
+FROM ruby
+RUN gem install mailcatcher --no-document
+ENV PATH=/usr/local/bundle/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+EXPOSE 1080/tcp
+EXPOSE 1025/tcp
+CMD mailcatcher --foreground --ip=0.0.0.0
+
+
+
+---------
+systemctl start mailcatcher
+systemctl enable mailcatcher
+
+php -r 'mail("info@example.net", "Feedback", "This is so useful, thanks!");'
+
+
+
+---------
+
+mailcatcher --foreground --http-ip=0.0.0.0
+mailcatcher --version
+pkill mailcatcher
+mailcatcher --ip=0.0.0.0
+
+---------
+
+$mail->isSMTP();
+$mail->Host = 'localhost';
+$mail->SMTPAuth = false;
+$mail->SMTPAutoTLS = false;
+$mail->Port = 25;
+
+
+$mail->SMTPDebug = 2; // to see exactly what's the issue
+$mail->SMTPSecure = false;
+$mail->SMTPAutoTLS = false;
+$mailer->Port = '587';
+
+// if you're using SSL
+$mail->SMTPSecure = 'ssl';
+// OR use TLS
+$mail->SMTPSecure = 'tls';
+
+$mail->SMTPOptions = array(
+    'ssl' => array(
+        'verify_peer' => false,
+        'verify_peer_name' => false,
+        'allow_self_signed' => true
+    )
+);
+
+---------
+
+# PHPMailer SMTP Connection Failed Because Of SSL Support Issue With PHP
+$mail->SMTPDebug = 2;
+$mail->Host = gethostbyname('smtp.pepipost.com');
+
+---------
+
+$mail = new PHPMailer();
+$mail->IsSMTP();  // telling the class to use SMTP
+$mail->SMTPDebug = 2;
+$mail->Mailer = "smtp";
+$mail->Host = "ssl://smtp.gmail.com";
+$mail->Port = 587;
+$mail->SMTPAuth = true; // turn on SMTP authentication
+$mail->Username = "myemail@example.com"; // SMTP username
+$mail->Password = "mypasswword"; // SMTP password
+$Mail->Priority = 1;
+$mail->AddAddress("myemail@gmail.com","Name");
+$mail->SetFrom($visitor_email, $name);
+$mail->AddReplyTo($visitor_email,$name);
+$mail->Subject  = "This is a Test Message";
+$mail->Body     = $user_message;
+$mail->WordWrap = 50;
+if(!$mail->Send()) {echo 'Message was not sent.';echo 'Mailer error: ' . $mail->ErrorInfo;
+} else {echo 'Message has been sent.';}
+
+---------
+
+$mail->SMTPSecure = "ssl";
+$mail->Host='smtp.gmail.com';
+$mail->Port='465';
+$mail->Username   = 'you@gmail.com'; // SMTP account username
+$mail->Password   = 'your gmail password';
+$mail->SMTPKeepAlive = true;
+$mail->Mailer = "smtp";
+$mail->IsSMTP(); // telling the class to use SMTP
+$mail->SMTPAuth   = true;                  // enable SMTP authentication
+$mail->CharSet = 'utf-8';
+$mail->SMTPDebug  = 0;
+
+---------
+
+$mail = new PHPMailer(true);
+$mail->isSMTP();// Set mailer to use SMTP
+$mail->CharSet = "utf-8";// set charset to utf8
+$mail->SMTPAuth = true;// Enable SMTP authentication
+$mail->SMTPSecure = 'tls';// Enable TLS encryption, `ssl` also accepted
+$mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
+$mail->Port = 587;// TCP port to connect to
+$mail->SMTPOptions = array(
+    'ssl' => array(
+        'verify_peer' => false,
+        'verify_peer_name' => false,
+        'allow_self_signed' => true
+    )
+);
+$mail->isHTML(true);// Set email format to HTML
+$mail->Username = 'Sender Email';// SMTP username
+$mail->Password = 'Sender Email Password';// SMTP password
+$mail->setFrom('example@mail.com', 'John Smith');//Your application NAME and EMAIL
+$mail->Subject = 'Test';//Message subject
+$mail->MsgHTML('HTML code');// Message body
+$mail->addAddress('User Email', 'User Name');// Target email
+$mail->send();
+
+---------
+
+# view the server's certificate
+openssl s_client -connect server.domain.tld:465 | openssl x509 -text
+openssl s_client -starttls smtp -crlf -connect server.domain.tld:587 | openssl x509 -text
+openssl s_client -connect vsp1.example.local:25 -starttls smtp
+openssl s_client -connect vsp2.example.local:25 -starttls smtp
+---------
+
+php artisan config:clear
+php artisan cache:clear
+
+ping
+telnet
+telnet mailcatcher.domain.com 1025
+telnet pepipost.com 25
+nc vsp1.example.local 25
+telnet vsp1.example.local 25
+
+apt-get update -y
+apt-get install -y iputils-ping
+apt-get install telnet -y
+apt install curl  -y
+
+apk add curl  -y
+
+
+telnet 172.21.0.3 1025
+nslookup -type=mx example.local
+dig example.local mx
+curl http://localhost:1080
+ping 172.21.0.3
+smtpping admin@example.local
+smtpping -r -w 0 -P 5 admin@example.local @vsp1.example.local
+nslookup -type=mx mailtrap.io
+
+#####################################################
+# MailCatcher PHPMailer Docker Test
+#####################################################
+
+https://mailcatcher.me/
+https://packagist.org/packages/phpmailer/phpmailer
+https://wiki.ubuntuusers.de/Mailserver_testen/
+
+declare(strict_types=1);
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require_once(__DIR__ . '/config.php');
+require_once('vendor/autoload.php');
+
+$mail = new PHPMailer(true);
+try {
+    //Server settings
+    $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+    $mail->isSMTP();
+    $mail->Host       = '172.21.0.3';
+    $mail->SMTPAuth   = false;
+    $mail->Username   = '';
+    $mail->Password   = '';
+    $mail->Port       = 1025;
+    $mail->SMTPDebug = 2; // to see exactly what's the issue
+    $mail->SMTPSecure = "";
+    $mail->SMTPAutoTLS = false;
+    $mail->SMTPOptions = array(
+        'ssl' => array(
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => true
+        )
+    );
+    //Recipients
+    $mail->setFrom('foo@example.com', 'Mailer');
+    $mail->addAddress('tester@example.com', 'Tester');
+    //Content
+    $mail->isHTML(true);
+    $mail->Subject = 'Here is the subject';
+    $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+    $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+    $mail->send();
+    echo 'Message has been sent';
+} catch (Exception $e) {
+    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+}
+
+
+###############################################################
+“Could Not Access File:” in PHPMailer function
+###############################################################
+
+https://stackoverflow.com/questions/21216883/could-not-access-file-in-phpmail-function
+https://github.com/PHPMailer/PHPMailer/issues/1645
+https://stackoverflow.com/questions/18753122/phpmailer-addstringattachment-with-pdf
+https://stackoverflow.com/questions/312230/proper-mime-media-type-for-pdf-files
+https://www.daniweb.com/programming/web-development/threads/447877/phpmailer-error
+https://www.sitepoint.com/community/t/could-not-acess-file-using-phpmailer-to-send-email-with-one-attachment/42320
+https://www.sitepoint.com/community/t/could-not-acess-file-using-phpmailer-to-send-email-with-one-attachment/42320
+https://www.drupal.org/project/smtp/issues/3228138
+
+$mail->addAttachment( $sPath, basename($sPath), $encoding = 'base64', $type = 'application/octet-stream', $disposition = 'attachment');
+$mail->addAttachment( $sPath, basename($sPath), $encoding = 'base64', $type = 'application/pdf', $disposition = 'attachment');
+
+ls -al /path/to/file
+
+protected static function isPermittedPath($path)
+{
+ //Matches scheme definition from https://tools.ietf.org/html/rfc3986#section-3.1
+ return !preg_match('#^[a-z][a-z\d+.-]*://#i', $path);
+}
+
+###############################################################
+ZipArchive  PHPMailer
+###############################################################
+
+https://www.php.net/manual/de/class.ziparchive.php
+https://www.php.net/manual/de/ziparchive.open.php
+https://stackoverflow.com/questions/11540339/how-to-create-a-zip-file-using-php
+https://stackoverflow.com/questions/62910196/mailer-error-in-phpmailer-function-to-send-email
+https://stackoverflow.com/questions/6433643/file-permissions-and-chmod-how-to-set-777-in-php-upon-file-creation
+https://www.php.net/manual/en/function.chmod.php
+https://www.php.net/manual/en/function.chown.php
+https://stackoverflow.com/questions/4914750/how-to-zip-a-whole-folder-using-php
+
+// Read and write for owner, nothing for everybody else
+chmod("/somedir/somefile", 0600);
+// Read and write for owner, read for everybody else
+chmod("/somedir/somefile", 0644);
+// Everything for owner, read and execute for others
+chmod("/somedir/somefile", 0755);
+// Everything for owner, read and execute for owner's group
+chmod("/somedir/somefile", 0750);
+
+
+$path = "/home/sites/php.net/public_html/sandbox.zip";
+$user_name = "root";
+chown($path, $user_name);
+
+
+chmod($sandbox, 0644);
+chown($sandbox, "www-data");
+
+chown -R "www-data" /var/www/html/
+chmod -R 777 /var/www/html/
+chown -R "www-data:www-data" /var/www/html/
+ls -lha /var/www/html/
+
+
+$zip = new ZipArchive;
+$res = $zip->open('test.zip', ZipArchive::CREATE);
+if ($res === TRUE) {
+    $zip->addFromString('test.txt', 'Der Dateiinhalt kommt hier');
+    $zip->addFile('data.txt', 'eintragsname.txt');
+    $zip->close();
+    echo 'ok';
+} else {
+    echo 'Fehler';
+}
+
+......
+
+$zip = new ZipArchive;
+$res = $zip->open('test.zip');
+if ($res === TRUE) {
+    echo 'ok';
+    $zip->extractTo('test');
+    $zip->close();
+} else {
+    echo 'Fehler, Code:' . $res;
+}
+
+......
+
+$zip = new ZipArchive();
+$DelFilePath="first.zip";
+if(file_exists($_SERVER['DOCUMENT_ROOT']."/TEST/".$DelFilePath)) {
+        unlink ($_SERVER['DOCUMENT_ROOT']."/TEST/".$DelFilePath);
+}
+if ($zip->open($_SERVER['DOCUMENT_ROOT']."/TEST/".$DelFilePath, ZIPARCHIVE::CREATE) != TRUE) {
+        die ("Could not open archive");
+}
+$zip->addFile("file_path","file_name");
+// close and save archive
+$zip->close();
+
+......
+
+$zipFile = "./testZip.zip";
+$zipArchive = new ZipArchive();
+if ($zipArchive->open($zipFile, (ZipArchive::CREATE | ZipArchive::OVERWRITE)) !== true)
+    die("Failed to create archive\n");
+$zipArchive->addGlob("./*.txt");
+if ($zipArchive->status != ZIPARCHIVE::ER_OK)
+    echo "Failed to write files to zip\n";
+$zipArchive->close();
+
+###############################################################
+mailgun mailtrap
+###############################################################
+
+https://mailtrap.io/
+https://www.mailgun.com/de/
+
+https://devpress.csdn.net/cloudnative/63055fb37e6682346619e140.html
+https://github.com/mailgun/mailgun-php
+https://stackoverflow.com/questions/69538788/laravel-with-mailcatcher-thrown-exception-cannot-assign-requested-address
+https://laracasts.com/discuss/channels/laravel/how-can-i-solve-connection-could-not-be-established-with-host-smtpgmailcom
+https://laracasts.com/discuss/channels/laravel/connection-could-not-be-established-with-host-stream-socket-client
+
+'mailers' => [
+    'smtp' => [
+        'transport' => 'smtp',
+        'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
+        'port' => env('MAIL_PORT', 587),
+        'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+        'username' => env('MAIL_USERNAME'),
+        'password' => env('MAIL_PASSWORD'),
+        'timeout' => null,
+        'auth_mode' => null,
+    ],
+],
+
