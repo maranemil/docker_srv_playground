@@ -21,8 +21,8 @@ services:
       - "9008:80"
     environment:
       WORDPRESS_DB_HOST: my_database:3306
-      WORDPRESS_DB_USER: blabla
-      WORDPRESS_DB_PASSWORD: blabla
+      WORDPRESS_DB_USER: admin
+      WORDPRESS_DB_PASSWORD: password
       WORDPRESS_DB_NAME: my_wp_database
       WORDPRESS_TABLE_PREFIX: wp_
       WORDPRESS_DEBUG: 1

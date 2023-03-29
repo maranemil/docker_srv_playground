@@ -191,7 +191,7 @@ $mail->Host = "ssl://smtp.gmail.com";
 $mail->Port = 587;
 $mail->SMTPAuth = true; // turn on SMTP authentication
 $mail->Username = "myemail@example.com"; // SMTP username
-$mail->Password = "mypasswword"; // SMTP password
+$mail->Password = "password"; // SMTP password
 $Mail->Priority = 1;
 $mail->AddAddress("myemail@gmail.com","Name");
 $mail->SetFrom($visitor_email, $name);

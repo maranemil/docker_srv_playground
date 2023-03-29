@@ -40,9 +40,9 @@ services:
       - --collation-server=utf8_unicode_ci
     environment:
       - MYSQL_USER=typo3
-      - MYSQL_PASSWORD=badPasswordChangeIt
+      - MYSQL_PASSWORD=password
       - MYSQL_DATABASE=typo3
-      - MYSQL_ROOT_PASSWORD=veryBadForRoot
+      - MYSQL_ROOT_PASSWORD=password
     image: mariadb:10.4
     networks:
       - private

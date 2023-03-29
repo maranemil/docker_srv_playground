@@ -103,7 +103,7 @@ curl -i -X POST --data '@role.json' -H 'Content-Type: application/json' -H "Auth
 curl --location --request POST 'http://localhost:8080/auth/realms/master/protocol/openid-connect/token' \
 --header 'Content-Type: application/x-www-form-urlencoded' \
 --data-urlencode 'username=admin2' \
---data-urlencode 'password=admin2' \
+--data-urlencode 'password=password' \
 --data-urlencode 'grant_type=password' \
 --data-urlencode 'client_id=admin-cli'
 

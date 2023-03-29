@@ -464,10 +464,10 @@ bin/kc.[sh|bat] start-dev --http-relative-path /auth
 	JAVA_OPTS: "-Djava.security.egd=file:/dev/./urandom -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/home -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
 	KC_PROXY: "edge"
 	KEYCLOAK_ADMIN: "admin"
-	KEYCLOAK_ADMIN_PASSWORD: "xxx"
+	KEYCLOAK_ADMIN_PASSWORD: "password"
 	KC_DB_URL: "jdbc:mariadb://xxxx:3306/keycloak"
 	KC_DB_USERNAME: "xxx"
-	KC_DB_PASSWORD: "xxx"
+	KC_DB_PASSWORD: "password"
 	KC_DB: "mariadb"
 	KC_HTTP_RELATIVE_PATH: "/"
 	KC_HOSTNAME: "xxx.com"
@@ -490,7 +490,7 @@ services:
     environment:
       TZ: Europe/Berlin
       KEYCLOAK_USER: keycloak
-      KEYCLOAK_PASSWORD: keycloak1!
+      KEYCLOAK_PASSWORD: password!
       DB_VENDOR: h2
     ports:
       - "8443:8443"

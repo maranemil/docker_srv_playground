@@ -18,7 +18,7 @@ services:
     image: mongo
     environment:
       - MONGO_INITDB_ROOT_USERNAME=usr
-      - MONGO_INITDB_ROOT_PASSWORD=psswd
+      - MONGO_INITDB_ROOT_PASSWORD=password
     volumes:
       - mongo-db:/data/db
 

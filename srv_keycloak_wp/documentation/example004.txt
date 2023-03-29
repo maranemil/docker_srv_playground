@@ -323,7 +323,7 @@ services:
       - nw_containers
     environment:
       - POSTGRES_USER=blub
-      - POSTGRES_PASSWORD=bla
+      - POSTGRES_PASSWORD=password
       - POSTGRES_DB=blub
     volumes:
       - postgres_data:/var/lib/postgresql/data/
@@ -609,7 +609,7 @@ services:
       - "postgres-data:/var/lib/postgresql/data"
     environment:
       - POSTGRES_USER=foo
-      - POSTGRES_PASSWORD=
+      - POSTGRES_PASSWORD=password
       - POSTGRES_DB=project
 
   redis:

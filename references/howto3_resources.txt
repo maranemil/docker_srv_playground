@@ -140,8 +140,8 @@ https://adamtheautomator.com/docker-compose-environment-variables/
 
 # Enviornmental Variables file .env.dev
 MYSQL_ROOT_PASSWORD="password_DEV"
-MYSQL_ALLOW_EMPTY_PASSWORD="password1"
-MYSQL_RANDOM_ROOT_PASSWORD="password1"
+MYSQL_ALLOW_EMPTY_PASSWORD="password"
+MYSQL_RANDOM_ROOT_PASSWORD="password"
 
 
 
