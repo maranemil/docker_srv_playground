@@ -43,7 +43,6 @@ composer update
     }
 }
 
-
 ----------------------------------------------------------------------
 
 #### install ####
@@ -56,11 +55,8 @@ symfony composer require api
 symfony console doctrine:database:create
 symfony console doctrine:schema:create
 symfony serve
+
 ----------------------------------------------------------------------
-
-
-----------------------------------------------------------------
-
 
 #symfony serve
 #symfony composer require api
@@ -74,7 +70,6 @@ symfony server:ca:install
 
 php bin/console server:stop
 php bin/console server:start --force
-
 
 php bin/console list
 php app/console list
@@ -118,3 +113,140 @@ http://172.19.0.2:8000/docs
         "symfony/yaml": "6.2.*"
     }
 }
+
+##################################################################
+symfony -h |  grep serve
+##################################################################
+
+local:proxy:start, proxy:start                                                      Start the local proxy server (local domains support)
+local:proxy:status, proxy:status                                                    Get the local proxy server status
+local:proxy:stop, proxy:stop                                                        Stop the local proxy server
+local:proxy:url, proxy:url                                                          Get the local proxy server URL
+local:server:ca:install, server:ca:install                                          Create a local Certificate Authority for serving HTTPS
+local:server:ca:uninstall, server:ca:uninstall                                      Uninstall the local Certificate Authority
+local:server:list, server:list                                                      List all configured local web servers
+local:server:log, server:log                                                        Display local web server logs
+local:server:prod, server:prod                                                      Switch a project to use Symfony's production environment
+local:server:start, server:start, serve                                             Run a local web server
+local:server:status, server:status                                                  Get the local web server status
+local:server:stop, server:stop                                                      Stop the local web server
+
+##################################################################
+composer
+##################################################################
+
+https://getcomposer.org/doc/articles/autoloader-optimization.md
+https://getcomposer.org/doc/03-cli.md
+
+composer install
+composer update
+composer recipes
+
+composer dump
+composer dump-autoload
+composer clear-cache
+
+php bin/console cache:clear
+php bin/console cache:clear --no-warmup --no-optional-warmers
+chmod -R 777 /var/www/
+
+composer -h
+composer list
+
+Available commands:
+  about                    Shows a short information about Composer
+  archive                  Creates an archive of this composer package
+  audit                    Checks for security vulnerability advisories for installed packages
+  auto-scripts             Runs the auto-scripts script as defined in composer.json
+  browse                   [home] Opens the package's repository URL or homepage in your browser
+  bump                     Increases the lower limit of your composer.json requirements to the currently installed versions
+  check-platform-reqs      Check that platform requirements are satisfied
+  clear-cache              [clearcache|cc] Clears composer's internal package cache
+  completion               Dump the shell completion script
+  config                   Sets config options
+  create-project           Creates new project from a package into given directory
+  depends                  [why] Shows which packages cause the given package to be installed
+  diagnose                 Diagnoses the system to identify common errors
+  dump-autoload            [dumpautoload] Dumps the autoloader
+  exec                     Executes a vendored binary/script
+  fund                     Discover how to help fund the maintenance of your dependencies
+  global                   Allows running commands in the global composer dir ($COMPOSER_HOME)
+  help                     Display help for a command
+  init                     Creates a basic composer.json file in current directory
+  install                  [i] Installs the project dependencies from the composer.lock file if present, or falls back on the composer.json
+  licenses                 Shows information about licenses of dependencies
+  list                     List commands
+  outdated                 Shows a list of installed packages that have updates available, including their latest version
+  prohibits                [why-not] Shows which packages prevent the given package from being installed
+  reinstall                Uninstalls and reinstalls the given package names
+  remove                   Removes a package from the require or require-dev
+  require                  [r] Adds required packages to your composer.json and installs them
+  run-script               [run] Runs the scripts defined in composer.json
+  search                   Searches for packages
+  self-update              [selfupdate] Updates composer.phar to the latest version
+  show                     [info] Shows information about packages
+  status                   Shows a list of locally modified packages
+  suggests                 Shows package suggestions
+  update                   [u|upgrade] Updates your dependencies to the latest version according to composer.json, and updates the composer.lock file
+  validate                 Validates a composer.json and composer.lock
+ symfony
+  symfony:dump-env         [dump-env] Compiles .env files to .env.local.php.
+  symfony:generate-id
+  symfony:recipes          [recipes] Shows information about all available recipes.
+  symfony:recipes:install  [recipes:install|symfony:sync-recipes|sync-recipes|fix-recipes] Installs or reinstalls recipes for already installed packages.
+  symfony:recipes:update   [recipes:update] Updates an already-installed recipe to the latest version.
+  symfony:unpack           [unpack] [DEPRECATED] Unpacks a Symfony pack.
+
+
+##################################################################
+lcobucci jwt
+##################################################################
+
+composer require lcobucci/jwt
+
+https://copyprogramming.com/howto/error-lcobucci-jwt-signer-invalidkeyprovided-it-was-not-possible-to-parse-your-key
+https://lcobucci-jwt.readthedocs.io/en/latest/configuration/
+https://lcobucci-jwt.readthedocs.io/en/latest/installation/
+https://lcobucci-jwt.readthedocs.io/en/latest/upgrading/
+https://packagist.org/packages/lcobucci/jwt
+https://packagist.org/packages/lcobucci/jwt#3.3.3
+https://stackoverflow.com/questions/65563793/error-lcobucci-jwt-signer-invalidkeyprovided-it-was-not-possible-to-parse-your
+https://symfony.com/bundles/LexikJWTAuthenticationBundle/current/1-configuration-reference.html
+https://www.geeksforgeeks.org/difference-between-php-artisan-dump-autoload-and-composer-dump-autoload/
+
+# laravel
+php artisan jwt:secret
+php artisan key:generate
+php artisan jwt:secret
+php artisan cache:clear
+php artisan config:clear
+
+
+php artisan serve --host=hostname.app --port=8080
+php artisan cache:clear
+php artisan config:clear
+php artisan view:clear
+
+docker system prune -a
+
+##################################################################
+404 resource not found api-platform CORS
+##################################################################
+
+https://api-platform.com/docs/admin/getting-started/
+https://api-platform.com/docs/admin/getting-started/#creating-the-admin
+https://api-platform.com/docs/core/security/
+https://api-platform.com/docs/core/user/
+https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-cors.html
+https://docs.aws.amazon.com/de_de/apigateway/latest/developerguide/how-to-cors.html
+https://github.com/api-platform/core/issues/1199
+https://javascript.info/fetch-crossorigin
+https://stackoverflow.com/questions/42386176/404-resource-not-found-api-platform
+https://stackoverflow.com/questions/54985470/api-platform-corsalloworigin-doesnt-set
+
+php bin/console cache:clear
+php -S localhost:8000 -t public
+symfony server:start
+
