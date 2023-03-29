@@ -1,0 +1,14 @@
+##################################################################
+nginx-proxy
+##################################################################
+
+https://hub.docker.com/r/jwilder/nginx-proxy
+https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/Docker-Nginx-reverse-proxy-setup-example
+https://www.freecodecamp.org/news/docker-nginx-letsencrypt-easy-secure-reverse-proxy-40165ba3aee2/
+https://nginxproxymanager.com/
+https://phoenixnap.com/kb/docker-nginx-reverse-proxy
+https://medium.com/@devops.ent/nginx-proxy-manager-how-to-installation-and-configuration-using-docker-portainer-1348c67a392e
+
+docker run -d --name nginx-base -p 80:80 nginx:latest
+
+
