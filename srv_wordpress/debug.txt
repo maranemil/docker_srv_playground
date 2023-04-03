@@ -1,0 +1,208 @@
+
+##################################################################################
+Add admin user to wordpress
+##################################################################################
+
+https://www.wpbeginner.com/wp-tutorials/how-to-add-an-admin-user-to-the-wordpress-database-via-mysql/
+
+INSERT INTO `databasename`.`wp_users` (`ID`, `user_login`, `user_pass`, `user_nicename`, `user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `display_name`) VALUES ('3', 'demo', MD5('demo'), 'Your Name', 'test@example.com', 'http://www.example.com/', '2022-09-01 00:00:00', '', '0', 'Your Name');
+
+INSERT INTO `databasename`.`wp_usermeta` (`umeta_id`, `user_id`, `meta_key`, `meta_value`) VALUES (NULL, '3', 'wp_capabilities', 'a:1:{s:13:"administrator";s:1:"1";}');
+INSERT INTO `databasename`.`wp_usermeta` (`umeta_id`, `user_id`, `meta_key`, `meta_value`) VALUES (NULL, '3', 'wp_user_level', '10');
+
+
+wp_usermeta
+~~~~~~~~~~~~~~~~~~~~~~~~
+wp_capabilities a:1:{s:13:"administrator";s:1:"1";}
+wp_user_level 10
+
+------------
+##################################################################################
+Curl: (60) SSL certificate problem: unable to get local issuer certificate
+##################################################################################
+
+https://stackoverflow.com/questions/29822686/curl-error-60-ssl-certificate-unable-to-get-local-issuer-certificate
+https://laracasts.com/discuss/channels/general-discussion/curl-error-60-ssl-certificate-problem-unable-to-get-local-issuer-certificate
+https://stackoverflow.com/questions/44632619/wordpress-curl-error-60-ssl-certificate
+https://ryansechrest.com/2022/10/curl-error-60-ssl-certificate-problem-self-signed-certificate-in-certificate-chain-in-wordpress/
+https://stackoverflow.com/questions/44632619/wordpress-curl-error-60-ssl-certificate
+https://stackoverflow.com/questions/44632619/wordpress-curl-error-60-ssl-certificate
+https://datafeedrapi.helpscoutdocs.com/article/220-curl-error-60-ssl-certificate-problem-unable-to-get-local-issuer-certificate
+https://wp-kama.com/note/error-making-request-wordpress
+https://laracasts.com/discuss/channels/general-discussion/curl-error-60-ssl-certificate-problem-unable-to-get-local-issuer-certificate?page=2
+
+--------------------------------
+var_dump(openssl_get_cert_locations());
+--------------------------------
+curl_setopt($process, CURLOPT_SSL_VERIFYPEER, false);
+cURL -k --insecure url
+--------------------------------
+$guzzle->setDefaultOption('verify', false);
+--------------------------------
+add_filter('https_ssl_verify', '__return_false');
+apply_filters( 'https_local_ssl_verify', false );
+--------------------------------
+$params = [
+    "sslverify" => false,
+    "timeout" => 2,
+    "user-agent" => "path/" . VERSION,
+    "body" => "",
+];
+$response = wp_remote_get($testurl, $params);
+$request = wp_remote_request(home_url(), ["sslverify" => false]);
+--------------------------------
+$content = wp_remote_get($discovery_endpoint, ["sslverify" => false]);
+--------------------------------
+
+add_filter(
+    "http_request_args",
+    function ($args) {
+        if (getenv("WP_ENV") !== "development") {
+            return $args;
+        }
+        $args["sslcertificates"] =
+            ini_get("curl.cainfo") ?? $args["sslcertificates"];
+        return $args;
+    },
+    0,
+    1
+);
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+FIX WORK AROUND
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+$response = wp_remote_post($tokenendpoint, [
+    "method" => "POST",
+    "timeout" => 45,
+    "redirection" => 5,
+    "httpversion" => "1.0",
+    "blocking" => true,
+    "headers" => $headers,
+    "body" => $body, // data
+    "cookies" => [],
+    "sslverify" => false,
+]);
+if (is_wp_error($response)) {
+    wp_die(esc_html($response));
+}
+$response = $response["body"];
+$content = json_decode($response, true);
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+FIX WORK AROUND
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+$response = wp_remote_post($this->endpoint_token, [
+    "method" => "POST", // GET
+    "timeout" => 45,
+    "redirection" => 5,
+    "httpversion" => "1.0",
+    "blocking" => true,
+    "headers" => [
+        "Content-Type" => "application/x-www-form-urlencoded",
+    ],
+    "body" => [
+        "grant_type" => "client_credentials",
+        "client_id" => $this->client_id,
+        "client_secret" => $this->client_secret,
+    ],
+    "cookies" => [],
+    "sslverify" => false,
+]);
+$arrResponse = (array) json_decode(
+    $response["body"],
+    true,
+    512,
+    JSON_THROW_ON_ERROR
+);
+if (empty($arrResponse["access_token"])) {
+    self::$errors[] = "error";
+}
+$this->access_token = $arrResponse["access_token"];
+
+
+------
+
+$url = "YOUR_ENDPOINT";
+$args = [
+    "headers" => [
+        "Authorization" => "HASH_HERE",
+    ],
+    "sslverify" => false,
+    "data" => [
+        "campaign_id" => $campaign_id,
+    ],
+];
+
+$response = wp_remote_get($url, $args);
+$body = wp_remote_retrieve_body($response);
+
+---
+https://stackoverflow.com/questions/65514325/wordpress-intercepting-response-location-header-impossible-response-headers-are
+https://stackoverflow.com/questions/65514325/wordpress-intercepting-response-location-header-impossible-response-headers-are
+https://github.com/WP-API/client-php/blob/master/library/WPAPI.php
+
+<?php
+$url = "base_url/endpoint/";
+$headers = [
+    "Content-Type" => "application/x-www-form-urlencoded",
+];
+$type = "POST";
+$data = [
+    //'token' => <omitted>,
+    //'email' => <omitted>,
+    //'password' => <omitted>
+    "grant_type" => "<omitted>",
+    "client_id" => "<omitted>",
+    "client_secret" => "<omitted>",
+];
+
+$options = [
+    #'follow_redirects' => false,
+    "verify" => false,
+    "verifyname" => false,
+];
+
+Requests::request($url, $headers, $data, $type, $options);
+$response = Requests::post($url, [], $data);
+$arrResponse = (array) json_decode(
+    $response->body,
+    true,
+    512,
+    JSON_THROW_ON_ERROR
+);
+if (empty($arrResponse["access_token"])) {
+    self::$errors[] = "Error";
+}
+
+
+##################################################################################
+WP_DEBUG
+##################################################################################
+
+https://wordpress.stackexchange.com/questions/19689/wp-debug-is-not-set-but-im-still-getting-warnings
+https://wordpress.org/support/topic/warnings-and-errors-displayed-with-wp-debug-set-to-false/
+https://stackoverflow.com/questions/32266155/definewp-debug-true-does-not-show-errors
+https://stackoverflow.com/questions/69733110/wordpress-php-warnings-and-notices-shown-even-with-wp-debug-and-wp-debug-displa
+
+
+define( 'WP_DEBUG', true );
+define( 'WP_DEBUG_DISPLAY', true );
+define( 'SAVEQUERIES', true );
+@ini_set('html_errors', 'On');
+@ini_set( 'display_errors', 1 );
+#ini_set("log_errors", 1);
+ini_set("display_startup_errors", 1);
+ini_set("error_reporting", E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
+
+
+
+define('WP_DEBUG', true);
+@ini_set('html_errors', 'On');
+ini_set('log_errors','On');
+ini_set('display_errors','On');
+ini_set('error_reporting', E_ALL );
+ini_set("display_startup_errors", 1);
+define('WP_DEBUG_LOG', true);
+define('WP_DEBUG_DISPLAY', true);
+
