@@ -1,0 +1,61 @@
+version: "2"
+
+services:
+  openldap:
+    image: bitnami/openldap:2
+    user: root
+    ports:
+      - '1389:1389'
+      - '1636:1636'
+    environment:
+      - LDAP_ADMIN_USERNAME=admin
+      - LDAP_ADMIN_PASSWORD=adminpassword
+      - LDAP_USERS=user01,user02
+      - LDAP_PASSWORDS=password1,password2
+      - LDAP_ENABLE_TLS=no
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - my-network
+    volumes:
+      - 'openldap_data:/bitnami/openldap'
+
+  openldap-ui:
+    image: wheelybird/ldap-user-manager:latest
+#    restart: unless-stopped
+    ports:
+      - "8082:80"
+    environment:
+      - SERVER_HOSTNAME=localhost:8082
+      - LDAP_URI=ldap://openldap
+      - LDAP_BASE_DN=dc=company,dc=network
+      - LDAP_ADMINS_GROUP=admins
+      - LDAP_ADMIN_BIND_DN=cn=admin,dc=company,dc=network
+      - LDAP_ADMIN_BIND_PWD=password
+      - LDAP_IGNORE_CERT_ERRORS=true
+      - NO_HTTPS=true
+    depends_on:
+      - openldap
+
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/var/www/html
+    networks:
+      - my-network
+
+  debian:
+    image: debian:11
+    tty: true
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
+
+volumes:
+  openldap_data:
+    driver: local
+

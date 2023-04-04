@@ -1,0 +1,686 @@
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+openldap mlan
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://hub.docker.com/r/mlan/openldap/
+
+
+version: '3'
+services:
+  auth:
+    image: mlan/openldap
+    networks:
+      - backend
+    command: --root-cn ${LDAPROOT_CN-admin} --root-pw ${LDAPROOT_PW-secret}
+    environment:
+      - LDAPBASE=${LDAPBASE-dc=example,dc=com}
+      - LDAPLOGLEVEL=${LDAPLOGLEVEL-parse}
+    volumes:
+      - auth:/srv
+      - /etc/localtime:/etc/localtime:ro        # Use host timezone
+
+networks:
+  backend:
+
+volumes:
+  auth:
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+openldap osixia
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://hub.docker.com/r/osixia/openldap
+https://github.com/osixia/docker-openldap
+
+docker run --name my-openldap-container --detach osixia/openldap:1.5.0
+docker run -p 389:389 -p 636:636 --name my-openldap-container --detach osixia/openldap:1.5.0
+docker exec my-openldap-container ldapsearch -x -H ldap://localhost -b dc=example,dc=org -D "cn=admin,dc=example,dc=org" -w admin
+
+docker run \
+	--env LDAP_ORGANISATION="My Company" \
+	--env LDAP_DOMAIN="my-company.com" \
+	--env LDAP_ADMIN_PASSWORD="JonSn0w" \
+	--detach osixia/openldap:1.5.0
+
+docker build \
+	--build-arg LDAP_OPENLDAP_GID=1234 \
+	--build-arg LDAP_OPENLDAP_UID=2345 \
+	-t my_ldap_image .
+docker run --name my_ldap_container -d my_ldap_image
+# this should output uid=2345(openldap) gid=1234(openldap) groups=1234(openldap)
+docker exec my_ldap_container id openldap
+
+docker run \
+	--hostname ldap.example.org \
+	--volume /path/to/certificates:/container/service/slapd/assets/certs \
+	--env LDAP_TLS_CRT_FILENAME=my-ldap.crt \
+	--env LDAP_TLS_KEY_FILENAME=my-ldap.key \
+	--env LDAP_TLS_CA_CRT_FILENAME=the-ca.crt \
+	--detach osixia/openldap:1.5.0
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+openldap bitnami
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://hub.docker.com/r/bitnami/openldap/
+
+
+docker run --name openldap bitnami/openldap:latest
+docker pull bitnami/openldap:latest
+
+
+# Connecting to other containers
+docker network create my-network --driver bridge
+docker run --detach --rm --name openldap \
+  --network my-network \
+  --env LDAP_ADMIN_USERNAME=admin \
+  --env LDAP_ADMIN_PASSWORD=adminpassword \
+  --env LDAP_USERS=customuser \
+  --env LDAP_PASSWORDS=custompassword \
+  bitnami/openldap:latest
+docker run --detach --rm --name mariadb-galera \
+    --network my-network \
+    --env MARIADB_ROOT_PASSWORD=root-password \
+    --env MARIADB_GALERA_MARIABACKUP_PASSWORD=backup-password \
+    --env MARIADB_USER=customuser \
+    --env MARIADB_DATABASE=customdatabase \
+    --env MARIADB_ENABLE_LDAP=yes \
+    --env LDAP_URI=ldap://openldap:1389 \
+    --env LDAP_BASE=dc=example,dc=org \
+    --env LDAP_BIND_DN=cn=admin,dc=example,dc=org \
+    --env LDAP_BIND_PASSWORD=adminpassword \
+    bitnami/mariadb-galera:latest
+docker run -it --rm --name mariadb-client \
+    --network my-network \
+    bitnami/mariadb-galera:latest mysql -h mariadb-galera -u customuser -D customdatabase -pcustompassword
+
+# Using a Docker Compose file
+version: '2'
+
+networks:
+  my-network:
+    driver: bridge
+services:
+  openldap:
+    image: bitnami/openldap:2
+    ports:
+      - '1389:1389'
+      - '1636:1636'
+    environment:
+      - LDAP_ADMIN_USERNAME=admin
+      - LDAP_ADMIN_PASSWORD=adminpassword
+      - LDAP_USERS=user01,user02
+      - LDAP_PASSWORDS=password1,password2
+#     - LDAP_ENABLE_TLS=yes
+#     - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - my-network
+    volumes:
+      - 'openldap_data:/bitnami/openldap'
+  myapp:
+    image: 'YOUR_APPLICATION_IMAGE'
+    networks:
+      - my-network
+volumes:
+  openldap_data:
+    driver: local
+
+docker-compose up -d
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+OpenLDAP container with demo data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://documentation.abas.cloud/en/abas-keycloak/setup-user-federation-ldap.html
+
+docker pull rroemhild/test-openldap
+docker run --privileged -d -p 389:389 -p 636:636 rroemhild/test-openldap
+
+###########################################################
+MISC
+###########################################################
+
+https://hub.docker.com/_/php
+https://github.com/adldap/adLDAP
+https://laracasts.com/discuss/channels/laravel/adldap2-laravel-with-windows-active-directory
+https://github.com/jotaelesalinas/laravel-adminless-ldap-auth
+https://hub.docker.com/r/linuxserver/ldap-auth
+https://stackoverflow.com/questions/8754826/how-to-disable-xdebug
+https://getcomposer.org/doc/03-cli.md#install-i
+https://packagist.org/packages/noahheck/e_pdostatement
+https://packagist.org/packages/simplesamlphp/simplesamlphp
+https://www.drupal.org/project/simplesamlphp_auth/issues/3173343
+https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-simplesamlphp-for-saml-authentication-on-ubuntu-18-04
+https://docs.acquia.com/resource/simplesaml/configphp/
+https://simplesamlphp.org/docs/stable/simplesamlphp-install
+https://social.technet.microsoft.com/wiki/contents/articles/2195.active-directory-dsquery-commands.aspx
+
+###########################################################
+phpLDAPadmin
+###########################################################
+
+https://hub.docker.com/r/silintl/phpldapadmin
+https://phpldapadmin.sourceforge.net/wiki/index.php/Main_Page
+https://github.com/leenooks/phpLDAPadmin
+https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-openldap-and-phpldapadmin-on-ubuntu-16-04
+https://wiki.debian.org/LDAP/phpldapadmin
+https://www.howtoforge.com/how-to-install-and-configure-openldap-phpldapadmin-on-ubuntu-2004/
+https://www.techrepublic.com/article/how-to-install-and-configure-ldap-and-phpldapadmin/
+https://github.com/leenooks/phpLDAPadmin/wiki
+https://github.com/leenooks/phpLDAPadmin
+https://medium.com/analytics-vidhya/install-openldap-with-phpldapadmin-on-ubuntu-9e56e57f741e
+https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-openldap-and-phpldapadmin-on-ubuntu-16-04
+https://wiki.archlinux.org/title/PhpLDAPadmin
+
+
+# debian:11
+sudo apt-get update
+sudo apt-get install slapd ldap-utils -y
+sudo dpkg-reconfigure slapd
+sudo ufw allow ldap
+ldapwhoami -H ldap:// -x
+
+
+
+sudo apt-get install phpldapadmin
+sudo nano /etc/phpldapadmin/config.php
+
+----
+https://packages.debian.org/sid/all/phpldapadmin/download
+https://unix.stackexchange.com/questions/321271/apt-get-doesnt-find-phpldapadmin-in-debian-9-stretch
+https://www.tecmint.com/install-openldap-server-and-administer-with-phpldapadmin-in-debianubuntu/
+
+apt install wget
+wget http://ftp.us.debian.org/debian/pool/main/p/phpldapadmin/phpldapadmin_1.2.6.3-0.3_all.deb
+dpkg -i phpldapadmin_1.2.6.3-0.3_all.deb
+
+phpldapadmin depends on php; however:
+  Package php is not installed.
+  Package php-ldap is not installed.
+  Package php-xml is not installed.
+  Package ucf is not installed.
+
+apt --fix-broken install
+apt install php php-ldap php-xml ucf -y
+apt-get install apache2 php php-mysql -y
+dpkg -i phpldapadmin_1.2.6.3-0.3_all.deb
+
+
+apt install nano -y
+nano /etc/ldap/ldap.conf # Uncomment the BASE and URI lines
+dpkg-reconfigure slapd
+ldapsearch -x
+slapcat
+
+
+apt-get install phpldapadmin
+nano /etc/phpldapadmin/config.php
+
+$servers = new Datastore();
+$servers->newServer('ldap_pla');
+$servers->setValue('server','name','Tecmint LDAP Server');
+$servers->setValue('server','host','127.0.0.1');
+$servers->setValue('server','base',array('dc=tecmint123,dc=com'));
+$servers->setValue('login','bind_id','cn=admin,dc=tecmint123,dc=com');
+
+
+slapcat # print config
+slappasswd # Create OpenLDAP Bind DN
+#ldapadd -Y EXTERNAL -H ldapi:///
+
+service apache2 restart
+http://172.19.0.4/phpldapadmin/
+
+cn=admin,dc=openldap,dc=com
+adminpassword
+
+----
+
+/etc/phpldapadmin/config.php
+$servers->setValue('server','name','Example LDAP');
+$servers->setValue('server','base', array('dc=example,dc=com'));
+#$servers->setValue('login','bind_id','cn=admin,dc=example,dc=com');
+$config->custom->appearance['hide_template_warning'] = true;
+
+# Configuring StartTLS LDAP Encryption
+sudo nano /usr/local/bin/renew.sh
+SITE=example.com
+sudo chmod u+x /usr/local/bin/renew.sh
+sudo /usr/local/bin/renew.sh
+sudo su -c 'ls -al /etc/ssl/{certs,private}/example.com*'
+https://example.com/phpldapadmin
+
+# Configuring slapd to Offer Secure Connections
+sudo usermod -aG ssl-cert openldap
+sudo systemctl restart slapd
+ldapwhoami -H ldap://example.com -x -ZZ
+
+*
+*
+*
+
+Phpldapadmin error UNHANDLED, $resource is not a resource
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://forum.iredmail.org/topic12375-phpldapadmin-error-unhandled-resource-is-not-a-resource.html
+https://github.com/leenooks/phpLDAPadmin/blob/master/lib/ds_ldap.php
+https://stackoverflow.com/questions/13921030/phpldapadmin-does-not-work-for-an-unknown-reason
+
+nano /etc/phpldapadmin/config.php
+
+$servers->setValue('server','name','mx.mydomain.com');
+$servers->setValue('server','host','ldaps:127.0.0.1');
+$servers->setValue('server','port',636);
+$servers->setValue('server','base',array('dc=mydomain,dc=com'));
+
+$servers->setValue('server','host','127.0.0.1');
+$servers->setValue('server','port',389);
+$servers->setValue('server','tls',true);
+
+$servers->setValue('server','base',array('dc=barbucha'));
+$servers->setValue('login','bind_id','cn=admin,dc=barbucha');
+
+nano /etc/ldap/ldap.conf:
+TLS_REQCERT  allow
+
+
+vim /etc/openldap/base.ldif
+dn: dc=em,dc=com
+o: RDCenter
+objectclass: dcobject
+objectclass: organization
+
+ldapadd  -f base.ldif  -x -D  cn=admin,dc=em,dc=com -W
+
+*
+*
+*
+
+error - additional info: invalid DN
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://stackoverflow.com/questions/13487225/ldap-issue-ldap-bind-invalid-dn-syntax
+https://www.linuxquestions.org/questions/linux-newbie-8/ldap_bind-invalid-dn-syntax-34-additional-info-invalid-dn-4175489666/
+https://www.linuxquestions.org/questions/linux-newbie-8/ldap_bind-invalid-dn-syntax-34-additional-info-invalid-dn-4175489666/
+https://stackoverflow.com/questions/13487225/ldap-issue-ldap-bind-invalid-dn-syntax
+https://knowledge.broadcom.com/external/article/53754/when-trying-to-connect-to-caldap-from-ld.html
+https://support.hcltechsw.com/csm?id=kb_article&sysparm_article=KB0027482
+https://serverfault.com/questions/812060/ldap-search-invalid-dn-syntax-binddn
+https://community.zammad.org/t/invalid-dn-syntax-ldap-integration/197/4
+https://community.zammad.org/t/invalid-dn-syntax-ldap-integration/197/18
+
+ldapsearch -x -H ldap://172.19.0.3:1389 -D admin -w adminpassword -b "cn=admin,dc=openldap"
+ldapsearch -x -H ldap://172.19.0.3:1389 -D admin -w adminpassword -b "cn=admin,cn=users,dc=openldap,dc=local"
+
+Base DN ou=users,ou=directory, ou=ett,ou=com
+Base User uid=admin,ou=directory,ou=ett,ou=com
+Bind Pass ******
+
+Base User c=TT,ou=users,OU=directory,ou=whatever,ou=com
+
+
+cat /etc/openldap/file.in.ldif
+dn: dc=vekomy,dc=in
+dc: vekomy
+description: LDAP Admin
+objectClass: dcObject
+objectClass: organizationalUnit
+ou: rootobject
+dn: ou=People, dc=orgname,dc=in
+ou: People
+description: Users of orgname
+objectClass: organizationalUnit
+
+cat /etc/openldap/slapd.conf
+
+
+
+###########################################################
+Adldap2
+###########################################################
+
+https://adldap2.github.io/Adldap2/#/?id=quick-start
+https://adldap2.github.io/Adldap2/#/setup?id=getting-started
+https://packagist.org/packages/adldap2/adldap2
+https://packagist.org/packages/adldap/adldap
+https://github.com/adldap/adLDAP
+
+
+###########################################################
+How to test a LDAP connection from a client
+###########################################################
+
+https://serverfault.com/questions/452935/how-to-test-a-ldap-connection-from-a-client
+https://serverfault.com/questions/459083/how-to-get-ldapsearch-on-scientific-linux
+https://command-not-found.com/ldapsearch
+https://www.reddit.com/r/oscp/comments/11dctov/ldapsearch_does_not_accept_the_h_argument_anymore/
+https://stackoverflow.com/questions/57530847/adldap2-openldap-cant-contact-ldap-server
+https://serverfault.com/questions/1105261/unable-to-bind-to-server-cant-contact-ldap-server
+
+ldapsearch -x -LLL -H host.example.com -D user -w password -b"dc=ad,dc=example,dc=com" -s sub "(objectClass=user)" givenName
+ldapsearch -x -LLL -H [host] -D [user] -w [password] -b [base DN] -s sub "([filter])" [attribute list]
+ldapsearch -x -b "uid=username,ou=people,dc=example,dc=com"
+
+apt-get install ldap-utils
+yum install openldap
+apk add openldap
+apk add openldap-clients
+
+ldapsearch does not accept the -h argument anymore -h must be -H
+----------------------------------------------
+ldapsearch -x -H ldap://192.168.167.122
+ldapsearch -x -H ldap://172.19.0.3:389 -D admin -w adminpassword -b "dc=local,dc=com"
+ldapsearch -x -H ldap://172.19.0.3:389 -D admin -w adminpassword -b "dc=ad,dc=example,dc=com,dc=local"
+ldapsearch -x -H ldap://172.19.0.3:1389 -D admin -w adminpassword -b "dc=local,dc=com"
+
+Can't contact LDAP server (-1)
+Invalid DN syntax (34) additional info: invalid DN
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+docker php
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+composer remove noahheck/e_pdostatement
+composer install
+apk add nano
+apk add openldap-clients
+ldapsearch
+ldapsearch -x -H ldap://172.19.0.3:1389 -D admin -w adminpassword -b "cn=admin,dc=openldap"
+
+
+
+docker debian
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sudo apt-get update
+sudo apt-get install slapd ldap-utils -y
+sudo dpkg-reconfigure slapd
+sudo ufw allow ldap
+ldapwhoami -H ldap:// -x
+ldapsearch -x -H ldap://172.20.0.9 -D admin -w adminpassword -b "cn=admin,dc=openldap"
+
+service apache2 restart
+http://172.19.0.2/phpldapadmin/
+
+ldapwhoami -x -H ldap://172.20.0.9:1389
+anonymous
+
+apt install wget -y
+wget http://ftp.us.debian.org/debian/pool/main/p/phpldapadmin/phpldapadmin_1.2.6.3-0.3_all.deb
+dpkg -i phpldapadmin_1.2.6.3-0.3_all.deb
+
+phpldapadmin depends on php; however:
+  Package php is not installed.
+  Package php-ldap is not installed.
+  Package php-xml is not installed.
+  Package ucf is not installed.
+
+apt --fix-broken install -y
+apt install php php-ldap php-xml ucf -y
+apt-get install apache2 php php-mysql -y
+dpkg -i phpldapadmin_1.2.6.3-0.3_all.deb
+
+debconf: unable to initialize frontend: Dialog
+debconf: (No usable dialog-like program is installed, so the dialog based frontend cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 78.)
+debconf: falling back to frontend: Readline
+
+
+apt install nano -y
+nano /etc/ldap/ldap.conf # Uncomment the BASE and URI lines
+dpkg-reconfigure slapd
+ldapsearch -x
+slapcat
+
+
+apt-get install phpldapadmin
+nano /etc/phpldapadmin/config.php
+
+$servers = new Datastore();
+$servers->newServer('ldap_pla');
+$servers->setValue('server','name','Tecmint LDAP Server');
+$servers->setValue('server','host','127.0.0.1');
+$servers->setValue('server','base',array('dc=tecmint123,dc=com'));
+$servers->setValue('login','bind_id','cn=admin,dc=tecmint123,dc=com');
+
+
+slapcat # print config
+slappasswd # Create OpenLDAP Bind DN
+
+
+
+UNHANDLED, $resource is not a resource
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cn=admin,dc=example,dc=com
+cn=admin,dc=example,dc=com,dc=openldap
+cn=admin,dc=172.20.0.9,dc=com
+adminpassword
+
+apt install nano -y
+nano /etc/phpldapadmin/config.php
+
+$servers->setValue('server','host','127.0.0.1');
+$servers->setValue('server','port',389);
+$servers->setValue('server','tls',true);
+
+
+$servers->setValue('server','host','172.20.0.9');
+$servers->setValue('server','port',1389);
+$servers->setValue('server','tls',false);
+
+ldapsearch -h
+  -b basedn  base dn for search
+  -D binddn  bind DN
+  -d level   set LDAP debugging level to `level'
+  -L         print responses in LDIFv1 format
+  -h host    LDAP server
+  -H URI     LDAP Uniform Resource Identifier(s)
+  -p port    port on LDAP server
+  -v         run in verbose mode (diagnostics to standard output)
+  -w passwd  bind password (for simple authentication)
+  -W         prompt for bind password
+  -x         Simple authentication
+  -X authzid SASL authorization identity ("dn:<dn>" or "u:<user>")
+
+ldapsearch -x -H ldap://172.20.0.9:1389 -D admin -w adminpassword -b "cn=admin,dc=172.20.0.9,dc=openldap"
+
+Base DN ou=users,ou=directory, ou=ett,ou=com |
+Base User uid=admin,ou=directory,ou=ett,ou=com
+Bind Pass ******
+
+
+ldapsearch -x -h openldap -p 1389  -D admin -w adminpassword
+ldapsearch -x -H ldap://172.20.0.9:1389 -D admin -w adminpassword
+
+ldapsearch -x -d 1 -H ldap://172.20.0.9:1389 -D admin -w adminpassword
+
+Connections:
+* host: 172.20.0.9  port: 1389  (default)
+  refcnt: 2  status: Connected
+  last used: Tue Apr  4 15:45:04 2023
+res_errno: 34, res_error: <invalid DN>, res_matched: <>
+
+ldap_bind: Invalid DN syntax (34)
+        additional info: invalid DN
+
+dsquery user -samid admin
+dsquery: command not found
+
+#############################################
+#############################################
+https://devconnected.com/how-to-search-ldap-using-ldapsearch-examples/
+https://www.digitalocean.com/community/tutorials/how-to-manage-and-use-ldap-servers-with-openldap-utilities
+
+ldapsearch -x -b "dc=devconnected,dc=com" -H ldap://172.20.0.9:1389
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# extended LDIF
+#
+# LDAPv3
+# base <dc=devconnected,dc=com> with scope subtree
+# filter: (objectclass=*)
+# requesting: ALL
+#
+# search result
+search: 2
+result: 32 No such object
+# numResponses: 1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ldapsearch -x -b "dc=devconnected,dc=com" -H ldap://172.20.0.9:1389 -D "cn=admin,dc=devconnected,dc=com" -W
+adminpassword
+
+
+slapcat # print config
+slappasswd # Create OpenLDAP Bind DN
+
+
+ldapsearch -x -b "dc=devconnected,dc=com" -H ldap://172.20.0.9:1389 -D "cn=admin,dc=devconnected,dc=com" -w adminpassword
+ldapsearch -x -b "dc=devconnected,dc=com" -H ldap://172.20.0.9:1389 -D "cn=user01,dc=devconnected,dc=com" -w password1
+ldapwhoami -x -H ldap://172.20.0.9:1389 # anonymous
+
+cmd:
+ldapadd
+ldapcompare
+ldapdelete
+ldapexop
+ldapmodify
+ldapmodrdn
+ldappasswd
+ldapsearch
+ldapurl
+ldapwhoami
+
+change LDAP passwd:
+slappasswd
+New password:
+Re-enter new password:
+{SSHA}sIodnsWBaOgMjvWCN+TWW+pW8Vf5vQWZ
+{SSHA}dZCCAU/3Cv8ZevVlUK+YLY20HOgHjSZZ
+
+
+
+ldapmodify -Q -Y EXTERNAL -H ldapi:/// << E0F
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+add: olcRootPW
+olcRootPW: {SSHA}dZCCAU/3Cv8ZevVlUK+YLY20HOgHjSZZ
+E0F
+
+ldapsearch -x -b "dc=devconnected,dc=com" -H ldap://172.20.0.9:1389 -D "cn=admin,dc=devconnected,dc=com" -w adminpassword
+ldap_bind: Invalid credentials (49)
+
+
+
+ldapsearch -LLL -Y EXTERNAL -H  ldapi:/// -b cn=config olcRootDN=cn=admin,dc=my,dc=company,dc=com dn olcRootDN olcRootPW
+SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=1001,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+
+NEW_PWD=demo
+PWD_HASH=$(slappasswd -s ${NEW_PWD})
+echo "Your password hash is \"${PWD_HASH}\"."
+# Your password hash is "{SSHA}0VFw7R4lCy/1dhqugFBwaqtGjLVfrwKq".
+
+ldapmodify -Y EXTERNAL -H ldapi:/// << E0F
+dn: olcDatabase={1}mdb,cn=config
+replace: olcRootPW
+olcRootPW: ${PWD_HASH}
+E0F
+
+ldapmodify -Q -Y EXTERNAL -H ldapi:/// << E0F
+dn: olcDatabase={1}mdb,cn=config
+changetype: modify
+replace: olcRootPW
+olcRootPW: SSHA}0VFw7R4lCy/1dhqugFBwaqtGjLVfrwKq
+E0F
+
+ldapmodify -Q -Y EXTERNAL -H ldapi:/// << E0F
+dn: olcDatabase={1}mdb
+replace: olcRootPW
+olcRootPW: SSHA}0VFw7R4lCy/1dhqugFBwaqtGjLVfrwKq
+E0F
+
+
+# SASL/EXTERNAL authentication started
+# SASL username: gidNumber=0+uidNumber=1001,cn=peercred,cn=external,cn=auth
+# SASL SSF: 0
+# modifying entry "olcDatabase={1}mdb,cn=config"
+# ldap_modify: No such object (32)
+#         matched DN: cn=config
+
+
+
+
+OLD_PWD=admin
+
+ldappasswd -h localhost -p 389 -x -D "cn=admin,dc=my,dc=company,dc=com" -w "${OLD_PWD}" -a "${OLD_PWD}" -s "${NEW_PWD}"
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+change passwd
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+https://gist.github.com/arnathan2k/a6d4f0db97bac5750dc670f92f9b4018
+https://serverfault.com/questions/438777/how-do-you-set-the-admin-password-on-openldap-2-4
+https://www.digitalocean.com/community/tutorials/how-to-change-account-passwords-on-an-openldap-server
+https://stackoverflow.com/questions/4812207/ldap-to-change-user-password
+https://stackoverflow.com/questions/22168398/openldap-no-global-superior-knowledge
+https://github.com/nextcloud/server/issues/4177
+https://serverfault.com/questions/556490/ldapsamba-login-issues
+https://stackoverflow.com/questions/75183387/openldap-setup-with-server-and-ui-fails
+https://www.watchguard.com/help/docs/help-center/en-US/Content/en-US/Fireware/authentication/active_directory_bind_error_c.html
+https://social.technet.microsoft.com/Forums/lync/en-US/373c1f28-6488-4eed-9123-3c774a22120f/fail-to-bind-cndirectory-manager?forum=winserverDS
+
+
+1. Find slapd
+>> locate slapd
+
+2. Find user activity in slapd.log
+>> grep -i username101 slapd.log
+
+3. Get the Root Credentials
+ldapsearch -LLL -Y EXTERNAL -H ldapi:/// -b  cn=config olcRootDN=cn=admin,dc=com,dc=example  dn olcRootDN olcRootPW
+
+4. Create slapd pasword
+slappasswd -h {SHA}
+# New password: demo
+# Re-enter new password:  demo
+# {SHA}ieSV55Qc+eQOaYDRSha/AjzNTJE=
+
+5. create ldif file changepwd.ldif
+touch changepwd.ldif
+dn: olcDatabase={2}bdb,cn=config
+#olcRootDN: cn=admin,dc=com,dc=example
+changetype: modify
+replace: olcRootPW
+olcRootPW: {SHA}ieSV55Qc+eQOaYDRSha/AjzNTJE=
+
+5. Modify Admin password
+>> ldapmodify -H ldapi:// -Y EXTERNAL -f ./changepwd.ldif
+
+
+
+login as root openldap
+-------------------------------------
+https://github.com/docker/compose/issues/4189
+https://github.com/docker/compose/issues/4725
+
+.env
+GID=1000
+UID=1000
+
+smbpasswd -w <MyLiteralPassword>
+
+###########################################################
+Openldap UI
+###########################################################
+
+https://stackoverflow.com/questions/75183387/openldap-setup-with-server-and-ui-fails
+https://github.com/bitnami/containers/issues/24924
+https://gallery.ecr.aws/bitnami/openldap
+https://docs.bitnami.com/tutorials/create-openldap-server-kubernetes/
+https://docs.bitnami.com/tutorials/running-non-root-containers-on-openshift
+https://docs.docker.com/engine/security/
+https://docs.bitnami.com/tutorials/work-with-non-root-containers/
+https://hub.docker.com/r/bitnami/openldap/
+https://github.com/docker/compose/issues/4725
+https://stackoverflow.com/questions/56844746/how-to-set-uid-and-gid-in-docker-compose
+https://dev.to/acro5piano/specifying-user-and-group-in-docker-i2e
+https://stackoverflow.com/questions/64723235/docker-compose-environment-variables-blank-string
+https://forums.docker.com/t/docker-compose-not-seeing-environment-variables-on-the-host/11837
+
+
