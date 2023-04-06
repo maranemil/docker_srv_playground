@@ -23,8 +23,13 @@ cn=lisa,ou=dev,ou=user,dc=server,dc=com
 # https://www.tutorialspoint.com/online_php_formatter.htm
 require_once __DIR__. "/vendor/autoload.php";
 
-use \LdapRecord\Connection;
-use \LdapRecord\Auth\BindException;
+#  composer require directorytree/ldaprecord
+
+use LdapRecord\Connection;
+use LdapRecord\Auth\BindException;
+use LdapRecord\Container;
+use LdapRecord\Models\Entry;
+
 $options = [
 #'account_suffix' => $this->setting['account_suffix'], @example.com
 'hosts' => [$this->setting['domain_controllers']], //  domain
@@ -52,11 +57,20 @@ if ($connection->auth()->attempt($username . $account_suffix, $password)) {
     $authenticated = 1;
 }
 #...
+Container::addConnection($connection, 'domain-b');
+if (Container::getInstance()->exists('domain-b')) {
+    echo "The 'domain-b' connection exists!";
+}
+#...
 $query = $connection->query();
-$query->where('sAMAccountName', 'contains', $username)->limit(5)->get();
+$query->where('samaccountname', 'contains', $username)->limit(5)->get();
 #...
 $connection = new \LdapRecord\Connection(['...']);
 $connection->connect();
-$user = $connection->query()->where('samaccountname', '=', $_POST['username'])->firstOrFail();
+$user = $connection->query()->where('samaccountname', '=', $_POST['username']);
 // Get the groups from the user.
-$userGroups = $user['memberof'];
+$userGroups = $user['somevar'];
+
+$query = $connection->query();
+$result = $query->where('samaccountname', '=', $username)->get();
+$someVar = $result[0]['somevar'];

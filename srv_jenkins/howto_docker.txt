@@ -1,0 +1,169 @@
+################################################
+How to Use Jenkins to Build and Run an Image Using Docker
+################################################
+
+https://www.youtube.com/watch?v=nfLO5ONVI6E
+https://www.youtube.com/watch?v=Y160f9-xZY4
+https://github.com/darinpope/getting-started-docker/tree/00-hello-there
+
+# Dockerfile
+FROM python:3.7-alpine
+CMD [ "python", "-c", "print('Hi there!')"]
+
+# Jenkinsfile
+pipeline {
+  agent { label "linux" }
+  stages {
+    stage("build") {
+      steps {
+        sh """
+          docker build -t hello_there .
+        """
+      }
+    }
+    stage("run") {
+      steps {
+        sh """
+          docker run --rm hello_there
+        """
+      }
+    }
+  }
+}
+
+https://github.com/darinpope/getting-started-docker/tree/10-more-practical-image
+
+# Dockerfile
+FROM python:3.7-alpine
+COPY hello_there.py /
+CMD [ "python", "hello_there.py"]
+
+# hello_there.py
+#!/usr/bin/env python3
+print('hello there!')
+
+# Jenkinsfile
+pipeline {
+  agent { label "linux" }
+  stages {
+    stage("build") {
+      steps {
+        sh """
+          docker build -t hello_there .
+        """
+      }
+    }
+    stage("run") {
+      steps {
+        sh """
+          docker run --rm hello_there
+        """
+      }
+    }
+  }
+}
+
+
+https://github.com/darinpope/getting-started-docker/tree/20-more-changes
+
+
+# Dockerfile
+FROM python:3.7-alpine
+COPY hello_there.py /
+CMD [ "python", "hello_there.py"]
+
+
+# Jenkinsfile
+pipeline {
+  agent { label "linux" }
+  stages {
+    stage("build") {
+      steps {
+        sh """
+          docker build -t hello_there .
+        """
+      }
+    }
+    stage("run") {
+      steps {
+        sh """
+          docker run --rm hello_there
+        """
+      }
+    }
+  }
+}
+
+
+# hello_there.py
+#!/usr/bin/env python3
+import requests
+x = requests.get('https://www.google.com')
+if x.status_code == 200:
+ print('yay!')
+else:
+ print('uh-oh!')
+
+https://github.com/darinpope/getting-started-docker/tree/30-add-fix
+
+# Dockerfile
+FROM python:3.7-alpine
+RUN pip install requests
+COPY hello_there.py /
+CMD [ "python", "hello_there.py"]
+
+
+# Jenkinsfile
+pipeline {
+  agent { label "linux" }
+  stages {
+    stage("build") {
+      steps {
+        sh """
+          docker build -t hello_there .
+        """
+      }
+    }
+    stage("run") {
+      steps {
+        sh """
+          docker run --rm hello_there
+        """
+      }
+    }
+  }
+}
+
+# hello_there.py
+#!/usr/bin/env python3
+import requests
+x = requests.get('https://www.google.com')
+if x.status_code == 200:
+ print('yay!')
+else:
+ print('uh-oh!')
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+How to build with Jenkins and Docker example
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+https://www.youtube.com/watch?v=Y160f9-xZY4
+
+jk plugins
+docker
+docker pipeline
+
+
+https://github.com/learn-devops-fast
+https://github.com/learn-devops-fast/rock-paper-scissors
+https://github.com/learn-devops-fast/rock-paper-scissors/blob/master/Jenkinsfile
+
+new item -> enter item name -> pipeline -> pipeline tab ->
+	pipeine block -> pipeline script from SCM -> git -> add repo url
+	branch to build */master
+	script path - Jenkinsfile
+	Apply / Save
+	Build now
+
+
+
