@@ -847,4 +847,11 @@ cn
 uid
 mail
 
+#########################################################
+setLogger LdapRecord
+#########################################################
+https://ldaprecord.com/docs/laravel/v1/auth/importing/
+https://ldaprecord.com/docs/laravel/v1/debugging/
+https://ldaprecord.com/docs/core/v2/logging/
 
+\LdapRecord\Container::setLogger($myLogger);

@@ -19,12 +19,22 @@ pip install pytorch torchvision
 pip install transformers diffusers invisible-watermark
 pip install -e .
 pip install -r requirements.txt
-
+-----------------------------------------------------------------------
 pip install jupyter
 jupyter-notebook colab_demo.ipynb
 pip install google-colab
-
-docker system prune -a
-
 -----------------------------------------------------------------------
-
+docker system prune -a
+-----------------------------------------------------------------------
+sudo apt install python3-pip
+sudo apt-get install python3-pyqt5
+sudo apt-get update --fix-missing
+pip install opencv-python
+pip install --ignore-installed --upgrade tensorflow
+pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
+-----------------------------------------------------------------------
+pip install --upgrade pip
+pip install torch torchvision
+pip install transformers diffusers invisible-watermark
+pip install -e .
