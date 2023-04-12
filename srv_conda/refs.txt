@@ -1,0 +1,75 @@
+
+https://hub.docker.com/layers/pytorch/pytorch/1.12.1-cuda11.3-cudnn8-devel/images/sha256-dda4e7ce91e3f5b309233111b251e54cf47b44a742fe37c7f68d9429321fa0f9?context=explore
+https://hub.docker.com/r/pytorch/pytorch/tags
+https://hub.docker.com/r/conda/miniconda3/
+https://github.com/Docker-Hub-frolvlad/docker-alpine-miniconda3
+https://hub.docker.com/r/frolvlad/alpine-miniconda3/
+https://anaconda-project.readthedocs.io/en/latest/user-guide/tasks/docker-image.html
+https://anaconda.org/conda-forge/docker
+
+
+https://kevalnagda.github.io/conda-docker-tutorial
+
+environment.yml Conda environment.
+
+name: env
+channels:
+   - conda-forge
+dependencies:
+   - python=3.6
+   - flask
+
+
+# Define base image
+FROM continuumio/miniconda3
+# Set working directory for the project
+WORKDIR /app
+# Create Conda environment from the YAML file
+COPY environment.yml .
+RUN conda env create -f environment.yml
+# Activate Conda environment and check if it is working properly
+RUN conda activate env
+RUN echo "Making sure flask is installed correctly..."
+RUN python -c "import flask"
+# Python program to run in the container
+COPY run.py .
+ENTRYPOINT ["python", "run.py"]
+
+
+
+# Define base image
+FROM continuumio/miniconda3
+# Set working directory for the project
+WORKDIR /app
+# Override default shell and use bash
+SHELL ["/bin/bash", "--login", "-c"]
+# Create Conda environment from the YAML file
+COPY environment.yml .
+RUN conda env create -f environment.yml
+# Initialize conda in the bash config files
+RUN conda init bash
+# Activate Conda environment and check if it is working properly
+RUN conda activate env
+RUN echo "Making sure flask is installed correctly..."
+RUN python -c "import flask"
+# Python program to run in the container
+COPY run.py .
+ENTRYPOINT ["python", "run.py"]
+
+
+
+# Define base image
+FROM continuumio/miniconda3
+# Set working directory for the project
+WORKDIR /app
+# Create Conda environment from the YAML file
+COPY environment.yml .
+RUN conda env create -f environment.yml
+# Override default shell and use bash
+SHELL ["conda", "run", "-n", "env", "/bin/bash", "-c"]
+# Activate Conda environment and check if it is working properly
+RUN echo "Making sure flask is installed correctly..."
+RUN python -c "import flask"
+# Python program to run in the container
+COPY run.py .
+ENTRYPOINT ["conda", "run", "-n", "env", "python", "run.py"]
