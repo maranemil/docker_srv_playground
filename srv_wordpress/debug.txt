@@ -225,3 +225,68 @@ define('WP_DEBUG', false);
 define('WP_MEMORY_LIMIT', '100M');
 define('WP_ALLOW_REPAIR', true);
 define('FS_METHOD','direct');
+
+##################################################################################
+db dump restore mysql
+##################################################################################
+
+https://hub.docker.com/_/mariadb
+https://github.com/MariaDB/mariadb-docker
+https://mariadb.com/kb/en/mariadb-container-cheat-sheet/
+https://onexlab-io.medium.com/docker-compose-mysql-entry-point-fa6335346791
+
+# docke-compose.yml volume mysql:5.7 mariadb:10
+service:
+ my-db:
+  ...
+  volumes:
+     - mysql:/var/lib/mysql
+     - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql:ro
+
+
+# makefile bash
+docker cp dump.sql my-db_1:/tmp/dump.sql
+#docker cp my-db_1:/tmp/wordpress.sql .
+docker-compose exec my-db mysql -u root -pexample wordpress -e "source /tmp/dump.sql;"
+
+https://docs.docker.com/compose/reference/
+https://hub.docker.com/r/docker/compose
+https://docs.docker.com/compose/compose-file/03-compose-file/
+https://docs.docker.com/compose/samples-for-compose/
+
+# start all servies *
+docker-compose -f docker-compose.yml -p folder-project up -d maria-db
+
+#start single contaner
+docker-compose up -d maria-db
+/usr/bin/docker-compose -f docker-compose.yml -p my-blog up -d maria-db
+-p - project name
+-f - file compose
+-d starts the containers in the background and leaves them running
+up  - Create and start containers
+
+
+/usr/bin/docker-compose -f docker-compose.yml -p folder-project stop my-db my-blog adminer
+/usr/bin/docker-compose -f docker-compose.yml stop my-db my-blog adminer
+
+
+FROM wordpress:6.0-php8.1-apache as base
+FROM wordpress:6.0.2-php8.1-apache as base
+FROM wordpress:6.2.0-php8.2-apache as base
+FROM wordpress:6.2.0-php8.1-apache as base
+
+
+https://hub.docker.com/_/wordpress
+https://hub.docker.com/_/wordpress/tags?page=1&name=6.2
+https://github.com/docker-library/wordpress/blob/master/latest/php8.1/apache/Dockerfile
+
+https://hub.docker.com/layers/library/wordpress/6.0.2-php8.1-apache/images/sha256-cd620b10f7a066483036e492c4240460fe8b3fec9d89480cc5992374706f394c?context=explore
+
+######################################################
+FS_METHOD
+######################################################
+
+https://rankmath.com/kb/constant-fs-method/
+https://stackoverflow.com/questions/29194352/how-can-wordpress-fs-method-direct-identify-wordpress-administrators
+
+define( 'FS_METHOD', 'direct' );
