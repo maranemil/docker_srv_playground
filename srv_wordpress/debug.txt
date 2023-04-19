@@ -290,3 +290,13 @@ https://rankmath.com/kb/constant-fs-method/
 https://stackoverflow.com/questions/29194352/how-can-wordpress-fs-method-direct-identify-wordpress-administrators
 
 define( 'FS_METHOD', 'direct' );
+
+
+######################################################
+WP-CLI WordPress
+######################################################
+
+https://make.wordpress.org/cli/
+https://wordpress.org/documentation/
+https://developer.wordpress.org/cli/commands/
+https://make.wordpress.org/cli/handbook/

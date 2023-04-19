@@ -34,14 +34,11 @@ docker kill $(docker ps -q)
 docker rm $(docker ps -aq)
 docker rm -f $(docker ps -a -q)
 
-
-
 # delete all stopped containers
 docker container prune
 
 # Delete all volumes
 docker volume rm $(docker volume ls -q)
-
 
 docker volume ls
 docker volume ls --help
@@ -76,4 +73,31 @@ v2
     mem_limit: 512m
     mem_reservation: 128M
     cpuset: 0-3
+
+#################################################
+Stop and remove all docker containers and images
+#################################################
+
+https://blog.baudson.de/blog/stop-and-remove-all-docker-containers-and-images
+https://coderwall.com/p/ewk0mq/stop-remove-all-docker-containers
+https://docs.docker.com/engine/reference/commandline/container_stop/
+https://typeofnan.dev/how-to-stop-all-docker-containers/
+https://gist.github.com/evanscottgray/8571828
+https://www.upwork.com/resources/how-to-stop-a-docker-container
+https://codenotary.com/blog/extremely-useful-docker-commands
+
+List all containers (only IDs)
+docker ps -aq
+
+Stop all running containers
+docker stop $(docker ps -aq)
+docker stop $(docker ps -a -q)
+
+Remove all containers
+docker rm $(docker ps -aq)
+docker rm $(docker ps -a -q)
+
+Remove all images
+docker rmi $(docker images -q)
+
 
