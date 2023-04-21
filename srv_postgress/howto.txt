@@ -182,3 +182,10 @@ https://hub.docker.com/_/adminer
 
 
 
+#######################################################################
+Postgres TRUNCATE TABLE
+#######################################################################
+
+https://stackoverflow.com/questions/2829158/truncating-all-tables-in-a-postgres-database
+
+TRUNCATE TABLE table;

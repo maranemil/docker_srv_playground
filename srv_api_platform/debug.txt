@@ -1,0 +1,67 @@
+
+#######################################################################
+Cache not updated when entity annotation is changed #2644 api-platform.com
+#######################################################################
+
+
+https://github.com/api-platform/core/issues/2644
+https://api-platform.com/docs/core/getting-started/
+https://api-platform.com/docs/admin/getting-started/#creating-the-admin
+https://api-platform.com/docs/core/graphql/#enabling-graphql
+https://api-platform.com/docs/core/performance/
+https://symfony.com/components/Cache
+https://symfonycasts.com/screencast/api-platform2-security/uncached-metadata
+https://stackoverflow.com/questions/63576790/clear-cache-command-gets-an-error-error-after-installing-api-platform-com
+https://symfony.com/doc/3.3/console/usage.html
+https://docs.shopware.com/en/shopware-6-en/configuration/caches-indexes
+
+
+php bin/console cache:clear
+
+docker compose exec php bin/console cache:clear --env=prod
+docker compose exec php sh -c 'composer require webonyx/graphql-php  bin/console cache:clear'
+
+
+php bin/console cache:clear --no-warmup --env=dev
+php bin/console cache:clear --no-warmup --env=prod
+php bin/console cache:clear --no-warmup -e prod
+php bin/console list --no-debug
+
+
+#######################################################################
+symfony file extension
+#######################################################################
+
+https://github.com/symfony/http-foundation
+https://symfony.com/doc/current/components/http_foundation.html
+https://stackoverflow.com/questions/45874994/symfony-2-how-to-get-file-extension-from-getrequest-files-get
+https://packagist.org/packages/symfony/http-foundation
+https://symfony.com/doc/current/components/http_foundation.html
+https://stackoverflow.com/questions/20508788/do-i-need-content-type-application-octet-stream-for-file-download
+https://stackoverflow.com/questions/35299457/getting-mime-type-from-file-name-in-php
+
+$image = $request->files->get( 'image' );
+print_r($image->getClientOriginalExtension());
+
+
+$image = $this->getRequest()->files->get("image");
+// Symfony is guessing extension of file
+$extension = $image->guessExtension();
+
+$file = $request->file('FILE_NAME_IN_REQUEST');
+$mimeType = $file->getClientmimeType();
+
+
+#######################################################################
+How to get a file's extension in PHP?
+#######################################################################
+
+https://www.php.net/manual/en/function.mime-content-type.php
+https://stackoverflow.com/questions/173868/how-to-get-a-files-extension-in-php
+https://www.php.net/manual/de/reserved.variables.files.php
+
+$ext = pathinfo($filename, PATHINFO_EXTENSION);
+$ext = pathinfo('test.png', PATHINFO_EXTENSION);
+var_dump($ext);
+
+$path_info = pathinfo('/foo/bar/baz.bill');
