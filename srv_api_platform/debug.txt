@@ -65,3 +65,127 @@ $ext = pathinfo('test.png', PATHINFO_EXTENSION);
 var_dump($ext);
 
 $path_info = pathinfo('/foo/bar/baz.bill');
+
+#######################################################################
+docs migrations
+#######################################################################
+
+https://api-platform.com/docs/distribution/
+https://api-platform.com/docs/
+https://api-platform.com/docs/core/operations/
+https://api-platform.com/docs/schema-generator/configuration/
+https://api-platform.com/docs/core/getting-started/
+https://api-platform.com/docs/core/upgrade-guide/
+https://api-platform.com/docs/schema-generator/
+
+docker compose exec php bin/console doctrine:migrations:diff
+docker compose exec php bin/console doctrine:migrations:migrate
+
+FIX
+php bin/console doctrine:migrations:diff
+php bin/console doctrine:migrations:migrate
+
+
+php bin/console make:migration
+composer require migrations:2.0.0
+php bin/console doctrine:database:create
+php bin/console make:migration
+php bin/console doctrine:migrations:migrate
+
+
+https://api-platform.com/docs/core/migrate-from-fosrestbundle/
+https://api-platform.com/docs/core/upgrade-guide/
+https://api-platform.com/docs/core/extensions/
+https://symfonycasts.com/screencast/api-platform2/api-resource
+https://api-platform.com/docs/core/state-processors/
+https://api-platform.com/docs/core/operations/
+https://api-platform.com/docs/core/state-providers/
+https://api-platform.com/docs/distribution/
+https://api-platform.com/docs/core/migrate-from-fosrestbundle/
+
+-------------------------
+https://www.doctrine-project.org/projects/doctrine-migrations/en/1.7/reference/generating_migrations.html
+https://www.doctrine-project.org/projects/doctrine-migrations/en/3.6/reference/generating-migrations.html
+https://www.doctrine-project.org/projects/doctrine-migrations/en/1.7/reference/introduction.html
+https://www.doctrine-project.org/projects/doctrine-migrations/en/1.7/reference/managing_migrations.html
+
+############################################################
+FIX add nullable
+############################################################
+/** @Column(type="string", length=255, nullable=true) */
+#[ORM\Column(type: 'string', length: 255, nullable: true)]
+
+FIX
+php bin/console doctrine:migrations:diff
+php bin/console doctrine:migrations:migrate
+
+############################################################
+migrations
+############################################################
+./doctrine list migrations
+./doctrine migrations:diff
+./doctrine migrations:generate
+./doctrine migrations:migrate --dry-run
+./doctrine migrations:migrate --no-interaction
+./doctrine migrations:status
+./doctrine migrations:migrate prev
+
+Managing the Version Table
+./doctrine migrations:version YYYYMMDDHHMMSS --add
+./doctrine migrations:version YYYYMMDDHHMMSS --delete
+
+############################################################
+null string
+############################################################
+
+https://stackoverflow.com/questions/33608821/nullable-return-types-in-php7
+https://www.php.net/manual/en/migration71.new-features.php
+
+# FIX allow null
+
+public function getString(): ?string
+{
+	return $this->string;
+}
+
+public function setString(string|null $string): self
+{
+	$this->string = $string;
+	#return $this;
+}
+
+############################################################
+Arrow Functions
+############################################################
+
+Arrow functions were introduced in PHP 7.4 as a more concise syntax for anonymous functions.
+
+https://www.php.net/manual/en/functions.arrow.php
+http://phptester.net/
+
+$y = 1;
+$fn1 = static fn($x) => $x + $y;
+// equivalent to using $y by value:
+$fn2 = function ($x) use ($y) {
+    return $x + $y;
+};
+
+var_export($fn1(3));
+
+
+############################################################
+'LOWEST_PRIORITY' should be declared with access modifier. #675
+############################################################
+
+https://github.com/kalessil/phpinspectionsea/issues/675
+https://www.php.net/manual/en/language.oop5.visibility.php
+
+FIX
+private const LOWEST_PRIORITY = "2";
+
+
+
+
+
+
+
