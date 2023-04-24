@@ -1,8 +1,6 @@
-
 #######################################################################
 Cache not updated when entity annotation is changed #2644 api-platform.com
 #######################################################################
-
 
 https://github.com/api-platform/core/issues/2644
 https://api-platform.com/docs/core/getting-started/
@@ -15,18 +13,15 @@ https://stackoverflow.com/questions/63576790/clear-cache-command-gets-an-error-e
 https://symfony.com/doc/3.3/console/usage.html
 https://docs.shopware.com/en/shopware-6-en/configuration/caches-indexes
 
-
 php bin/console cache:clear
 
 docker compose exec php bin/console cache:clear --env=prod
 docker compose exec php sh -c 'composer require webonyx/graphql-php  bin/console cache:clear'
 
-
 php bin/console cache:clear --no-warmup --env=dev
 php bin/console cache:clear --no-warmup --env=prod
 php bin/console cache:clear --no-warmup -e prod
 php bin/console list --no-debug
-
 
 #######################################################################
 symfony file extension
@@ -50,7 +45,6 @@ $extension = $image->guessExtension();
 
 $file = $request->file('FILE_NAME_IN_REQUEST');
 $mimeType = $file->getClientmimeType();
-
 
 #######################################################################
 How to get a file's extension in PHP?
@@ -172,7 +166,6 @@ $fn2 = function ($x) use ($y) {
 
 var_export($fn1(3));
 
-
 ############################################################
 'LOWEST_PRIORITY' should be declared with access modifier. #675
 ############################################################
@@ -183,8 +176,79 @@ https://www.php.net/manual/en/language.oop5.visibility.php
 FIX
 private const LOWEST_PRIORITY = "2";
 
+#############################################################
+Clearing Webpack cache
+#############################################################
+
+https://stackoverflow.com/questions/40742538/clearing-webpack-cache
+https://backbencher.dev/clear-browser-cache-when-webpack-bundle-updated
+https://www.educba.com/clear-cache-javascript/
+
+node_modules/.cache
+------------------------
+set cache: false in webpack config
+------------------------
+webpack.config.js
+module.exports = {
+  output: {
+    filename: "main.[contenthash].js",
+    clean: true,
+  },
+};
+
+#############################################################
+Warning: Can’t perform a React state update on an unmounted component.
+This is a no-op, but it indicates a memory leak in your application.
+
+Warning: Can’t perform a React state update on an unmounted component.
+This is a no-op, but it indicates a memory leak in your application.
+To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
+#############################################################
+
+https://github.com/joshwcomeau/use-sound/issues/14
+https://stackoverflow.com/questions/54954385/react-useeffect-causing-cant-perform-a-react-state-update-on-an-unmounted-comp
+https://medium.com/berlin-tech-blog/how-to-get-rid-of-cant-perform-a-react-state-update-on-an-unmounted-component-or-why-it-is-cd5e8132d6c6
+https://dev.to/jexperton/how-to-fix-the-react-memory-leak-warning-d4i
+https://dev.to/jexperton/how-to-fix-the-react-memory-leak-warning-d4i
+https://github.com/joshwcomeau/use-sound/issues/14
+https://stackoverflow.com/questions/54954385/react-useeffect-causing-cant-perform-a-react-state-update-on-an-unmounted-comp
+https://medium.com/berlin-tech-blog/how-to-get-rid-of-cant-perform-a-react-state-update-on-an-unmounted-component-or-why-it-is-cd5e8132d6c6
+
+#############################################################
+react-dom.development.js:67 Warning: A future version of React will block javascript:
+URLs as a security precaution. Use event handlers instead if you can.
+If you need to generate unsafe HTML try using dangerouslySetInnerHTML instead.
+React was passed "javascript:void(0)".
+#############################################################
 
 
+#############################################################
+postgresql Fehler in der SQL-Abfrage: ERROR: cannot truncate a table referenced in a foreign key constraint
+#############################################################
+
+https://stackoverflow.com/questions/5452760/how-to-truncate-a-foreign-key-constrained-table
+https://github.com/typeorm/typeorm/issues/1649
+
+Postgres
+TRUNCATE TABLE "table1"
+TRUNCATE TABLE "table1" CASCADE
+
+maria-db
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE table1;
+TRUNCATE table2;
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+#############################################################
+React Hook useEffect has a missing dependency: 'fetchWithAuth'. Either include it or remove the dependency array
+#############################################################
+
+https://stackoverflow.com/questions/55840294/how-to-fix-missing-dependency-warning-when-using-useeffect-react-hook
+https://stackoverflow.com/questions/55840294/how-to-fix-missing-dependency-warning-when-using-useeffect-react-hook
+https://stackoverflow.com/questions/73721043/react-router-usenavigate-with-a-useeffect-hook-proper-way-to-use
+https://codevoweb.com/react-hook-useeffect-has-a-missing-dependency-error/
+https://timmousk.com/blog/react-hook-useeffect-has-a-missing-dependency/
 
 
 
