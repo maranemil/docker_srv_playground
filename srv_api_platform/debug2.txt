@@ -1,0 +1,232 @@
+
+################################################
+mimeType file validation
+################################################
+
+https://github.com/dustin10/VichUploaderBundle/issues/90
+https://smaine-milianni.medium.com/my-journey-with-the-symfony-mime-type-guesser-28da04213b33
+https://stackoverflow.com/questions/12087738/file-upload-how-to-exclude-a-mime-type-using-asserts
+https://stackoverflow.com/questions/56554237/how-to-use-assert-file-and-assert-image-at-the-same-time-in-symfony
+https://symfony.com/doc/current/reference/constraints/File.html
+https://symfony.com/doc/current/validation/custom_constraint.html
+https://symfony2-document.readthedocs.io/en/latest/reference/constraints/File.html
+https://symfonycasts.com/screencast/symfony-uploads/validation
+
+---
+
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+* @Assert\File(
+* maxSize="1M",
+* mimeTypes={"image/png", "image/jpeg", "image/pjpeg"}
+*/
+
+---
+
+// src/Entity/Author.php
+namespace App\Entity;
+use Symfony\Component\Validator\Constraints as Assert;
+class Author
+{
+ /**
+ * @Assert\File(
+ * maxSize = “1024k”,
+ * mimeTypes = {“application/pdf”, “application/x-pdf”},
+ * mimeTypesMessage = “Please upload a valid PDF”
+ * )
+ */
+ protected $bioFile;
+}
+
+---
+
+1) Set enable_annotations parameter as true in your app/config/config.yml:
+
+# app/config/config.yml
+framework:
+    validation:      { enable_annotations: true }
+2) Include properly the validation constraints on your entity file.
+
+// YourEntity.php
+use Symfony\Component\Validator\Constraints as Assert;
+3) Use the annotation properly. Example:
+
+// YourEntity.php
+/**
+ * @Assert\File(
+ *      maxSize="5242880",
+ *      mimeTypes = {
+ *          "image/png",
+ *          "image/jpeg",
+ *          "image/jpg",
+ *          "image/gif",
+ *          "application/pdf",
+ *          "application/x-pdf"
+ *      }
+ * )
+ */
+ private $arquivo;
+
+---
+
+#[Assert\AtLeastOneOf(
+    constraints: [
+        new Assert\File(extensions: ['pdf']),
+        new Assert\Sequentially(
+            [
+                new Assert\File(extensions: ['jpg', 'jpeg','png','svg']),
+                new Assert\Image(maxWidth: 160)
+             ]
+        ),
+    ]
+)]
+public UploadedFile $file;
+
+-----------------------------------------------------------------------
+
+################################################
+Next.js Generator
+################################################
+
+https://api-platform.com/docs/create-client/nextjs/
+https://api-platform.com/docs/distribution/
+https://github.com/teohhanhui/api-platform-docs/blob/master/client-generator/nextjs.md
+https://www.npmjs.com/package/@api-platform/create-client
+https://nextjs.org/
+
+################################################
+Enabling the Built-in HTTP Cache Invalidation System
+################################################
+
+https://api-platform.com/docs/core/controllers/
+https://api-platform.com/docs/core/performance/
+https://api-platform.com/docs/core/performance/#setting-custom-http-cache-headers
+https://api-platform.com/docs/distribution/debugging/
+https://api-platform.com/docs/extra/troubleshooting/
+https://api-platform.com/docs/v2.6/core/performance/#setting-custom-http-cache-headers
+https://symfony.com/doc/current/cache.html
+https://symfony.com/doc/current/http_cache.html
+
+
+https://docs.docker.com/build/building/multi-platform/
+https://docs.docker.com/build/cache/
+https://docs.docker.com/registry/spec/api/
+https://github.com/api-platform/api-platform/issues/1738
+https://github.com/api-platform/api-platform/issues/1816
+https://github.com/api-platform/api-platform/issues/1895
+https://github.com/api-platform/api-platform/issues/1895
+https://github.com/api-platform/api-platform/issues/2207
+https://github.com/api-platform/core/issues/2926
+https://stackoverflow.com/questions/63576790/clear-cache-command-gets-an-error-error-after-installing-api-platform-com
+https://stackoverflow.com/questions/63868226/react-and-docker-during-dev-see-changes-without-restart
+https://stackoverflow.com/questions/75448864/after-updating-to-php-8-setting-custom-http-cache-headers-with-api-platform-is
+https://symfonycasts.com/screencast/api-platform2-security/uncached-metadata
+
+----------------
+
+composer req api
+
+----------------
+
+# api/Dockerfile
+FROM api_platform_php as api_platform_php_dev
+
+ARG XDEBUG_VERSION=3.1.3
+RUN set -eux; \
+ apk add --no-cache --virtual .build-deps $PHPIZE_DEPS; \
+ pecl install xdebug-$XDEBUG_VERSION; \
+ docker-php-ext-enable xdebug; \
+ apk del .build-deps
+
+----------------
+
+version: "3.4"
+services:
+  php:
+    build:
+      target: api_platform_php_dev
+    environment:
+      # See https://docs.docker.com/docker-for-mac/networking/#i-want-to-connect-from-a-container-to-a-service-on-the-host
+      # See https://github.com/docker/for-linux/issues/264
+      # The `remote_host` below may optionally be replaced with `remote_connect_back`
+      # XDEBUG_MODE required for step debugging
+      XDEBUG_MODE: debug
+      # default port for Xdebug 3 is 9003
+      # idekey=VSCODE if you are debugging with VSCode
+      XDEBUG_CONFIG: >-
+        client_host=host.docker.internal
+        idekey=PHPSTORM
+      # This should correspond to the server declared in PHPStorm `Preferences | Languages & Frameworks | PHP | Servers`
+      # Then PHPStorm will use the corresponding path mappings
+      PHP_IDE_CONFIG: serverName=api-platform
+
+----------------
+
+
+version: "3.4"
+
+services:
+  php:
+    build:
+      context: ./api
+      target: api_platform_php
+    restart: unless-stopped
+    volumes:
+      - php_socket:/var/run/php
+    healthcheck:
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
+
+  pwa:
+    build:
+      context: ./pwa
+      target: api_platform_pwa_dev
+    environment:
+      API_PLATFORM_CLIENT_GENERATOR_ENTRYPOINT: http://caddy
+
+#  pwa:
+#    build:
+#      context: ./pwa
+#      target: api_platform_pwa_dev
+#    volumes:
+#      - ./pwa:/usr/src/pwa:rw,cached
+##     - ./admin:/usr/src/admin:rw,cached
+#    environment:
+#      - WATCHPACK_POLLING=true
+
+  caddy:
+    build:
+      context: api/
+      target: api_platform_caddy
+    depends_on:
+      - php
+      - pwa
+    environment:
+      PWA_UPSTREAM: pwa:3000
+      SERVER_NAME: ${SERVER_NAME:-localhost, caddy:80}
+      MERCURE_PUBLISHER_JWT_KEY: ${MERCURE_PUBLISHER_JWT_KEY:-xxxx}
+      MERCURE_SUBSCRIBER_JWT_KEY: ${MERCURE_SUBSCRIBER_JWT_KEY:-xxxx}
+    restart: unless-stopped
+    volumes:
+      - php_socket:/var/run/php
+      - caddy_data:/data
+      - caddy_config:/config
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+      - target: 443
+        published: 443
+        protocol: tcp
+      - target: 443
+        published: 443
+        protocol: udp
+
+volumes:
+  php_socket:
+  caddy_data:
+  caddy_config:
+

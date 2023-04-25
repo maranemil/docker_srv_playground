@@ -625,8 +625,6 @@ https://github.com/cakephp
 https://github.com/cakephp/app/tags?after=3.2.5
 https://codeigniter.com/userguide3/installation/downloads.html
 
-
-
 -----------------------------------------------
 
 https://refine.dev/blog/docker-entrypoint/
@@ -661,3 +659,188 @@ ENTRYPOINT ["ab"]
 CMD ["http://bing.com"]
 
 
+
+################################################
+docker container update volume without restart
+################################################
+
+https://docs.docker.com/engine/reference/commandline/container_restart/
+https://docs.docker.com/engine/reference/commandline/container_update/
+https://code.visualstudio.com/docs/devcontainers/containers
+https://docs.docker.com/engine/reference/commandline/update/
+https://docs.docker.com/engine/reference/commandline/service_update/
+https://docs.docker.com/config/containers/start-containers-automatically/
+https://docs.docker.com/engine/api/
+https://docs.docker.com/engine/api/sdk/examples/
+https://docs.docker.com/engine/reference/commandline/update/
+
+
+docker run -d --restart unless-stopped redis
+docker update --restart unless-stopped redis
+docker update --restart unless-stopped $(docker ps -q)
+
+https://stackoverflow.com/questions/43868726/docker-mounted-volume-only-updates-on-container-restart
+https://www.freecodecamp.org/news/how-to-enable-live-reload-on-docker-based-applications/
+https://github.com/moby/moby/issues/15793
+https://www.baeldung.com/linux/docker-container-add-volume
+https://docs.tibco.com/pub/mash-local/4.3.0/doc/html/docker/GUID-BD850566-5B79-4915-987E-430FC38DAAE4.html
+https://linuxhandbook.com/update-docker-container-zero-downtime/
+https://www.howtogeek.com/devops/how-to-add-a-volume-to-an-existing-docker-container/
+
+FROM node:14-alpine
+WORKDIR /src
+ADD package.json /src
+RUN npm i --silent
+ADD . /src
+RUN npm run build
+CMD npm start
+
+docker run --name mongodb -p 27017:27017 -d mongo:4
+docker build -t app nodejs-with-mongodb-api-example
+docker volume create --name nodemodules
+
+docker run \
+    --name app \
+    --link mongodb \
+    -e MONGO_URL=mongodb \
+    -e PORT=4000 \
+    -p 4000:4000 \
+    -v `pwd`/nodejs-with-mongodb-api-example:/src \
+    -v nodemodules:/src/node_modules \
+    app npm run dev:watch
+
+docker rm app
+docker volume rm nodemodules
+docker stop $(docker ps -aq)
+docker rm $(docker ps -aq)
+
+version: '3'
+services:
+    mongodb:
+        image: mongo:4
+        ports:
+            - 27017:27017
+    app:
+        build: nodejs-with-mongodb-api-example
+        command: npm run dev:watch
+        ports:
+            - 4000:4000
+        environment:
+            MONGO_URL: mongodb
+            PORT: 4000
+        volumes:
+            - ./nodejs-with-mongodb-api-example:/src/
+            - nodemodules:/src/node_modules
+        links:
+            - mongodb
+        depends_on:
+            - mongodb
+
+volumes:
+    nodemodules: {}
+
+
+# docker-compose up --build
+
+
+# test edit
+# create your file on the host
+echo "# my-file" > myfile.txt
+# create a directory (this is the "container's filesystem")
+mkdir container
+# create the mountpoint inside the container's filesystem
+touch container/myfile.txt
+# mount the file from the host into the container
+mount -o ro,bind myfile.txt container/myfile.txt
+# read the bind-mounted file "inside the container"
+cat container/myfile.txt
+# my-file
+# "modify" the file, in this case, using `sed`, which uses a temporary file, then replaces the file
+sed -i 's/my-file/my-file-updated/g' myfile.txt
+# check that the file "on the host" is updated
+cat myfile.txt
+# my-file-updated
+# check the mounted file "inside the container:
+cat container/myfile.txt
+# my-file
+# unmount the file
+umount container/myfile.txt
+
+
+
+How to Do a Clean Restart of a Docker Instance
+
+Procedure
+Stop the container(s) using the following command:
+docker-compose down
+Delete all containers using the following command:
+docker rm -f $(docker ps -a -q)
+Delete all volumes using the following command:
+docker volume rm $(docker volume ls -q)
+Restart the containers using the following command:
+docker-compose up -d
+
+
+
+################################################
+Scale up a new container
+################################################
+
+https://linuxhandbook.com/update-docker-container-zero-downtime/
+
+docker-compose up -d --scale web-app=2 --no-recreate
+docker rm -f old-web-app
+docker-compose up -d --scale web-app=1 --no-recreate
+
+
+version: '3.5'
+services:
+  ghost:
+    image: ghost:3.36
+    volumes:
+      - ghost:/var/lib/ghost/content
+    environment:
+      - VIRTUAL_HOST=blog.domain.com
+      - LETSENCRYPT_HOST=blog.domain.com
+      - url=https://blog.domain.com
+      - NODE_ENV=production
+    restart: always
+    networks:
+      - net
+
+volumes:
+  ghost:
+    external: true
+
+networks:
+  net:
+    external: true
+
+
+version: '3.5'
+services:
+  ghost-blog:
+    image: ghost:3.37.1
+    volumes:
+      - ghost-blog:/var/lib/ghost/content
+    environment:
+      - VIRTUAL_HOST=blog.domain.com
+      - LETSENCRYPT_HOST=blog.domain.com
+      - url=https://blog.domain.com
+      - NODE_ENV=production
+    restart: always
+    networks:
+      - net
+
+volumes:
+  ghost-blog:
+    external: true
+
+networks:
+  net:
+    external: true
+
+docker-compose up -d --scale ghost-blog=2 --no-recreate
+docker ps
+docker rm -f ghost_ghost-blog_1
+docker-compose up -d --scale ghost-blog=1 --no-recreate
