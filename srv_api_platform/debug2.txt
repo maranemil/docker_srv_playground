@@ -230,3 +230,108 @@ volumes:
   caddy_data:
   caddy_config:
 
+
+################################################################
+denyAccessUnlessGranted symfony
+################################################################
+
+https://doc.hotexamples.com/de/class/symfony.bundle.frameworkbundle.controller/Controller
+https://github.com/symfony/symfony/issues/35755
+https://github.com/symfony/symfony/issues/45774
+https://sajadtorkamani.com/symfony-voters-reference/
+https://stackoverflow.com/questions/34748252/denyaccessunlessgranted-in-controller-multiple-roles
+https://symfony.com/doc/current/security/voters.html
+https://symfonycasts.com/screencast/symfony-security/deny-access-controller
+
+// src/Controller/PostController.php
+// inside your controller action
+if ($post->getOwner() !== $this->getUser()) {
+    throw $this->createAccessDeniedException();
+}
+
+$this->denyAccessUnlessGranted(['ROLE_EDIT', 'ROLE_ADMIN'], $item, 'You cannot edit this item.');
+
+protected function denyAccessUnlessGranted($attributes, $object = null, $message = 'Access Denied.')
+{
+    if (!$this->isGranted($attributes, $object)) {
+        throw $this->createAccessDeniedException($message);
+    }
+}
+
+if(!$this->isGranted('ROLE_EDIT', $item) && !$this->isGranted('ROLE_OTHER', $item)){
+    throw $this->createAccessDeniedException('not allowed');
+}
+
+
+################################################################
+api platform 405 Method not allowed
+################################################################
+
+https://github.com/api-platform/core/issues/854
+https://restful-api-design.readthedocs.io/en/latest/methods.html
+https://api-platform.com/docs/core/operations/#enabling-and-disabling-operations
+https://github.com/api-platform/api-platform/issues/768
+https://api-platform.com/docs/core/operations/
+https://stackoverflow.com/questions/48290013/post-405-method-not-allowed-api-symfony-angular
+https://symfony.com/doc/6.2/the-fast-track/en/26-api.html
+
+405 Method Not Allowed
+The request method is known by the server but has been disabled and cannot be used
+
+Method	Scope		Semantics
+GET	collection	Retrieve all resources in a collection
+GET	resource	Retrieve a single resource
+HEAD	collection	Retrieve all resources in a collection (header only)
+HEAD	resource	Retrieve a single resource (header only)
+POST	collection	Create a new resource in a collection
+PUT	resource	Update a resource
+PATCH	resource	Update a resource
+DELETE	resource	Delete a resource
+OPTIONS	any		Return available HTTP methods and other options
+
+
+class MainController extends Controller
+{
+    /**
+     * @Route(
+     *     path="/",
+     *     methods={"POST"}
+     * )
+     */
+    public function indexAction()
+    {
+        //...
+    }
+}
+
+
+// https://symfonycasts.com/screencast/api-platform/operations
+// https://api-platform.com/docs/core/operations/
+// https://api-platform.com/docs/core/operations/#enabling-and-disabling-operations
+// api/src/Entity/Place.php
+namespace App\Entity;
+
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\ApiResource;
+use App\Controller\GetWeather;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ApiResource(
+    operations: [
+        new Get(),
+        new Put(),
+        new Delete(),
+        new Get(name: 'weather', uriTemplate: '/places/{id}/weather', controller: GetWeather::class),
+        new GetCollection(),
+        new Post(),
+    ]
+)]
+#[ORM\Entity]
+class Place
+{
+    //...
+}
