@@ -209,5 +209,25 @@ RUN set -ex; \
 
 
 
+########################################################
+file's extension in PHP
+########################################################
+
+https://stackoverflow.com/questions/173868/how-to-get-a-files-extension-in-php
+https://www.php.net/manual/en/function.pathinfo.php
+
+$ext = pathinfo($filename, PATHINFO_EXTENSION);
+
+
+########################################################
+override default ImageMagick policy.xml
+########################################################
+https://stackoverflow.com/questions/52703123/override-default-imagemagick-policy-xml
+https://imagemagick.org/script/security-policy.php
+
+nano /etc/ImageMagick-6/policy.xml
+
+
+
 
 

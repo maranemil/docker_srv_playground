@@ -8,5 +8,56 @@ https://docs.docker.com/engine/install/linux-postinstall/
 sudo apt install docker.io docker -y
 sudo apt install docker-compose -y
 
+############################################################
+MinIO update docker
+############################################################
+
+https://min.io/docs/minio/linux/reference/minio-mc-admin/mc-admin-update.html
+https://min.io/docs/minio/linux/reference/minio-mc.html
+https://min.io/docs/minio/linux/reference/minio-mc-admin.html
+https://github.com/minio/minio/issues/8479
+https://github.com/minio/mc/blob/master/docs/minio-admin-complete-guide.md
+
+Documentation: https://docs.min.io
+You are running an older version of MinIO released 1 year ago
+Update: Run `mc admin update`
+
+--------------------------------------------------------------
+
+https://hub.docker.com/r/bitnami/minio
+
+docker run --name minio \
+    --publish 9000:9000 \
+    --publish 9001:9001 \
+    --volume /path/to/minio-persistence:/data \
+    bitnami/minio:latest
+
+
+version: '2'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  minio:
+    image: 'bitnami/minio:latest'
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    environment:
+      - MINIO_ROOT_USER=minio-root-user
+      - MINIO_ROOT_PASSWORD=minio-root-password
+    networks:
+      - app-tier
+  myapp:
+    image: 'YOUR_APPLICATION_IMAGE'
+    networks:
+      - app-tier
+    environment:
+      - MINIO_SERVER_ACCESS_KEY=minio-access-key
+      - MINIO_SERVER_SECRET_KEY=minio-secret-key
+
+-----------------------------------------------
 
 
