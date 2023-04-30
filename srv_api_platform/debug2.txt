@@ -635,3 +635,139 @@ nginx -t
 nginx -T
 nginx -s reload
 service --status-all
+
+
+
+#######################################################
+ext-zip' is missing in composer.json
+#######################################################
+
+https://www.compulsivecoders.com/tech/how-to-install-php-ext-zip-extension/
+https://stackoverflow.com/questions/56219962/composer-require-ext-zip-fails
+
+php --version
+sudo apt-get install php-zip
+
+{
+    "require" : {
+        "ext-zip": "*"
+    }
+}
+
+If your code runs OK - you've already got the zip extension installed on your machine.
+PHPStorm adds this suggestion to ensure that anywhere else that the project is deployed
+also has the right extensions too.
+
+Manually adding the line in your composer.json file (require block) "ext-zip": "*",
+ (and others that it can suggest, such as ext-apc, ext-redis and ext-json, as well
+ as any others that you might be using) will make sure that when you deploy it
+ composer can also check that the appropriate extra items are installed.
+
+It's only a warning though, and you could ignore it - or you can allow composer
+ to make sure that your servers are setup as they would be needed to run your code,
+ and do things with zip-files. If your server doesn't have ext-zip installed,
+ composer install would complain, and stop - saving issues later when you discover
+ that code fails without the zip extension, et al.
+
+
+
+#######################################################
+debug  createQueryBuilder query Doctrine - rint out the real sql
+#######################################################
+
+https://stackoverflow.com/questions/2095394/doctrine-how-to-print-out-the-real-sql-not-just-the-prepared-statement
+https://gist.github.com/JohnD-EE/4d6c6ff4a8364269ed19
+https://symfonycasts.com/screencast/doctrine-queries/raw-sql-queries
+https://symfonycasts.com/screencast/doctrine-queries/query-builder
+https://www.doctrine-project.org/projects/doctrine-dbal/en/current/reference/query-builder.html
+https://symfony.com/doc/current/doctrine.html
+https://orkhan.gitbook.io/typeorm/docs/select-query-builder
+https://www.doctrine-project.org/projects/doctrine-orm/en/2.14/reference/query-builder.html
+https://stackoverflow.com/questions/7576029/doctrine-dql-dynamic-order-by-parameter
+https://github.com/rectorphp/rector/issues/2280
+
+$qb = $this->createQueryBuilder('a');
+$query=$qb->getQuery();
+// SHOW SQL:  $query->getSql()
+echo $query->getSQL();
+// Show Parameters:
+echo $query->getParameters();
+
+
+$qb = $this->createQueryBuilder('a');
+$query = $qb->getQuery();
+print "<pre>";
+        print_r(array(
+            'dql' => $query->getDQL(),
+            'parameters' => $query->getParameters(),
+            'sql' => $query->getSQL()
+        ));
+print "</pre>";
+
+
+#######################################################
+DateTime
+#######################################################
+
+https://github.com/api-platform/api-platform/issues/506
+https://stackoverflow.com/questions/69632445/could-not-convert-php-value-to-type-date-expected-one-of-the-following-types-n
+https://github.com/api-platform/api-platform/issues/2191
+https://api-platform.com/docs/core/filters/
+https://www.sitepoint.com/php-get-current-date/
+https://www.php.net/manual/en/datetime.format.php
+https://www.sitepoint.com/php-get-current-date/
+https://stackoverflow.com/questions/9904080/how-to-get-time-and-date-from-datetime-stamp-in-php
+https://www.php.net/manual/en/class.datetime.php
+https://www.doctrine-project.org/projects/doctrine-orm/en/2.14/reference/query-builder.html
+https://github.com/doctrine/dbal/issues/3740
+
+
+$currentDate = date('Y-m-d');
+echo $currentDate;
+
+$currentDate = date('l, F j, Y');
+echo $currentDate;
+
+$timestamp = time();
+$currentDate = gmdate('Y-m-d', $timestamp);
+echo $currentDate;
+
+$currentDateTime = new DateTime('now', new DateTimeZone('UTC'));
+$currentDateTime = new DateTime('now');
+$currentDateTime->setTimezone(new DateTimeZone('UTC'));
+
+
+$currentYear = date("Y");
+$dateTo = new DateTime();
+$dateTo->setDate($currentYear, 12, 31);
+print_r($dateTo->format('Y-m-d'));
+
+
+$s = '8/29/2011 11:16:12 AM';
+$dt = new DateTime($s);
+$date = $dt->format('m/d/Y');
+$time = $dt->format('H:i:s');
+echo $date, ' | ', $time;
+
+
+use Doctrine\DBAL\Types\Type;
+$query->setParameter($a, Types::BOOLEAN);
+$query->setParameter($b, Types::DATE_MUTABLE);
+
+$connection->createQueryBuilder()
+    ->insert('contacts')
+    ->values(
+        [
+            'name' => '?',
+            'birthday' => '?',
+        ]
+    )
+    ->setParameter(0, (string)$name)
+    ->setParameter(1, $birthday, Types::DATE_MUTABLE)
+    ->execute();
+
+
+
+
+
+
