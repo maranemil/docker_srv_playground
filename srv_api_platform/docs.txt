@@ -12,10 +12,10 @@ https://api-platform.com/docs/deployment/docker-compose/
 https://api-platform.com/docs/distribution/
 https://api-platform.com/docs/distribution/#introduction
 https://api-platform.com/docs/schema-generator/
+
 https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html
 https://demo.api-platform.com/docs
 https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
-https://docs.behat.org/en/latest/
 https://docs.behat.org/en/latest/
 https://getcomposer.org/doc/
 https://getcomposer.org/doc/00-intro.md
@@ -48,15 +48,198 @@ https://vuejs.org/guide/introduction.html#what-is-vue
 https://vuetifyjs.com/en/
 https://vuetifyjs.com/en/getting-started/installation/
 https://vuetifyjs.com/en/introduction/why-vuetify/
+
 https://www.doctrine-project.org/
 https://www.doctrine-project.org/index.html
 https://www.doctrine-project.org/projects/doctrine-mongodb-odm/en/2.5/index.html
 https://www.doctrine-project.org/projects/doctrine-orm/en/current/tutorials/getting-started.html#guide-assumptions
 https://www.doctrine-project.org/projects/doctrine-orm/en/latest/index.html
 https://www.doctrine-project.org/projects/mongodb-odm.html
+
 https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/index.html
 https://www.hydra-cg.com/
 https://www.hydra-cg.com/spec/latest/core/
 https://www.openapis.org/
 
 https://www.youtube.com/watch?v=ZRBRtA_2NAo
+
+########################################################################
+api-platform symfonycasts
+########################################################################
+
+[api-platform]
+https://symfonycasts.com/screencast/api-platform
+https://symfonycasts.com/screencast/api-platform2-security
+https://symfonycasts.com/screencast/api-platform-extending
+https://symfonycasts.com/screencast/api-platform2
+https://symfonycasts.com/screencast/api-platform-security
+
+[]
+https://symfonycasts.com/screencast/api-platform/serialization-groups#play
+https://symfonycasts.com/screencast/api-platform/pagination
+https://symfonycasts.com/screencast/api-platform2/hydra#play
+https://symfonycasts.com/screencast/api-platform2-security/login-response#play
+https://symfonycasts.com/screencast/api-platform-extending/publish-state-change#play
+
+https://www.youtube.com/watch?v=ZRBRtA_2NAo
+https://github.com/GaryClarke/api-platform-crash-course
+
+composer require api
+composer req maker --dev
+
+./bin/console make:entity
+docker-compose up -d
+symfony console make:migration
+symfony console doctrine:migrations:migrate
+
+src/Entity/DragonTreasure.php
+#[ORM\Entity(repositoryClass: DragonTreasure:class)]
+#[ApiResource( shortName: 'Treasure', description: 'Text', operations: [new Get(uriTemplate: '/dragon-plunder/{id}'), new Post(), new GetCollection()...])]
+
+#[ORM\Id]
+#[ORM\IGeneratedValue]
+
+#[ORM\Column(length:255)]
+#[ORM\Column(length:255, type: Types:TEXT)]
+
+php ./bin/console debug:router
+
+/api/docs
+/api/docs.json
+
+composer require debug
+
+http://localhost/docs
+http://localhost/docs.jsonld
+http://localhost/docs.json
+http://localhost/_profiler/0ce76c?panel=router
+http://localhost/_profiler/0ce76c?panel=logger
+http://localhost/_profiler/empty/search/results?limit=10
+
+symfony console make:migration
+symfony console doctrine:migrations:migrate
+symfony server -d
+
+.env # modify db url
+config/packages/doctrine.yaml # modify db driver
+src/Entity # create entities
+
+composer require api
+composer req maker --dev
+composer req webonyx/graphql-php # enable graphQL
+composer req migrations
+
+symfony console doctrine:database:create
+symfony console make:migration
+symfony console doctrine:migrations:migrate
+
+http://localhost/api/resource/2.json
+http://localhost/api/resource/2.jsonld
+
+yarn encore dev --watch # frontend
+symfony serve # localhost:8000
+localhost:8000/api
+symfony console debug:config api_platform
+symfony console config:dump api_platform
+
+ > enable_docs: false / enable_entrypoint: false > config/prod/api_platform.yaml
+symfony console cache:clear
+localhost:8000/api
+localhost:8000/api/docs
+
+config/packages/security.yaml
+
+	app_user_provider:
+		entity:
+			class: App\Entity\User
+			property: email
+firewalls:
+	main:
+		json_login:
+			check_path: app_login
+			username_path: email
+			password_path: password
+
+# https://symfonycasts.com/screencast/api-platform2-security/json-login#play
+# https://symfonycasts.com/screencast/api-platform2-security/login-success#play
+src/Controller/SecurityController.php
+
+symfony console security:encode
+
+symfony run bin/phpunit
+symfony run bin/phpunit --filter=testCreateUser
+symfony console debug:autowiring Persister
+symfony console debug:container api_platform
+---------------------
+https://en.wikipedia.org/wiki/HTTP_cookie
+https://de.wikipedia.org/wiki/HTTP-Cookie
+https://cookie-script.com/documentation/httponly-cookies
+https://owasp.org/www-community/HttpOnly
+https://wiki.selfhtml.org/wiki/Cookie/sichere_Cookies
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies?retiredLocale=de
+https://www.cookiepro.com/knowledge/httponly-cookie/
+https://learn.microsoft.com/de-de/dotnet/api/system.web.httpcookie.httponly?view=netframework-4.8.1
+---------------------
+[symfony]
+https://symfonycasts.com/screencast/symfony-rest
+https://symfonycasts.com/screencast/symfony-rest2
+https://symfonycasts.com/screencast/symfony-rest3
+https://symfonycasts.com/screencast/symfony-rest4
+---------------------
+https://symfonycasts.com/screencast/api-platform
+https://symfonycasts.com/screencast/api-platform/operations
+https://symfony.com/doc/6.2/the-fast-track/en/26-api.html
+---------------------
+########################################################################
+session max_age
+########################################################################
+
+https://symfonycasts.com/screencast/api-platform2-security/login-success
+https://api-platform.com/docs/core/performance/
+https://symfony.com/bundles/NelmioCorsBundle/current/index.html
+https://github.com/nelmio/NelmioCorsBundle
+https://symfony.com/bundles/LexikJWTAuthenticationBundle/current/4-cors-requests.html
+https://stackoverflow.com/questions/71068198/symfony-nelmio-cors-issue-access-control-allow-origin-header-contains-multiple
+https://api-platform.com/docs/admin/getting-started/
+
+framework.session from symfony
+
+    session:
+        handler_id: null
+        cookie_secure: auto
+        cookie_samesite: lax
+        cookie_lifetime: 31536000
+
+ session:
+        handler_id: 'session.handler.native_file'
+        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
+        cookie_secure: auto
+        cookie_samesite: lax
+        cookie_lifetime: 31536000
+        gc_maxlifetime: 31536000
+
+gc_maxlifetime
+defines how long a session can be IDLE before it is removed from the server.
+So, if a session has not been used for 31536000 seconds, it is eligible to be removed.
+But, if the session remains active, it won't be idle and will not be removed.
+
+cookie_lifetime
+defines how long the session cookie can be used.
+This means that after 31536000 seconds, the cookie well become invalid and the session will end,
+no matter what - even if the user is still actively browsing your site.
+
+nelmio_cors:
+  defaults:
+  paths:
+        '^/api/':
+            allow_origin: ['*']
+            allow_headers: ['X-Custom-Auth']
+            allow_methods: ['POST', 'PUT', 'GET', 'DELETE']
+            max_age: 3600
+
+
+
+
+
+https://laracasts.com/
+https://cakephp.org/documentation/videos
