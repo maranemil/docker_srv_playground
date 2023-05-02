@@ -237,9 +237,113 @@ nelmio_cors:
             allow_methods: ['POST', 'PUT', 'GET', 'DELETE']
             max_age: 3600
 
-
-
-
-
+----------------------------------------------------------
 https://laracasts.com/
 https://cakephp.org/documentation/videos
+----------------------------------------------------------
+
+composer require foundry orm-fixtures --dev
+php ./bin/console make:factory
+symfony console doctrine:fixtures:load
+php ./bin/console debug:config api_platform
+
+pagination > enable:false
+php ./bin/console config:dump api_platform
+
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Metadata\ApiFilter;
+#[ApiFilter(BooleanFilter::class, properties: ['isPublished'])]
+
+#[ApiFilter(BooleanFilter::class)]
+#[ApiFilter(SearchFilter::class, strategy: 'partial')]
+#[ApiFilter(RangeFilter::class)]
+
+https://github.com/dunglas/vulcain
+https://hub.docker.com/r/dunglas/vulcain
+
+api_platform:
+    formats:
+        jsonld: [ 'application/ld+json' ]
+        json: [ 'application/json' ]
+        html: [ 'text/html' ]
+
+Validation >
+use Symfony\Component\Validator\Constraints as Assert;
+#[Assert\NotBlank]
+#[Assert\Length(min: 2, max: 50, maxMessage: 'Describe your loot in 50 chars or less')]
+#[Assert\GreaterThanOrEqual(0)]
+#[Assert\LessThanOrEqual(10)]
+
+php ./bin/console make:user
+php ./bin/console make:entity User
+php ./bin/console make:migration
+php ./bin/console doctrine:migrations:migrate
+php ./bin/console make:factory
+
+
+AppFixtures.php
+fn > load > UserFactory:createMany(10);
+php ./bin/console doctrine:fixtures:load
+
+#[ApiResource(
+    normalizationContext: ['groups' => ['user:read']],
+    denormalizationContext: ['groups' => ['user:write']],
+)]
+#[Groups(['user:read', 'user:write'])]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['username'], message: 'It looks like another dragon took your username. ROAR!')]
+
+#[Assert\NotBlank]
+#[Assert\Email]
+
+symfony console doctrine:database:drop --force
+symfony console doctrine:database:create
+symfony console doctrine:migrations:migrate
+symfony console doctrine:fixtures:load
+
+Embedded Relations
+- src/Entity/User.php
+#[ORM\OneToMany(mappedBy: 'owner', targetEntity: Articles::class)]
+private Collection $articles
+
+#[ORM\OneToMany(mappedBy: 'owner', targetEntity: DragonTreasure::class, cascade: ['persist'])]
+
+#[Assert\Valid]
+
+#[ORM\ManyToOne(inversedBy: 'Articles')]
+#[ORM\JoinColumn(nullable: false)]
+
+#[ApiFilter(PropertyFilter::class)]
+
+#[ApiFilter(SearchFilter::class, properties: [
+    'owner.username' => 'partial',
+])]
+
+
+
+#[ApiResource(
+    uriTemplate: '/users/{user_id}/articles.{_format}',
+    shortName: 'Article',
+    operations: [new GetCollection()],
+    uriVariables: [
+        'user_id' => new Link(
+            fromProperty: 'articles',
+            fromClass: User::class,
+        ),
+    ],
+)]
+
+
+# React Admin
+composer require encore
+npm install
+npm install @api-platform/admin -D
+composer require symfony/ux-react
+npm install react -D
+npm run watch
+npm install @babel/react-preset@^7.0.0 --save-dev
+npm run watch
+php bin/console debug:router
+
+
+curl -X GET 'https://localhost:8000/api' -H "accept: application/ld+json"
