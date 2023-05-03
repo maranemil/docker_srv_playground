@@ -1,0 +1,257 @@
+
+###########################################################
+Warning: A future version of React will block javascript: URLs as a security precaution.
+Use event handlers instead if you can. If you need to generate unsafe HTML try using dangerouslySetInnerHTML instead.
+React was passed "javascript:void(0);".
+###########################################################
+
+https://stackoverflow.com/questions/59840919/warning-a-future-version-of-react-will-block-javascript
+https://github.com/facebook/react/issues/16592
+https://github.com/microsoft/fluentui/issues/21803
+https://legacy.reactjs.org/docs/strict-mode.html
+https://legacy.reactjs.org/warnings/unknown-prop.html
+https://refine.dev/blog/react-strict-mode-in-react-18/
+https://www.syncfusion.com/blogs/post/everything-you-should-know-about-react-18.aspx
+https://sentry.io/answers/defining-proper-key-in-props/
+
+"use strict";
+
+<a href="javascript:void(0);"></a>
+<a href="javascript:;" ...>...</a>
+<a href={undefined} ... > also works!
+
+FIX?
+<NavLink to="#" onClick={e => e.preventDefault()}>
+FIX?
+<a href="#nolink"></a>
+
+------------------------
+
+import * as React from "react";
+
+interface OnClickLinkProps {
+  children: React.ReactChild | React.ReactChild[];
+  className?: string;
+  onClick: () => void;
+}
+
+export function OnClickLink(props: OnClickLinkProps): React.ReactElement {
+  function onClick(event: React.MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
+    props.onClick();
+  }
+
+  return (
+    <a href="#" onClick={onClick} className={props.className || ""}>
+      {props.children}
+    </a>
+  );
+}
+
+------------------------
+
+You can define a component based on a element. The followings are a bunch of code snippets.
+
+import React, { FC, MouseEvent } from 'react'
+import classnames from 'classnames'
+import './navigator.scss'
+
+export interface INavigatorProps {
+  className?: string
+  prefixCls?: string
+  style?: React.CSSProperties
+  url: string
+  onClick?: (event: MouseEvent<HTMLAnchorElement>) => void
+}
+
+export const Navigator: FC<INavigatorProps> = ({
+  style,
+  children,
+  url: oldUrl,
+  className = '',
+  onClick: oldOnClick,
+  prefixCls = 'pa-navigator',
+}) => {
+  const classNameString = classnames(className, prefixCls)
+
+  let [url = oldUrl, onClick = oldOnClick] = []
+  if (/^javascript:/.test(url) || url === '#') {
+    // @ts-ignore
+    url = undefined
+    onClick = (event) => {
+      event.stopPropagation()
+      oldOnClick?.call(Object.create(null), event)
+    }
+  }
+  return (
+    <a
+      href={url}
+      style={style}
+      className={classNameString}
+      onClick={onClick}
+      rel='noopener noreferrer'
+    >
+      {children}
+    </a>
+  )
+}
+
+
+###########################################################
+Warning: Can't perform a React state update on an unmounted component.
+This is a no-op, but it indicates a memory leak in your application.
+To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
+###########################################################
+
+https://medium.com/berlin-tech-blog/how-to-get-rid-of-cant-perform-a-react-state-update-on-an-unmounted-component-or-why-it-is-cd5e8132d6c6
+https://tasoskakour.com/blog/react-use-effect-cleanups
+https://developer.school/snippets/react/perform-an-action-when-component-is-mounted
+https://forum.freecodecamp.org/t/getting-this-error-when-deleting-the-comment-cant-perform-a-react-state-update-on-an-unmounted-component/516644
+https://codedamn.com/news/reactjs/cant-perform-a-react-state-update-error
+https://webexpe.com/blog/fixing-cant-perform-a-React-state-update-on-an-unmounted-component/
+https://github.com/joshwcomeau/use-sound/issues/14
+https://dev.to/jexperton/how-to-fix-the-react-memory-leak-warning-d4i
+https://medium.com/berlin-tech-blog/how-to-get-rid-of-cant-perform-a-react-state-update-on-an-unmounted-component-or-why-it-is-cd5e8132d6c6
+https://stackoverflow.com/questions/54954385/react-useeffect-causing-cant-perform-a-react-state-update-on-an-unmounted-comp
+
+
+const [state, setState] = useState({});
+useEffect(() => {
+    myFunction();
+    return () => {
+      setState({}); // This worked for me
+    };
+}, []);
+const myFunction = () => {
+    setState({
+        name: 'Jhon',
+        surname: 'Doe',
+    })
+}
+
+------------
+
+function Component(props) {
+  const [fetched, setFetched] = React.useState(false);
+  React.useEffect(() => {
+    const ac = new AbortController();
+    Promise.all([
+      fetch('http://placekitten.com/1000/1000', {signal: ac.signal}),
+      fetch('http://placekitten.com/2000/2000', {signal: ac.signal})
+    ]).then(() => setFetched(true))
+      .catch(ex => console.error(ex));
+    return () => ac.abort(); // Abort both fetches on unmount
+  }, []);
+  return fetched;
+}
+const main = document.querySelector('main');
+ReactDOM.render(React.createElement(Component), main);
+setTimeout(() => ReactDOM.unmountComponentAtNode(main), 1); // Unmount after 1ms
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/react/16.8.3/umd/react.development.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.3/umd/react-dom.development.js"></script>
+<main></main>
+
+###########################################################
+Function.prototype.apply doesn't work on Function.prototype.call in Chrome
+###########################################################
+
+https://gist.github.com/sibelius/21feac8570c4446f158edb70a53218a2
+https://stackoverflow.com/questions/30982922/function-prototype-apply-doesnt-work-on-function-prototype-call-in-chrome
+https://www.quora.com/Why-does-JavaScript-have-function-prototype-apply-or-function-prototype-call-when-we-can-just-invoke-it-with-function-value-arg1-and-arg2
+
+Window.call.apply(function foo() { console.log('foo'); });
+
+##########################################################################
+Changing the Number of Items per Page
+##########################################################################
+
+https://api-platform.com/docs/core/pagination/
+https://stackoverflow.com/questions/68317054/api-platform-symfony-only-getting-30-results-pagination
+https://dunglas.dev/2018/01/api-platform-2-2-graphql-json-api-admin-and-pwa-kubernetes-instant-deployment-and-many-more-new-features/
+https://symfonycasts.com/screencast/api-platform/pagination
+https://api-platform.com/docs/core/pagination/
+https://marmelab.com/react-admin/doc/3.17/DataProviders.html
+
+#[ApiResource(
+    paginationClientEnabled: true,
+    paginationClientItemsPerPage: 10
+)]
+
+##########################################################################
+How to Define Commands as Services
+##########################################################################
+
+https://stefanoalletti.wordpress.com/2018/03/07/symfony-api-platform-cqrs-part-1/
+https://itnext.io/building-restful-apis-with-symfony-5-and-php-8-35368a6246ad
+https://symfony.com/doc/current/console/commands_as_services.html
+https://gist.github.com/GregoireHebert/09ea983e55217d0199a1986467a811c7
+https://github.com/api-platform/api-platform/issues/705
+https://api-platform.com/docs/core/upgrade-guide/
+https://api-platform.com/docs/distribution/
+
+declare(strict_types=1);
+namespace AppBundle\Command;
+
+php bin/console make:controller
+php bin/console make:test
+php bin/console make:fixtures
+php bin/console doctrine:fixtures:load
+
+------------
+src/Command/SunshineCommand.php
+
+namespace App\Command;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+// ...
+
+#[AsCommand(name: 'app:sunshine')]
+class SunshineCommand extends Command
+{
+    // ...
+}
+
+
+
+# config/services.yaml
+services:
+    # ...
+
+    App\Command\SunshineCommand:
+        tags:
+            - { name: 'console.command', command: 'app:sunshine' }
+
+php ./bin/console app:sunshine
+
+##########################################################################
+remove duplicates
+##########################################################################
+
+https://stackoverflow.com/questions/1960473/get-all-unique-values-in-a-javascript-array-remove-duplicates
+
+
+// usage example:
+var myArray = ['a', 1, 'a', 2, '1'];
+var unique = myArray.filter((value, index, array) => array.indexOf(value) === index);
+console.log(unique); // unique is ['a', 1, 2, '1']
+
+// usage example ES6
+var myArray = ['a', 1, 'a', 2, '1'];
+let unique = [...new Set(myArray)];
+console.log(unique); // unique is ['a', 1, 2, '1']
+
+
+function dataSort(){
+	// csv foramt 1,2,3
+	let dataCSV = pizza?.DataRequest.map(DataRequest => DataRequest.someFiled ).join(",");
+	// transform to array
+	let dataArray = dataCSV.split(',');
+	// make unique
+	let dataUnique = dataArray.filter((value, index, array) => array.indexOf(value) === index);
+	// return unique value
+	return dataUnique.join(",");
+}
