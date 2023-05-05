@@ -1,0 +1,13 @@
+# docker pull jupyter/datascience-notebook
+# docker run -p 10000:8888 jupyter/scipy-notebook:2023-02-28
+version: "3"
+services:
+  jupyter-nb:
+    image: jupyter/datascience-notebook
+    #image: jupyter/scipy-notebook
+    ports:
+      - "10000:8888"
+
+
+# localhost:10000/
+# docker stop $(docker ps -aq)

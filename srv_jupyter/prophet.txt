@@ -1,0 +1,125 @@
+https://hub.docker.com/r/jupyter/datascience-notebook/
+https://github.com/jupyter/docker-stacks
+https://github.com/jupyter/docker-stacks
+https://jupyter-docker-stacks.readthedocs.io/en/latest/
+
+------------------------------------------------------------------------
+https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.median.html
+https://pandas.pydata.org/docs/dev/reference/api/pandas.DataFrame.median.html
+https://www.w3schools.com/python/pandas/ref_df_median.asp
+
+import pandas as pd
+data = [[1, 1, 2], [6, 4, 2], [4, 2, 1], [4, 2, 3]]
+df = pd.DataFrame(data)
+print(df.median())
+------------------------------------------------------------------------
+dataset = dataset.iloc[:,[1, 2]]
+------------------------------------------------------------------------
+import plotly.graph_objects as go
+fig = go.Figure()
+fig = fig.add_trace(go.Scatter(x=[0, 1, 2, 3, 4], y=[0, 1, 4, 9, 16]))
+fig.show()
+------------------------------------------------------------------------
+df = pd.DataFrame({"a":[1,2],"b":[1,2]})
+df.plot(figsize=(3,3));
+df = pd.DataFrame({"a":[1,2],"b":[1,2]})
+df.plot(figsize=(5,3));
+------------------------------------------------------------------------
+https://raw.githubusercontent.com/facebook/prophet/main/examples/example_wp_log_peyton_manning.csv
+------------------------------------------------------------------------
+data.columns = data.columns.str.strip()
+------------------------------------------------------------------------
+Arguments
+m	 Prophet model object.
+periods	 Int number of periods to forecast forward.
+freq	 'day', 'week', 'month', 'quarter', 'year', 1(1 sec), 60(1 minute) or 3600(1 hour).
+include_history	 Boolean to include the historical dates in the data frame for predictions.
+------------------------------------------------------------------------
+https://www.geeksforgeeks.org/adding-new-column-to-existing-dataframe-in-pandas/
+https://www.geeksforgeeks.org/replace-nan-values-with-zeros-in-pandas-dataframe/
+------------------------------------------------------------------------
+https://facebook.github.io/prophet/
+https://facebook.github.io/prophet/docs/installation.html
+https://facebook.github.io/prophet/docs/multiplicative_seasonality.html
+https://facebook.github.io/prophet/docs/quick_start.html
+https://facebook.github.io/prophet/docs/quick_start.html#python-api
+https://facebook.github.io/prophet/docs/quick_start.html#r-api
+https://facebook.github.io/prophet/docs/seasonality,_holiday_effects,_and_regressors.html
+https://facebook.github.io/prophet/docs/seasonality,_holiday_effects,_and_regressors.html
+https://facebook.github.io/prophet/docs/uncertainty_intervals.html
+https://francescobranda.netlify.app/post/distributed_deep_learning/
+https://github.com/brendanartley/Medium-Article-Code/blob/main/code/energy-demand-forecast-w-neuralprophet.ipynb
+https://github.com/facebook/prophet
+https://github.com/facebook/prophet/issues/1092
+https://github.com/facebook/prophet/issues/1525
+https://github.com/facebook/prophet/issues/432
+https://github.com/mberk06/DS_academic_papers/blob/master/28_prophet_vs_neural_prophet.py
+https://github.com/ourownstory/neural_prophet
+https://github.com/ourownstory/neural_prophet/blob/main/README.md
+https://github.com/smazzanti/direct_loss_estimation/blob/main/direct_loss_estimation.ipynb
+https://medium.com/analytics-vidhya/neuralprophet-a-neural-network-based-time-series-model-3c74af3b0ec6
+https://medium.com/analytics-vidhya/time-series-tutorial-using-neuralprophet-e918a1b437ed
+https://neuralprophet.com/
+https://neuralprophet.com/code/forecaster.html
+https://neuralprophet.com/tutorials/tutorial01.html
+https://neuralprophet.com/tutorials/tutorial02.html
+https://pip.pypa.io/en/stable/cli/pip/
+https://pypi.org/project/neuralprophet/
+https://pypi.org/project/plotly/
+https://python.hotexamples.com/de/examples/fbprophet/Prophet/make_future_dataframe/python-prophet-make_future_dataframe-method-examples.html
+https://python.hotexamples.com/examples/neuralprophet/NeuralProphet/plot_components/python-neuralprophet-plot_components-method-examples.html
+https://python.hotexamples.com/examples/neuralprophet/NeuralProphet/split_df/python-neuralprophet-split_df-method-examples.html
+https://pytorch.org/docs/stable/generated/torch.nn.SmoothL1Loss.html
+https://rdrr.io/cran/prophet/man/make_future_dataframe.html
+https://satyakide.com/2022/02/22/neural-prophet-the-enhanced-version-of-facebooks-forecasting-api/
+https://search.r-project.org/CRAN/refmans/prophet/html/make_future_dataframe.html
+https://stackoverflow.com/questions/49696876/facebook-prophet-non-daily-data-in-python
+https://towardsdatascience.com/forecast-model-tuning-with-additional-regressors-in-prophet-ffcbf1777dda
+https://towardsdatascience.com/in-depth-understanding-of-neuralprophet-through-a-complete-example-2474f675bc96
+https://towardsdatascience.com/prophet-vs-neuralprophet-fc717ab7a9d8
+https://towardsdatascience.com/website-visitor-forecast-with-facebook-prophet-a-complete-tutorial-1d0a5bcd1f8f
+https://www.rdocumentation.org/packages/prophet/versions/1.0/topics/make_future_dataframe
+------------------------------------------------------------------------
+https://www.kaggle.com/code/prashant111/tutorial-time-series-forecasting-with-prophet
+https://www.kaggle.com/code/muhammetalikula/covid19-turkey/notebook
+https://www.kaggle.com/code/ohseokkim/predicting-future-by-lstm-prophet-neural-prophet/notebook
+https://www.kaggle.com/code/rxsraghavagrawal/time-series-forecasting-using-fbprophet
+https://www.kaggle.com/code/rhythmcam/stock-prediction-by-prophet
+https://www.kaggle.com/code/joshuaswords/neuralprophet-facebook-s-newest-tool/notebook
+https://www.kaggle.com/code/mishki/time-series-demand-forecast-arma-prophet
+------------------------------------------------------------------------
+sklearn
+keras
+------------------------------------------------------------------------
+
+https://scikit-learn.org/stable/auto_examples/index.html
+https://scikit-learn.org/stable/auto_examples/tree/plot_tree_regression.html#sphx-glr-auto-examples-tree-plot-tree-regression-py
+https://scikit-learn.org/stable/auto_examples/ensemble/plot_adaboost_regression.html#sphx-glr-auto-examples-ensemble-plot-adaboost-regression-py
+https://scikit-learn.org/stable/auto_examples/ensemble/plot_gradient_boosting_regression.html#sphx-glr-auto-examples-ensemble-plot-gradient-boosting-regression-py
+https://scikit-learn.org/stable/auto_examples/ensemble/plot_voting_regressor.html#sphx-glr-auto-examples-ensemble-plot-voting-regressor-py
+https://scikit-learn.org/stable/auto_examples/ensemble/plot_gradient_boosting_quantile.html#sphx-glr-auto-examples-ensemble-plot-gradient-boosting-quantile-py
+https://scikit-learn.org/stable/auto_examples/gaussian_process/plot_compare_gpr_krr.html#sphx-glr-auto-examples-gaussian-process-plot-compare-gpr-krr-py
+https://scikit-learn.org/stable/auto_examples/gaussian_process/plot_gpr_co2.html#sphx-glr-auto-examples-gaussian-process-plot-gpr-co2-py
+https://scikit-learn.org/stable/auto_examples/linear_model/plot_ard.html#sphx-glr-auto-examples-linear-model-plot-ard-py
+https://scikit-learn.org/stable/auto_examples/linear_model/plot_bayesian_ridge_curvefit.html#sphx-glr-auto-examples-linear-model-plot-bayesian-ridge-curvefit-py
+https://scikit-learn.org/stable/auto_examples/linear_model/plot_ols.html#sphx-glr-auto-examples-linear-model-plot-ols-py
+https://scikit-learn.org/stable/auto_examples/linear_model/plot_iris_logistic.html#sphx-glr-auto-examples-linear-model-plot-iris-logistic-py
+https://www.tensorflow.org/tutorials/keras/regression
+https://inside-machinelearning.com/en/how-to-do-linear-regression-with-keras/
+https://learnopencv.com/tensorflow-keras-tutorial-linear-regression/
+https://www.machinelearningmindset.com/linear-regression-with-tensorflow/
+https://mlflow.org/docs/latest/tutorials-and-examples/index.html
+https://github.com/mlflow/mlflow/blob/master/examples/prophet/train.py
+https://github.com/h2oai/h2o-3
+https://h2o.ai/
+https://github.com/tensorflow/skflow
+https://github.com/EducationalTestingService/skll
+https://skll.readthedocs.io/en/latest/utilities.html#generate-predictions
+https://github.com/meetvora/mlp-classifier
+https://github.com/smazzanti/direct_loss_estimation/blob/main/direct_loss_estimation.ipynb
+
+
+
+
+
+

@@ -38,7 +38,8 @@ remove-everything:
 stop:
 	@echo "Stopping docker"
 	#sudo service docker stop
-	sudo systemctl stop docker
+	#sudo systemctl stop docker
+	docker stop $(docker ps -aq)
 
 start:
 	@echo "Starting docker"
