@@ -69,3 +69,18 @@ systemctl reboot -i
 #/printer  ("Print Optimized" - 300 dpi images)
 #/prepress ("Prepress Optimized" - color preserving, 300 dpi imgs)
 #/default  (useful across a wide variety of uses)
+
+###############################################
+# search color in 5000 tiff files
+###############################################
+
+identify -verbose input.tiff | grep -A 2 -i Histogram
+identify -verbose input.tiff | grep -A 2 -i Histogram
+identify -verbose input.tiff | grep -e '255,194,0,' -c
+identify -verbose input.tiff | grep -e '255,194,0' -c | xargs echo
+identify -verbose input.tiff | grep -e '255,194,0' -c | xargs -t
+identify -verbose input.tiff | grep -e '255,194,0' -c | xargs echo | grep -Fq "2" && echo 2;
+
+# match twice the same color
+for i in *.tiff; do identify -verbose $i | grep -e '255,194,0' -c | xargs echo | grep -Fq "2" && echo 2; done
+for i in *.tiff; do identify -verbose $i | grep -e '255,194,0' -c | xargs echo | grep -Fq "2" && echo $i; done
