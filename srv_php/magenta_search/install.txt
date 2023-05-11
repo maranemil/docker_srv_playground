@@ -1,0 +1,71 @@
+#########################################
+req:
+#########################################
+php7.4 docker container
+python3
+
+#########################################
+install
+#########################################
+sudo apt install php-cli composer -y
+sudo apt install php-gd
+composer require tecnickcom/tcpdf
+sudo dpkg --configure -a
+systemctl reboot -i
+
+# composer require sargilla/tcpdf
+# composer require setasign/fpdf
+
+#########################################
+# checks
+#########################################
+# Loading NimbusSans-Regular font from /usr/share/ghostscript/9.55.0/Resource/Font/NimbusSans-Regular
+# ls /usr/share/fonts/truetype/
+# ls /usr/share/fonts/opentype/
+
+
+#sudo ls /usr/share/color/icc/
+#CineLogCurve.icc         CineonLog_M_Knee_30.icc         FOGRA28L.ti3  FOGRA40L.ti3    ITULab.icc     sRGB.icc   TR006.ti3
+#CineonLog_M.icc          CineonLog_M_Knee_60.icc         FOGRA29L.ti3  ghostscript     LCMSLABI.ICM   TR002.ti3
+#CineonLog_M_Knee_10.icc  colord                          FOGRA30L.ti3  Gray-CIE_L.icc  LCMSXYZI.ICM   TR003.ti3
+#CineonLog_M_Knee_20.icc  compatibleWithAdobeRGB1998.icc  FOGRA39L.ti3  Gray.icc        LStar-RGB.icc  TR005.ti3
+
+#sudo ls /usr/share/color/icc/ghostscript/
+#a98.icc           default_gray.icc  esrgb.icc      lab.icc      ps_gray.icc  rommrgb.icc  sgray.icc
+#default_cmyk.icc  default_rgb.icc   gray_to_k.icc  ps_cmyk.icc  ps_rgb.icc   scrgb.icc    srgb.icc
+
+#sudo ls /usr/share/color/icc/colord/
+#AdobeRGB1998.icc  Bluish.icc         Crayons.icc    EktaSpacePS5.icc  NTSC-RGB.icc     SMPTE-C-RGB.icc         x11-colors.icc
+#AppleRGB.icc      BruceRGB.icc       DonRGB4.icc    Gamma5000K.icc    PAL-RGB.icc      sRGB.icc
+#BestRGB.icc       CIE-RGB.icc        ECI-RGBv1.icc  Gamma5500K.icc    ProPhotoRGB.icc  SwappedRedAndGreen.icc
+#BetaRGB.icc       ColorMatchRGB.icc  ECI-RGBv2.icc  Gamma6500K.icc    Rec709.icc       WideGamutRGB.icc
+
+# Loading NimbusSans-Regular font from /usr/share/ghostscript/9.55.0/Resource/Font/NimbusSans-Regular
+# ls /usr/share/ghostscript/9.55.0/Resource/Font/
+# ls /usr/share/ghostscript/9.55.0/Resource/Init/
+# cat /usr/share/ghostscript/9.55.0/Resource/Init/Fontmap.GS
+# /usr/share/ghostscript/9.55.0/Resource/Font/NimbusSans-Regular
+# dpkg-query -S /usr/share/ghostscript/9.55.0/Resource/Font/*
+# dpkg -l | grep xfonts
+# sudo apt-get remove ttf-mscorefonts-installer
+# sudo fc-cache -fv
+# ls /usr/share/fonts/truetype/
+# ls /usr/share/fonts/*
+
+
+
+# https://wiki.ubuntuusers.de/Ghostscript/
+# https://linuxize.com/post/how-to-use-linux-sleep-command-to-pause-a-bash-script/
+# https://www.cyberciti.biz/faq/unix-linux-bash-read-comma-separated-cvsfile/
+# https://www.shell-tips.com/bash/how-to-parse-csv-file/#gsc.tab=0
+# https://www.teosoft.it/note/2018-06-21-compress-pdf-with-linux/
+# https://wiki.ingeg.it/notes/change_pdf_image_quality_with_gs
+# https://www.teosoft.it/note/2018-06-21-compress-pdf-with-linux/
+# https://ghostscript.com/docs/9.54.0/VectorDevices.htm
+# https://tiborstanko.sk/compress-paper-pdf.html
+
+#/screen   ("Screen Optimized" - 72 dpi images)
+#/ebook    ("eBook" - 150 dpi images)
+#/printer  ("Print Optimized" - 300 dpi images)
+#/prepress ("Prepress Optimized" - color preserving, 300 dpi imgs)
+#/default  (useful across a wide variety of uses)

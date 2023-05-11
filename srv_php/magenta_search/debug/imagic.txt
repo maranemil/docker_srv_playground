@@ -1,0 +1,362 @@
+
+########################################################################
+How to convert Illustrator files to EPS via the command line
+########################################################################
+
+https://stackoverflow.com/questions/19083558/how-to-convert-illustrator-files-to-eps-via-the-command-line-nix
+https://superuser.com/questions/198460/converting-from-eps-to-svg-format
+https://tex.stackexchange.com/questions/2872/what-are-good-ways-to-convert-eps-to-pdf
+https://jugmac00.github.io/til/how-can-you-convert-an-adobe-illustrator-file-to-an-encapsulated-postscript-file/
+https://stackoverflow.com/questions/28917496/is-it-possible-to-use-eps-file-created-with-eps2write-in-endpage-procedure
+https://ghostscript.com/docs/9.54.0/VectorDevices.htm
+https://ghostscript.com/docs/9.54.0/Use.htm
+https://tex.stackexchange.com/questions/20883/how-to-convert-pdf-to-eps
+https://github.com/doxygen/doxygen/issues/7578
+https://stackoverflow.com/questions/24700167/ghostscript-behavior-using-ps2write
+https://github.com/sumatrapdfreader/sumatrapdf/issues/983
+https://tex.stackexchange.com/questions/672904/right-placement-in-pdf-file-but-wrong-after-pdf2ps-merges-pdf-merges2-ps
+https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=238583
+https://tcpdf.org/examples/example_032/
+https://inkscape.org/forums/questions/using-inkscape-to-convert-from-eps-to-svg-same-result-as-adobe-illustrator/
+https://wiki.inkscape.org/wiki/Using_the_Command_Line
+https://inkscape.org/doc/inkscape-man.html
+https://ghostscript.com/docs/9.54.0/VectorDevices.htm
+
+inkscape --export-type="png" my_file.svg
+inkscape --export-type="ps" my_file.svg
+inkscape --export-type="eps" my_file.svg
+inkscape --export-type="pdf" my_file.svg
+inkscape --export-type="svg" my_file.svg
+inkscape --export-type="png" --export-id="MyTriangle" my_file.svg
+
+gs -dNOPAUSE -dBATCH -sDEVICE=eps2write -sOutputFile=out.eps input.ai
+gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=out.pdf input.ai
+gs -dNOPAUSE -dBATCH -sDEVICE=eps2write -sOutputFile=out.eps input.ai
+gs -dNOPAUSE -dBATCH -sDEVICE=eps2write -sOutputFile=out.eps -dCompressPages=false testeps.ps
+gs -q -dNOCACHE -dNOPAUSE -dBATCH -dSAFER -sDEVICE=eps2write -sOutputFile=output.eps input.pdf
+gs -o ps2-output.ps -sDEVICE=ps2write input.eps
+gs -dNOPAUSE -dQUIET -dBATCH -sDEVICE=ps2write -sOutputFile=%s -f %s -c save pop quit
+
+gs -dBATCH -dSAFER -dNOPAUSE -sDEVICE=eps2write -sOutputFile=output.eps input.pdf 
+
+
+inkscape input.eps -l converted.svg
+inkscape --export-pdf=output.pdf input.eps
+
+https://www.vertopal.com/en/product/cli
+https://www.vertopal.com/product/cli/download?platform=linux
+
+vertopal convert AI_INPUT_FILE --to eps
+vertopal convert EPS_INPUT_FILE --to ai
+
+Image format features
+https://www.peachpit.com/articles/article.aspx?p=1374385&seqNum=4
+
+Supported Feature	TIFF 	EPS 	PSD 	PDF
+RGB color space		X	X	X	X
+CMYK color space	X	X	X	X
+Grayscale		X	X	X	X
+ICC profiles		X	X	X	X
+Clipping paths		X	X	X	X
+Layers			X	-	X	X
+Alpha channels		X	—	X	X
+Spot color channels	X	1	X	X
+Duotones		-	X	X	X
+Bitmap (bi-level cont)	X	X	X	X
+Vector data		2	3	2	X
+Transparency		X	—	X	X 
+
+
+
+
+for i in *.*; do identify $i | grep -i 'cmyk'; done
+for i in *.*; do identify -verbose $i | grep -in 'space'; done
+for i in *.*; do identify -verbose $i | grep -in 'colorspace' && echo $i; done
+for i in files/*.*; do identify  $i | grep -in --color 'rgb\|cmyk'; done
+
+########################################################################
+########################################################################
+https://wiki.scribus.net/canvas/Help:Manual_Commandline
+https://wiki.scribus.net/canvas/Command_line_scripts
+https://wiki.scribus.net/canvas/Command_line_scripts#Hello_world_script_with_arguments
+https://wiki.scribus.net/canvas/Document_preparation_with_free_software
+
+scribus -- in.pdf
+scribus -v #  1.5.8
+
+scribus -g -py export_to_pdf.py -version 13 -bleedr 2 -compress 1 -info 'test title' -file 'test.pdf' -- testdoc.sla
+
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+def main(argv):
+	pdf = scribus.PDFfile()
+	pdf.pages=[1]
+	pdf.version = 13
+	pdf.file = 'newfile.pdf'
+	
+SCRIBUS					    CMYK	PDF
+VECTORS	Inkscape 			CMYK 	SVG/JPG
+ExportPDFCMYK	Inkscape	CMYK
+RASTER	GIMP				CMYK 	TIFF/JPG
+Krita				        CMYK 	PNG or JPG
+
+
+########################################################################
+Extension "Export to PDF in CMYK" for Linux
+########################################################################
+
+https://wiki.inkscape.org/wiki/ExportPDFCMYK
+https://wiki.inkscape.org/wiki/index.php/Release_notes/1.0.1#Color-managed_PDF_export_using_Scribus
+Download the following files: export-pdf-cmyk.py export-pdf-cmyk.inx
+
+Copy the two files to the folder
+/usr/share/inkscape/extensions 
+
+########################################################################
+########################################################################
+https://www.bitblokes.de/bild-in-cmyk-umwandeln-linux-und-imagemagick-helfen/
+https://wiki.scribus.net/canvas/Document_preparation_with_free_software
+https://superuser.com/questions/370959/how-can-i-tell-if-my-image-is-cmyk-from-linux-command-line
+
+convert ./input.jpg -colorspace cmyk -compress LZW output.tif
+convert ./input.jpg -colorspace cmyk -profile ./ECI_Offset_2009/ISOcoated_v2_eci.icc output-eci.tif
+identify -verbose ./output.tif
+identify -format '%[colorspace]' image.jpg
+
+
+########################################################################
+color-picker ubuntu
+########################################################################
+
+https://ubunlog.com/en/color-picker-ubuntu-color-picker/
+https://snapcraft.io/color-picker
+https://manpages.ubuntu.com/manpages/jammy/man1/color-picker.1.html
+https://linuxhint.com/best-color-picker-apps-linux/
+
+sudo snap install color-picker
+sudo apt install gpick
+sudo apt install gcolor3
+sudo apt install kcolorchooser
+
+########################################################################
+ps2svg
+########################################################################
+https://graphicdesign.stackexchange.com/questions/27069/is-it-possible-to-convert-postscript-to-svg-inkscape
+
+barcode -e ean -b 4003994155486 | pstoedit -q -f fig | fig2dev -L svg
+barcode -e ean -b 4003994155486 > example.eps
+inkscape -z example.eps --export-plain-svg /dev/stdout
+
+########################################################################
+EPS 2 AI
+########################################################################
+https://www.tendinopathyrehab.com/TCPDF/examples/images/?SA
+https://tcpdf.org/examples/example_032/
+https://ghostscript.com/docs/9.55.0/Readme.htm
+https://stackoverflow.com/questions/9793120/how-to-covert-svg-to-eps-in-ghostscript
+
+########################################################################
+dummy png magick
+########################################################################
+
+https://stackoverflow.com/questions/7771975/imagemagick-create-a-png-file-which-is-just-a-solid-rectangle
+https://onlinepngtools.com/generate-single-color-png
+https://imagemagick.org/Usage/canvas/#
+https://imagemagick.org/Usage/formats/#png_non-im
+https://imagemagick.org/script/color-management.php
+https://legacy.imagemagick.org/discourse-server/viewtopic.php?t=35602 
+https://imagemagick.org/discourse-server/viewtopic.php?t=34834
+https://github.com/ImageMagick/ImageMagick/discussions/2485
+
+convert -size 100x100 xc:#990000 whatever.png
+convert -size 100x100 xc:rgb\(0,255,0\) whatever.png
+convert -size 100x100 xc:rgba\(0,255,0, 0.4\) whatever.png
+convert -size 100x100 xc:"#8a2be2" blue@2x.png
+convert -size 2400x1474 xc:#2E2B2D -define jpeg:extent=20kb flat.jpeg
+magick original.jpeg -resize 1x1 -scale 2400x1474 out.png
+
+convert icon.png -fuzz 50% -fill "#550000" -opaque "#000000" icon2.png
+convert icon.png -fill blue -colorize 100 out.png
+convert icon.png -alpha off -fuzz 50% -fill "#550000" -opaque "#000000" -alpha on icon2.png
+magick icon.png -alpha off -fuzz 50% -fill "#550000" -opaque "#000000" -alpha on icon2.png
+magick icon.png -channel RGB -fuzz 50% -fill "#550000" -opaque "#000000" -alpha on icon2.png
+
+magick cmyk_image.jpg -colorspace rgb rgb_image.jpg
+convert input.jpg  -type Palette  output.png
+
+magick -size 100x100 canvas:khaki  canvas_khaki.gif
+magick -size 100x100 xc:wheat  canvas_wheat.gif
+magick 'xc:Salmon[100x100!]'  canvas_salmon.gif
+magick test.png  -alpha Opaque +level-colors Sienna  color_levelc.gif
+magick test.png -alpha off -fill Chocolate -colorize 100%  color_colorize.gif
+magick test.png -background LemonChiffon -compose Dst -extent 100x100 color_extent.gif
+magick test.png -alpha set -fill '#FF000040' -draw 'color 0,0 reset' color_semitrans.png
+magick test.png  -gamma 0  -alpha off  black_gamma.png
+magick -size 100x100 gradient:  gradient.jpg
+
+magick test.png -type Palette -strip test_magick_palette.png
+
+########################################################################
+RGB to HEX Color Converter
+########################################################################
+
+https://www.rgbtohex.net/rgb-to-hex/
+https://www.rgbtohex.net/hex-to-rgb/
+https://www.rgbtohex.net/rgb/
+https://wizlogo.com/de/cmyk-to-hex
+https://wizlogo.com/de/cmyk-to-rgb
+https://wizlogo.com/de/rgb-to-cmyk
+https://www.rapidtables.com/convert/color/hex-to-rgb.html
+https://www.rapidtables.com/convert/color/rgb-to-cmyk.html
+https://www.color-hex.com/
+
+########################################################################
+magick stroke hex code draw
+########################################################################
+
+https://imagemagick.org/script/color.php
+https://legacy.imagemagick.org/Usage/draw/
+https://legacy.imagemagick.org/Usage/annotating/
+https://imagemagick.org/script/composite.php
+https://legacy.imagemagick.org/Usage/text/
+https://legacy.imagemagick.org/Usage/
+https://legacy.imagemagick.org/Usage/draw/
+https://legacy.imagemagick.org/Usage/warping/
+
+########################################################################
+How to convert a color pdf to black-white
+########################################################################
+
+https://stackoverflow.com/questions/20128656/how-to-convert-a-pdf-to-grayscale-from-command-line-avoiding-to-be-rasterized
+https://unix.stackexchange.com/questions/93959/how-to-convert-a-color-pdf-to-black-white
+https://askubuntu.com/questions/1379227/how-to-turn-a-pdf-grayscale-in-ubuntu
+
+gs -sOutputFile=outfile.pdf -sDEVICE=pdfwrite \
+  -sColorConversionStrategy=Gray -dProcessColorModel=/DeviceGray \
+  -dCompatibilityLevel=1.4 infile.pdf < /dev/null
+
+
+gs \
+   -sDEVICE=pdfwrite \
+   -sProcessColorModel=DeviceGray \
+   -sColorConversionStrategy=Gray \
+   -dOverrideICC \
+   -o out.pdf \
+   -f page-27.pdf
+   
+#!/bin/bash
+gs \
+ -sOutputFile=output.pdf \
+ -sDEVICE=pdfwrite \
+ -sColorConversionStrategy=Gray \
+ -dProcessColorModel=/DeviceGray \
+ -dCompatibilityLevel=1.4 \
+ -dNOPAUSE \
+ -dBATCH \
+ $1
+
+
+#!/bin/bash
+gs      -sOutputFile=output.pdf \
+        -q -dNOPAUSE -dBATCH -dSAFER \
+        -sDEVICE=pdfwrite \
+        -dCompatibilityLevel=1.3 \
+        -dPDFSETTINGS=/screen \
+        -dEmbedAllFonts=true \
+        -dSubsetFonts=true \
+        -sColorConversionStrategy=/Mono \
+        -sColorConversionStrategyForImages=/Mono \
+        -sProcessColorModel=/DeviceGray \
+        $1
+
+
+########################################################################
+magick draw 
+########################################################################
+https://legacy.imagemagick.org/Usage/draw/
+
+########################################################################
+magick text color
+########################################################################
+
+https://linuxhint.com/imagemagick-adding-text-image/
+https://suay.site/?p=2955
+https://legacy.imagemagick.org/Usage/text/
+https://legacy.imagemagick.org/Usage/annotating/
+https://stackoverflow.com/questions/23236898/add-text-on-image-at-specific-point-using-imagemagick
+
+
+magick IMAGE.jpg -pointsize 72 -fill DarkViolet -annotate +500+450 'zaLinux.ru' test40.jpg
+
+convert dragon.gif -gravity south \
+          -stroke '#000C' -strokewidth 2 -annotate 0 'Faerie Dragon' \
+          -stroke  none   -fill white    -annotate 0 'Faerie Dragon' \
+          anno_outline.jpg
+
+convert photo44.jpg   -background Khaki -pointsize 50 label:'LinuxHint' -gravity Center -append code002.jpg
+convert photo44.jpg  -background Khaki -pointsize 50 label:'LinuxHint' +swap  -gravity Center -append code003.jpg
+convert photo44.jpg -gravity Center -pointsize 50 -fill white -annotate 0 'LinuxHint' code2.jpeg
+convert photo44.jpg -gravity North -fill white -pointsize 50 -annotate +100+100 'LinuxHint' code3.jpg
+convert photo44.jpg -fill white -pointsize 60 -gravity Center -draw "text 0,50 'LinuxHint'" code4.jpg
+convert photo44.jpg -fill khaki -pointsize 60 -gravity center -draw "text 0,150 'LinuxHint'" code4.5.jpg
+
+convert -pointsize 40 -fill blue -draw 'text 600,600 "Love You Mom"' temp1.jpg temp2.jpg
+convert temp.jpg -gravity North -pointsize 30 -annotate +0+100 'Love you mom' temp1.jpg 
+
+########################################################################
+dummy svg
+########################################################################
+
+https://www.w3schools.com/graphics/tryit.asp?filename=trysvg_myfirst
+https://www.w3schools.com/graphics/svg_intro.asp
+https://www.freecodecamp.org/news/svg-tutorial-learn-to-code-images/
+https://www.geeksforgeeks.org/how-to-set-the-svg-background-color/
+https://www.motiontricks.com/creating-dynamic-svg-elements-with-javascript/
+
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="100" height="100">
+   <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="#193263" style="fill:#193263 ;fill-rule:nonzero;stroke:none" />
+   Sorry, your browser does not support inline SVG.
+</svg> 
+
+<svg width="200" height="200" viewBox="-100 -100 200 200”>
+    <circle cx="0" cy="20" r="70" fill="#D1495B" />
+    <circle
+      cx="0"
+      cy="-75"
+      r="12"
+      fill="none"
+      stroke="#F79257"
+      stroke-width="2"
+    />
+    <rect x="-17.5" y="-65" width="35" height="20" fill="#F79257" />
+  </svg>
+
+ <svg width="200" height="200" viewBox="-100 -100 200 200">
+    <polygon points="0,0 80,120 -80,120" fill="#234236" />
+    <polygon points="0,-40 60,60 -60,60" fill="#0C5C4C" />
+    <polygon points="0,-80 40,0 -40,0" fill="#38755B" />
+    <rect x="-20" y="120" width="40" height="30" fill="brown" />
+  </svg>
+  
+  
+########################################################################
+ create-a-blank-pdf
+########################################################################
+https://www.blog.pythonlibrary.org/2021/09/28/python-101-how-to-generate-a-pdf/
+https://towardsdatascience.com/creating-pdf-files-with-python-ad3ccadfae0f
+https://unix.stackexchange.com/questions/277892/how-do-i-create-a-blank-pdf-from-the-command-line
+https://realpython.com/creating-modifying-pdf/
+
+https://inkscape.org/doc/inkscape-man.html
+
+https://packagist.org/packages/sargilla/tcpdf
+https://packagist.org/packages/tecnickcom/tcpdf
+https://tcpdf.org/examples/example_009/
+https://github.com/tecnickcom/TCPDF
+https://packagist.org/packages/setasign/fpdf
+https://github.com/Setasign/FPDF
+http://www.fpdf.org/
+https://github.com/sargilla/tcpdf
+https://github.com/sargilla/tcpdf/tree/master
+

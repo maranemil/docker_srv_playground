@@ -1,0 +1,118 @@
+##########################################################
+rgb-to-cmyk
+##########################################################
+https://www.color-hex.com/color/6400c8
+https://colordesigner.io/convert/hextocmyk
+https://www.colorbook.io/hexcolors/view/6400C8
+https://cmyktool.com/hex-to-cmyk-conversion/6400C8/
+https://wizlogo.com/hex-to-cmyk
+https://codebeautify.org/hex-to-cmyk-converter
+https://convertacolor.com/
+https://www.rapidtables.com/convert/color/rgb-to-cmyk.html
+https://www.rapidtables.com/convert/color/cmyk-to-rgb.html
+https://convertacolor.com/
+https://cmyktool.com/rgb-to-cmyk-conversion/2-38-226/
+https://colordesigner.io/convert/rgbtocmyk
+https://www.rapidtables.com/convert/color/cmyk-to-rgb.html
+https://www.numberplanet.com/number/ffffffffffffffff/index.html
+https://www.rapidtables.com/web/color/html-color-codes.html
+https://imagecolorpicker.com/
+https://htmlcolorcodes.com/
+https://www.rapidtables.com/web/color/html-color-codes.html
+https://www.cssfontstack.com/oldsites/hexcolortool/
+
+##########################################################
+tcpdf
+##########################################################
+
+https://tcpdf.org/examples/
+https://tcpdf.org/examples/example_004/
+https://tcpdf.org/examples/
+https://tcpdf.org/examples/example_022/
+
+##########################################################
+compress
+##########################################################
+
+https://baireuther.de/lhb/tag/pdfwrite/
+https://gist.github.com/guifromrio/6390547
+https://swwiki.e-dschungel.de/ghostscript
+
+dPDFSETTINGS	Beschreibung
+/prepress (default)	300dpi
+/ebook	150 dpi
+/screen	72 dpi
+
+##########################################################
+profile imagemagick
+##########################################################
+https://ghostscript.com/docs/9.54.0/Use.htm
+https://web.mit.edu/ghostscript/www/Use.htm
+https://ghostscript.com/docs/9.54.0/VectorDevices.htm
+https://imagemagick.org/script/compose.php
+https://legacy.imagemagick.org/Usage/masking/
+https://www.color.org/icc32.pdf
+https://www.rigacci.org/wiki/doku.php/doc/appunti/software/imagemagick_color_management
+https://github.com/ImageMagick/ImageMagick/issues/2030
+https://www.garrickadenbuie.com/blog/process-profile-picture-magick/#
+https://imagemagick.org/script/identify.php
+https://imagemagick.org/script/resources.php
+https://imagemagick.org/script/command-line-options.php
+https://imagemagick.org/script/color-management.php
+https://www.imagemagick.org/Usage/formats/#profiles
+
+##########################################################
+remove alpha
+##########################################################
+
+https://stackoverflow.com/questions/28937084/imagemagick-remove-alpha-component-replace-all-intermediate-alpha-pixel-with-s
+convert input.png -alpha off output.png
+find . -name "*.png" -exec convert "{}" -alpha off "{}" \;
+convert input.png -channel A -threshold 254 output.png
+for f in *.png; do convert "$f" -channel A -threshold 254 "${f%%.png}.png"; done
+for file in *.png; do convert $file -alpha deactivate; done
+
+
+########################################################################
+SVG Color 1.2, Part 2: Language
+########################################################################
+
+https://stackoverflow.com/questions/3405689/svg-image-with-cmyk-colours-is-it-possible
+https://www.w3.org/TR/SVGColor12/#icc-colors
+https://www.w3.org/TR/SVG11/struct.html
+https://www.w3.org/TR/SVG/struct.html
+https://www.w3.org/TR/SVGTiny12/schema.html
+https://stackoverflow.com/questions/12464533/how-can-i-verify-a-svg-doc-is-correct-version-1-2
+https://validator.nu/
+https://plantuml.com/de/svg
+
+SVG 2.0 adds support for unmanaged colors allowing you to specify a CMYK color with an sRGB fallback:
+
+<circle fill="#CD853F device-cmyk(0.11, 0.48, 0.83, 0.00)"/>
+<color-profile name="acmecmyk" xlink:href="http://printers.example.com/acmecorp/model1234"/>
+<circle fill="#CD853F icc-color(acmecmyk, 0.11, 0.48, 0.83, 0.00)"/>
+
+<circle fill="rgb(205,133,63)"/>
+<circle fill="peru"/>
+<circle fill="rgb(80.392%, 52.157%, 24.706%)"/>
+<circle fill="#CD853F"/>
+
+local tester
+--------
+pip3 install jingtrang
+wget 'https://bimigroup.org/resources/SVG_PS-latest.rnc.txt'
+pyjing -c SVG_PS-latest.rnc.txt my-image.svg
+
+
+https://pypi.org/project/svgcheck/
+svgcheck [options] -C -v -o FILENAME  SOURCE
+
+-------------
+
+
+
+
+
+
+
+
