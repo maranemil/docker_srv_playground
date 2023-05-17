@@ -1,0 +1,535 @@
+#################################################
+neuralprophet
+#################################################
+
+https://neuralprophet.com/contents.html
+https://neuralprophet.com/quickstart.html
+https://medium.com/analytics-vidhya/time-series-tutorial-using-neuralprophet-e918a1b437ed
+https://www.youtube.com/watch?v=95-HMzxsghY
+
+#################################################
+How to round an average to 2 decimal places in PostgreSQL?
+#################################################
+
+https://hub.docker.com/_/adminer/
+https://hub.docker.com/_/postgres
+
+https://www.techonthenet.com/postgresql/is_not_null.php
+https://stackoverflow.com/questions/13113096/how-to-round-an-average-to-2-decimal-places-in-postgresql
+
+SELECT round( CAST(float8 '3.1415927' as numeric), 2);
+SELECT ROUND( AVG(some_column)::numeric, 2 ) FROM table;
+
+#################################################
+ValueError: could not convert string to float: '2017-05-24'
+#################################################
+https://stackoverflow.com/questions/54352621/sklearn-linear-regression-with-date-data
+
+data_time = np.asarray(['2017-05-24', '2017-05-25', '2017-05-26'])
+data_count = np.asarray([300.000, 301.000, 302.000])
+
+df = pd.DataFrame({'time': data_time, 'count': data_count})
+df.time = pd.to_datetime(df.time)
+regr = linear_model.LinearRegression()
+regr.fit(df.time.values.reshape(-1, 1), df['count'].reshape(-1, 1))
+# Make predictions using the testing set
+y_pred = regr.predict(df.time.values.astype(float).reshape(-1, 1))
+df['pred'] = y_pred
+
+
+#################################################
+convert data frame datatime string to float in python /Pandas
+#################################################
+
+https://stackoverflow.com/questions/57330482/convert-data-frame-datatime-string-to-float-in-python-pandas
+
+https://onecompiler.com/
+https://onecompiler.com/python
+https://www.tutorialspoint.com/online_python_compiler.php
+https://pynative.com/online-python-code-editor-to-execute-python-code/
+
+import datetime
+import time
+timeString= '2018-06-27 15:31:54.053'
+dateTime1 = datetime.datetime.strptime(timeString, '%Y-%m-%d %H:%M:%S.%f')
+time_float = float(time.mktime(dateTime1.timetuple()))
+print(time_float)
+
+1530113514.0
+
+Executed in: 0.035 sec(s)
+Memory: 5008 kilobyte(s)
+
+# transform date into unixtime
+df['unixtime'] =  df.apply(lambda x: time.mktime((   datetime.datetime.strptime(x['ds'], '%Y-%m')   ).timetuple()), axis=1) 
+
+#################################################
+Pandas (python): How to add column to dataframe for index?
+#################################################
+
+https://stackoverflow.com/questions/12168648/pandas-python-how-to-add-column-to-dataframe-for-index
+https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.set_index.html
+https://pynative.com/pandas-set-index/
+https://stackoverflow.com/questions/20461165/how-to-convert-index-of-a-pandas-dataframe-into-a-column
+
+df['new_col'] = range(1, len(df) + 1)
+# df = df.reset_index()
+
+#################################################
+AttributeError: 'str' object has no attribute 'strftime'
+#################################################
+
+https://stackoverflow.com/questions/19887353/attributeerror-str-object-has-no-attribute-strftime
+
+from datetime import datetime
+cr_date = datetime(2013, 10, 31, 18, 23, 29, 227)
+cr_date.strftime('%m/%d/%Y')
+datetime.strptime(cr_date, '%Y-%m-%d %H:%M:%S.%f')
+# datetime.datetime(2013, 10, 31, 18, 23, 29, 227)
+datetime.strptime(cr_date, '%Y-%m-%d %H:%M:%S.%f').strftime('%m/%d/%Y')
+# '10/31/2013'
+
+cr_date = '2013-10-31 18:23:29.000227'
+cr_date = datetime.datetime.strptime(cr_date, '%Y-%m-%d %H:%M:%S.%f')
+cr_date = cr_date.strftime("%m/%d/%Y")
+
+#################################################
+Panda add new column
+#################################################
+
+https://stackoverflow.com/questions/40045632/adding-a-column-in-pandas-df-using-a-function
+
+df['price'] = df['Symbol'].apply(getquotetoday)
+df['new_column_name'] = df.apply(lambda x: my_function(x['value_1'], x['value_2']), axis=1)df['price'] = df['Symbol'].pipe(getquotetoday)
+
+#################################################
+# Program to generate a random number between 0 and 9
+#################################################
+https://www.programiz.com/python-programming/examples/random-number
+
+# importing the random module
+import random
+print(random.randint(0,9))
+
+#################################################
+Generate random timeseries data with dates
+#################################################
+https://stackoverflow.com/questions/56310849/generate-random-timeseries-data-with-dates
+
+import pandas.util.testing as testing
+import numpy as np
+np.random.seed(1)
+testing.N, testing.K = 5, 3  # Setting the rows and columns of the desired data
+print testing.makeTimeDataFrame(freq='MS')
+
+or 
+
+import numpy as np
+import pandas as pd
+np.random.seed(1)
+
+rows,cols = 5,3
+data = np.random.rand(rows,cols) # You can use other random functions to generate values with constraints
+tidx = pd.date_range('2019-01-01', periods=rows, freq='MS') # freq='MS'set the frequency of date in months and start from day 1. You can use 'T' for minutes and so on
+data_frame = pd.DataFrame(data, columns=['a','b','c'], index=tidx)
+print data_frame
+
+or 
+
+np.random.seed(2019)
+N = 10
+rng = pd.date_range('2019-01-01', freq='MS', periods=N)
+df = pd.DataFrame(np.random.rand(N, 3), columns=['temp','depth','acceleration'], index=rng)
+print (df)
+
+or
+
+np.random.seed(2019)
+N = 10
+rng = pd.date_range('2019-01-01', freq='MS', periods=N)
+df = pd.DataFrame(np.random.randint(20, size=(10, 3)), 
+                  columns=['temp','depth','acceleration'], 
+                  index=rng)
+print (df)
+           
+#################################################
+Pandas_Cheat_Sheet
+#################################################
+https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf
+
+
+#################################################
+plot fig
+#################################################
+
+import pandas as p
+df = pd.read_csv('data/widget_sales.csv')
+df.head() 
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots()
+ax.plot(df.widget_sales)   
+ax.set_xlabel('Time')      
+ax.set_ylabel('Widget sales (k$)')
+ 
+plt.xticks(
+[0, 30, 57, 87, 116, 145, 175, 204, 234, 264, 293, 323, 352, 382, 409, 439, 468, 498],
+['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', '2020', 'Feb', 'Mar', 'Apr', 'May', 'Jun'])      #D
+fig.autofmt_xdate()
+plt.tight_layout() 
+
+
+#################################################
+test install prophet error
+#################################################
+
+# https://github.com/facebook/prophet/issues/1939
+#!pip install pystan==2.19.1.1
+#!pip install --upgrade numpy
+#!pip install prophet --no-cache-dir
+#!pip install --upgrade prophet
+
+#################################################
+ Quick Examples of Drop Duplicate Rows
+ #################################################
+
+https://sparkbyexamples.com/pandas/pandas-drop-duplicate-rows-from-dataframe/
+
+# Below are quick example
+# keep first duplicate row
+df2 = df.drop_duplicates()
+
+# Using DataFrame.drop_duplicates() to keep first duplicate row
+df2 = df.drop_duplicates(keep='first')
+
+# keep last duplicate row
+df2 = df.drop_duplicates( keep='last')
+
+# Remove all duplicate rows 
+df2 = df.drop_duplicates(keep=False)
+
+# Delete duplicate rows based on specific columns 
+df2 = df.drop_duplicates(subset=["Courses", "Fee"], keep=False)
+
+# Drop duplicate rows in place
+df.drop_duplicates(inplace=True)
+
+# Using DataFrame.apply() and lambda function 
+df2 = df.apply(lambda x: x.astype(str).str.lower()).drop_duplicates(subset=['Courses', 'Fee'], keep='first')
+
+#################################################
+misc
+#################################################
+
+https://real-statistics.com/multiple-regression/multiple-regression-analysis/seasonal-regression-forecasts/
+https://scikit-learn.org/stable/auto_examples/linear_model/plot_quantile_regression.html#sphx-glr-auto-examples-linear-model-plot-quantile-regression-py
+https://scikit-learn.org/stable/auto_examples/linear_model/plot_ols.html#sphx-glr-auto-examples-linear-model-plot-ols-py
+https://scikit-learn.org/stable/auto_examples/linear_model/plot_ols.html#sphx-glr-auto-examples-linear-model-plot-ols-py
+https://scikit-learn.org/stable/auto_examples/gaussian_process/plot_compare_gpr_krr.html#sphx-glr-auto-examples-gaussian-process-plot-compare-gpr-krr-py
+https://scikit-learn.org/stable/auto_examples/gaussian_process/plot_gpr_noisy_targets.html#sphx-glr-auto-examples-gaussian-process-plot-gpr-noisy-targets-py
+https://scikit-learn.org/stable/auto_examples/gaussian_process/plot_gpr_co2.html#sphx-glr-auto-examples-gaussian-process-plot-gpr-co2-py
+https://scikit-learn.org/stable/auto_examples/ensemble/plot_gradient_boosting_quantile.html#sphx-glr-auto-examples-ensemble-plot-gradient-boosting-quantile-py
+https://scikit-learn.org/stable/auto_examples/ensemble/plot_voting_regressor.html#sphx-glr-auto-examples-ensemble-plot-voting-regressor-py
+https://scikit-learn.org/stable/auto_examples/ensemble/plot_gradient_boosting_regression.html#sphx-glr-auto-examples-ensemble-plot-gradient-boosting-regression-py
+https://scikit-learn.org/stable/auto_examples/index.html
+https://scikit-learn.org/stable/auto_examples/index.html
+https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html
+https://scikit-learn.org/stable/auto_examples/miscellaneous/plot_isotonic_regression.html#sphx-glr-auto-examples-miscellaneous-plot-isotonic-regression-py
+https://www.cienciadedatos.net/documentos/py27-time-series-forecasting-python-scikitlearn.html
+
+Seasonality time series 
+https://medium.com/swlh/seasonality-analysis-and-forecast-in-time-series-b8fbba820327#
+https://medium.com/swlh/time-series-analysis-7006ea1c3326
+https://machinelearningmastery.com/time-series-seasonality-with-python/
+https://otexts.com/fpp2/tspatterns.html
+https://otexts.com/fpp2/complexseasonality.html
+https://www.analyticsvidhya.com/blog/2021/07/time-series-forecasting-complete-tutorial-part-1/
+
+Moving-average model
+https://en.wikipedia.org/wiki/Moving-average_model
+https://otexts.com/fpp2/MA.html
+https://www.projectpro.io/article/moving-average-time-series-model/716
+https://towardsdatascience.com/defining-the-moving-average-model-for-time-series-forecasting-in-python-626781db2502
+https://mc-stan.org/docs/2_19/stan-users-guide/moving-average-models.html
+
+
+https://forecastegy.com/posts/multiple-time-series-forecasting-with-scikit-learn/
+https://www.machinelearningplus.com/time-series/time-series-analysis-python/
+https://towardsdatascience.com/an-end-to-end-project-on-time-series-analysis-and-forecasting-with-python-4835e6bf050b
+https://machinelearningmastery.com/time-series-forecasting-methods-in-python-cheat-sheet/
+https://www.pluralsight.com/guides/machine-learning-for-time-series-data-in-python
+https://builtin.com/data-science/time-series-forecasting-python
+https://python.plainenglish.io/financial-forecasting-with-python-predicting-future-performance-with-statistical-models-42209f9a9886
+https://notebook.community/chrlttv/Teaching/Session5/2_TimeSeriesForecasting_keys
+
+
+https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.set_index.html
+https://stackoverflow.com/questions/38862293/how-to-add-incremental-numbers-to-a-new-column-using-pandas
+https://notebook.community/chrlttv/Teaching/Session5/2_TimeSeriesForecasting_keys
+https://www.cienciadedatos.net/documentos/py27-time-series-forecasting-python-scikitlearn.html
+https://towardsdatascience.com/time-series-forecasting-with-pycaret-regression-module-237b703a0c63
+https://pub.towardsai.net/machine-learning-for-time-series-data-in-python-regression-5e19fa2e7471
+https://stackoverflow.com/questions/65982695/insert-a-new-column-in-pandas-with-random-string-values
+https://stackoverflow.com/questions/32740556/in-pandas-how-do-i-replace-label-ids-with-label-strings
+https://pandas.pydata.org/docs/user_guide/text.html
+https://stackoverflow.com/questions/22005911/convert-columns-to-string-in-pandas
+https://stackoverflow.com/questions/44976363/generating-column-names-iteratively-in-pandas
+https://stackoverflow.com/questions/30327417/pandas-create-new-column-in-df-with-random-integers-from-range
+https://www.statology.org/pandas-generate-random-data/
+https://stackoverflow.com/questions/40461072/generate-random-strings-in-pandas
+https://www.kaggle.com/code/ryanholbrook/linear-regression-with-time-series
+https://sparkbyexamples.com/pandas/how-to-plot-the-pandas-series/
+https://stackoverflow.com/questions/41709257/how-to-change-the-plot-line-color-from-blue-to-black
+https://mljar.com/blog/matplotlib-colors/
+https://www.kaggle.com/code/ryanholbrook/linear-regression-with-time-series
+https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.tail.html
+https://matplotlib.org/2.0.2/api/_as_gen/matplotlib.axes.Axes.plot.html
+https://sparkbyexamples.com/pandas/pandas-set-index-name-to-dataframe/
+https://stackoverflow.com/questions/14770735/how-do-i-change-the-figure-size-with-subplots
+https://python-forum.io/thread-32894.html
+https://numpy.org/doc/stable/reference/generated/numpy.reshape.html
+https://stackoverflow.com/questions/73918802/valueerror-x-and-y-must-have-same-first-dimension-but-have-shapes-100-and
+https://stackoverflow.com/questions/34023918/make-new-column-in-panda-dataframe-by-adding-values-from-other-columns
+https://stackoverflow.com/questions/11481644/how-do-i-assign-multiple-labels-at-once-in-matplotlib
+https://stackoverflow.com/questions/14827650/pyplot-scatter-plot-marker-size
+https://stackoverflow.com/questions/46011940/how-to-plot-two-pandas-time-series-on-same-plot-with-legends-and-secondary-y-axi
+https://www.statology.org/pandas-plot-multiple-series/
+https://www.kaggle.com/code/ryanholbrook/linear-regression-with-time-series
+https://stackoverflow.com/questions/36420908/can-i-draw-a-regression-line-and-show-parameters-using-scatterplot-with-a-pandas
+https://learn-scikit.oneoffcoder.com/tips.html
+https://stackoverflow.com/questions/54352621/sklearn-linear-regression-with-date-data
+https://scikit-learn.org/stable/auto_examples/index.html
+https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html
+https://scikit-learn.org/stable/auto_examples/linear_model/plot_ols.html
+https://scikit-learn.org/stable/datasets.html
+https://www.freecodecamp.org/news/how-to-build-and-train-linear-and-logistic-regression-ml-models-in-python/
+https://medium.com/the-code-monster/split-a-dataset-into-train-and-test-datasets-using-sk-learn-acc7fd1802e0
+https://numpy.org/doc/stable/reference/generated/numpy.amax.html
+https://numpy.org/doc/stable/reference/random/generated/numpy.random.rand.html
+https://numpy.org/doc/1.16/reference/routines.random.html
+https://numpy.org/doc/stable/reference/random/generated/numpy.random.randint.html
+https://www.freecodecamp.org/news/matplotlib-figure-size-change-plot-size-in-python/
+https://machinelearningcompass.com/dataset_optimization/split_data_the_right_way/
+https://realpython.com/train-test-split-python-data/
+https://learn-scikit.oneoffcoder.com/tips.html
+https://sparkbyexamples.com/pandas/how-to-plot-the-pandas-series/
+https://towardsdatascience.com/keep-it-simple-keep-it-linear-a-linear-regression-model-for-time-series-5dbc83d89fc3
+https://towardsdatascience.com/time-series-in-python-part-2-dealing-with-seasonal-data-397a65b74051
+https://towardsdatascience.com/time-series-in-python-exponential-smoothing-and-arima-processes-2c67f2a52788
+https://www.geeksforgeeks.org/how-to-convert-datetime-to-unix-timestamp-in-python/
+https://www.kaggle.com/code/ryanholbrook/linear-regression-with-time-series
+
+https://www.geeksforgeeks.org/how-to-rename-columns-in-pandas-dataframe/
+https://www.statology.org/pandas-rename-columns/
+https://stackoverflow.com/questions/26336251/rename-a-single-pandas-dataframe-column-without-knowing-column-name
+https://stackoverflow.com/questions/19758364/rename-specific-columns-in-pandas
+https://datagy.io/pandas-drop-index-column/
+
+https://neuralprophet.com/code/forecaster.html
+https://neuralprophet.com/quickstart.html
+https://neuralprophet.com/contents.html
+https://rdrr.io/github/AlbertoAlmuinha/neuralprophet/man/neural_prophet.html
+
+https://numpy.org/doc/stable/reference/generated/numpy.log.html
+https://www.geeksforgeeks.org/numpy-log-python/
+https://sparkbyexamples.com/numpy/how-to-use-numpy-log/
+https://www.educative.io/answers/what-is-numpylog-in-python
+https://juanitorduz.github.io/fb_prophet/
+https://dataamber.medium.com/neural-prophet-vs-prophet-why-neural-prophet-is-so-accurate-60fe1313ac05
+https://www.geeksforgeeks.org/log-and-natural-logarithmic-value-of-a-column-in-pandas-python/
+https://github.com/e-alizadeh/data-science-blog/blob/master/notebooks/NeuralProphet/neural_prophet.ipynb
+https://facebook.github.io/prophet/docs/multiplicative_seasonality.html
+https://www.geeksforgeeks.org/normalize-a-column-in-pandas/
+
+https://sparkbyexamples.com/pandas/pandas-rolling-mean-average-sum/
+https://sparkbyexamples.com/pandas/pandas-get-column-average-mean/
+
+https://www.youtube.com/watch?v=95-HMzxsghY
+
+https://www.section.io/engineering-education/predicting-covid-using-neuralprophet/
+https://pytorch.org/tutorials/beginner/saving_loading_models.html
+https://stacktuts.com/how-to-fix-matplotlib-attributeerror-axessubplot-object-has-no-attribute-add-axes-in-python
+https://www.kaggle.com/code/chirag9073/neuralprophet-time-series-forecasting-tutorial
+https://satyakide.com/2022/02/22/neural-prophet-the-enhanced-version-of-facebooks-forecasting-api/
+https://towardsdatascience.com/neuralprophet-energy-demand-forecasting-4c6ca21df532
+https://neuralprophet.com/code/forecaster.html
+https://towardsdatascience.com/time-series-forecasting-predicting-stock-prices-using-facebooks-prophet-model-9ee1657132b5
+https://pub.towardsai.net/neuralprophet-for-time-series-forecasting-predicting-stock-prices-using-facebooks-new-model-c5c191ed4eb8
+https://towardsdatascience.com/how-to-use-facebooks-neuralprophet-and-why-it-s-so-powerful-136652d2da8b
+https://gist.github.com/AmolMavuduru/9d288d0c2d812a85955aa00a4e946adf
+https://towardsdatascience.com/how-to-use-facebooks-neuralprophet-and-why-it-s-so-powerful-136652d2da8b
+https://www.kaggle.com/code/joshuaswords/neuralprophet-facebook-s-newest-tool/notebook
+https://www.kaggle.com/code/joshuaswords/neuralprophet-facebook-s-newest-tool/notebook
+https://towardsdatascience.com/in-depth-understanding-of-neuralprophet-through-a-complete-example-2474f675bc96
+https://rdrr.io/github/AlbertoAlmuinha/neuralprophet/man/neural_prophet.html
+https://neuralprophet.com/code/forecaster.html
+https://paul-bruffett.medium.com/experimenting-with-neural-prophet-9cc9a0f4921
+https://code.visualstudio.com/docs/datascience/jupyter-notebooks
+https://towardsdatascience.com/defining-the-moving-average-model-for-time-series-forecasting-in-python-626781db2502
+https://www.projectpro.io/article/moving-average-time-series-model/716
+https://otexts.com/fpp2/MA.html
+https://en.wikipedia.org/wiki/Moving-average_model
+https://www.analyticsvidhya.com/blog/2021/07/time-series-forecasting-complete-tutorial-part-1/
+https://otexts.com/fpp2/complexseasonality.html
+https://otexts.com/fpp2/tspatterns.html
+https://machinelearningmastery.com/time-series-seasonality-with-python/#####
+https://medium.com/swlh/time-series-analysis-7006ea1c3326####
+https://medium.com/swlh/seasonality-analysis-and-forecast-in-time-series-b8fbba820327####
+https://medium.com/swlh/seasonality-analysis-and-forecast-in-time-series-b8fbba820327#
+https://machinelearningmastery.com/sarima-for-time-series-forecasting-in-python/
+https://towardsdatascience.com/time-series-forecasting-with-arima-sarima-and-sarimax-ee61099e78f6####
+https://www.visual-design.net/post/time-series-analysis-arma-arima-sarima
+https://otexts.com/fpp2/seasonal-arima.html
+https://online.stat.psu.edu/stat510/lesson/4/4.1
+
+https://neptune.ai/blog/arima-vs-prophet-vs-lstm
+
+https://alkaline-ml.com/pmdarima/modules/generated/pmdarima.arima.auto_arima.html
+https://alkaline-ml.com/pmdarima/tips_and_tricks.html
+https://www.tensorflow.org/js/tutorials/conversion/import_keras
+https://www.tensorflow.org/guide/keras/sequential_model
+https://pypi.org/project/pmdarima/
+https://alkaline-ml.com/pmdarima/setup.html
+https://www.statsmodels.org/dev/generated/statsmodels.tsa.arima.model.ARIMA.fit.html
+https://www.projectpro.io/article/how-to-build-arima-model-in-python/544
+https://www.geeksforgeeks.org/python-os-getenv-method/
+https://stackoverflow.com/questions/4906977/how-can-i-access-environment-variables-in-python
+https://stackoverflow.com/questions/37660312/how-to-run-tensorflow-on-cpu
+https://alkaline-ml.com/pmdarima/modules/generated/pmdarima.arima.auto_arima.html
+
+
+https://www.kaggle.com/code/nholloway/seasonality-and-sarimax
+https://www.alldatascience.com/time-series/forecasting-time-series-with-auto-arima/
+https://www.projectpro.io/article/how-to-build-arima-model-in-python/544
+https://alkaline-ml.com/pmdarima/tips_and_tricks.html
+https://alkaline-ml.com/pmdarima/modules/generated/pmdarima.arima.auto_arima.html
+https://pypi.org/project/pmdarima/
+https://alkaline-ml.com/pmdarima/setup.html
+https://github.com/karthebans/DS/blob/main/time-series-forecasting-arima-lstm-prophet%20(1).ipynb
+https://www.richard-stanton.com/2021/04/20/neuralprophet-ar-models.html
+https://arxiv.org/pdf/2107.12770.pdf
+https://arxiv.org/pdf/2111.15397.pdf
+https://towardsdatascience.com/prophet-vs-neuralprophet-fc717ab7a9d8
+https://medium.com/@cdabakoglu/time-series-forecasting-arima-lstm-prophet-with-python-e73a750a9887
+https://neptune.ai/blog/arima-vs-prophet-vs-lstm
+
+
+https://facebook.github.io/prophet/docs/multiplicative_seasonality.html
+https://facebook.github.io/prophet/docs/non-daily_data.html
+https://neuralprophet.com/code/forecaster.html
+https://juanitorduz.github.io/fb_prophet/
+https://rdrr.io/github/AlbertoAlmuinha/neuralprophet/man/neural_prophet.html
+https://neuralprophet.com/quickstart.html
+https://medium.com/analytics-vidhya/time-series-tutorial-using-neuralprophet-e918a1b437ed
+https://neuralprophet.com/contents.html
+https://towardsdatascience.com/optimizing-jupyter-notebook-tips-tricks-and-nbextensions-26d75d502663
+https://www.audiolabs-erlangen.de/resources/MIR/FMP/B/B_Jupyter.html
+https://subscription.packtpub.com/book/big-data-and-business-intelligence/9781785884870/1/ch01lvl1sec12/basic-notebook-operations
+
+################################################
+This function does not handle missing values
+Fitting ARIMA to time series with missing values
+################################################
+
+"stl" and "decompose" functions do not accept missing values....
+
+https://stackoverflow.com/questions/46496630/missing-values-arima-model
+https://github.com/statsmodels/statsmodels/issues/6596
+https://stats.stackexchange.com/questions/346225/fitting-arima-to-time-series-with-missing-values
+
+https://www.projectpro.io/recipes/deal-with-missing-values-in-timeseries-in-python
+https://www.analyticsvidhya.com/blog/2021/05/dealing-with-missing-values-in-python-a-complete-guide/
+https://www.datacamp.com/tutorial/techniques-to-handle-missing-data-values
+https://uc-r.github.io/missing_values
+https://jakevdp.github.io/PythonDataScienceHandbook/03.04-missing-values.html
+https://medium.com/nerd-for-tech/dealing-with-missing-data-using-python-3fd785b77a05
+https://www.geo.fu-berlin.de/en/v/soga/Geodata-analysis/time-series-analysis/Dealing-with-missing-values/Imputing-missing-values/index.html
+https://www.geo.fu-berlin.de/en/v/soga/Geodata-analysis/time-series-analysis/ARIMA-modelling-in-R/index.html
+https://rdrr.io/r/stats/arima.html
+
+https://juanitorduz.github.io/fb_prophet/
+https://stackoverflow.com/questions/71340374/how-can-i-set-the-frequency-of-a-pandas-index
+https://www.youtube.com/watch?v=95-HMzxsghY
+
+################################################
+save neuralprophet model
+################################################
+
+https://medium.com/analytics-vidhya/neuralprophet-a-neural-network-based-time-series-model-3c74af3b0ec6
+https://stackoverflow.com/questions/70265780/facebook-neuralprophet-loading-model-from-pickle-for-prediction
+
+import pickle
+with open('neuralprophet_model.pkl', "wb") as f:
+    pickle.dump(m, f)
+
+# save model
+from neuralprophet import NeuralProphet
+from matplotlib import pyplot as plt
+import pandas as pd
+import pickle
+data_location = /input_data/
+df = pd.read_csv(data_location + 'input.csv')
+np = NeuralProphet()
+model = np.fit(df, freq="5min")
+with open('model/neuralprophet_model.pkl', "wb") as f:
+     # dump information to that file
+     pickle.dump(model, f)
+
+
+# read model
+from neuralprophet import NeuralProphet
+import pandas as pd
+import pickle
+with open('model/neuralprophet_model.pkl', "rb") as f:
+     model = pickle.load(file)
+# To get a next 1 hour prediction by 5mins interval 
+future = model.make_future_dataframe(periods=12, freq='5min')
+forecast = model.predict(future)
+
+################################################
+save prediction to csv
+################################################
+
+https://neuralprophet.com/how-to-guides/feature-guides/collect_predictions.html
+https://stackoverflow.com/questions/25333044/saving-dataframe-names-as-csv-file-names-in-pandas
+https://neuralprophet.com/quickstart.html
+https://www.kaggle.com/code/ohseokkim/predicting-future-by-lstm-prophet-neural-prophet
+https://neuralprophet.com/
+https://neuralprophet.com/how-to-guides/feature-guides/collect_predictions.html
+https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html
+
+m = NeuralProphet(n_lags=5, n_forecasts=3, epochs=g_epochs,)
+metrics_train = m.fit(df=df, freq="D")
+forecast = m.predict(df)
+df_fc = m.get_latest_forecast(forecast)
+df_fc.head(3)
+df_fc.to_csv('test.csv',index=False)
+
+################################################
+misc
+################################################
+
+https://www.javatpoint.com/time-series-forecasting-with-prophet-in-python
+https://morioh.com/p/9bc6143eee97
+https://medium.com/analytics-vidhya/forecasting-using-facebooks-prophet-library-ce628e76586b
+https://www.geeksforgeeks.org/time-series-analysis-using-facebook-prophet/
+https://github.com/facebook/prophet/issues/523
+
+https://github.com/Workday/timeseries-forecast/blob/master/src/main/java/com/workday/insights/timeseries/arima/Arima.java
+https://stackoverflow.com/questions/22140180/java-api-for-auto-regression-ar-arima-time-series-analysis
+https://help.imsl.com/java/7.1/manual/api/com/imsl/stat/AutoARIMAEx3.html
+https://madlib.apache.org/docs/latest/group__grp__arima.html
+http://javadox.com/com.github.jrachiele/java-timeseries/0.2.1/timeseries/models/arima/Arima.html
+https://quant.stackexchange.com/questions/29882/please-advice-free-java-library-for-classical-time-series-forecasting
+
+https://towardsdatascience.com/comparing-robustness-of-mae-mse-and-rmse-6d69da870828
+https://towardsdatascience.com/understanding-the-3-most-common-loss-functions-for-machine-learning-regression-23e0ef3e14d3
+https://medium.com/analytics-vidhya/common-loss-functions-in-machine-learning-for-a-regression-model-27d2bbda9c93
+https://eyeonplanning.com/the-heart-of-machine-learning-understanding-the-importance-of-loss-functions/
+https://angela-wong.medium.com/rmse-or-mae-which-and-why-loss-functions-used-in-regression-and-classification-a98afc9fa215
+
+
+
+
+
+
+

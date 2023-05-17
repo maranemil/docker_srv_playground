@@ -1,0 +1,40 @@
+# docker pull jupyter/datascience-notebook
+# docker run -p 10000:8888 jupyter/scipy-notebook:2023-02-28
+# docker stop $(docker ps -aq)
+
+version: "3"
+services:
+  jupyter-nb:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    #image: jupyter/datascience-notebook
+    #image: jupyter/scipy-notebook
+    ports:
+      - "8888:8888"
+
+  postgres_db:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=password # user: postgres
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+  # docker cp dmp.sql prediction_postgres_db_1:/tmp
+  # create database wpdb
+  # psql -U postgres wpdb < /tmp/.dmp.sql
+
+  adminer:
+    image: adminer
+    #restart: always
+    ports:
+      - "8080:8080"
+
+#  db:
+#    image: "postgres"
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - ./pgdata:/var/lib/postgresql/data
+#    environment:
+#      - POSTGRES_USER=dbuser
+#      - POSTGRES_PASSWORD=password
