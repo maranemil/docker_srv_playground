@@ -124,3 +124,24 @@ ENTRYPOINT ["ab" , "http://google.com/" ]
 docker build  .  –t testentrypoint
 Docker run testentrypoint
 
+
+###########################################
+keep docker container alive
+###########################################
+
+https://www.baeldung.com/ops/running-docker-containers-indefinitely
+https://devopscube.com/keep-docker-container-running/
+https://stackoverflow.com/questions/30209776/docker-container-will-automatically-stop-after-docker-run-d
+
+docker run ubuntu tail -f /dev/null
+docker run ubuntu while true; do sleep 1; done
+docker run ubuntu sleep infinity
+docker run -d centos tail -f /dev/null
+
+Dockerfile
+FROM ubuntu:latest
+ENTRYPOINT ["tail", "-f", "/dev/null"]
+
+Dockerfile
+ENTRYPOINT ["tail"]
+CMD ["-f","/dev/null"]
