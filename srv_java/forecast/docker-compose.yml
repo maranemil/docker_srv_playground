@@ -1,0 +1,21 @@
+version: '3'
+services:
+  spring-boot-app:
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8089:8080"
+    volumes:
+      - ./src:/home
+
+
+
+# apt update
+# apt intall maven nano
+# java -version - openjdk version "11.0.16" 2022-07-19
+# mvn -v  # Apache Maven 3.6.3
+# touch MovingAverage.java && nano MovingAverage.java
+# java MovingAverage.java
+# docker cp MovingAverage.java pythonproject_spring-boot-app_1:/home
