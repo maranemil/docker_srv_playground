@@ -1,8 +1,0 @@
-https://github.com/ianbarber/PHPIR
-https://github.com/Yusser95/ARIMA-PHP
-https://github.com/vivesweb/php-libplot
-https://github.com/vivesweb/graph-php
-
-https://www.php.net/manual/en/function.fann-train-on-file.php
-https://www.php.net/manual/en/class.svm.php
-
