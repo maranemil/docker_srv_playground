@@ -1,0 +1,428 @@
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------
+function movingAverageForecast($data, $windowSize, $forecastPeriods) {
+    $forecast = [];
+
+    for ($i = 0; $i < $forecastPeriods; $i++) {
+        // Extract the current window of data
+        $window = array_slice($data, $i, $windowSize);
+
+        // Calculate the average of the window
+        $average = array_sum($window) / $windowSize;
+
+        // Add the average to the forecast
+        $forecast[] = $average;
+    }
+
+    return $forecast;
+}
+
+// Example usage
+$data = [10, 15, 20, 25, 30];
+$windowSize = 3;
+$forecastPeriods = 5;
+
+$result = movingAverageForecast($data, $windowSize, $forecastPeriods);
+
+// Print the forecasted values
+echo "Forecasted Values:\n";
+foreach ($result as $value) {
+    echo $value . "\n";
+}
+
+--------------------------------------------------------
+
+function movingMedianForecast($data, $windowSize, $forecastPeriods) {
+    $forecast = [];
+
+    for ($i = 0; $i < $forecastPeriods; $i++) {
+        // Extract the current window of data
+        $window = array_slice($data, $i, $windowSize);
+
+        // Calculate the median of the window
+        $median = calculateMedian($window);
+
+        // Add the median to the forecast
+        $forecast[] = $median;
+    }
+
+    return $forecast;
+}
+
+// Function to calculate the median of an array
+function calculateMedian($data) {
+    sort($data);
+    $count = count($data);
+    $middle = floor(($count - 1) / 2);
+    if ($count % 2 == 0) {
+        $median = ($data[$middle] + $data[$middle + 1]) / 2;
+    } else {
+        $median = $data[$middle];
+    }
+    return $median;
+}
+
+// Example usage
+$data = [10, 15, 20, 25, 30];
+$windowSize = 3;
+$forecastPeriods = 5;
+
+$result = movingMedianForecast($data, $windowSize, $forecastPeriods);
+
+// Print the forecasted values
+echo "Forecasted Values:\n";
+foreach ($result as $value) {
+    echo $value . "\n";
+}
+
+--------------------------------------------------------
+function movingWeightsForecast($data, $weights, $forecastPeriods) {
+    $forecast = [];
+
+    // Check if the number of weights matches the data size
+    if (count($weights) != count($data)) {
+        throw new Exception("The number of weights must match the data size.");
+    }
+
+    // Normalize the weights to ensure they sum up to 1
+    $sumWeights = array_sum($weights);
+    $weights = array_map(function($weight) use ($sumWeights) {
+        return $weight / $sumWeights;
+    }, $weights);
+
+    for ($i = 0; $i < $forecastPeriods; $i++) {
+        // Calculate the forecasted value by applying the moving weights
+        $forecastValue = 0;
+        $windowSize = min($i + 1, count($data));
+        for ($j = 0; $j < $windowSize; $j++) {
+            $forecastValue += $weights[$j] * $data[$i - $j];
+        }
+
+        $forecast[] = $forecastValue;
+    }
+
+    return $forecast;
+}
+
+// Example usage
+$data = [10, 15, 20, 25, 30];
+$weights = [0.2, 0.3, 0.4, 0.1];
+$forecastPeriods = 5;
+
+$result = movingWeightsForecast($data, $weights, $forecastPeriods);
+
+// Print the forecasted values
+echo "Forecasted Values:\n";
+foreach ($result as $value) {
+    echo $value . "\n";
+}
+
+--------------------------------------------------------
+function exponentialMovingAverageForecast($data, $periods, $forecastPeriods) {
+    $alpha = 2 / ($periods + 1);
+    $ema = array_slice($data, 0, $periods);
+    $forecast = [];
+
+    // Calculate the initial EMA as the simple moving average of the first $periods data points
+    $ema[] = array_sum($ema) / $periods;
+
+    for ($i = $periods; $i < count($data) + $forecastPeriods; $i++) {
+        // Calculate the EMA for the current period
+        $emaValue = $alpha * $data[$i] + (1 - $alpha) * $ema[$i - 1];
+        $ema[] = $emaValue;
+
+        // Store the forecasted value for the future periods
+        if ($i >= count($data)) {
+            $forecast[] = $emaValue;
+        }
+    }
+
+    return $forecast;
+}
+
+// Example usage
+$data = [10, 15, 20, 25, 30];
+$periods = 3;
+$forecastPeriods = 5;
+
+$result = exponentialMovingAverageForecast($data, $periods, $forecastPeriods);
+
+// Print the forecasted values
+echo "Forecasted Values:\n";
+foreach ($result as $value) {
+    echo $value . "\n";
+}
+
+--------------------------------------------------------
+function exponentialSmoothingForecast($data, $alpha, $forecastPeriods) {
+    $forecast = [];
+
+    // Check if alpha is within the valid range [0, 1]
+    if ($alpha < 0 || $alpha > 1) {
+        throw new Exception("Invalid alpha value.");
+    }
+
+    // Initialize the forecast with the first data point
+    $forecast[] = $data[0];
+
+    // Apply exponential smoothing for the remaining forecast periods
+    for ($i = 1; $i < $forecastPeriods; $i++) {
+        // Calculate the forecasted value using exponential smoothing
+        $forecastValue = $alpha * $data[$i] + (1 - $alpha) * $forecast[$i - 1];
+        $forecast[] = $forecastValue;
+    }
+
+    return $forecast;
+}
+
+// Example usage
+$data = [10, 15, 20, 25, 30];
+$alpha = 0.5;
+$forecastPeriods = 5;
+
+$result = exponentialSmoothingForecast($data, $alpha, $forecastPeriods);
+
+// Print the forecasted values
+echo "Forecasted Values:\n";
+foreach ($result as $value) {
+    echo $value . "\n";
+}
+
+--------------------------------------------------------
+function movingAverageCrossoverForecast($data, $shortPeriod, $longPeriod, $forecastPeriods) {
+    $shortMA = simpleMovingAverage(array_slice($data, -$shortPeriod));
+    $longMA = simpleMovingAverage(array_slice($data, -$longPeriod));
+    $forecast = [];
+
+    for ($i = 0; $i < $forecastPeriods; $i++) {
+        if ($shortMA > $longMA) {
+            // Short moving average is above long moving average, forecast a positive value
+            $forecastValue = 1;
+        } else {
+            // Short moving average is below or equal to long moving average, forecast a negative value
+            $forecastValue = -1;
+        }
+
+        $forecast[] = $forecastValue;
+
+        // Update the moving averages for the next iteration
+        array_shift($data); // Remove the oldest data point
+        $shortMA = simpleMovingAverage(array_slice($data, -$shortPeriod));
+        $longMA = simpleMovingAverage(array_slice($data, -$longPeriod));
+    }
+
+    return $forecast;
+}
+
+// Calculate the simple moving average
+function simpleMovingAverage($data) {
+    return array_sum($data) / count($data);
+}
+
+// Example usage
+$data = [10, 15, 20, 25, 30, 35, 40, 45, 50];
+$shortPeriod = 3;
+$longPeriod = 6;
+$forecastPeriods = 5;
+
+$result = movingAverageCrossoverForecast($data, $shortPeriod, $longPeriod, $forecastPeriods);
+
+// Print the forecasted values
+echo "Forecasted Values:\n";
+foreach ($result as $value) {
+    echo $value . "\n";
+}
+
+--------------------------------------------------------
+function risingMovingAverageForecast($data, $windowSize, $forecastPeriods) {
+    $forecast = [];
+
+    // Check if the window size is valid
+    if ($windowSize <= 0 || $windowSize > count($data)) {
+        throw new Exception("Invalid window size.");
+    }
+
+    for ($i = 0; $i < $forecastPeriods; $i++) {
+        // Calculate the average of the last $windowSize elements
+        $window = array_slice($data, -$windowSize);
+        $average = array_sum($window) / $windowSize;
+
+        // Calculate the forecasted value as the average plus the previous forecasted value
+        $forecastValue = $average + ($i > 0 ? $forecast[$i - 1] : 0);
+        $forecast[] = $forecastValue;
+    }
+
+    return $forecast;
+}
+
+// Example usage
+$data = [10, 15, 20, 25, 30];
+$windowSize = 3;
+$forecastPeriods = 5;
+
+$result = risingMovingAverageForecast($data, $windowSize, $forecastPeriods);
+
+// Print the forecasted values
+echo "Forecasted Values:\n";
+foreach ($result as $value) {
+    echo $value . "\n";
+}
+
+--------------------------------------------------------
+function runningTotalForecast($data, $forecastPeriods) {
+    $runningTotal = array_sum($data);
+    $forecast = [];
+
+    for ($i = 0; $i < $forecastPeriods; $i++) {
+        $forecastValue = $runningTotal;
+        $forecast[] = $forecastValue;
+
+        // Update the running total with the forecasted value
+        $runningTotal += $forecastValue;
+    }
+
+    return $forecast;
+}
+
+// Example usage
+$data = [10, 15, 20, 25, 30];
+$forecastPeriods = 5;
+
+$result = runningTotalForecast($data, $forecastPeriods);
+
+// Print the forecasted values
+echo "Forecasted Values:\n";
+foreach ($result as $value) {
+    echo $value . "\n";
+}
+
+--------------------------------------------------------
+function windowedFunctionForecast($data, $windowSize, $forecastPeriods) {
+    $forecast = [];
+
+    // Check if the window size is valid
+    if ($windowSize <= 0 || $windowSize > count($data)) {
+        throw new Exception("Invalid window size.");
+    }
+
+    for ($i = 0; $i < $forecastPeriods; $i++) {
+        $window = array_slice($data, -$windowSize); // Get the last $windowSize elements
+        $forecastValue = // Apply your desired function on the window to generate the forecast
+        $forecast[] = $forecastValue;
+
+        // Append the forecasted value to the data array for the next iteration
+        $data[] = $forecastValue;
+    }
+
+    return $forecast;
+}
+
+// Example usage
+$data = [10, 15, 20, 25, 30];
+$windowSize = 3;
+$forecastPeriods = 5;
+
+$result = windowedFunctionForecast($data, $windowSize, $forecastPeriods);
+
+// Print the forecasted values
+echo "Forecasted Values:\n";
+foreach ($result as $value) {
+    echo $value . "\n";
+}
+
+--------------------------------------------------------
+function zeroLagEMAForecast($data, $period, $forecastPeriods) {
+    $zlema = zeroLagEMA($data, $period);
+    $forecast = [];
+
+    for ($i = 0; $i < $forecastPeriods; $i++) {
+        $lastValue = end($data);
+        $forecastValue = (2 * $lastValue) - $zlema[count($zlema) - 1];
+        $forecast[] = $forecastValue;
+
+        // Update the data array and recalculate the ZLEMA
+        $data[] = $forecastValue;
+        $zlema = zeroLagEMA($data, $period);
+    }
+
+    return $forecast;
+}
+
+// Example usage
+$data = [10, 15, 20, 25, 30];
+$period = 5;
+$forecastPeriods = 5;
+
+$result = zeroLagEMAForecast($data, $period, $forecastPeriods);
+
+// Print the forecasted values
+echo "Forecasted Values:\n";
+foreach ($result as $value) {
+    echo $value . "\n";
+}
+
+--------------------------------------------------------
+function cumulativeAverageForecast($data, $forecastPeriods) {
+    $cumulativeAverage = cumulativeAverage($data);
+    $forecast = [];
+
+    $lastValue = end($data);
+
+    for ($i = 0; $i < $forecastPeriods; $i++) {
+        $forecastValue = ($lastValue + $cumulativeAverage[count($cumulativeAverage) - 1]) / 2;
+        $forecast[] = $forecastValue;
+        $lastValue = $forecastValue;
+    }
+
+    return $forecast;
+}
+
+// Example usage
+$data = [10, 15, 20, 25, 30];
+$forecastPeriods = 5;
+
+$result = cumulativeAverageForecast($data, $forecastPeriods);
+
+// Print the forecasted values
+echo "Forecasted Values:\n";
+foreach ($result as $value) {
+    echo $value . "\n";
+}
+
+--------------------------------------------------------
+
+function simpleMovingAverageForecast($data, $windowSize, $forecastPeriods) {
+    $sma = simpleMovingAverage($data, $windowSize);
+    $forecast = [];
+
+    // Start forecasting from the last data point
+    $startIndex = count($data) - $windowSize;
+
+    for ($i = 0; $i < $forecastPeriods; $i++) {
+        $forecastValue = $sma[$startIndex + $i];
+        $forecast[] = $forecastValue;
+    }
+
+    return $forecast;
+}
+
+// Example usage
+$data = [10, 15, 20, 25, 30, 25, 20, 15];
+$windowSize = 3;
+$forecastPeriods = 5;
+
+$result = simpleMovingAverageForecast($data, $windowSize, $forecastPeriods);
+
+// Print the forecasted values
+echo "Forecasted Values:\n";
+foreach ($result as $value) {
+    echo $value . "\n";
+}
