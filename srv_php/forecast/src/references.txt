@@ -6,3 +6,697 @@ https://github.com/vivesweb/graph-php
 https://www.php.net/manual/en/function.fann-train-on-file.php
 https://www.php.net/manual/en/class.svm.php
 
+
+--------------------------------------------------------
+
+function calculateMovingAverage($data, $windowSize) {
+    $movingAverage = [];
+    $numDataPoints = count($data);
+
+    // Calculate the moving average for the existing dataset
+    for ($i = $windowSize - 1; $i < $numDataPoints; $i++) {
+        $sum = 0;
+        for ($j = $i; $j >= $i - ($windowSize - 1); $j--) {
+            $sum += $data[$j];
+        }
+        $average = $sum / $windowSize;
+        $movingAverage[] = round($average, 2);
+    }
+
+    return $movingAverage;
+}
+
+function forecastMovingAverage($movingAverage, $forecastSize) {
+    $numMovingAverage = count($movingAverage);
+    $forecast = [];
+
+    // Forecast future values based on the moving average
+    for ($i = 0; $i < $forecastSize; $i++) {
+        $sum = 0;
+        $start = $numMovingAverage - ($i + 1);
+        $end = $start - ($forecastSize - 1);
+
+        for ($j = $start; $j >= $end; $j--) {
+            $sum += $movingAverage[$j];
+        }
+        $average = $sum / $forecastSize;
+        $forecast[] = round($average, 2);
+    }
+
+    return $forecast;
+}
+
+// Example usage
+$data = [12, 18, 20, 15, 22, 17, 21, 16];
+$windowSize = 3;
+$forecastSize = 3;
+
+$movingAverage = calculateMovingAverage($data, $windowSize);
+$forecast = forecastMovingAverage($movingAverage, $forecastSize);
+
+// Print the moving average
+echo "Moving Average:\n";
+foreach ($movingAverage as $value) {
+    echo $value . "\n";
+}
+
+// Print the forecasted values
+echo "\nForecasted Values:\n";
+foreach ($forecast as $value) {
+    echo $value . "\n";
+}
+
+--------------------------------------------------------
+
+function movingMedian($data, $windowSize) {
+    $numData = count($data);
+    $halfWindowSize = floor($windowSize / 2);
+
+    $movingMedians = [];
+
+    for ($i = 0; $i < $numData; $i++) {
+        $startIndex = max(0, $i - $halfWindowSize);
+        $endIndex = min($numData - 1, $i + $halfWindowSize);
+
+        $window = array_slice($data, $startIndex, $endIndex - $startIndex + 1);
+        sort($window);
+
+        $medianIndex = floor(count($window) / 2);
+        $movingMedians[] = $window[$medianIndex];
+    }
+
+    return $movingMedians;
+}
+
+// Example usage
+$data = [2, 4, 6, 8, 10, 12, 14, 16];
+$windowSize = 3;
+
+$result = movingMedian($data, $windowSize);
+
+// Print the moving medians
+echo "Moving Medians:\n";
+foreach ($result as $median) {
+    echo $median . "\n";
+}
+
+
+--------------------------------------------------------
+
+function weightedMovingAverage($data, $weights) {
+    $numData = count($data);
+    $numWeights = count($weights);
+    $halfNumWeights = floor($numWeights / 2);
+
+    $weightedMovingAverages = [];
+
+    for ($i = 0; $i < $numData; $i++) {
+        $startIndex = max(0, $i - $halfNumWeights);
+        $endIndex = min($numData - 1, $i + $halfNumWeights);
+
+        $window = array_slice($data, $startIndex, $endIndex - $startIndex + 1);
+        $windowSize = count($window);
+
+        $weightedSum = 0;
+
+        for ($j = 0; $j < $windowSize; $j++) {
+            $weightedSum += $window[$j] * $weights[$j];
+        }
+
+        $weightedMovingAverages[] = $weightedSum / array_sum($weights);
+    }
+
+    return $weightedMovingAverages;
+}
+
+// Example usage
+$data = [2, 4, 6, 8, 10, 12, 14, 16];
+$weights = [0.2, 0.3, 0.5];
+
+$result = weightedMovingAverage($data, $weights);
+
+// Print the weighted moving averages
+echo "Weighted Moving Averages:\n";
+foreach ($result as $average) {
+    echo $average . "\n";
+}
+
+--------------------------------------------------------
+
+function exponentialMovingAverage($data, $alpha) {
+    $ema = [];
+    $ema[0] = $data[0];
+
+    for ($i = 1; $i < count($data); $i++) {
+        $ema[$i] = $alpha * $data[$i] + (1 - $alpha) * $ema[$i-1];
+    }
+
+    return $ema;
+}
+
+// Example usage
+$data = [2, 4, 6, 8, 10, 12, 14, 16];
+$alpha = 0.5;
+
+$result = exponentialMovingAverage($data, $alpha);
+
+// Print the exponential moving averages
+echo "Exponential Moving Averages:\n";
+foreach ($result as $average) {
+    echo $average . "\n";
+}
+
+--------------------------------------------------------
+
+function exponentialSmoothing($data, $alpha) {
+    $smoothedData = [];
+    $smoothedData[0] = $data[0];
+
+    for ($i = 1; $i < count($data); $i++) {
+        $smoothedData[$i] = $alpha * $data[$i] + (1 - $alpha) * $smoothedData[$i-1];
+    }
+
+    return $smoothedData;
+}
+
+// Example usage
+$data = [2, 4, 6, 8, 10, 12, 14, 16];
+$alpha = 0.5;
+
+$result = exponentialSmoothing($data, $alpha);
+
+// Print the smoothed data
+echo "Smoothed Data:\n";
+foreach ($result as $value) {
+    echo $value . "\n";
+}
+
+--------------------------------------------------------
+// Install the required library via composer
+require 'vendor/autoload.php';
+
+use Phpml\Regression\LeastSquares;
+use Phpml\Regression\Loess;
+
+function localRegression($x, $y, $bandwidth) {
+    $loess = new Loess($bandwidth);
+    $loess->train($x, $y);
+
+    $predictions = [];
+
+    foreach ($x as $value) {
+        $prediction = $loess->predict([$value]);
+        $predictions[] = $prediction[0];
+    }
+
+    return $predictions;
+}
+
+// Example usage
+$x = [1, 2, 3, 4, 5, 6, 7, 8];
+$y = [2, 4, 5, 7, 6, 8, 9, 11];
+$bandwidth = 0.5;
+
+$result = localRegression($x, $y, $bandwidth);
+
+// Print the predicted values
+echo "Predicted Values:\n";
+foreach ($result as $value) {
+    echo $value . "\n";
+}
+
+--------------------------------------------------------
+// Install the required library via composer
+require 'vendor/autoload.php';
+
+use Phpml\Estimator\KernelDensityEstimation;
+
+function kernelSmoothing($data, $bandwidth) {
+    $estimator = new KernelDensityEstimation($bandwidth);
+    $estimator->train($data);
+
+    $predictions = [];
+
+    foreach ($data as $value) {
+        $prediction = $estimator->estimate([$value]);
+        $predictions[] = $prediction[0];
+    }
+
+    return $predictions;
+}
+
+// Example usage
+$data = [2, 4, 6, 8, 10, 12, 14, 16];
+$bandwidth = 0.5;
+
+$result = kernelSmoothing($data, $bandwidth);
+
+// Print the smoothed values
+echo "Smoothed Values:\n";
+foreach ($result as $value) {
+    echo $value . "\n";
+}
+
+--------------------------------------------------------
+function movingAverageCrossover($data, $shortPeriod, $longPeriod) {
+    $shortMA = [];
+    $longMA = [];
+    $crossoverPoints = [];
+
+    for ($i = $longPeriod - 1; $i < count($data); $i++) {
+        // Calculate the short-term moving average
+        $shortMA[$i] = array_sum(array_slice($data, $i - $shortPeriod + 1, $shortPeriod)) / $shortPeriod;
+
+        // Calculate the long-term moving average
+        $longMA[$i] = array_sum(array_slice($data, $i - $longPeriod + 1, $longPeriod)) / $longPeriod;
+
+        // Check for a crossover point
+        if ($i > $longPeriod - 1 && $shortMA[$i] > $longMA[$i-1] && $shortMA[$i-1] <= $longMA[$i-1]) {
+            $crossoverPoints[] = $i;
+        } elseif ($i > $longPeriod - 1 && $shortMA[$i] < $longMA[$i-1] && $shortMA[$i-1] >= $longMA[$i-1]) {
+            $crossoverPoints[] = -$i;
+        }
+    }
+
+    return $crossoverPoints;
+}
+
+// Example usage
+$data = [10, 15, 20, 25, 30, 35, 40, 45, 50, 45, 40, 35, 30, 25, 20, 15];
+$shortPeriod = 3;
+$longPeriod = 5;
+
+$result = movingAverageCrossover($data, $shortPeriod, $longPeriod);
+
+// Print the crossover points
+echo "Crossover Points:\n";
+foreach ($result as $point) {
+    echo $point . "\n";
+}
+
+--------------------------------------------------------
+function movingLeastSquares($x, $y, $queryPoint, $neighborhoodSize, $degree) {
+    $numPoints = count($x);
+    $numQueryPoints = count($queryPoint);
+    $smoothedY = [];
+
+    for ($i = 0; $i < $numQueryPoints; $i++) {
+        $query = $queryPoint[$i];
+        $weightedYSum = 0;
+        $weightSum = 0;
+
+        for ($j = 0; $j < $numPoints; $j++) {
+            $distance = abs($x[$j] - $query);
+
+            if ($distance <= $neighborhoodSize) {
+                $weight = pow(1 - pow($distance / $neighborhoodSize, $degree), $degree);
+                $weightedYSum += $weight * $y[$j];
+                $weightSum += $weight;
+            }
+        }
+
+        $smoothedY[$i] = $weightedYSum / $weightSum;
+    }
+
+    return $smoothedY;
+}
+
+// Example usage
+$x = [1, 2, 3, 4, 5, 6, 7, 8];
+$y = [2, 4, 5, 7, 6, 8, 9, 11];
+$queryPoint = [2.5, 4.5, 6.5];
+$neighborhoodSize = 1;
+$degree = 2;
+
+$result = movingLeastSquares($x, $y, $queryPoint, $neighborhoodSize, $degree);
+
+// Print the smoothed values
+echo "Smoothed Values:\n";
+foreach ($result as $value) {
+    echo $value . "\n";
+}
+
+--------------------------------------------------------
+function risingMovingAverage($data, $period) {
+    $movingAverages = [];
+
+    for ($i = $period - 1; $i < count($data); $i++) {
+        $sum = array_sum(array_slice($data, $i - $period + 1, $period));
+        $average = $sum / $period;
+        $movingAverages[] = $average;
+    }
+
+    return $movingAverages;
+}
+
+// Example usage
+$data = [10, 15, 20, 25, 30, 25, 20, 15];
+$period = 3;
+
+$result = risingMovingAverage($data, $period);
+
+// Print the rising moving averages
+echo "Rising Moving Averages:\n";
+foreach ($result as $average) {
+    echo $average . "\n";
+}
+
+--------------------------------------------------------
+function rollingHash($text, $windowSize) {
+    $hashes = [];
+    $textLength = strlen($text);
+
+    // Calculate the initial hash value
+    $hash = 0;
+    for ($i = 0; $i < $windowSize; $i++) {
+        $hash += ord($text[$i]);
+    }
+    $hashes[] = $hash;
+
+    // Calculate the rolling hash values
+    for ($i = 1; $i <= $textLength - $windowSize; $i++) {
+        $hash -= ord($text[$i - 1]);
+        $hash += ord($text[$i + $windowSize - 1]);
+        $hashes[] = $hash;
+    }
+
+    return $hashes;
+}
+
+// Example usage
+$text = "abcdefg";
+$windowSize = 3;
+
+$result = rollingHash($text, $windowSize);
+
+// Print the rolling hash values
+echo "Rolling Hash Values:\n";
+foreach ($result as $hash) {
+    echo $hash . "\n";
+}
+
+--------------------------------------------------------
+function runningTotal($data) {
+    $runningTotal = [];
+    $sum = 0;
+
+    foreach ($data as $value) {
+        $sum += $value;
+        $runningTotal[] = $sum;
+    }
+
+    return $runningTotal;
+}
+
+// Example usage
+$data = [10, 15, 20, 25, 30];
+
+$result = runningTotal($data);
+
+// Print the running total
+echo "Running Total:\n";
+foreach ($result as $total) {
+    echo $total . "\n";
+}
+
+--------------------------------------------------------
+function savitzkyGolayFilter($data, $windowSize, $polyOrder) {
+    $filteredData = [];
+
+    // Check if the window size is odd and greater than 1
+    if ($windowSize % 2 !== 1 || $windowSize <= 1) {
+        throw new Exception("Window size must be an odd number greater than 1.");
+    }
+
+    // Check if the polynomial order is non-negative
+    if ($polyOrder < 0) {
+        throw new Exception("Polynomial order must be non-negative.");
+    }
+
+    $halfWindowSize = ($windowSize - 1) / 2;
+
+    for ($i = 0; $i < count($data); $i++) {
+        $startIndex = max(0, $i - $halfWindowSize);
+        $endIndex = min(count($data) - 1, $i + $halfWindowSize);
+
+        $x = range($startIndex, $endIndex);
+        $y = array_slice($data, $startIndex, $endIndex - $startIndex + 1);
+
+        $coefficients = savitzkyGolayCoefficients($x, $polyOrder, $windowSize);
+
+        $filteredValue = 0;
+
+        foreach ($coefficients as $j => $coefficient) {
+            $filteredValue += $coefficient * $y[$j];
+        }
+
+        $filteredData[] = $filteredValue;
+    }
+
+    return $filteredData;
+}
+
+function savitzkyGolayCoefficients($x, $polyOrder, $windowSize) {
+    $matrix = [];
+
+    foreach ($x as $value) {
+        $row = [];
+        for ($i = 0; $i <= $polyOrder; $i++) {
+            $row[] = pow($value, $i);
+        }
+        $matrix[] = $row;
+    }
+
+    $matrixTranspose = array_map(null, ...$matrix);
+
+    $matrixInverse = array_map(function ($row) {
+        return array_map('floatval', $row);
+    }, matrixInverse($matrixTranspose));
+
+    $weights = [];
+
+    for ($i = 0; $i < $windowSize; $i++) {
+        $row = array_map(function ($column) use ($i) {
+            return $column[$i];
+        }, $matrixInverse);
+        $weights[] = array_sum($row);
+    }
+
+    $sumWeights = array_sum($weights);
+    $weights = array_map(function ($value) use ($sumWeights) {
+        return $value / $sumWeights;
+    }, $weights);
+
+    return $weights;
+}
+
+// Helper function to calculate the inverse of a matrix
+function matrixInverse($matrix) {
+    $n = count($matrix);
+    $augmentedMatrix = array_map(function ($row, $index) {
+        return $row + array_pad([], $index, 0) + [1] + array_pad([], $n - $index - 1, 0);
+    }, $matrix, array_keys($matrix));
+    $result = [];
+    for ($i = 0; $i < $n; $i++) {
+        $pivot = $augmentedMatrix[$i][$i];
+        for ($j = 0; $j < $n; $j++) {
+            $augmentedMatrix[$i][$j] /= $pivot;
+        }
+        for ($j = 0; $j < $n; $j++) {
+            if ($j !== $i) {
+                $multiplier = $augmentedMatrix[$j][$i];
+                for ($k = 0; $k < $n; $k++) {
+                    $augmentedMatrix[$j][$k] -= $multiplier * $augmentedMatrix[$i][$k];
+                }
+            }
+        }
+    }
+    for ($i = 0; $i < $n; $i++) {
+        $result[] = array_slice($augmentedMatrix[$i], $n);
+    }
+    return $result;
+}
+
+// Example usage
+$data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+$windowSize = 5;
+$polyOrder = 2;
+
+$result = savitzkyGolayFilter($data, $windowSize, $polyOrder);
+
+// Print the filtered data
+echo "Filtered Data:\n";
+foreach ($result as $value) {
+    echo $value . "\n";
+}
+
+--------------------------------------------------------
+function windowFunction($data, $windowType) {
+    $windowedData = [];
+
+    switch ($windowType) {
+        case 'rectangular':
+            $window = array_fill(0, count($data), 1);
+            break;
+        case 'hamming':
+            $window = hammingWindow(count($data));
+            break;
+        case 'hanning':
+            $window = hanningWindow(count($data));
+            break;
+        case 'blackman':
+            $window = blackmanWindow(count($data));
+            break;
+        default:
+            throw new Exception("Invalid window type.");
+    }
+
+    for ($i = 0; $i < count($data); $i++) {
+        $windowedData[] = $data[$i] * $window[$i];
+    }
+
+    return $windowedData;
+}
+
+function hammingWindow($length) {
+    $window = [];
+
+    for ($i = 0; $i < $length; $i++) {
+        $window[] = 0.54 - 0.46 * cos(2 * pi() * $i / ($length - 1));
+    }
+
+    return $window;
+}
+
+function hanningWindow($length) {
+    $window = [];
+
+    for ($i = 0; $i < $length; $i++) {
+        $window[] = 0.5 * (1 - cos(2 * pi() * $i / ($length - 1)));
+    }
+
+    return $window;
+}
+
+function blackmanWindow($length) {
+    $window = [];
+
+    for ($i = 0; $i < $length; $i++) {
+        $window[] = 0.42 - 0.5 * cos(2 * pi() * $i / ($length - 1)) + 0.08 * cos(4 * pi() * $i / ($length - 1));
+    }
+
+    return $window;
+}
+
+// Example usage
+$data = [10, 15, 20, 25, 30];
+$windowType = 'hamming';
+
+$result = windowFunction($data, $windowType);
+
+// Print the windowed data
+echo "Windowed Data:\n";
+foreach ($result as $value) {
+    echo $value . "\n";
+}
+
+--------------------------------------------------------
+function zeroLagEMA($data, $period) {
+    $zlema = [];
+    $multiplier = 2 / ($period + 1);
+    $ema1 = $ema2 = $ema3 = $ema4 = $ema5 = null;
+
+    foreach ($data as $value) {
+        if ($ema1 === null) {
+            // Initialize the first EMA value with the first data point
+            $ema1 = $ema2 = $ema3 = $ema4 = $ema5 = $value;
+        } else {
+            $ema1 = ($value - $ema1) * $multiplier + $ema1;
+            $ema2 = ($ema1 - $ema2) * $multiplier + $ema2;
+            $ema3 = ($ema2 - $ema3) * $multiplier + $ema3;
+            $ema4 = ($ema3 - $ema4) * $multiplier + $ema4;
+            $ema5 = ($ema4 - $ema5) * $multiplier + $ema5;
+        }
+
+        $zlema[] = 6 * $ema1 - 15 * $ema2 + 20 * $ema3 - 15 * $ema4 + 6 * $ema5;
+    }
+
+    return $zlema;
+}
+
+// Example usage
+$data = [10, 15, 20, 25, 30, 25, 20, 15];
+$period = 5;
+
+$result = zeroLagEMA($data, $period);
+
+// Print the zero lag exponential moving averages
+echo "Zero Lag Exponential Moving Averages:\n";
+foreach ($result as $value) {
+    echo $value . "\n";
+}
+
+--------------------------------------------------------
+function cumulativeAverage($data) {
+    $cumulativeAverage = [];
+    $sum = 0;
+
+    foreach ($data as $index => $value) {
+        $sum += $value;
+        $cumulativeAverage[] = $sum / ($index + 1);
+    }
+
+    return $cumulativeAverage;
+}
+
+// Example usage
+$data = [10, 15, 20, 25, 30];
+
+$result = cumulativeAverage($data);
+
+// Print the cumulative average
+echo "Cumulative Average:\n";
+foreach ($result as $average) {
+    echo $average . "\n";
+}
+
+--------------------------------------------------------
+function simpleMovingAverage($data, $windowSize) {
+    $sma = [];
+    $sum = 0;
+
+    // Check if the window size is valid
+    if ($windowSize <= 0 || $windowSize > count($data)) {
+        throw new Exception("Invalid window size.");
+    }
+
+    // Calculate the initial sum for the first window
+    for ($i = 0; $i < $windowSize; $i++) {
+        $sum += $data[$i];
+    }
+
+    $sma[] = $sum / $windowSize;
+
+    // Calculate the moving average for the remaining data points
+    for ($i = $windowSize; $i < count($data); $i++) {
+        $sum = $sum - $data[$i - $windowSize] + $data[$i];
+        $sma[] = $sum / $windowSize;
+    }
+
+    return $sma;
+}
+
+// Example usage
+$data = [10, 15, 20, 25, 30, 25, 20, 15];
+$windowSize = 3;
+
+$result = simpleMovingAverage($data, $windowSize);
+
+// Print the simple moving averages
+echo "Simple Moving Averages:\n";
+foreach ($result as $average) {
+    echo $average . "\n";
+}
+
+--------------------------------------------------------
+
