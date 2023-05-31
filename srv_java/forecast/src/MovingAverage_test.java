@@ -1,7 +1,7 @@
 /* https://www.codeconvert.ai/php-to-java-converter */
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 
 public class MovingAverage {
     public static List<Double> calculateMovingAverage(List<Double> data, int windowSize) {
@@ -37,25 +37,25 @@ public class MovingAverage {
     }
 
     public static void main(String[] args) {
-        List<Double> data = new ArrayList<>();
-        data.add(17.0);
-        data.add(19.0);
-        data.add(26.0);
-        data.add(12.0);
-        data.add(18.0);
-        data.add(20.0);
-        data.add(15.0);
-        data.add(22.0);
-        data.add(17.0);
-        data.add(21.0);
-        data.add(16.0);
+        /*
+        Data: [2.0, 4.0, 6.0, 8.0, 12.0, 14.0, 16.0, 18.0, 20.0]
+        Moving Average: [4.0, 6.0, 8.67, 11.33, 14.0, 16.0, 18.0]
+        Forecast: [17.0, 15.0]
+
+        Expected [2,3, 4.5, 6.25, 9.12, 11.56, 13.78, 15.89, 17.94]
+        Calculated:   [4.0, 6.00, 8.67, 11.33, 14.00, 16.00, 18.00] OK
+        */
+
+        //List<Double> data = new ArrayList<>();
+        //data.add(17.0);
+        List<Double> data = Arrays.asList(2.0, 4.0, 6.0, 8.0, 12.0, 14.0, 16.0, 18.0, 20.0);
         int windowSize = 3;
-        int forecastSize = 3;
+        int forecastSize = 2;
         List<Double> movingAverage = calculateMovingAverage(data, windowSize);
         List<Double> forecast = forecastMovingAverage(movingAverage, forecastSize);
-        System.out.println("Data: " + data);
+        /*System.out.println("Data: " + data);
         System.out.println("Moving Average: " + movingAverage);
-        System.out.println("Forecast: " + forecast);
+        System.out.println("Forecast: " + forecast);*/
     }
 }
 

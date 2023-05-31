@@ -3,6 +3,10 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+        /*
+         * Expected  [2.0, 3.0, 4.0, 5.0, 6.4, 7.66, 8.85, 10.0, 11.11]
+         * Calclated [2.0, 3.0, 4.0, 5.0, 6.4, 7.67, 8.86, 10.0, 11.11] OK
+         * */
         List<Integer> data = new ArrayList<>();
         /*2, 4, 6, 8, 12, 14, 16, 18, 20*/
         data.add(2);
@@ -10,10 +14,16 @@ public class Main {
         data.add(6);
         data.add(8);
         data.add(12);
+        data.add(14);
+        data.add(16);
+        data.add(18);
+        data.add(20);
         int forecastPeriods = 2;
         List<Double> resultCalculation = cumulativeAverage(data);
         List<Double> resultForecast = cumulativeAverageForecast(data, forecastPeriods);
-        System.out.println(resultCalculation);
+        System.out.println("CA Data: " + data);
+        System.out.println("CA Calculation: " + resultCalculation);
+        System.out.println("CA Forecast: " + resultForecast);
     }
 
     public static List<Double> cumulativeAverageForecast(List<Integer> data, int forecastPeriods) {

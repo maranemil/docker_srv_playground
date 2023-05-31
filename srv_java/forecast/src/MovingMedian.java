@@ -1,13 +1,29 @@
 import java.util.Arrays;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
+        /*
+        Expected  [2, 4, 4, 6, 8, 12, 14, 16, 18, 20]
+        Calculated:  [4, 4, 6, 8, 12, 14, 16, 18, 20] OK
+        */
         int[] data = {2, 4, 6, 8, 12, 14, 16, 18, 20};
         int windowSize = 3;
         int forecastPeriods = 2;
         int[] resultCalculation = movingMedian(data, windowSize);
+
+        // https://www.softwaretestinghelp.com/reverse-an-array-in-java/
+        /*int j = 0;
+        int[]  resultCalculationInvert = new int[resultCalculation.length];
+        for(int i=resultCalculation.length-1;i>=0;i--){
+            resultCalculationInvert[j] = resultCalculation[i];
+            j=j+1;
+        }*/
+        //System.out.println(Arrays.toString(resultCalculationInvert));
         int[] resultForecast = movingMedianForecast(resultCalculation, windowSize, forecastPeriods);
-        System.out.println(Arrays.toString(resultCalculation));
+        System.out.println("MM Data: " + Arrays.toString(data));
+        System.out.println("MM Calculation: " + Arrays.toString(resultCalculation));
+        System.out.println("MM Forecast: " + Arrays.toString(resultForecast));
     }
 
     public static int[] movingMedianForecast(int[] data, int windowSize, int forecastPeriods) {

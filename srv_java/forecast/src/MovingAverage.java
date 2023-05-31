@@ -1,7 +1,25 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 
 public class MovingAverageCalculator {
+
+    public static void main(String[] args) {
+        /*
+         Expected [2,3, 4.5, 6.25, 9.12, 11.56, 13.78, 15.89, 17.94]
+         Calculated [   4.0, 6.0,  8.67, 11.33, 14.0,  16.0,  18.0]   OK
+        */
+        int windowSize = 3;
+        int forecastSize = 2;
+        List<Double> data = Arrays.asList(2.0, 4.0, 6.0, 8.0, 12.0, 14.0, 16.0, 18.0, 20.0);
+        List<Double> resultCalculation = calculateMovingAverage(data, windowSize);
+        List<Double> resultForecast = forecastMovingAverage(resultCalculation, forecastSize);
+        System.out.println("MA Data" + data);
+        System.out.println("MA Calculation" + resultCalculation);
+        System.out.println("MA Forecast" + resultForecast);
+    }
+
+
     public static List<Double> calculateMovingAverage(List<Double> data, int windowSize) {
         List<Double> movingAverage = new ArrayList<>();
         int numDataPoints = data.size();
@@ -32,13 +50,5 @@ public class MovingAverageCalculator {
         return forecast;
     }
 
-    public static void main(String[] args) {
-        int windowSize = 3;
-        int forecastSize = 2;
-        List<Double> data = new ArrayList<>();
-        // add data to the list
-        List<Double> resultCalculation = calculateMovingAverage(data, windowSize);
-        List<Double> resultForecast = forecastMovingAverage(resultCalculation, forecastSize);
-        System.out.println(resultCalculation);
-    }
+
 }

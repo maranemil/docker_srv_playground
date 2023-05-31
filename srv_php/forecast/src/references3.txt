@@ -1114,6 +1114,26 @@ https://en.wikipedia.org/wiki/Moving_average#Moving_median
 https://docs.oracle.com/cd/E57185_01/HIRUG/ch12s07s08.html
 
 
+# https://www.codeconvert.ai/php-to-java-converter
+
+
+https://stackoverflow.com/questions/38938993/java-error-double-cannot-be-converted-to-double
+https://docs.oracle.com/javase/tutorial/java/nutsandbolts/arrays.html
+https://stackoverflow.com/questions/523871/best-way-to-concatenate-list-of-string-objects
+https://rollbar.com/blog/how-to-handle-the-incompatible-types-error-in-java/
+http://www.java2s.com/example/java-api/java/lang/charsequence/tostring-0-23.html
+https://teamtreehouse.com/community/incompatible-types-char-cannot-be-converted-to-charsequence
+https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#join-java.lang.CharSequence-java.lang.Iterable-
+https://stackoverflow.com/questions/9280981/convert-float-to-charsequence-in-android
+https://stackoverflow.com/questions/34137792/no-suitable-method-found-for-addjava-lang-stringin-arraylist-constructor
+https://stackoverflow.com/questions/6213794/how-to-convert-list-of-double-to-list-of-string
+https://www.javatpoint.com/java-double-to-string
+https://stackoverflow.com/questions/5766318/converting-double-to-string
+
+https://docs.oracle.com/cd/E26228_01/doc.93/e20706/ap_forcst_calc_ex.htm#WEAFC278
+https://otexts.com/fpp2/ses.html
+https://www.simplilearn.com/exponential-smoothing-for-time-series-forecasting-in-python-article
+https://en.wikipedia.org/wiki/Exponential_smoothing
 
 
 
