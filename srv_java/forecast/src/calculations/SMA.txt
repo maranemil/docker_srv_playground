@@ -1,0 +1,442 @@
+###################################################
+Simple Moving Average  SMA
+###################################################
+https://atozmath.com/CONM/TimeSeries.aspx?q=smaf
+https://atozmath.com/CONM/TimeSeries.aspx?q=sma
+
+-------------------------------------------------------
+
+3 month Simple Moving Average
+month	1	2	3	4	5	6	7	8	9
+Sales	2	4	6	8	12	14	16	18	20
+Calculate 3 month Simple Moving Average
+
+Solution:
+The value of table for x and y
+
+x	1	2	3	4	5	6	7	8	9
+y	2	4	6	8	12	14	16	18	20
+
+Calculation of 3 month moving averages of the data
+(1)month	(2) Sales	(3) 3 month moving total	(4) 3 month moving average (3)÷3
+1		2		
+2		4		2+4+6=12	12÷3=4
+3		6		4+6+8=18	18÷3=6
+4		8		6+8+12=26	26÷3=8.67
+5		12		8+12+14=34	34÷3=11.33
+6		14		12+14+16=42	42÷3=14
+7		16		14+16+18=48	48÷3=16
+8		18		16+18+20=54	54÷3=18
+9		20		
+
+
+----------------------------------------------------
+
+4 month Simple Moving Average
+month	1	2	3	4	5	6	7	8	9
+Sales	2	4	6	8	12	14	16	18	20
+Calculate 4 month Simple Moving Average
+
+Solution:
+The value of table for x and y
+
+x	1	2	3	4	5	6	7	8	9
+y	2	4	6	8	12	14	16	18	20
+
+
+Calculation of 4 month moving averages of the data
+(1) month	(2) Sales	(3) 4 month moving total	(4) 4 month moving average (3)÷4	(5) 2 item moving total of column (4)	(6) 4 month centered moving average (5)÷2
+1	2				
+					
+2	4				
+		2+4+6+8=20	20÷4=5		
+3	6			5+7.5=12.5	12.5÷2=6.25
+		4+6+8+12=30	30÷4=7.5		
+4	8			7.5+10=17.5	17.5÷2=8.75
+		6+8+12+14=40	40÷4=10		
+5	12			10+12.5=22.5	22.5÷2=11.25
+		8+12+14+16=50	50÷4=12.5		
+6	14			12.5+15=27.5	27.5÷2=13.75
+		12+14+16+18=60	60÷4=15		
+7	16			15+17=32	32÷2=16
+		14+16+18+20=68	68÷4=17		
+8	18				
+					
+9	20				
+
+
+----------------------------------------------------
+
+5 month Simple Moving Average
+month	1	2	3	4	5	6	7	8	9
+Sales	2	4	6	8	12	14	16	18	20
+Calculate 5 month Simple Moving Average
+
+Solution:
+The value of table for x and y
+
+x	1	2	3	4	5	6	7	8	9
+y	2	4	6	8	12	14	16	18	20
+
+Calculation of 5 month moving averages of the data
+(1)month	(2) Sales	(3) 5 month moving total	(4) 5 month moving average (3)÷5 
+1		2		
+2		4		
+3		6		2+4+6+8+12=32		32÷5=6.4
+4		8		4+6+8+12+14=44		44÷5=8.8
+5		12		6+8+12+14+16=56		56÷5=11.2
+6		14		8+12+14+16+18=68	68÷5=13.6
+7		16		12+14+16+18+20=80	80÷5=16
+8		18		
+9		20		
+
+----------------------------------------------------
+
+
+
+
+
+###########################################################################
+SMA Forecast
+###########################################################################
+
+Number of Periods to Average 3
+Decimal Place 2
+
+
+3 month Simple Moving Average forecast
+month	1	2	3	4	5	6	7	8	9
+Sales	2	4	6	8	12	14	16	18	20
+Calculate 3 month Simple Moving Average forecast
+
+Solution:
+The value of table for x and y
+
+x	1	2	3	4	5	6	7	8	9
+y	2	4	6	8	12	14	16	18	20
+
+Calculation of 3 month moving averages of the data
+
+
+(1)month	(2) Sales	(3) 3 month moving total	(4) 3 month moving average (3)÷3
+1	2		
+2	4	2+4+6=12	12÷3=4
+3	6	4+6+8=18	18÷3=6
+4	8	6+8+12=26	26÷3=8.67
+5	12	8+12+14=34	34÷3=11.33
+6	14	12+14+16=42	42÷3=14
+7	16	14+16+18=48	48÷3=16
+8	18	16+18+20=54	54÷3=18
+9	20		
+
+
+
+(1)month	(2)Sales	(3)3 month moving average	(4)Error	(5)|Error|	(6)Error2	(7)|%Error|
+1	2					
+2	4					
+3	6					
+4	8	4	    8-4=4	        4	    16	    50%
+5	12	6	    12-6=6	        6	    36	    50%
+6	14	8.67	14-8.67=5.33	5.33	28.44	38.1%
+7	16	11.33	16-11.33=4.67	4.67	21.78	29.17%
+8	18	14	    18-14=4	        4	    16	    22.22%
+9	20	16	    20-16=4	        4	    16	    20%
+10		18	    Total	        28	    134.22	209.48%
+
+
+Forecasting errors
+
+1. Mean absolute error (MAE), also called mean absolute deviation (MAD)
+MAE=1n∑|ei|=286=4.67
+
+2. Mean squared error (MSE)
+MSE=1n∑|e2i|=134.226=22.37
+
+3. Root mean squared error (RMSE)
+RMSE=√MSE=√22.37=4.73
+
+4. Mean absolute percentage error (MAPE)
+MAPE=1n∑|eiyi|=209.486=34.91
+
+-------------------------------------------------------------------
+
+Number of Periods to Average 4
+Decimal Place 2
+
+Calculation of 4 month moving averages of the data
+(1)month	(2) Sales	(3) 4 month moving total	(4) 4 month moving average (3)÷4	(5) 2 item moving total of column (4)	(6) 4 month centered moving average (5)÷2
+1	2	
+						
+2	4				
+		2+4+6+8=20	20÷4=5		
+3	6			5+7.5=12.5	12.5÷2=6.25
+		4+6+8+12=30	30÷4=7.5		
+4	8			7.5+10=17.5	17.5÷2=8.75
+		6+8+12+14=40	40÷4=10		
+5	12			10+12.5=22.5	22.5÷2=11.25
+		8+12+14+16=50	50÷4=12.5		
+6	14			12.5+15=27.5	27.5÷2=13.75
+		12+14+16+18=60	60÷4=15		
+7	16			15+17=32	32÷2=16
+		14+16+18+20=68	68÷4=17		
+8	18				
+					
+9	20		
+
+
+
+(1)month	(2) Sales	(3) 4 month moving average	(4) Error	(5) |Error|	(6) Error2	(7) |%Error|
+1	2					
+2	4					
+3	6					
+4	8					
+5	12	6.25	12-6.25=5.75	5.75	33.06	47.92%
+6	14	8.75	14-8.75=5.25	5.25	27.56	37.5%
+7	16	11.25	16-11.25=4.75	4.75	22.56	29.69%
+8	18	13.75	18-13.75=4.25	4.25	18.06	23.61%
+9	20	16	    20-16=4	        4	    16	    20%
+10		0	    Total	        24	    117.25	158.72%
+
+
+Forecasting errors
+
+1. Mean absolute error (MAE), also called mean absolute deviation (MAD)
+MAE=1n∑|ei|=245=4.8
+ 
+2. Mean squared error (MSE)
+MSE=1n∑|e2i|=117.255=23.45
+
+3. Root mean squared error (RMSE)
+RMSE=√MSE=√23.45=4.84
+
+4. Mean absolute percentage error (MAPE)
+MAPE=1n∑|eiyi|=158.725=31.74
+
+
+-------------------------------------------------------------------
+
+Number of Periods to Average 5
+Decimal Place 2
+
+Calculation of 5 month moving averages of the data
+
+(1)month	(2)Sales	(3)5 month moving total		(4) 5 month moving average (3)÷5
+1	2		
+2	4		
+3	6	2+4+6+8+12=32	32÷5=6.4
+4	8	4+6+8+12+14=44	44÷5=8.8
+5	12	6+8+12+14+16=56	56÷5=11.2
+6	14	8+12+14+16+18=68	68÷5=13.6
+7	16	12+14+16+18+20=80	80÷5=16
+8	18		
+9	20		
+
+
+(1)month	(2)Sales	(3)5 month moving average	(4)Error	(5)|Error|	(6)Error2	(7)|%Error|
+1	2					
+2	4					
+3	6					
+4	8					
+5	12					
+6	14	6.4	    14-6.4=7.6	    7.6	    57.76	54.29%
+7	16	8.8	    16-8.8=7.2	    7.2	    51.84	45%
+8	18	11.2	18-11.2=6.8	    6.8	    46.24	37.78%
+9	20	13.6	20-13.6=6.4	    6.4	    40.96	32%
+10		16	    Total	        28	    196.8	169.06%
+
+Forecasting errors 
+
+1. Mean absolute error (MAE), also called mean absolute deviation (MAD)
+MAE=1n∑|ei|=28/4=7
+
+2. Mean squared error (MSE)
+MSE=1n∑|e2i|=196.8/4=49.2
+  
+  
+3. Root mean squared error (RMSE)
+RMSE=√MSE=√49.2=7.01
+
+4. Mean absolute percentage error (MAPE)
+MAPE=1n∑|eiyi|=169.06/4=42.27
+
+
+###########################################################################
+SMA Forecast
+###########################################################################
+
+3 month Simple Moving Average forecast
+month	1	2	3	4	5	6	7	8	9
+Sales	2	4	6	8	12	14	16	18	20
+Calculate 3 month Simple Moving Average forecast
+
+Solution:
+The value of table for x and y
+
+x	1	2	3	4	5	6	7	8	9
+y	2	4	6	8	12	14	16	18	20
+
+Calculation of 3 month moving averages of the data
+
+(1)month	(2) Sales	(3)3 month moving total	(4) 3 month moving average (3)÷3
+1		2		
+2		4		2+4+6=12		12÷3=4
+3		6		4+6+8=18		18÷3=6
+4		8		6+8+12=26		26÷3=8.67
+5		12		8+12+14=34		34÷3=11.33
+6		14		12+14+16=42		42÷3=14
+7		16		14+16+18=48		48÷3=16
+8		18		16+18+20=54		54÷3=18
+9		20		
+
+
+(1)month	(2)Sales	(3)3 month moving average	(4)Error	(5)|Error|	(6)Error2	(7)|%Error|
+1		2					
+2		4					
+3		6					
+4		8		4				8-4=4	        4	    16		50%
+5		12		6				12-6=6	        6	    36		50%
+6		14		8.67			14-8.67=5.33	5.33	28.44	38.1%
+7		16		11.33			16-11.33=4.67	4.67	21.78	29.17%
+8		18		14				18-14=4	        4	    16		22.22%
+9		20		16				20-16=4	        4	    16		20%
+10				18				Total		    28		134.22	209.48%
+
+
+
+Forecasting errors
+
+1. Mean absolute error (MAE), also called mean absolute deviation (MAD)
+MAE=1n∑|ei|=28/6=4.67
+
+2. Mean squared error (MSE)
+MSE=1n∑|e2i|=134.22/6=22.37
+
+3. Root mean squared error (RMSE)
+RMSE=√MSE=√22.37=4.73
+
+4. Mean absolute percentage error (MAPE)
+MAPE=1n∑|eiyi|=209.48/6=34.91
+
+-------------------------------------
+
+4 month Simple Moving Average forecast
+month	1	2	3	4	5	6	7	8	9
+Sales	2	4	6	8	12	14	16	18	20
+Calculate 4 month Simple Moving Average forecast
+
+Solution:
+The value of table for x and y
+
+x	1	2	3	4	5	6	7	8	9
+y	2	4	6	8	12	14	16	18	20
+
+
+Calculation of 4 month moving averages of the data
+
+(1)month	(2) Sales	(3) 4 month moving total	(4) 4 month moving average (3)÷4	(5) 2 item moving total of column (4)	(6) 4 month centered moving average (5)÷2
+1	2				
+					
+2	4				
+		2+4+6+8=20	20÷4=5		
+3	6			5+7.5=12.5	12.5÷2=6.25
+		4+6+8+12=30	30÷4=7.5		
+4	8			7.5+10=17.5	17.5÷2=8.75
+		6+8+12+14=40	40÷4=10		
+5	12			10+12.5=22.5	22.5÷2=11.25
+		8+12+14+16=50	50÷4=12.5		
+6	14			12.5+15=27.5	27.5÷2=13.75
+		12+14+16+18=60	60÷4=15		
+7	16			15+17=32	32÷2=16
+		14+16+18+20=68	68÷4=17		
+8	18				
+					
+9	20			
+
+
+(1)month	(2) Sales	(3) 4 month moving average	(4) Error	(5) |Error|	(6) Error2	(7) |%Error|
+1	2					
+2	4					
+3	6					
+4	8					
+5	12	6.25	12-6.25=5.75	5.75	33.06	47.92%
+6	14	8.75	14-8.75=5.25	5.25	27.56	37.5%
+7	16	11.25	16-11.25=4.75	4.75	22.56	29.69%
+8	18	13.75	18-13.75=4.25	4.25	18.06	23.61%
+9	20	16	    20-16=4	        4	    16	    20%
+10		0	    Total	        24	    117.25	158.72%
+
+
+Forecasting errors
+
+1. Mean absolute error (MAE), also called mean absolute deviation (MAD)
+MAE=1n∑|ei|=245=4.8
+
+ 
+2. Mean squared error (MSE)
+MSE=1n∑|e2i|=117.255=23.45
+
+
+3. Root mean squared error (RMSE)
+RMSE=√MSE=√23.45=4.84
+
+
+4. Mean absolute percentage error (MAPE)
+MAPE=1n∑|eiyi|=158.725=31.74
+
+---------------------------------------------------------------------------------
+
+5 month Simple Moving Average forecast
+month	1	2	3	4	5	6	7	8	9
+Sales	2	4	6	8	12	14	16	18	20
+Calculate 5 month Simple Moving Average forecast
+
+Solution:
+The value of table for x and y
+
+x	1	2	3	4	5	6	7	8	9
+y	2	4	6	8	12	14	16	18	20
+
+Calculation of 5 month moving averages of the data
+
+(1)month	(2) Sales	(3) 5 month moving total	(4) 5 month moving average (3)÷5
+1	2		
+2	4		
+3	6	2+4+6+8+12=32	32÷5=6.4
+4	8	4+6+8+12+14=44	44÷5=8.8
+5	12	6+8+12+14+16=56	56÷5=11.2
+6	14	8+12+14+16+18=68	68÷5=13.6
+7	16	12+14+16+18+20=80	80÷5=16
+8	18		
+9	20		
+
+
+(1)month	(2) Sales	(3) 5 month moving average	(4) Error	(5) |Error|	(6) Error2	(7) |%Error|
+1	2					
+2	4					
+3	6					
+4	8					
+5	12					
+6	14	6.4	    14-6.4=7.6	    7.6	57.76	54.29%
+7	16	8.8	    16-8.8=7.2	    7.2	51.84	45%
+8	18	11.2	18-11.2=6.8	    6.8	46.24	37.78%
+9	20	13.6	20-13.6=6.4	    6.4	40.96	32%
+10		16	    Total	        28	196.8	169.06%
+
+
+
+Forecasting errors
+
+1. Mean absolute error (MAE), also called mean absolute deviation (MAD)
+MAE=1n∑|ei|=284=7
+ 
+2. Mean squared error (MSE)
+MSE=1n∑|e2i|=196.84=49.2
+
+3. Root mean squared error (RMSE)
+RMSE=√MSE=√49.2=7.01
+
+4. Mean absolute percentage error (MAPE)
+MAPE=1n∑|eiyi|=169.064=42.27
+
+
+

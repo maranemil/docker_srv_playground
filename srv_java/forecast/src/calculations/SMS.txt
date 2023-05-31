@@ -1,0 +1,197 @@
+###################################################
+Single Exponential Smoothing  SMS
+###################################################
+https://atozmath.com/CONM/TimeSeries.aspx?q=ses
+https://atozmath.com/CONM/TimeSeries.aspx?q=sesf
+
+Single Exponential Smoothing
+year	1	2	3	4	5	6	7	8	9
+Sales	2	4	6	8	12	14	16	18	20
+Calculate Single Exponential Smoothing
+
+Solution:
+(1)year	(2)Sales	(3)Exponential Smoothing (α=0.1)
+1	2	2
+2	4	0.1⋅2+0.9⋅2=2
+3	6	0.1⋅4+0.9⋅2=2.2
+4	8	0.1⋅6+0.9⋅2.2=2.58
+5	12	0.1⋅8+0.9⋅2.58=3.12
+6	14	0.1⋅12+0.9⋅3.12=4.01
+7	16	0.1⋅14+0.9⋅4.01=5.01
+8	18	0.1⋅16+0.9⋅5.01=6.11
+9	20	0.1⋅18+0.9⋅6.11=7.3
+10		0.1⋅20+0.9⋅7.3=8.57
+
+-------------------------------------------------------------------------
+
+Single Exponential Smoothing
+year	1	2	3	4	5	6	7	8	9
+Sales	2	4	6	8	12	14	16	18	20
+Calculate Single Exponential Smoothing
+
+Solution:
+(1)year	(2) Sales	(3) Exponential Smoothing (α=0.3)
+1	2	2
+2	4	0.3⋅2+0.7⋅2=2
+3	6	0.3⋅4+0.7⋅2=2.6
+4	8	0.3⋅6+0.7⋅2.6=3.62
+5	12	0.3⋅8+0.7⋅3.62=4.93
+6	14	0.3⋅12+0.7⋅4.93=7.05
+7	16	0.3⋅14+0.7⋅7.05=9.14
+8	18	0.3⋅16+0.7⋅9.14=11.2
+9	20	0.3⋅18+0.7⋅11.2=13.24
+10		0.3⋅20+0.7⋅13.24=15.27
+
+
+#########################################################################################
+forecast
+#########################################################################################
+
+
+3 month Single Exponential Smoothing forecast
+month	1	2	3	4	5	6	7	8	9
+Sales	2	4	6	8	12	14	16	18	20
+Calculate 3 month Single Exponential Smoothing forecast
+
+Solution:
+(1)month	(2) Sales	(3) Exponential Smoothing (α=0.1)
+1	2	2
+2	4	0.1⋅2+0.9⋅2=2
+3	6	0.1⋅4+0.9⋅2=2.2
+4	8	0.1⋅6+0.9⋅2.2=2.58
+5	12	0.1⋅8+0.9⋅2.58=3.12
+6	14	0.1⋅12+0.9⋅3.12=4.01
+7	16	0.1⋅14+0.9⋅4.01=5.01
+8	18	0.1⋅16+0.9⋅5.01=6.11
+9	20	0.1⋅18+0.9⋅6.11=7.3
+10		0.1⋅20+0.9⋅7.3=8.57
+
+
+
+
+
+(1)month	(2) Sales	(3) Exponential Smoothing	(4) Error	(5) |Error|	(6) Error2	(7) |%Error|
+1	2	2				
+2	4	2				
+3	6	2.2				
+4	8	2.58	8-2.58=5.42	        5.42	29.38	67.75%
+5	12	3.12	12-3.12=8.88	    8.88	78.82	73.98%
+6	14	4.01	14-4.01=9.99	    9.99	99.8	71.36%
+7	16	5.01	16-5.01=10.99	    10.99	120.81	68.69%
+8	18	6.11	18-6.11=11.89	    11.89	141.42	66.07%
+9	20	7.3	    20-7.3=12.7	        12.7	161.36	63.51%
+10		8.57	Total		        59.87	631.59	411.37%
+
+
+Forecasting errors
+
+1. Mean absolute error (MAE), also called mean absolute deviation (MAD)
+MAE=1n∑|ei|=59.87/6=9.98
+
+ 2. Mean squared error (MSE)
+MSE=1n∑|e2i|=631.59/6=105.26
+
+3. Root mean squared error (RMSE)
+RMSE=√MSE=√105.26=10.26
+
+4. Mean absolute percentage error (MAPE)
+MAPE=1n∑|eiyi|=411.37/6=68.56
+
+
+----------------------------------------------------------------------------------------------------
+
+4 month Single Exponential Smoothing forecast
+month	1	2	3	4	5	6	7	8	9
+Sales	2	4	6	8	12	14	16	18	20
+Calculate 4 month Single Exponential Smoothing forecast
+
+Solution:
+(1)month	(2) Sales	(3) Exponential Smoothing (α=0.1)
+1	2	2
+2	4	0.1⋅2+0.9⋅2=2
+3	6	0.1⋅4+0.9⋅2=2.2
+4	8	0.1⋅6+0.9⋅2.2=2.58
+5	12	0.1⋅8+0.9⋅2.58=3.12
+6	14	0.1⋅12+0.9⋅3.12=4.01
+7	16	0.1⋅14+0.9⋅4.01=5.01
+8	18	0.1⋅16+0.9⋅5.01=6.11
+9	20	0.1⋅18+0.9⋅6.11=7.3
+10		0.1⋅20+0.9⋅7.3=8.57
+
+
+(1)month	(2) Sales	(3) Exponential Smoothing	(4) Error	(5) |Error|	(6) Error2	(7) |%Error|
+1	2	2				
+2	4	2				
+3	6	2.2				
+4	8	2.58				
+5	12	3.12	12-3.12=8.88	8.88	78.82	73.98%
+6	14	4.01	14-4.01=9.99	9.99	99.8	71.36%
+7	16	5.01	16-5.01=10.99	10.99	120.81	68.69%
+8	18	6.11	18-6.11=11.89	11.89	141.42	66.07%
+9	20	7.3	    20-7.3=12.7	    12.7	161.36	63.51%
+10		8.57	Total		    54.45	602.21	343.62%
+
+
+Forecasting errors
+
+1. Mean absolute error (MAE), also called mean absolute deviation (MAD)
+MAE=1n∑|ei|=54.45/5=10.89
+
+ 2. Mean squared error (MSE)
+MSE=1n∑|e2i|=602.21/5=120.44
+
+3. Root mean squared error (RMSE)
+RMSE=√MSE=√120.44=10.97
+
+
+4. Mean absolute percentage error (MAPE)
+MAPE=1n∑|eiyi|=343.62/5=68.72
+
+--------------------------------------------------
+
+5 month Single Exponential Smoothing forecast
+month	1	2	3	4	5	6	7	8	9
+Sales	2	4	6	8	12	14	16	18	20
+Calculate 5 month Single Exponential Smoothing forecast
+
+Solution:
+(1)month	(2) Sales	(3) Exponential Smoothing (α=0.1)
+1	2	2
+2	4	0.1⋅2+0.9⋅2=2
+3	6	0.1⋅4+0.9⋅2=2.2
+4	8	0.1⋅6+0.9⋅2.2=2.58
+5	12	0.1⋅8+0.9⋅2.58=3.12
+6	14	0.1⋅12+0.9⋅3.12=4.01
+7	16	0.1⋅14+0.9⋅4.01=5.01
+8	18	0.1⋅16+0.9⋅5.01=6.11
+9	20	0.1⋅18+0.9⋅6.11=7.3
+10		0.1⋅20+0.9⋅7.3=8.57
+
+
+(1)month	(2) Sales	(3) Exponential Smoothing	(4) Error	(5) |Error|	(6) Error2	(7) |%Error|
+1	2	2				
+2	4	2				
+3	6	2.2				
+4	8	2.58				
+5	12	3.12				
+6	14	4.01	14-4.01=9.99	9.99	99.8	71.36%
+7	16	5.01	16-5.01=10.99	10.99	120.81	68.69%
+8	18	6.11	18-6.11=11.89	11.89	141.42	66.07%
+9	20	7.3	    20-7.3=12.7	    12.7	161.36	63.51%
+10		8.57	Total		    45.58	523.39	269.63%
+
+
+Forecasting errors
+
+1. Mean absolute error (MAE), also called mean absolute deviation (MAD)
+MAE=1n∑|ei|=45.58/4=11.39
+
+ 2. Mean squared error (MSE)
+MSE=1n∑|e2i|=523.39/4=130.85
+
+3. Root mean squared error (RMSE)
+RMSE=√MSE=√130.85=11.44
+
+4. Mean absolute percentage error (MAPE)
+MAPE=1n∑|eiyi|=269.63/4=67.41
+

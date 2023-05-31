@@ -1,0 +1,311 @@
+###################################################
+Weighted Moving Average WMA
+###################################################
+https://atozmath.com/CONM/TimeSeries.aspx?q=wma
+https://atozmath.com/CONM/TimeSeries.aspx?q=wmaf
+-----------------------------------------------------------------------------------------------
+
+3 month Weighted Moving Average
+month	1	2	3	4	5	6	7	8	9
+Sales	2	4	6	8	12	14	16	18	20
+
+
+Calculate 3 month Weighted Moving Average with weight=1,2,1
+
+Solution:
+The value of table for x and y
+
+x	1	2	3	4	5	6	7	8	9
+y	2	4	6	8	12	14	16	18	20
+
+The weights of the 3 months are respectively 1,2,1 and their sum is 4
+Calculation of 3 month moving averages of the data
+
+(1)month	(2) Sales	(3) 3 month weighted moving total	(4) 3 month weighted moving average (3)÷4
+1	2		
+2	4			1×2+2×4+1×6=16				16÷4=4
+3	6			1×4+2×6+1×8=24				24÷4=6
+4	8			1×6+2×8+1×12=34				34÷4=8.5
+5	12			1×8+2×12+1×14=46			46÷4=11.5
+6	14			1×12+2×14+1×16=56			56÷4=14
+7	16			1×14+2×16+1×18=64			64÷4=16
+8	18			1×16+2×18+1×20=72			72÷4=18
+9	20		
+
+----------------------------------------------------------------------------
+
+4 month Weighted Moving Average
+month	1	2	3	4	5	6	7	8	9
+Sales	2	4	6	8	12	14	16	18	20
+
+
+Calculate 4 month Weighted Moving Average with weight=1,2,1
+
+Solution:
+You have entered 3 weights(1,2,1) and trying to find 4 month weighted moving average, So we have added remaining as 1.
+The value of table for x and y
+
+x	1	2	3	4	5	6	7	8	9
+y	2	4	6	8	12	14	16	18	20
+
+The weights of the 4 months are respectively 1,2,1,1 and their sum is 5
+Calculation of 4 month moving averages of the data
+
+1)month	(2) Sales	(3) 4 month weighted moving total	(4) 4 month weighted moving average (3)÷5	(5)  2 item moving total of  column (4)  	(6) 4 month centered weighted moving average (5)÷2
+1	2				
+					
+2	4				
+			1×2+2×4+1×6+1×8=24			24÷5=4.8		
+3	6													4.8+7.2=12					12÷2=6
+			1×4+2×6+1×8+1×12=36			36÷5=7.2		
+4	8													7.2+9.6=16.8					16.8÷2=8.4
+			1×6+2×8+1×12+1×14=48			48÷5=9.6		
+5	12													9.6+12.4=22					22÷2=11
+			1×8+2×12+1×14+1×16=62			62÷5=12.4		
+6	14													12.4+14.8=27.2					27.2÷2=13.6
+			1×12+2×14+1×16+1×18=74			74÷5=14.8		
+7	16													14.8+16.8=31.6					31.6÷2=15.8
+			1×14+2×16+1×18+1×20=84			84÷5=16.8		
+8	18				
+					
+9	20		
+
+
+----------------------------------------------------------------------------
+
+
+5 month Weighted Moving Average
+month	1	2	3	4	5	6	7	8	9
+Sales	2	4	6	8	12	14	16	18	20
+Calculate 5 month Weighted Moving Average with weight=1,2,1
+
+Solution:
+You have entered 3 weights(1,2,1) and trying to find 5 month weighted moving average, So we have added remaining as 1.
+The value of table for x and y
+
+x	1	2	3	4	5	6	7	8	9
+y	2	4	6	8	12	14	16	18	20
+
+The weights of the 5 months are respectively 1,2,1,1,1 and their sum is 6
+Calculation of 5 month moving averages of the data
+(1)month	(2) Sales	(3) 5 month weighted moving total	(4) 5 month weighted moving average (3)÷6
+1	2		
+2	4		
+3	6	1×2+2×4+1×6+1×8+1×12=36	36÷6=6
+4	8	1×4+2×6+1×8+1×12+1×14=50	50÷6=8.3333
+5	12	1×6+2×8+1×12+1×14+1×16=64	64÷6=10.6667
+6	14	1×8+2×12+1×14+1×16+1×18=80	80÷6=13.3333
+7	16	1×12+2×14+1×16+1×18+1×20=94	94÷6=15.6667
+8	18		
+9	20		
+
+
+
+
+
+#####################################################################################
+forecast
+#####################################################################################
+
+
+
+3 month Weighted Moving Average forecast
+month	1	2	3	4	5	6	7	8	9
+Sales	2	4	6	8	12	14	16	18	20
+Calculate 3 month Weighted Moving Average forecast with weight=1,2,1
+
+Solution:
+The value of table for x and y
+
+x	1	2	3	4	5	6	7	8	9
+y	2	4	6	8	12	14	16	18	20
+
+The weights of the 3 months are respectively 1,2,1 and their sum is 4
+Calculation of 3 month moving averages of the data
+
+(1) month	(2) Sales	(3) 3 month weighted moving total	(4) 3 month weighted moving average (3)÷4
+1	2		
+2	4	1×2+2×4+1×6=16	16÷4=4
+3	6	1×4+2×6+1×8=24	24÷4=6
+4	8	1×6+2×8+1×12=34	34÷4=8.5
+5	12	1×8+2×12+1×14=46	46÷4=11.5
+6	14	1×12+2×14+1×16=56	56÷4=14
+7	16	1×14+2×16+1×18=64	64÷4=16
+8	18	1×16+2×18+1×20=72	72÷4=18
+9	20		
+
+
+
+
+(1)month	(2) Sales	(3) 3 month weighted moving average	(4) Error	(5) |Error|	(6) Error2	(7) |%Error|
+1	2					
+2	4					
+3	6					
+4	8	4	    8-4=4	        4	    16	    50%
+5	12	6	    12-6=6	        6	    36	    50%
+6	14	8.5	    14-8.5=5.5	    5.5	    30.25	39.29%
+7	16	11.5	16-11.5=4.5	    4.5 	20.25	28.12%
+8	18	14	    18-14=4	        4	    16	    22.22%
+9	20	16	    20-16=4	        4	    16	    20%
+10		18	    Total	        28	    134.5	209.63%
+
+
+
+
+Forecasting errors
+
+1. Mean absolute error (MAE), also called mean absolute deviation (MAD)
+ MAE=1n∑|ei|=28/6=4.67
+
+2. Mean squared error (MSE)
+MSE=1n∑|e2i|=134.5/6=22.42
+
+3. Root mean squared error (RMSE)
+RMSE=√MSE=√22.42=4.73
+
+4. Mean absolute percentage error (MAPE)
+MAPE=1n∑|eiyi|=209.636=3/4.94
+
+-----------------------------------------------------------------------------------------
+
+4 month Weighted Moving Average forecast
+month	1	2	3	4	5	6	7	8	9
+Sales	2	4	6	8	12	14	16	18	20
+Calculate 4 month Weighted Moving Average forecast with weight=1,2,1
+
+Solution:
+You have entered 3 weights(1,2,1) and trying to find 4 month weighted moving average, So we have added remaining as 1.
+The value of table for x and y
+
+x	1	2	3	4	5	6	7	8	9
+y	2	4	6	8	12	14	16	18	20
+
+The weights of the 4 months are respectively 1,2,1,1 and their sum is 5
+Calculation of 4 month moving averages of the data
+
+(1)month	(2) Sales	(3) 4 month weighted moving total	(4) 4 month weighted moving average (3)÷5	(5) 2 item moving total of column (4)	(6) 4 month centered weighted moving average (5)÷2
+1	2				
+					
+2	4				
+		1×2+2×4+1×6+1×8=24	24÷5=4.8		
+3	6			4.8+7.2=12	12÷2=6
+		1×4+2×6+1×8+1×12=36	36÷5=7.2		
+4	8			7.2+9.6=16.8	16.8÷2=8.4
+		1×6+2×8+1×12+1×14=48	48÷5=9.6		
+5	12			9.6+12.4=22	22÷2=11
+		1×8+2×12+1×14+1×16=62	62÷5=12.4		
+6	14			12.4+14.8=27.2	27.2÷2=13.6
+		1×12+2×14+1×16+1×18=74	74÷5=14.8		
+7	16			14.8+16.8=31.6	31.6÷2=15.8
+		1×14+2×16+1×18+1×20=84	84÷5=16.8		
+8	18				
+					
+9	20				
+
+
+
+(1)month	(2) Sales	(3) 4 month weighted moving average	(4) Error	(5) |Error|	(6) Error2	(7) |%Error|
+1	2					
+2	4					
+3	6					
+4	8					
+5	12	6	    12-6=6	        6	    36	    50%
+6	14	8.4	    14-8.4=5.6	    5.6	    31.36	40%
+7	16	11	    16-11=5	        5	    25	    31.25%
+8	18	13.6	18-13.6=4.4	    4.4	    19.36	24.44%
+9	20	15.8	20-15.8=4.2	    4.2	    17.64	21%
+10		0	    Total		    25.2	129.36	166.69%
+
+
+Forecasting errors
+
+1. Mean absolute error (MAE), also called mean absolute deviation (MAD)
+ MAE=1n∑|ei|=25.2/5=5.04
+
+
+2. Mean squared error (MSE)
+MSE=1n∑|e2i|=129.36/5=25.87
+
+
+3. Root mean squared error (RMSE)
+RMSE=√MSE=√25.87=5.09
+
+
+4. Mean absolute percentage error (MAPE)
+MAPE=1n∑|eiyi|=166.69/5=33.34
+
+-------------------------------------------------------------------------------
+
+5 month Weighted Moving Average forecast
+month	1	2	3	4	5	6	7	8	9
+Sales	2	4	6	8	12	14	16	18	20
+Calculate 5 month Weighted Moving Average forecast with weight=1,2,1
+
+Solution:
+You have entered 3 weights(1,2,1) and trying to find 5 month weighted moving average, So we have added remaining as 1.
+The value of table for x and y
+
+x	1	2	3	4	5	6	7	8	9
+y	2	4	6	8	12	14	16	18	20
+
+
+
+The weights of the 5 months are respectively 1,2,1,1,1 and their sum is 6
+Calculation of 5 month moving averages of the data
+(1)
+month	(2)
+Sales	(3)
+5 month weighted moving total	(4)
+5 month weighted moving average
+(3)÷6
+1	2		
+2	4		
+3	6	1×2+2×4+1×6+1×8+1×12=36		36÷6=6
+4	8	1×4+2×6+1×8+1×12+1×14=50	50÷6=8.33
+5	12	1×6+2×8+1×12+1×14+1×16=64	64÷6=10.67
+6	14	1×8+2×12+1×14+1×16+1×18=80	80÷6=13.33
+7	16	1×12+2×14+1×16+1×18+1×20=94	94÷6=15.67
+8	18		
+9	20		
+
+
+
+(1)
+month	(2)
+Sales	(3)
+5 month weighted moving average	(4)
+Error	(5)
+|Error|	(6)
+Error2	(7)
+|%Error|
+1	2					
+2	4					
+3	6					
+4	8					
+5	12					
+6	14	6	14-6=8	8	64	57.14%
+7	16	8.33	16-8.33=7.67	7.67	58.78	47.92%
+8	18	10.67	18-10.67=7.33	7.33	53.78	40.74%
+9	20	13.33	20-13.33=6.67	6.67	44.44	33.33%
+10		15.67	Total	29.67	221	179.13%
+
+
+
+
+Forecasting errors
+
+1. Mean absolute error (MAE), also called mean absolute deviation (MAD)
+ MAE=1n∑|ei|=29.67/4=7.42
+
+
+2. Mean squared error (MSE)
+MSE=1n∑|e2i|=221/4=55.25
+
+
+3. Root mean squared error (RMSE)
+RMSE=√MSE=√55.25=7.43
+
+
+4. Mean absolute percentage error (MAPE)
+MAPE=1n∑|eiyi|=179.13/4=44.78
+
