@@ -6,13 +6,10 @@
 # wget http://pear.php.net/go-pear.phar
 # php go-pear.phar
 
-
-
 # apt-get install libfann-dev
 # apt-get install php-pear
 # pecl install fann
 # apt-get install -f
-
 
 $num_input = 2;
 $num_output = 1;
@@ -23,7 +20,7 @@ $max_epochs = 50;
 $current_epoch = 0;
 $epochs_between_saves = 100; // Minimum number of epochs between saves
 $epochs_since_last_save = 0;
-$filename = dirname(__FILE__) . "/xor.data";
+$filename = __DIR__ . "/xor.data";
 
 // Initialize psudo mse (mean squared error) to a number greater than the desired_error
 // this is what the network is trying to minimize.
@@ -54,7 +51,7 @@ if ($ann) {
     // See: http://php.net/manual/en/function.fann-train-epoch.php
     // Train one epoch with the training data stored in data.
     //
-    // One epoch is where all of the training data is considered
+    // One epoch is where all the training data is considered
     // exactly once.
     //
     // This function returns the MSE error as it is calculated
@@ -67,7 +64,7 @@ if ($ann) {
 
 
     // If we haven't saved the ANN in a while...
-    // and the current network is better then the previous best network
+    // and the current network is better than the previous best network
     // as defined by the current MSE being less than the last best MSE
     // Save it!
     if(($epochs_since_last_save >= $epochs_between_saves) && ($psudo_mse_result < $best_mse)){
@@ -75,7 +72,7 @@ if ($ann) {
       $best_mse = $psudo_mse_result; // we have a new best_mse
 
       // Save a Snapshot of the ANN
-      fann_save($ann, dirname(__FILE__) . "/xor.net");
+      fann_save($ann, __DIR__ . "/xor.net");
       echo 'Saved ANN.' . PHP_EOL; // report the save
       $epochs_since_last_save = 0; // reset the count
     }
@@ -85,7 +82,7 @@ if ($ann) {
   echo 'Training Complete! Saving Final Network.'  . PHP_EOL;
 
   // Save the final network
-  fann_save($ann, dirname(__FILE__) . "/xor.net");
+  fann_save($ann, __DIR__ . "/xor.net");
   fann_destroy($ann); // free memory
 }
 echo 'All Done!' . PHP_EOL;

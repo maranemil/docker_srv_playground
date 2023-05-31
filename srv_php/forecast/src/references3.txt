@@ -1,0 +1,1119 @@
+
+
+https://atozmath.com/CONM/TimeSeries.aspx?q=sma
+https://mathcracker.com/moving-average-forecast-calculator#results
+https://wpcalc.com/en/simple-moving-average/
+https://atozmath.com/CONM/TimeSeries.aspx?q=wmaf
+https://mathcracker.com/weighted-moving-average-forecast-calculator#results
+https://www.rapidtables.com/calc/math/weighted-average-calculator.html
+https://www.rapidtables.com/calc/math/exponential-growth-calculator.html
+https://www.easycalculation.com/mortgage/exponetial-moving-average-calculator.php
+https://school.stockcharts.com/doku.php?id=technical_indicators:moving_averages
+https://finance.icalculator.com/commute-cost-calculator.html
+https://school.stockcharts.com/doku.php?id=technical_indicators:moving_averages####
+https://www.rapidtables.com/calc/math/weighted-average-calculator.html
+
+
+SMA - simple moving Average
+# https://goodcalculators.com/simple-moving-average-calculator/
+Data:2,4,6,8,12,14,16,18,20,
+Res: 4,6,8.66,11.33,14,16,18
+
+weighted moving Average
+# https://goodcalculators.com/weighted-moving-average-calculator/
+Data:2,4,6,8,12,14,16,18,20,
+Res: 7.6, 10.1, 12.5, 14.8, 17
+Vector of Weights 0.1,0.15,0.2,0.25,0.3
+
+Exponential moving Average
+# https://goodcalculators.com/exponential-moving-average-calculator/
+Data:2,4,6,8,12,14,16,18,20,
+Res: 2,3,4.5,6.25,9.12,11.56,13.78,15.89,17.94
+
+Centered Moving Median
+# https://www.mathworks.com/help/matlab/ref/movmedian.html
+Data:2,4,6,8,12,14,16,18,20,
+Res: 3,4,6,8,12,14,16,18,19
+
+Exponential Smoothing Calculator
+# https://www.mathcelebrity.com/exposmooth.php
+Data:2,4,6,8,12,14,16,18,20,
+Alpha= 0.5
+Res{2, 3, 4.5, 6.25, 9.125, 11.56, 13.78, 15.89, 17.94}
+
+Running Total Calculator
+# https://3roam.com/running-total-calculator/
+Data:2,4,6,8,12,14,16,18,20
+Runinng total 100
+Running total average 11.11
+
+
+https://fsymbols.com/signs/tick/
+
+------------------------------------------------------------------------------------
+
+https://www.rdocumentation.org/packages/TTR/versions/0.24.3/topics/SMA
+https://tulipindicators.org/zlema
+https://www.quantshare.com/title-1456-rising-moving-average
+https://gist.github.com/aggchaitanya/d7b589628a36932d7cb69966b745f92b
+https://stackoverflow.com/questions/65778751/calculate-multiple-moving-average-crossovers
+
+
+[R]
+SMA(x, n = 10, ...)
+EMA(x, n = 10, wilder = FALSE, ratio = NULL, ...)
+DEMA(x, n = 10, v = 1, wilder = FALSE, ratio = NULL)
+WMA(x, n = 10, wts = 1:n, ...)
+EVWMA(price, volume, n = 10, ...)
+ZLEMA(x, n = 10, ratio = NULL, ...)
+VWAP(price, volume, n = 10, ...)
+VMA(x, w, ratio = 1, ...)
+HMA(x, n = 20, ...)
+ALMA(x, n = 9, offset = 0.85, sigma = 6, ...)
+
+
+[Lua]
+zlema = ti.zlema(input, 5)
+
+[C]
+/* Example usage of Zero-Lag Exponential Moving Average */
+/* Assuming that 'input' is a pre-loaded array of size 'in_size'. */
+TI_REAL *inputs[] = {input};
+TI_REAL options[] = {5}; /* period */
+TI_REAL *outputs[1]; /* zlema */
+/* Determine how large the output size is for our options. */
+const int out_size = in_size - ti_zlema_start(options);
+/* Allocate memory for output. */
+outputs[0] = malloc(sizeof(TI_REAL) * out_size); assert(outputs[0] != 0); /* zlema */
+/* Run the actual calculation. */
+const int ret = ti_zlema(in_size, inputs, options, outputs);
+assert(ret == TI_OKAY);
+
+
+	
+sm = sma(20);
+rule1 = sm > sm[1]; // SMA higher than previous bar SMA
+rule2 = perf(sm, 10) > 0; // SMA increased in the past 10 bars
+rule3 = LinearReg_Slope(sm, 10) > 0; // 10 bar linear slope of SMA is positive
+
+
+[py]
+# Calculate multiple moving average crossovers
+#Calculate moving averages first
+for GD in range(20,200,1):
+    aapl[GD] = aapl.Adj_Close.rolling(GD).mean()
+
+short = 20
+while short < 200:
+    long = short + 1
+    while long < 200:
+        aapl[short,long] = np.where(aapl[short] > aapl[long],1,0)
+        long = long + 1
+    short = short + 1
+    
+for short in range(20, 200):
+    for long in range(short + 1, 200):
+        aapl[short,long] = np.where(aapl[short] > aapl[long],1,0)
+    
+    
+------------------------------------------------------------------------------------
+
+################################################
+php online
+################################################
+
+https://www.programiz.com/php/online-compiler/
+http://phptester.net/
+https://www.tutorialspoint.com/execute_php_online.php
+https://ideone.com/
+
+################################################
+Python online
+################################################
+
+https://www.programiz.com/python-programming/online-compiler/
+https://www.online-python.com/
+https://pynative.com/online-python-code-editor-to-execute-python-code/
+https://www.tutorialspoint.com/online_python_compiler.php
+https://onecompiler.com/python
+https://www.tutorialspoint.com/execute_python_online.php
+https://python-online.ch/pyonline/PyOnline.php
+https://ideone.com/
+
+https://www.python.org/
+https://trinket.io/
+
+################################################
+Cumulative Average in Python
+################################################
+
+https://www.appsloveworld.com/pandas/100/154/cumulative-average-in-python
+https://copyassignment.com/cumulative-average-in-python-assignment-expert/
+https://stackoverflow.com/questions/21142149/calculate-an-incremental-mean-using-python-pandas
+https://www.statology.org/cumulative-average-python/
+
+import pandas as pd
+import numpy as np
+
+#create DataFrame
+df = pd.DataFrame({'day': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+                   'sales': [3, 6, 0, 2, 4, 1, 0, 1, 4, 7, 3, 3, 8, 3, 5, 5]})
+
+#view first five rows of DataFrame
+df.head()
+#calculate average of 'sales' column
+df['sales'].expanding().mean()
+
+#add cumulative average sales as new column
+df['cum_avg_sales'] = df['sales'].expanding().mean()
+
+...
+
+s = pd.Series([4, 5, 6, 7, 4, 5, 6, 7])
+pd.expanding_mean(s, 4)
+
+...
+
+numbers = [2, 4, 6, 8, 12, 14, 16, 18, 20]
+avg = []
+for i in range(len(numbers)):
+    check = 0
+    l = i + 1
+    for j in range(i+1):
+        check += numbers[j]
+    avg.append(check/l)
+print(avg)
+print(sum(avg))
+
+# [2.0, 3.0, 4.0, 5.0, 6.4, 7.66, 8.85, 10.0, 11.11]
+# 58.03492063492064
+
+...
+
+import pandas as pd
+import numpy as np
+
+n = [2, 4, 6, 8, 12, 14, 16, 18, 20]
+df = pd.DataFrame(n, columns = ['numbers',])
+df.index = np.arange(1, len(df)+1)
+# create a new column for the cumulative average
+df = df.assign(cum_avg = df['numbers'].expanding().mean())
+# plot
+print(df['cum_avg'])
+
+1     2.000000
+2     3.000000
+3     4.000000
+4     5.000000
+5     6.400000
+6     7.666667
+7     8.857143
+8    10.000000
+9    11.111111
+
+...
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+
+#df = pd.read_csv('somecsvfile.csv')
+#instead I just create a df with a column named 'numbers'
+df = pd.DataFrame([1, 4, 7, 4, 19], columns = ['numbers',])
+x = range(1, len(df)+1)  #x will be used to divide the numbers selected in y to give us z
+y = df['numbers']
+z = np.cumsum(y) / np.array(x)
+
+plt.plot(x, z, 'o')
+plt.xticks(x)
+plt.xlabel('Entry')
+plt.ylabel('Cumulative average')
+
+...
+import pandas as pd
+n = [2, 4, 6, 8, 12, 14, 16, 18, 20]
+df = pd.DataFrame(n, columns = ['numbers',])
+#augment the index so it starts at 1 like you want
+df.index = np.arange(1, len(df)+1)
+
+# create a new column for the cumulative average
+df = df.assign(cum_avg = df['numbers'].expanding().mean())
+# plot
+df['cum_avg'].plot(linestyle = 'none',
+                   marker = 'o',
+                   xticks = df.index,
+                   xlabel = 'Entry',
+                   ylabel = 'Cumulative average')
+
+################################################
+zlsma in Python
+################################################
+
+https://stackoverflow.com/questions/73471492/problem-with-creating-a-zerolaglsma-indicator
+https://gitlab.insa-rouen.fr/rrouyrre/backtrader/-/blob/c4bde4eed1e0dec0bb24a38e8d60bd033047ae1b/backtrader/indicators/zlema.py
+https://github.com/mementum/backtrader/blob/master/backtrader/indicators/zlema.py
+
+def lsma(data, period=14, regression=True):
+    size = len(data)
+    out = np.full(size, np.nan)
+    w = np.arange(1, period + 1, dtype=np.float64)
+    if regression:
+        for i in range(period - 1, size):
+            e = i + 1
+            s = e - period
+            intercept, slope = np.dot(np.linalg.pinv(np.vstack((np.ones(period), w)).T), data[s:e])
+            out[i] = slope * period + intercept
+    else:
+        for i in range(period - 1, size):
+            e = i + 1
+            s = e - period
+            out[i] = np.dot(data[s:e], w) / np.sum(w)
+    return out
+
+
+def zlsma(data, period=14, regression=True):
+    size = len(data)
+    sum_w = np.sum(np.arange(1, period + 1, dtype=np.float64))
+    lsma_v = lsma(data, period, regression)
+    out = np.full(size, np.nan)
+    w = sum_w / (2 * np.sum(np.arange(1, period)))
+    for i in range(period - 1, size):
+        out[i] = lsma_v[i] + (data[i] - lsma_v[i]) * w
+    return out
+    
+    
+data = [2, 4, 6, 8, 12, 14, 16, 18, 20]
+print(lsma(data,3))
+print(zlsma(data,3))
+
+[ nan, nan,  6.0, 8.0, 11.66, 14.33, 16.0, 18.0, 20.0 ]
+[ nan, nan,  6.0, 8.0, 12.00, 14.00, 16.0, 18.0, 20.0 ]
+
+
+################################################
+zlsma in PHP ?
+################################################
+https://www.codeconvert.ai/app
+
+function lsma($data, $period=14, $regression=True) {
+    $size = count($data);
+    $out = array_fill(0, $size, NAN);
+    $w = range(1, $period + 1);
+    if ($regression) {
+        for ($i = $period - 1; $i < $size; $i++) {
+            $e = $i + 1;
+            $s = $e - $period;
+            $matrix = array(array_fill(0, $period, 1), $w);
+            $transpose = array_map(null, ...$matrix);
+            $pinv = array_map(null, ...array_map('array_values', array_map('array_reverse', $transpose)));
+            $coefficients = array_map(null, ...$pinv);
+            $intercept = $coefficients[0][0];
+            $slope = $coefficients[1][0];
+            $dot_product = array_map(function($x, $y) { return $x * $y; }, array_slice($data, $s, $period), $coefficients[1]);
+            $out[$i] = $slope * $period + $intercept;
+        }
+    } else {
+        for ($i = $period - 1; $i < $size; $i++) {
+            $e = $i + 1;
+            $s = $e - $period;
+            $dot_product = array_map(function($x, $y) { return $x * $y; }, array_slice($data, $s, $period), $w);
+            $out[$i] = array_sum($dot_product) / array_sum($w);
+        }
+    }
+    return $out;
+}
+
+function zlsma($data, $period=14, $regression=True) {
+    $size = count($data);
+    $sum_w = array_sum(range(1, $period + 1));
+    $lsma_v = lsma($data, $period, $regression);
+    $out = array_fill(0, $size, NAN);
+    $w = $sum_w / (2 * array_sum(range(1, $period)));
+    for ($i = $period - 1; $i < $size; $i++) {
+        $out[$i] = $lsma_v[$i] + ($data[$i] - $lsma_v[$i]) * $w;
+    }
+    return $out;
+}
+
+$data = array(2, 4, 6, 8, 12, 14, 16, 18, 20);
+print_r(lsma($data, 3));
+
+# not expected result after conversion
+# Array ( [0] => NAN [1] => NAN [2] => 7 [3] => 7 [4] => 7 [5] => 7 [6] => 7 [7] => 7 [8] => 7 )
+
+################################################
+running-total in Python
+################################################
+
+https://www.quora.com/How-do-I-create-a-running-total-in-Python
+
+class tot: 
+	def __init__(self, n=0): 
+		self.n = n 
+		self.t = n 
+ 
+	def __add__(self, o): 
+		o.t = self.t + o.n  
+		return o 
+ 
+	def __iadd__(self, o): 
+		return self.__add__(o) 
+ 
+	def __sub__(self, o): 
+		o.t = self.t - o.n  
+		return o 
+ 
+	def __isub__(self, o): 
+		return self.__sub__(o)	 
+ 
+	def get(self): 
+		return f"{self.n=} {self.t=}" 
+ 
+	def __repr__(self): 
+		return f"{self.t}" 
+		
+		
+s = tot() 
+a = [] 
+data = [2, 4, 6, 8, 12, 14, 16, 18, 20]
+
+for r in data:
+#for r in range(1,21): 
+	if r > 3: 
+		s -= tot(r) 
+	else: 
+		s += tot(r) 
+	a.append(s) 
+	print(f"Current Value is {r} and running total is {s}") 
+	
+
+Current Value is 2 and running total is 2
+Current Value is 4 and running total is -2
+Current Value is 6 and running total is -8
+Current Value is 8 and running total is -16
+Current Value is 12 and running total is -28
+Current Value is 14 and running total is -42
+Current Value is 16 and running total is -58
+Current Value is 18 and running total is -76
+Current Value is 20 and running total is -96
+
+
+#import matplotlib.pyplot as plt 
+#x = list(range(1,21)) 
+#y = [y.t for y in a] 
+#plt.plot(x,y) 
+#plt.show() 
+
+
+################################################
+cumulative in Python
+################################################
+
+https://www.educative.io/answers/how-to-calculate-a-cumulative-sum-in-python
+https://www.geeksforgeeks.org/python-program-to-find-cumulative-sum-of-a-list/
+https://stackoverflow.com/questions/3432830/list-comprehension-for-running-total
+
+#given list
+ln = [2, 4, 6, 8, 12, 14, 16, 18, 20]
+#create empty cumulative list
+cl = []
+#declare variable for sum
+s = 0
+#use for loop and append s to cl
+for i in ln:
+    s += i
+    cl.append(s)
+
+#print cumulative list
+print(cl)
+
+Output
+[2, 6, 12, 20, 32, 46, 62, 80, 100]
+
+.............
+
+def Cumulative(lists):
+    cu_list = []
+    length = len(lists)
+    cu_list = [sum(lists[0:x:1]) for x in range(0, length+1)]
+    return cu_list[1:]
+ 
+# Driver Code
+lists = [2, 4, 6, 8, 12, 14, 16, 18, 20]
+print (Cumulative(lists))
+
+Output
+[2, 6, 12, 20, 32, 46, 62, 80, 100]
+
+.............
+
+list=[2, 4, 6, 8, 12, 14, 16, 18, 20]
+new_list=[]
+j=0
+for i in range(0,len(list)):
+    j+=list[i]
+    new_list.append(j)
+     
+print(new_list)
+#code given by Divyanshu singh
+
+Output
+[2, 6, 12, 20, 32, 46, 62, 80, 100]
+
+.............
+
+from itertools import accumulate
+import operator
+ 
+def cumulative_sum(input_list):
+    # Use the accumulate() function to perform a cumulative sum of the elements in the list
+    cumulative_sum_iter = accumulate(input_list, operator.add)
+    # Convert the iterator to a list and return it
+    return list(cumulative_sum_iter)
+ 
+input_list = [2, 4, 6, 8, 12, 14, 16, 18, 20]
+output_list = cumulative_sum(input_list)
+print(output_list)
+
+Output
+[2, 6, 12, 20, 32, 46, 62, 80, 100]
+
+.............
+
+
+import numpy as np
+ 
+def cumulative_sum(input_list):
+    # Convert the list to a NumPy array
+    input_array = np.array(input_list)
+    # Compute the cumulative sum along the first axis of the array
+    cumulative_sum_array = np.cumsum(input_array)
+    # Convert the NumPy array back to a list and return it
+    return cumulative_sum_array.tolist()
+ 
+input_list = [2, 4, 6, 8, 12, 14, 16, 18, 20]
+output_list = cumulative_sum(input_list)
+print(output_list)
+
+Output
+[2, 6, 12, 20, 32, 46, 62, 80, 100]
+
+.............
+
+from collections import Counter
+ 
+def cumulative_sum(lst):
+    cnt = Counter(lst)
+    cum_sum = [lst[0]]
+    for i in range(1, len(lst)):
+        cum_sum.append(cum_sum[i-1] + lst[i])
+    return cum_sum
+ 
+lst = [2, 4, 6, 8, 12, 14, 16, 18, 20]
+result = cumulative_sum(lst)
+print(result)
+
+Output
+[2, 6, 12, 20, 32, 46, 62, 80, 100]
+
+
+################################################
+MovingAverageCrossStrategy
+################################################
+
+https://www.quantstart.com/articles/Backtesting-a-Moving-Average-Crossover-in-Python-with-pandas/
+
+# ma_cross.py
+
+class MovingAverageCrossStrategy(Strategy):
+    """    
+    Requires:
+    symbol - A stock symbol on which to form a strategy on.
+    bars - A DataFrame of bars for the above symbol.
+    short_window - Lookback period for short moving average.
+    long_window - Lookback period for long moving average."""
+
+    def __init__(self, symbol, bars, short_window=100, long_window=400):
+        self.symbol = symbol
+        self.bars = bars
+
+        self.short_window = short_window
+        self.long_window = long_window
+
+    def generate_signals(self):
+        """Returns the DataFrame of symbols containing the signals
+        to go long, short or hold (1, -1 or 0)."""
+        signals = pd.DataFrame(index=self.bars.index)
+        signals['signal'] = 0.0
+
+        # Create the set of short and long simple moving averages over the 
+        # respective periods
+        signals['short_mavg'] = pd.rolling_mean(bars['Close'], self.short_window, min_periods=1)
+        signals['long_mavg'] = pd.rolling_mean(bars['Close'], self.long_window, min_periods=1)
+
+        # Create a 'signal' (invested or not invested) when the short moving average crosses the long
+        # moving average, but only for the period greater than the shortest moving average window
+        signals['signal'][self.short_window:] = np.where(signals['short_mavg'][self.short_window:] 
+            > signals['long_mavg'][self.short_window:], 1.0, 0.0)   
+
+        # Take the difference of the signals in order to generate actual trading orders
+        signals['positions'] = signals['signal'].diff()   
+
+        return signals
+
+
+################################################
+Multiply each integer in a flat array by 60
+################################################
+
+https://stackoverflow.com/questions/2660152/multiply-each-integer-in-a-flat-array-by-60
+https://stackoverflow.com/questions/21788546/how-to-mutiply-all-values-in-a-php-foreach-array?noredirect=1&lq=1
+
+
+array_map(function($el) { return $el * 60; }, $input); #  lambda functions for callbacks
+
+
+alternatives
+array_map('bcmul', $input, array_fill(0, count($input), 60)); # 
+array_map(create_function('$el', 'return $el * 60;'), $input); # PHP < 5.3
+
+foreach ($times as $value) {
+  $new_times[] = $value * 60;
+}
+
+foreach( $times as &$val ){ $val *= 60; }
+
+array_map(function($el) { return $el * 60; }, $input_array);
+array_map(create_function('$el', 'return $el * 60;'), $input_array);
+array_walk($myArray, function(&$v) {$v *= 60;});
+
+################################################
+Running Median
+################################################
+
+https://stackoverflow.com/questions/37671432/how-to-calculate-running-median-efficiently
+
+from heapq import heappush, heappop
+
+class RunningMedian:
+    def __init__(self):
+        self.lowers, self.highers = [], []
+
+    def add_number(self, number):
+        if not self.highers or number > self.highers[0]:
+            heappush(self.highers, number)
+        else:
+            heappush(self.lowers, -number)  # for lowers we need a max heap
+        self.rebalance()
+
+    def rebalance(self):
+        if len(self.lowers) - len(self.highers) > 1:
+            heappush(self.highers, -heappop(self.lowers))
+        elif len(self.highers) - len(self.lowers) > 1:
+            heappush(self.lowers, -heappop(self.highers))
+
+    def get_median(self):
+        if len(self.lowers) == len(self.highers):
+            return (-self.lowers[0] + self.highers[0])/2
+        elif len(self.lowers) > len(self.highers):
+            return -self.lowers[0]
+        else:
+            return self.highers[0]
+data = [2, 4, 6, 8, 12, 14, 16, 18, 20]
+running_median = RunningMedian()
+for n in data:
+    running_median.add_number(n)
+    print(running_median.get_median())
+
+Out
+2
+3.0
+4
+5.0
+6
+7.0
+8
+10.0
+12
+
+
+################################################
+ Moving median
+################################################
+
+https://stackoverflow.com/questions/37671432/how-to-calculate-running-median-efficiently
+
+from collections import deque
+from bisect import insort, bisect_left
+from itertools import islice
+def running_median_insort(seq, window_size):
+    """Contributed by Peter Otten"""
+    seq = iter(seq)
+    d = deque()
+    s = []
+    result = []
+    for item in islice(seq, window_size):
+        d.append(item)
+        insort(s, item)
+        result.append(s[len(d)//2])
+    m = window_size // 2
+    for item in seq:
+        old = d.popleft()
+        d.append(item)
+        del s[bisect_left(s, old)]
+        insort(s, item)
+        result.append(s[m])
+    return result
+    
+data = [2, 4, 6, 8, 12, 14, 16, 18, 20]
+print(running_median_insort(data,3))
+
+Out
+[2, 4, 4, 6, 8, 12, 14, 16, 18]
+
+################################################
+Moving averages with Python
+################################################
+
+https://learnpython.com/blog/average-in-matplotlib/
+https://www.geeksforgeeks.org/how-to-calculate-moving-average-in-a-pandas-dataframe/
+https://stackoverflow.com/questions/13728392/moving-average-or-running-mean
+https://medium.com/@sarka.pribylova/stock-price-moving-average-in-python-e036b474664a
+https://www.javatpoint.com/calculate-moving-averages-in-python
+https://machinelearningmastery.com/moving-average-smoothing-for-time-series-forecasting-python/
+https://www.quantstart.com/articles/Backtesting-a-Moving-Average-Crossover-in-Python-with-pandas/
+
+mylist = [2, 4, 6, 8, 12, 14, 16, 18, 20]
+N = 3
+cumsum, moving_aves = [0], []
+for i, x in enumerate(mylist, 1):
+    cumsum.append(cumsum[i-1] + x)
+    if i>=N:
+        moving_ave = (cumsum[i] - cumsum[i-N])/N
+        #can do stuff with moving_ave here
+        moving_aves.append(moving_ave)
+        
+print(moving_ave)
+[4.0, 6.0, 8.66, 11.33, 14.0, 16.0, 18.0]
+
+...
+
+import numpy as np
+mylist = [2, 4, 6, 8, 12, 14, 16, 18, 20]
+N = 3
+mean = [np.mean(mylist[x:x+N]) for x in range(len(mylist)-N+1)]
+print(mean)
+[4.0, 6.0, 8.66, 11.33, 14.0, 16.0, 18.0]
+
+
+
+
+....
+
+import numpy as np
+import matplotlib.pyplot as plt
+modes = ['full', 'same', 'valid']
+for m in modes:
+    plt.plot(np.convolve(np.ones(200), np.ones(50)/50, mode=m));
+plt.axis([-10, 251, -.1, 1.1]);
+plt.legend(modes, loc='lower center');
+plt.show()
+
+.........
+
+def running_mean(x, N):
+    cumsum = numpy.cumsum(numpy.insert(x, 0, 0)) 
+    return (cumsum[N:] - cumsum[:-N]) / float(N)
+
+x = numpy.random.random(100)
+N = 10
+%timeit result1 = numpy.convolve(x, numpy.ones((N,))/N, mode='valid')
+%timeit result2 = running_mean(x, N)
+
+...
+
+# demonstrate loss of precision with only 100,000 points
+np.random.seed(42)
+x = np.random.randn(100000)+1e6
+y1 = running_mean_convolve(x, 10)
+y2 = running_mean_cumsum(x, 10)
+assert np.allclose(y1, y2, rtol=1e-12, atol=0)
+
+...
+
+import numpy as np
+from scipy.ndimage import uniform_filter1d
+N = 1000
+x = np.random.random(100000)
+y = uniform_filter1d(x, size=N)
+
+...
+
+################################################
+Running mean/Moving average
+################################################
+
+https://stackoverflow.com/questions/13728392/moving-average-or-running-mean
+
+### Running mean/Moving average
+def running_mean(l, N):
+    sum = 0
+    result = list( 0 for x in l)
+
+    for i in range( 0, N ):
+        sum = sum + l[i]
+        result[i] = sum / (i+1)
+
+    for i in range( N, len(l) ):
+        sum = sum - l[i-N] + l[i]
+        result[i] = sum / N
+
+    return result
+
+.....
+
+import numpy as np
+import bottleneck as bn
+
+a = np.random.randint(4, 1000, size=100)
+mm = bn.move_mean(a, window=5, min_count=1)
+
+...
+
+from collections import deque
+from itertools import islice
+
+def sliding_avg(iterable, N):        
+    it = iter(iterable)
+    window = deque(islice(it, N))        
+    num_vals = len(window)
+
+    if num_vals < N:
+        msg = 'window size {} exceeds total number of values {}'
+        raise ValueError(msg.format(N, num_vals))
+
+    N = float(N) # force floating point division if using Python 2
+    s = sum(window)
+    
+    while True:
+        yield s/N
+        try:
+            nxt = next(it)
+        except StopIteration:
+            break
+        s = s - window.popleft() + nxt
+        window.append(nxt)
+        
+        
+......
+
+def running_mean(y_in, x_in, N_out=101, sigma=1):
+    '''
+    Returns running mean as a Bell-curve weighted average at evenly spaced
+    points. Does NOT wrap signal around, or pad with zeros.
+    
+    Arguments:
+    y_in -- y values, the values to be smoothed and re-sampled
+    x_in -- x values for array
+    
+    Keyword arguments:
+    N_out -- NoOf elements in resampled array.
+    sigma -- 'Width' of Bell-curve in units of param x .
+    '''
+    import numpy as np
+    N_in = len(y_in)
+
+    # Gaussian kernel
+    x_out = np.linspace(np.min(x_in), np.max(x_in), N_out)
+    x_in_mesh, x_out_mesh = np.meshgrid(x_in, x_out)
+    gauss_kernel = np.exp(-np.square(x_in_mesh - x_out_mesh) / (2 * sigma**2))
+    # Normalize kernel, such that the sum is one along axis 1
+    normalization = np.tile(np.reshape(np.sum(gauss_kernel, axis=1), (N_out, 1)), (1, N_in))
+    gauss_kernel_normalized = gauss_kernel / normalization
+    # Perform running average as a linear operation
+    y_out = gauss_kernel_normalized @ y_in
+
+    return y_out, x_out
+        
+
+################################################
+moving-average-trading-strategy
+################################################
+
+
+https://www.learndatasci.com/tutorials/python-finance-part-3-moving-average-trading-strategy/
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+%matplotlib inline
+import seaborn as sns
+sns.set(style='darkgrid', context='talk', palette='Dark2')
+my_year_month_fmt = mdates.DateFormatter('%m/%y')
+data = pd.read_pickle('./data.pkl')
+data.head(10)
+# Calculating the short-window simple moving average
+short_rolling = data.rolling(window=20).mean()
+short_rolling.head(20)
+# Calculating the long-window simple moving average
+long_rolling = data.rolling(window=100).mean()
+long_rolling.tail()
+start_date = '2015-01-01'
+end_date = '2016-12-31'
+
+fig, ax = plt.subplots(figsize=(16,9))
+
+ax.plot(data.loc[start_date:end_date, :].index, data.loc[start_date:end_date, 'MSFT'], label='Price')
+ax.plot(long_rolling.loc[start_date:end_date, :].index, long_rolling.loc[start_date:end_date, 'MSFT'], label = '100-days SMA')
+ax.plot(short_rolling.loc[start_date:end_date, :].index, short_rolling.loc[start_date:end_date, 'MSFT'], label = '20-days SMA')
+
+ax.legend(loc='best')
+ax.set_ylabel('Price in $')
+ax.xaxis.set_major_formatter(my_year_month_fmt)
+
+# Using Pandas to calculate a 20-days span EMA. adjust=False specifies that we are interested in the recursive calculation mode.
+ema_short = data.ewm(span=20, adjust=False).mean()
+
+fig, ax = plt.subplots(figsize=(15,9))
+
+ax.plot(data.loc[start_date:end_date, :].index, data.loc[start_date:end_date, 'MSFT'], label='Price')
+ax.plot(ema_short.loc[start_date:end_date, :].index, ema_short.loc[start_date:end_date, 'MSFT'], label = 'Span 20-days EMA')
+ax.plot(short_rolling.loc[start_date:end_date, :].index, short_rolling.loc[start_date:end_date, 'MSFT'], label = '20-days SMA')
+
+ax.legend(loc='best')
+ax.set_ylabel('Price in $')
+ax.xaxis.set_major_formatter(my_year_month_fmt)
+# Taking the sign of the difference to determine whether the price or the EMA is greater and then multiplying by 1/3
+trading_positions = trading_positions_raw.apply(np.sign) * 1/3
+trading_positions.tail()
+# Lagging our trading signals by one day.
+trading_positions_final = trading_positions.shift(1)
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(16,9))
+
+ax1.plot(data.loc[start_date:end_date, :].index, data.loc[start_date:end_date, 'MSFT'], label='Price')
+ax1.plot(ema_short.loc[start_date:end_date, :].index, ema_short.loc[start_date:end_date, 'MSFT'], label = 'Span 20-days EMA')
+
+ax1.set_ylabel('$')
+ax1.legend(loc='best')
+ax1.xaxis.set_major_formatter(my_year_month_fmt)
+
+ax2.plot(trading_positions_final.loc[start_date:end_date, :].index, trading_positions_final.loc[start_date:end_date, 'MSFT'], 
+        label='Trading position')
+
+ax2.set_ylabel('Trading position')
+ax2.xaxis.set_major_formatter(my_year_month_fmt)
+# Log returns - First the logarithm of the prices is taken and the the difference of consecutive (log) observations
+asset_log_returns = np.log(data).diff()
+asset_log_returns.head()
+strategy_asset_log_returns = trading_positions_final * asset_log_returns
+strategy_asset_log_returns.tail()
+# Get the cumulative log-returns per asset
+cum_strategy_asset_log_returns = strategy_asset_log_returns.cumsum()
+
+# Transform the cumulative log returns to relative returns
+cum_strategy_asset_relative_returns = np.exp(cum_strategy_asset_log_returns) - 1
+
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(16,9))
+
+for c in asset_log_returns:
+    ax1.plot(cum_strategy_asset_log_returns.index, cum_strategy_asset_log_returns[c], label=str(c))
+
+ax1.set_ylabel('Cumulative log-returns')
+ax1.legend(loc='best')
+ax1.xaxis.set_major_formatter(my_year_month_fmt)
+
+for c in asset_log_returns:
+    ax2.plot(cum_strategy_asset_relative_returns.index, 100*cum_strategy_asset_relative_returns[c], label=str(c))
+
+ax2.set_ylabel('Total relative returns (%)')
+ax2.legend(loc='best')
+ax2.xaxis.set_major_formatter(my_year_month_fmt)
+# Total strategy relative returns. This is the exact calculation.
+cum_relative_return_exact = cum_strategy_asset_relative_returns.sum(axis=1)
+
+# Get the cumulative log-returns per asset
+cum_strategy_log_return = cum_strategy_asset_log_returns.sum(axis=1)
+
+# Transform the cumulative log returns to relative returns. This is the approximation
+cum_relative_return_approx = np.exp(cum_strategy_log_return) - 1
+
+fig, ax = plt.subplots(figsize=(16,9))
+
+ax.plot(cum_relative_return_exact.index, 100*cum_relative_return_exact, label='Exact')
+ax.plot(cum_relative_return_approx.index, 100*cum_relative_return_approx, label='Approximation')
+
+ax.set_ylabel('Total cumulative relative returns (%)')
+ax.legend(loc='best')
+ax.xaxis.set_major_formatter(my_year_month_fmt)
+
+def print_portfolio_yearly_statistics(portfolio_cumulative_relative_returns, days_per_year = 52 * 5):
+
+    total_days_in_simulation = portfolio_cumulative_relative_returns.shape[0]
+    number_of_years = total_days_in_simulation / days_per_year
+
+    # The last data point will give us the total portfolio return
+    total_portfolio_return = portfolio_cumulative_relative_returns[-1]
+    # Average portfolio return assuming compunding of returns
+    average_yearly_return = (1 + total_portfolio_return)**(1/number_of_years) - 1
+
+    print('Total portfolio return is: ' + '{:5.2f}'.format(100*total_portfolio_return) + '%')
+    print('Average yearly return is: ' + '{:5.2f}'.format(100*average_yearly_return) + '%')
+
+print_portfolio_yearly_statistics(cum_relative_return_exact)
+
+
+###########################################
+py2php
+###########################################
+
+https://extendsclass.com/php-to-python.html
+https://www.javainuse.com/php2py
+https://pypi.org/project/convert2php/
+
+
+https://github.com/dan-da/py2php
+https://stackoverflow.com/questions/2630629/convert-a-simple-python2-code-to-php
+https://stackoverflow.com/questions/4116596/converting-python-code-to-php
+https://gist.github.com/reusee/1035975
+https://github.com/bunkahle/py2php
+https://github.com/dan-da/py2php
+https://hanghieugiatot.com/python-code-to-php-converter-online
+https://github.com/dan-da/py2php
+https://packagist.org/packages/hikarine3/py2php
+https://platform.openai.com/examples/default-translate-code
+
+
+
+
+
+
+###########################################
+Rolling-Window Analysis of Time-Series Models Error Estimation (RMSE, MSE, MAE, MAPE, and Theil’s U)
+###########################################
+
+https://medium.com/@polanitzer/time-series-methodologies-part-1-single-moving-average-and-error-estimation-34b6518797a8
+https://medium.com/@polanitzer/time-series-methodologies-part-1-single-moving-average-and-error-estimation-34b6518797a8
+https://stats.stackexchange.com/questions/366387/how-to-decide-moving-window-size-for-time-series-prediction
+https://www.mathworks.com/help/econ/rolling-window-estimation-of-state-space-models.html
+https://stats.stackexchange.com/questions/366387/how-to-decide-moving-window-size-for-time-series-prediction
+https://stats.stackexchange.com/questions/19048/what-is-the-difference-between-test-set-and-validation-set
+https://stats.stackexchange.com/questions/26024/moving-average-model-error-terms
+
+Actual - Forcats 
+256.22
+146.64
+182.50
+118.54	198.12
+
+
+Actual - Forcats - Error | Squared Error | Percent Err1			| Percent Err2			| Percent Err3
+118.54 - 198.12 = 79,57  | 79,57*79,57   | (118.54 - 198.12/ 118.54)   	| (198.12 - 118.54/182.50)**2	| (118.54 - 182.50/182,50)**2
+
+
+1. MSE- Mean-Squared Error
+MSE = np.mean(df[‘Squared Error’][3:-1])
+
+2. RMSE- Root Mean-Squared Error
+RMSE = np.sqrt(np.mean(df[‘Squared Error’][3:-1]))
+
+3. MAE- Mean Absolute Error
+MAE = np.mean(df[‘Absolute Error’][3:-1])
+
+4. MAPE- Mean Absolute Percent Error
+MAPE = np.mean(df[‘Precent Error1’][3:-1])
+
+5. Theil’s U statistic
+ThielsU = np.sqrt( np.sum( df[‘Precent Error2’][3:-1] ) / np.sum( df[‘Precent Error3’][3:-1] ) )
+
+
+
+
+###########################################################################
+###########################################################################
+
+print "<pre>";
+$arr = [1,2,3,4,5,6,7,8,9];
+$interval = 5;
+
+for ($i = $interval; $i < count($arr ); $i++) {
+	$arrint = [];
+    for ($j = $i-1; $j > $i- ($interval+1 ); $j--) {
+		$arrint[] = $arr[$j];	
+	}
+	sort($arrint);
+	print_r($arrint);
+	echo calculateMedian($arrint);
+}
+
+function calculateMedian($arrint){
+	$count = count($arrint);
+	$median = round($count/2);
+	
+	if($count%2==0){
+		return ($arrint[($median)] + $arrint[($median)-1])/2;
+	
+	}
+	else{
+		return $arrint[($median)-1];
+	
+	}
+}
+
+-----------------------------------------------------
+
+function calculateMedian(array $array)
+{
+    $count = count($array);
+    $median = round($count / 2);
+    if ($count % 2 === 0) {
+        return ($array[($median)] + $array[($median) - 1]) / 2;
+    }
+    return $array[($median) - 1];
+}
+
+
+function calculateMovingMedian($data, $windowSize): array
+{
+    $movingMedian = [];
+    for ($i = $windowSize, $iMax = count($data); $i < $iMax; $i++) {
+        $median_arr = [];
+        for ($j = $i - 1; $j > $i - ($windowSize + 1); $j--) {
+            $median_arr[] = $data[$j];
+        }
+        sort($median_arr);
+        $movingMedian[] = calculateMedian($median_arr);
+    }
+    return $movingMedian;
+
+}
+
+
+function forecastMovingMedian($movingAverage, $forecastSize): array
+{
+    $numMovingAverage = count($movingAverage);
+    $forecast = [];
+    // Forecast future values based on the moving average
+    for ($i = 0; $i < $forecastSize; $i++) {
+        $sum = 0;
+        $start = $numMovingAverage - ($i + 1);
+        $end = $start - ($forecastSize - 1);
+        for ($j = $start; $j >= $end; $j--) {
+            $sum += $movingAverage[$j];
+        }
+        $average = $sum / $forecastSize;
+        $forecast[] = round($average, 2);
+    }
+    return $forecast;
+}
+
+
+https://www.mathworks.com/help/matlab/ref/movmedian.html
+https://en.wikipedia.org/wiki/Moving_average
+https://en.wikipedia.org/wiki/Moving_average#Moving_median
+https://docs.oracle.com/cd/E57185_01/HIRUG/ch12s07s08.html
+
+
+
+
+

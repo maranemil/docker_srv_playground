@@ -1,12 +1,5 @@
 
 
-
-
-
-
-
-
-
 --------------------------------------------------------
 function movingAverageForecast($data, $windowSize, $forecastPeriods) {
     $forecast = [];
