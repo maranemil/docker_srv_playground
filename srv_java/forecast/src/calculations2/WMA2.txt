@@ -1,0 +1,88 @@
+###################################################
+WMA
+###################################################
+
+Weighted Moving Average forecast
+https://atozmath.com/CONM/TimeSeries.aspx?q=wmaf
+
+Weight =1,2,1 / N=3
+
+
+3 month Weighted Moving Average forecast
+month	1	2	3	4	5	6	7	8	9
+Sales	2	4	6	8	12	14	16	18	20
+Calculate 3 month Weighted Moving Average forecast with weight=1,2,1
+
+Solution:
+The value of table for x and y
+
+x	1	2	3	4	5	6	7	8	9
+y	2	4	6	8	12	14	16	18	20
+
+The weights of the 3 months are respectively 1,2,1 and their sum is 4
+Calculation of 3 month moving averages of the data
+(1)month	(2) Sales	(3) 3 month weighted moving total	(4) 3 month weighted moving average (3)÷4
+1		2		
+2		4		1×2+2×4+1×6=16				16÷4=4
+3		6		1×4+2×6+1×8=24				24÷4=6
+4		8		1×6+2×8+1×12=34				34÷4=8.5
+5		12		1×8+2×12+1×14=46			46÷4=11.5
+6		14		1×12+2×14+1×16=56			56÷4=14
+7		16		1×14+2×16+1×18=64			64÷4=16
+8		18		1×16+2×18+1×20=72			72÷4=18
+9		20		
+
+(1)month	(2) Sales	(3) 3 month weighted moving average	(4) Error	(5) |Error|	(6) Error2	(7) |%Error|
+1	2					
+2	4					
+3	6					
+4	8	4	8-4=4		4	16	50%
+5	12	6	12-6=6		6	36	50%
+6	14	8.5	14-8.5=5.5	5.5	30.25	39.29%
+7	16	11.5	16-11.5=4.5	4.5	20.25	28.12%
+8	18	14	18-14=4	4	16	22.22%
+9	20	16	20-16=4	4	16	20%
+10		18	Total		28	134.5	209.63%
+
+----
+
+Forecasting errors
+
+1. Mean absolute error (MAE), also called mean absolute deviation (MAD)
+ MAE=1n∑|ei| = 28/6 =4.6667
+
+2. Mean squared error (MSE)
+MSE= 1 n ∑|e 2i |= 134.5/6 =22.4167
+
+3. Root mean squared error (RMSE)
+RMSE=√MSE=√22.4167 = 4.7346
+
+4. Mean absolute percentage error (MAPE)
+MAPE=1n ∑|eiyi |= 209.63/6 =34.94
+
+------------------------------------------------
+
+https://goodcalculators.com/weighted-moving-average-calculator/
+
+Data: 2,4,6,8,12,14,16,18,20
+Vector of Weights: 1,2,1
+Weighted Moving Average: 4, 6, 8.5, 11.5, 14, 16, 18
+
+https://www.earn2trade.com/blog/weighted-moving-average/
+https://corporatefinanceinstitute.com/resources/capital-markets/weighted-moving-average-wma/
+------------------------------------------------
+
+https://www.had2know.org/finance/weighted-moving-average-calculator.html
+
+Data: 2,4,6,8,12,14,16,18,20
+Vector of Weights: 1,2,1
+Weighted Moving Average: 4, 6, 8.5, 11.5, 14, 16, 18
+
+moving average sequence =  d - n + 1.
+
+
+
+
+
+
+

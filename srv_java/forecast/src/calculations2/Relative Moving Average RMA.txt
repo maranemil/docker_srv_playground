@@ -1,0 +1,34 @@
+###################################################
+Relative Moving Average RMA
+###################################################
+
+https://usethinkscript.com/threads/relative-moving-average-rma.10644/
+https://biosidmartin.com/what-is-rma-moving-average/
+
+
+input  Period1 = 20;
+def Price = (Open+ Close)/2;
+rec RMA = if BarNumber() < 3 then price else (1/Period1)*price +(1-(1/Period1))*RMA[1];
+Plot RMAvg = RMA;
+RMAvg.setdefaultColor(Color.Cyan);
+RMAvg.SetLineWeight(3);
+
+
+plots 2 RMA's with assigned price Color
+
+Code:
+input Period1 = 10;
+input Period2 = 40;
+input Price = Close;
+input APC = no;
+rec RMA1 = if BarNumber() < 3 then price else (1/Period1)*price +(1-(1/Period1))*RMA1[1];
+Plot RMAvg1 = RMA1;
+RMAvg1.setdefaultColor(Color.Cyan);
+RMAvg1.SetLineWeight(3);
+
+rec RMA2 = if BarNumber() < 3 then price else (1/Period2)*price +(1-(1/Period2))*RMA2[1];
+Plot RMAvg2 = RMA2;
+RMAvg2.setdefaultColor(Color.Magenta);
+RMAvg2.SetLineWeight(3);
+AssignPriceColor(If APC == yes and Price > RMA1 and RMA1 > RMA2 then Color.Green else if APC == yes and RMA1 > RMA2 then Color.Dark_Green else if APC == Yes and Price < RMA1 and RMA1 < RMA2 then Color.Red else if APC == Yes and RMA1 < RMA2 then Color.Dark_Red else if APC == yes then Color.Orange else Color.Current);
+

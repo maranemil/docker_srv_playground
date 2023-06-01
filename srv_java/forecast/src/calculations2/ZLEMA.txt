@@ -1,0 +1,310 @@
+###################################################
+ZLEMA Zero-Lag Exponential Moving Average
+###################################################
+
+https://tulipindicators.org/zlema
+https://www.quantifiedstrategies.com/zero-lag-exponential-moving-average/
+https://www.tradingview.com/script/LTqZz3l9-Indicator-Zero-Lag-EMA-a-simple-trading-strategy/
+https://en.wikipedia.org/wiki/Zero_lag_exponential_moving_average
+https://theforexgeek.com/zero-lag-exponential-moving-average/
+https://www.prorealcode.com/topic/conversion-request-adaptive-zero-lag-ema-v2/
+https://www.prorealcode.com/documentation/zlema/
+https://technicalindicators.net/indicators-technical-analysis/182-zlema-zero-lag-exponential-moving-average
+https://de.tradingview.com/scripts/zlema/
+https://www.tradingview.com/script/Q7h83i1t-Adaptive-Zero-Lag-EMA-v2/
+https://www.quantshare.com/item-1607-zero-lag-exponential-moving-average
+https://www.forexmt4indicators.com/zero-lag-ema-mt5-indicator/
+https://user42.tuxfamily.org/chart/manual/Zero_002dLag-Exponential-Moving-Average.html
+https://ru.tradingview.com/script/LTqZz3l9-Indicator-Zero-Lag-EMA-a-simple-trading-strategy/
+https://brandonfullers.wordpress.com/2021/04/20/zero-lag-ema-mt5-indicator-2/
+https://traders.com/documentation/feedbk_docs/2010/11/Ehlers.html
+https://support.atas.net/de/knowledge-bases/2/articles/45287-zero-lag-exponential-moving-average
+https://taapi.io/indicators/zero-lag-exponential-moving-average/
+https://www.wikiwand.com/en/Zero_lag_exponential_moving_average
+https://forex-station.com/app.php/attach/file/3326787
+https://nitro-ai.github.io/NitroFE/Zero%20Lag%20Exponential%20Moving%20Feature/
+----------------------------------------------------------
+
+How to calculate a zero-lag exponential moving average
+The formula for calculating the zero-lag exponential moving average for a given N- period is as follows:
+
+Lag = [Period – 1] / 2
+
+EMAdata = Data + [ Data – Data (lag days ago)]
+
+Zero-lag exponential moving average = EMA[EMAdata, Period]
+
+----------------------------------------------------------
+
+// Indicator: Zero Lag EMA & a simple trading strategy
+// @author LazyBear
+//
+study(title = "Almost Zero Lag EMA [LazyBear]", shorttitle="ZeroLagEMA_LB", overlay=true)
+length=input(10)
+src=close
+ema1=ema(src, length)
+ema2=ema(ema1, length)
+d=ema1-ema2
+zlema=ema1+d
+plot(zlema)
+
+----------------------------------------------------------
+
+Syntax:
+
+ZLEMA[period](price)
+1
+ZLEMA[period](price)
+Where:
+
+period= calculation period of the ZeroLag MA (default period is 20)
+price= applied price (or data serie) for the calculation
+
+Zero Lag Moving Average Calculation:
+
+ZLEMA = EMA of (close + (close-close[lag])) Lag = (N-1)/2
+
+----------------------------------------------------------
+
+Example of usage:
+
+a = Zlema(close, 250);
+Plot(a, "Zero-Lag exponential moving average", colorGreen);
+
+// Plots the 250-bar Zero-Lag exponential moving average on a chart
+
+
+----------------------------------------------------------
+
+
+It has two configurable parameters:
+
+Period – calculation period
+Applied price
+Calculation:
+
+ZeroLagEMA = Alpha * (2.0*AppliedPrice-LagAppliedPrice) + (1.0-Alpha) * PrevZeroLagEMA
+
+where:
+
+Alpha = 2.0 / (Period+1)
+Lag = Ceil((Period-1)/2.0)
+LagAppliedPrice – AppliedPrice on Lag bar
+
+----------------------------------------------------------
+
+Zero-Lag Exponential Moving Average
+The zero-lag exponential moving average (ZLEMA) is a variation of the EMA (see Exponential Moving Average) which adds a momentum term aiming to reduce lag in the average so as to track current prices more closely. For a given N-day period the formula is
+
+ZLEMA = EMA of (close + (close-close[lag]))
+
+----------------------------------------------------------
+
+Zero-Lag Exponential Moving Average indicator is an exponential moving average with the minimum delay.
+
+It has two configurable parameters:
+
+Period – calculation period
+Applied price
+Calculation:
+
+ZeroLagEMA = Alpha * (2.0*AppliedPrice-LagAppliedPrice) + (1.0-Alpha) * PrevZeroLagEMA
+
+where:
+
+Alpha = 2.0 / (Period+1)
+Lag = Ceil((Period-1)/2.0)
+LagAppliedPrice – AppliedPrice on Lag bar
+
+----------------------------------------------------------
+
+
+EMA = α * Price + (1 - α) * EMA[1];
+
+----------------------------------------------------------
+
+https://www.mesasoftware.com/papers/ZeroLag.pdf
+
+
+alpha = 2 / (Length + 1).
+EC = a*(Price + gain*(Price – EC[1])) + (1 – a)*EC[1];
+
+
+
+
+Inputs:
+	Length(20),
+	GainLimit(50);
+Vars:
+	alpha(0),
+	Gain(0),
+	BestGain(0),
+	EC(0),
+	Error(0),
+	LeastError(0),
+	EMA(0);
+alpha = 2 / (Length + 1);
+EMA = alpha*Close + (1 - alpha)*EMA[1];
+LeastError = 1000000;
+For Value1 = -GainLimit to GainLimit Begin
+	Gain = Value1 / 10;
+	EC = alpha*(EMA + Gain*(Close - EC[1])) + (1 - alpha)*EC[1];
+	Error = Close - EC;
+	If AbsValue(Error) < LeastError Then Begin
+		LeastError = AbsValue(Error);
+		BestGain = Gain;
+	End;
+End;
+EC = alpha*(EMA + BestGain*(Close - EC[1])) + (1 - alpha)*EC[1];
+
+Plot1(EC);
+Plot3(EMA);
+
+
+https://assets.researchsquare.com/files/rs-2540735/v1/2b2ffdcf1604c45b5d273405.pdf
+
+ZLEMA
+DEMA
+----------------------------------------------------------
+
+https://www.sierrachart.com/index.php?page=doc/StudiesReference.php&ID=191
+
+
+L(n)=⌈n−1/2⌉
+
+
+----------------------------------------------------------
+
+https://www.wisestocktrader.com/indicators/4399-zero-lag-ema-for-amibroker-afl
+
+// Downloaded From https://www.WiseStockTrader.com
+
+_SECTION_BEGIN("Zero-Lag EMA Indicator for AmiBroker ");
+
+SetBarsRequired(100000,0);
+GraphXSpace = 15;
+SetChartOptions(0,chartShowArrows|chartShowDates);
+SetChartBkColor(ParamColor("bkcolor",ColorRGB(0,0, 0)));
+GfxSetBkMode(0); 
+GfxSetOverlayMode(1);
+SetBarFillColor(IIf(C>O,ParamColor("Candle UP Color", colorGreen),IIf(C<=O,ParamColor("Candle Down Color", colorRed),colorLightGrey)));
+Plot(C,"\nPrice",IIf(C>O,ParamColor("Wick UP Color", colorDarkGreen),IIf(C<=O,ParamColor("Wick Down Color", colorDarkRed),colorLightGrey)),64,0,0,0,0);
+Length = Param("Length", 69, 20, 100,1 ); 
+GainLimit = Param("Gain limit", 22, 1, 100); 
+
+SetPositionSize(2,spsShares);
+
+alpha = 2 / ( Length + 1 ); 
+iEMA = AMA( Close, alpha ); 
+EC = Close[ 0 ]; 
+
+for( bar = 0; bar < BarCount; bar++ ) 
+{ 
+ EC1 = EC; 
+ LeastError = 1e9; 
+ BestEC = 0; 
+
+ for( gain = -0.1 * GainLimit; gain < 0.1 * GainLimit; gain += 0.1 ) 
+ { 
+   EC = alpha * ( iEMA[ bar ] + gain * ( Close[ bar ] - EC1 ) ) + 
+       ( 1 - alpha ) * EC1; 
+
+   Error = abs( Close[ bar ] - EC ); 
+
+   if( Error < LeastError ) 
+   { 
+    LeastError = Error; 
+    BestEC = EC; 
+   } 
+ } 
+ iEC[ bar ] = BestEC;   
+ iLeastError[ bar ] = LeastError; 
+} 
+Plot( iEMA, "EMA", colorRed ); 
+Plot( iEC, "EC" + _PARAM_VALUES(), colorYellow, styleThick ); 
+Plot( C, "Close", ParamColor("Color", colorGreen ), ParamStyle("Style") | GetPriceStyle() ); 
+
+// strategy rules 
+Buy = Cross( iEC, iEMA );
+Sell = Cross( iEMA, iEC );
+
+
+Buy=ExRem(Buy,Sell);
+Sell=ExRem(Sell,Buy);
+Short=Sell;
+Cover=Buy;
+
+BuyPrice=ValueWhen(Buy,C);
+SellPrice=ValueWhen(Sell,C);
+ShortPrice=ValueWhen(Short,C);
+CoverPrice=ValueWhen(Cover,C);
+
+Title = EncodeColor(colorWhite)+ "ZL EMA code from www.marketcalls.in" + " - " +  Name() + " - " + EncodeColor(colorRed)+ Interval(2) + EncodeColor(colorWhite) +
+
+ "  - " + Date() +" - "+"\n" +EncodeColor(colorRed) +"Op-"+O+"  "+"Hi-"+H+"  "+"Lo-"+L+"  "+
+
+"Cl-"+C+"  "+ "Vol= "+ WriteVal(V)+"\n"+ 
+
+EncodeColor(colorLime)+
+
+WriteIf (Buy , " GO LONG / Reverse sig at "+C+"  ","")+
+WriteIf (Sell , " EXIT LONG / Reverse sig at "+C+"  ","")+"\n"+EncodeColor(colorYellow)+
+WriteIf(Sell , "Total Profit/Loss for the Last Trade Rs."+(C-BuyPrice)+"","")+
+WriteIf(Buy  , "Total Profit/Loss for the Last trade Rs."+(SellPrice-C)+"","");
+
+PlotShapes(IIf(Buy, shapeSquare, shapeNone),colorGreen, 0, L, Offset=-40);
+PlotShapes(IIf(Buy, shapeSquare, shapeNone),colorLime, 0,L, Offset=-50);                      
+PlotShapes(IIf(Buy, shapeUpArrow, shapeNone),colorWhite, 0,L, Offset=-45); 
+PlotShapes(IIf(Short, shapeSquare, shapeNone),colorRed, 0, H, Offset=40);
+PlotShapes(IIf(Short, shapeSquare, shapeNone),colorOrange, 0,H, Offset=50);                      
+PlotShapes(IIf(Short, shapeDownArrow, shapeNone),colorWhite, 0,H, Offset=-45);
+
+
+
+
+----------------------------------------------------------
+
+https://ctrader.com/algos/indicators/show/145
+
+using System;
+using cAlgo.API;
+ 
+namespace cAlgo.Indicators
+{
+    [Indicator(IsOverlay = true, AccessRights = AccessRights.None)]
+    public class ZeroLagEMA:Indicator
+    {
+        private double _alpha;
+        private int _lag;
+ 
+        [Parameter(DefaultValue = 14, MinValue = 5)]
+        public int Period {get; set; }
+ 
+        [Parameter]
+        public DataSeries Source { get; set; }
+ 
+        [Output("Main", Color = Colors.Orange)]
+        public IndicatorDataSeries Result { get; set; }
+ 
+        public override void Calculate(int index)
+        {
+ 
+            if (index == 0)
+            {
+                _alpha = 2.0/(Period + 1);
+                _lag = (int) Math.Ceiling((Period - 1)/2.0);                
+            }
+            if(index < _lag)
+            {
+                Result[index] = Source[index];
+                return;
+            }
+ 
+            Result[index] = _alpha * (2 * Source[index] - Source[index -_lag]) + (1 - _alpha) * Result[index - 1];
+ 
+        }
+    }
+}
+
+
+

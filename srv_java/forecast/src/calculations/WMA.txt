@@ -1,6 +1,7 @@
 ###################################################
 Weighted Moving Average WMA
 ###################################################
+
 https://atozmath.com/CONM/TimeSeries.aspx?q=wma
 https://atozmath.com/CONM/TimeSeries.aspx?q=wmaf
 -----------------------------------------------------------------------------------------------

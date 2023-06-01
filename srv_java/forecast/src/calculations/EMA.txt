@@ -1,6 +1,7 @@
 ###################################################
 Exponential Moving Average EMA
 ###################################################
+
 https://atozmath.com/CONM/TimeSeries.aspx?q=ema
 https://atozmath.com/CONM/TimeSeries.aspx?q=emaf
 https://docs.oracle.com/en/cloud/saas/planning-budgeting-cloud/pfusu/insights_metrics_MAPE.html

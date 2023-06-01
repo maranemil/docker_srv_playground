@@ -1,6 +1,7 @@
 ###################################################
 Simple Moving Average  SMA
 ###################################################
+
 https://atozmath.com/CONM/TimeSeries.aspx?q=smaf
 https://atozmath.com/CONM/TimeSeries.aspx?q=sma
 

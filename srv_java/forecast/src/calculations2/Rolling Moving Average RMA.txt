@@ -1,0 +1,11 @@
+###################################################
+Rolling Moving Average RMA
+###################################################
+
+https://download.esignal.com/products/workstation/help/charts/studies/rmi.htm
+
+Formula
+ 
+RMA = ((RMA(t-1) * (n-1)) + Xt) / n
+n = The length of the Moving Average
+X = Price

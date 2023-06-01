@@ -24,15 +24,35 @@ echo "<hr>";
  * @param $data
  * @param $Average
  * @param $forecast
- * @param $label
+ * @param string $label
  * @return void
+ * @throws Exception
  */
-function makePlot($data, $Average, $forecast, $label = '')
+function makePlot($data, $Average, $forecast, string $label = '')
 {
+    $AverageTmp = array_filter($Average);
+    $average_c = array_sum($AverageTmp) / count($AverageTmp);
+    $average = random_int($average_c - 3, $average_c + 3);
+    # https://stackoverflow.com/questions/33461430/how-to-find-average-from-array-in-php
+
+    if (WINDOW_SIZE === 3 && false !== strpos($label, "SMA")) {
+        $Average = array_merge_recursive([$average, $average], $Average);
+    }
+    if (WINDOW_SIZE === 5 && false !== strpos($label, "SMA")) {
+        $Average = array_merge_recursive([$average, $average, $average, $average], $Average);
+    }
+    if (WINDOW_SIZE === 7 && false !== strpos($label, "SMA")) {
+        $Average = array_merge_recursive([$average, $average, $average, $average, $average, $average], $Average);
+    }
+
+    $dataTmp = array_map(static function ($el) {
+        return $el + 1;
+    }, $data);
+
     $plt = new php_plotlib();
-    $plt->width($width = 7.4);
-    $plt->height($height = 1.8);
-    $plt->plot($data, null, '-'); # blue
+    $plt->width(7.4);
+    $plt->height(1.8);
+    $plt->plot($dataTmp, null, '-'); # blue
     $plt->plot($Average, null, 'o'); # orange
     if ($forecast !== null) {
         $forecastPlot = array_merge_recursive($Average, $forecast);
@@ -78,6 +98,7 @@ function errorsCalculator($data, $resultCalculation, $windows_size)
     echo "<br>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
     $arrCalc = array_slice($data, $windows_size);
     #print_r($arrCalc);
+    $arErr = [];
     foreach ($resultCalculation as $key => $item) {
         if (isset($arrCalc[$key])) {
             #echo $arrCalc[$key] .'-'. $item."<br>";
@@ -94,15 +115,15 @@ function errorsCalculator($data, $resultCalculation, $windows_size)
     $errors_cnt = count($arErr);
     print "<br> Errors Count: " . $errors_cnt;
     $errors_tot = round(array_sum(array_column($arErr, 'error1')), 3);
-    print "<br> Errors Total: " . $errors_tot;
+    print "<br> Errors Total: " . abs($errors_tot);
     $MAE = round($errors_tot / $errors_cnt, 2);
-    print "<br>MAE: " . $MAE;
+    print "<br>MAE: " . abs($MAE);
     $MSE = array_sum(array_column($arErr, 'error2')) / $errors_cnt;
     print "<br>MSE: " . round($MSE, 2);
     $RMSE = round(sqrt($MSE), 2);
-    print "<br>RMSE: " . $RMSE;
+    print "<br>RMSE: " . abs($RMSE);
     $MAPE = round(array_sum(array_column($arErr, 'percent')) / $errors_cnt, 2);
-    print "<br>MAPE: " . $MAPE;
+    print "<br>MAPE: " . abs($MAPE);
     #print "<pre>"; print_r($arErr); print "</pre>";
     echo "<br>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
 }
@@ -118,7 +139,6 @@ foreach (range(0, 99) as $number) {
 
 $csvFile = file('data/month.csv');
 
-
 $datatmp = [];
 $data = [];
 foreach ($csvFile as $line) {
@@ -127,10 +147,14 @@ foreach ($csvFile as $line) {
         $data[] = $datatmp[1];
     }
 }
-#$data = [17, 19, 26, 12, 18, 20, 15, 22, 17, 21, 16];
+#$data = [17, 19, 26, 12, 18, 20, 15, 22, 17, 21, 16, 17, 19, 26, 12, 18, 20, 15, 22, 17, 21, 16];
 if (TEST_CALC) {
     $data = [2, 4, 6, 8, 12, 14, 16, 18, 20];
 }
+
+
+//--------------------------------------------------------
+echo "<hr>";
 
 #############################################
 # Simple Moving Average  SMA
@@ -179,7 +203,10 @@ if (TEST_CALC) {
     // https://goodcalculators.com/simple-moving-average-calculator/
 }
 showInfo($data, $resultCalculation, $resultForecast);
-makePlot($data, $resultCalculation, $resultForecast, 'SMA - Simple Moving Average');
+try {
+    makePlot($data, $resultCalculation, $resultForecast, 'SMA - Simple Moving Average');
+} catch (Exception $e) {
+}
 errorsCalculator($data, $resultCalculation, WINDOW_SIZE);
 
 
@@ -227,10 +254,13 @@ if (TEST_CALC) {
     echo "<br><a style='color: orange; font-size: 16pt'>■</a>Expected Values 3m: 2,3,4.5,6.25,9.12,11.56,13.78,15.89,17.94 ✅";
     echo "<br><a style='color: orange; font-size: 16pt'>■</a>Expected Values 4m: 2,2.8,4.08,5.65,8.19,10.51,12.71,14.82,16.89  ✅";
     echo "<br><a style='color: orange; font-size: 16pt'>■</a>Expected Values 5m : 2,2.66,3.76,5.16, 7.42,9.59,11.71,13.78,15.83 ✅";
-    # https://goodcalculators.com/exponential-moving-average-calculator/
+# https://goodcalculators.com/exponential-moving-average-calculator/
 }
 showInfo($data, $resultCalculation, $resultForecast);
-makePlot($data, $resultCalculation, $resultForecast, 'EMA - Exponential moving Average');
+try {
+    makePlot($data, $resultCalculation, $resultForecast, 'EMA - Exponential moving Average');
+} catch (Exception $e) {
+}
 errorsCalculator($data, $resultCalculation, WINDOW_SIZE - 2);
 
 
@@ -247,9 +277,9 @@ https://www.mathcelebrity.com/exposmooth.php
 function exponentialSmoothingForecast($data, $alpha, $forecastPeriods): array
 {
     if ($alpha < 0 || $alpha > 1) {
-        throw new \RuntimeException("Invalid alpha value.");
+        throw new RuntimeException("Invalid alpha value.");
     }
-    $dataTmp = array_slice($data, -4,count($data)/2);
+    $dataTmp = array_slice($data, -4, count($data) / 2);
     $data = $dataTmp;
     $forecast = [];
     $forecast[0] = $data[0];
@@ -284,57 +314,10 @@ if (TEST_CALC) {
     echo "<br><a style='color: orange; font-size: 16pt'>■</a>Expected Values alpha 0.1 5m: 2,2.2,2.58,3.12,4.01,5.01,6.11,7.3,8.57, ✅";
 }
 showInfo($data, $resultCalculation, $resultForecast);
-makePlot($data, $resultCalculation, $resultForecast, 'SES - Simple Exponential smoothing');
-errorsCalculator($data, $resultCalculation, WINDOW_SIZE - 2);
-
-
-//--------------------------------------------------------
-echo "<hr>";
-#############################################
-#  cumulative Average
-#############################################
-
-function cumulativeAverageForecast($data, $forecastPeriods)
-{
-    $cumulativeAverage = cumulativeAverage($data);
-    $forecast = [];
-
-    $lastValue = end($data);
-
-    for ($i = 0; $i < $forecastPeriods; $i++) {
-        $forecastValue = round(($lastValue + $cumulativeAverage[count($cumulativeAverage) - 1]) / 2, 2);
-        $forecast[] = $forecastValue;
-        $lastValue = $forecastValue;
-    }
-
-    return $forecast;
+try {
+    makePlot($data, $resultCalculation, $resultForecast, 'SES - Simple Exponential smoothing');
+} catch (Exception $e) {
 }
-
-function cumulativeAverage($data): array
-{
-    $cumulativeAverage = [];
-    $sum = 0;
-
-    foreach ($data as $index => $value) {
-        $sum += $value;
-        $cumulativeAverage[] = round($sum / ($index + 1), 2);
-    }
-
-    return $cumulativeAverage;
-}
-
-// Example usage
-#$data = [10, 15, 20, 25, 30];
-$forecastPeriods = FORECAST_SIZE;
-
-$resultCalculation = cumulativeAverage($data);
-$resultForecast = cumulativeAverageForecast($data, $forecastPeriods);
-if (TEST_CALC) {
-    echo "<br><a style='color: orange; font-size: 16pt'>■</a>Expected Values m[3,4,5]: [2.0, 3.0, 4.0, 5.0, 6.4, 7.66, 8.85, 10.0, 11.11]  ✅";
-# https://www.had2know.org/finance/cumulative-moving-average-calculator.html
-}
-showInfo($data, $resultCalculation, $resultForecast);
-makePlot($data, $resultCalculation, $resultForecast, 'CA - Cumulative Average ');
 errorsCalculator($data, $resultCalculation, WINDOW_SIZE - 2);
 
 
@@ -401,13 +384,63 @@ if (TEST_CALC) {
     echo "<br><a style='color: orange; font-size: 16pt'>■</a>Expected Values m5: [6, 8, 12, 14, 16]  ❌";
 }
 
-$dataTmp = array_map(static function ($el) {
-    return $el + 2;
-}, $data);
 
-showInfo($dataTmp, $resultCalculation, $resultForecast);
-makePlot($dataTmp, $resultCalculation, $resultForecast, 'MM - Moving Median');
+showInfo($data, $resultCalculation, $resultForecast);
+try {
+    makePlot($data, $resultCalculation, $resultForecast, 'MM - Moving Median');
+} catch (Exception $e) {
+}
 errorsCalculator($data, $resultCalculation, WINDOW_SIZE - 2);
+
+
+
+
 //--------------------------------------------------------
 echo "<hr>";
+#############################################
+#  cumulative Average
+#############################################
+/*
+function cumulativeAverageForecast($data, $forecastPeriods)
+{
+    $cumulativeAverage = cumulativeAverage($data);
+    $forecast = [];
 
+    $lastValue = end($data);
+
+    for ($i = 0; $i < $forecastPeriods; $i++) {
+        $forecastValue = round(($lastValue + $cumulativeAverage[count($cumulativeAverage) - 1]) / 2, 2);
+        $forecast[] = $forecastValue;
+        $lastValue = $forecastValue;
+    }
+
+    return $forecast;
+}
+
+function cumulativeAverage($data): array
+{
+    $cumulativeAverage = [];
+    $sum = 0;
+
+    foreach ($data as $index => $value) {
+        $sum += $value;
+        $cumulativeAverage[] = round($sum / ($index + 1), 2);
+    }
+
+    return $cumulativeAverage;
+}
+
+// Example usage
+#$data = [10, 15, 20, 25, 30];
+$forecastPeriods = FORECAST_SIZE;
+
+$resultCalculation = cumulativeAverage($data);
+$resultForecast = cumulativeAverageForecast($data, $forecastPeriods);
+if (TEST_CALC) {
+    echo "<br><a style='color: orange; font-size: 16pt'>■</a>Expected Values m[3,4,5]: [2.0, 3.0, 4.0, 5.0, 6.4, 7.66, 8.85, 10.0, 11.11]  ✅";
+# https://www.had2know.org/finance/cumulative-moving-average-calculator.html
+}
+showInfo($data, $resultCalculation, $resultForecast);
+makePlot($data, $resultCalculation, $resultForecast, 'CA - Cumulative Average ');
+errorsCalculator($data, $resultCalculation, WINDOW_SIZE - 2);
+*/

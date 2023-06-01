@@ -1,6 +1,7 @@
 ###################################################
 Single Exponential Smoothing  SMS
 ###################################################
+
 https://atozmath.com/CONM/TimeSeries.aspx?q=ses
 https://atozmath.com/CONM/TimeSeries.aspx?q=sesf
 

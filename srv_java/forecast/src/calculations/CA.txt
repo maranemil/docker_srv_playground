@@ -1,6 +1,7 @@
 ###################################################
 Cumulative Average Calculator  CAC
 ###################################################
+
 https://www.had2know.org/finance/cumulative-moving-average-calculator.html
 https://www.theclassroom.com/calculate-high-school-cumulative-average-grade-point-average-2733.html
 

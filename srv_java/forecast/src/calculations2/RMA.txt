@@ -1,0 +1,18 @@
+###################################################
+Rising moving average RMA
+###################################################
+
+https://en.wikipedia.org/wiki/Rising_moving_average
+https://www.ifcmarkets.com/en/ntx-indicators/moving-average
+https://towardsdatascience.com/how-to-code-different-types-of-moving-averages-in-python-4f8ed6d2416f
+
+https://www.tradingview.com/script/UA5t9NGI-CT-Moving-Average-Crossover-Indicator/
+
+
+A rising moving average indicates that the security is in an uptrend, while a declining moving average indicates that it is in a downtrend. 
+Similarly, upward momentum is confirmed with a bullish crossover, which occurs when a short-term moving average crosses above a longer-term moving average. 
+
+
+
+
+

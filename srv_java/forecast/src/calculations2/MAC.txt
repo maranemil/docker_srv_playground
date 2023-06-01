@@ -1,0 +1,74 @@
+###################################################
+Moving Average Crossover  MAC
+###################################################
+
+https://school.stockcharts.com/doku.php?id=technical_indicators:moving_averages
+https://towardsdatascience.com/making-a-trade-call-using-simple-moving-average-sma-crossover-strategy-python-implementation-29963326da7a
+https://indzara.com/free-excel-template-for-moving-average-crossover/
+
+https://www.youtube.com/watch?v=vygCVmpes1U
+https://www.youtube.com/watch?v=dpwCDyURKEU
+
+--------------------------------------------------------------------------------
+
+Types of Moving Averages:
+- Simple Moving Average(SMA)
+- Weighted Moving Average(WMA)
+- Exponential Moving Average (EMA or EWMA)
+
+moving-average crossover occurs when on plotting, the two moving averages each based on different time-periods tend to cross. 
+
+
+Simple Moving Average Formulas  5-day simple moving average
+-----------------------------
+Daily Closing Prices: 11,12,13,14,15,16,17
+First day of 5-day SMA: (11 + 12 + 13 + 14 + 15) / 5 = 13
+Second day of 5-day SMA: (12 + 13 + 14 + 15 + 16) / 5 = 14
+Third day of 5-day SMA: (13 + 14 + 15 + 16 + 17) / 5 = 15
+
+
+Exponential Moving Average Formulas
+-----------------------------
+Initial SMA: 10-period sum / 10 
+Multiplier: (2 / (Time periods + 1) ) = (2 / (10 + 1) ) = 0.1818 (18.18%)
+EMA: {Close - EMA(previous day)} x multiplier + EMA(previous day). 
+
+
+The Weighting Multiplier
+-----------------------------
+Time Period = (2 / Percentage) - 1
+3% Example:  Time Period = (2 / 0.03) - 1 = 65.67 time periods
+
+
+EMA Accuracy ...
+
+--------------------------------------------------------------------------------
+
+Answer
+https://stackoverflow.com/questions/65778751/calculate-multiple-moving-average-crossovers
+
+
+You need to reset long each iteration of the outer loop. Setting it once won't work, it needs to be set every time. I gather you want it to be one greater than short, so like this:
+
+short = 20
+while short < 200:
+    long = short + 1
+    while long < 200:
+        aapl[short,long] = np.where(aapl[short] > aapl[long],1,0)
+        long = long + 1
+    short = short + 1
+Then you can simplify both loops by using for loops to iterate over ranges. A single for loop will handle initialization, looping, and incrementing the loop variable all in one line.
+
+for short in range(20, 200):
+    for long in range(short + 1, 200):
+        aapl[short,long] = np.where(aapl[short] > aapl[long],1,0)
+
+--------------------------------------------------------------------------------
+
+https://people.duke.edu/~charvey/Teaching/BA453_2002/CCAM/CCAM.htm
+https://gist.github.com/aggchaitanya/d7b589628a36932d7cb69966b745f92b
+https://www.quantifiedstrategies.com/double-exponential-moving-average/
+https://blueberrymarkets.com/learn/advanced/moving-average-crossover/
+
+
+
