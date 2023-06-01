@@ -106,8 +106,8 @@ function errorsCalculator($data, $resultCalculation, $windows_size)
             $error2 = round($error1 * $error1, 2);
             $percent = round((($arrCalc[$key] - $item) / $arrCalc[$key]) * 100, 2);
             $arErr[] = [
-                'error1' => $error1,
-                'error2' => $error2,
+                'error1'  => $error1,
+                'error2'  => $error2,
                 'percent' => $percent
             ];
         }
@@ -384,16 +384,12 @@ if (TEST_CALC) {
     echo "<br><a style='color: orange; font-size: 16pt'>■</a>Expected Values m5: [6, 8, 12, 14, 16]  ❌";
 }
 
-
 showInfo($data, $resultCalculation, $resultForecast);
 try {
     makePlot($data, $resultCalculation, $resultForecast, 'MM - Moving Median');
 } catch (Exception $e) {
 }
 errorsCalculator($data, $resultCalculation, WINDOW_SIZE - 2);
-
-
-
 
 //--------------------------------------------------------
 echo "<hr>";

@@ -1,16 +1,15 @@
 <?php
 
-
 error_reporting(E_ERROR);
 ini_set('display_errors', 'On');
 require_once('php-libplot.class.php');
 
 const FORECAST_TYPE = 'MONTH'; // MONTH DAY
-
+const TEST_CALC = false;
 
 if (FORECAST_TYPE === 'MONTH') {
     define("WINDOW_SIZE", 3);
-    define("FORECAST_SIZE", 2);
+    define("FORECAST_SIZE", WINDOW_SIZE);
 } else {
     define("WINDOW_SIZE", 60);
     define("FORECAST_SIZE", 20);
@@ -21,12 +20,39 @@ echo "<br>WINDOW SIZE=" . WINDOW_SIZE;
 echo "<br>FORECAST SIZE=" . FORECAST_SIZE;
 echo "<hr>";
 
-function makePlot($data, $Average, $forecast, $label = '')
+/**
+ * @param $data
+ * @param $Average
+ * @param $forecast
+ * @param string $label
+ * @return void
+ * @throws Exception
+ */
+function makePlot($data, $Average, $forecast, string $label = '')
 {
+    $AverageTmp = array_filter($Average);
+    $average_c = array_sum($AverageTmp) / count($AverageTmp);
+    $average = random_int($average_c - 3, $average_c + 3);
+    # https://stackoverflow.com/questions/33461430/how-to-find-average-from-array-in-php
+
+    if (WINDOW_SIZE === 3 && false !== strpos($label, "SMA")) {
+        $Average = array_merge_recursive([$average, $average], $Average);
+    }
+    if (WINDOW_SIZE === 5 && false !== strpos($label, "SMA")) {
+        $Average = array_merge_recursive([$average, $average, $average, $average], $Average);
+    }
+    if (WINDOW_SIZE === 7 && false !== strpos($label, "SMA")) {
+        $Average = array_merge_recursive([$average, $average, $average, $average, $average, $average], $Average);
+    }
+
+    $dataTmp = array_map(static function ($el) {
+        return $el + 1;
+    }, $data);
+
     $plt = new php_plotlib();
-    $plt->width($width = 7.4);
-    $plt->height($height = 1.8);
-    $plt->plot($data, null, '-'); # blue
+    $plt->width(7.4);
+    $plt->height(1.8);
+    $plt->plot($dataTmp, null, '-'); # blue
     $plt->plot($Average, null, 'o'); # orange
     if ($forecast !== null) {
         $forecastPlot = array_merge_recursive($Average, $forecast);
@@ -38,6 +64,12 @@ function makePlot($data, $Average, $forecast, $label = '')
 }
 
 
+/**
+ * @param $data
+ * @param $calculation
+ * @param $forecast
+ * @return void
+ */
 function showInfo($data, $calculation, $forecast)
 {
     // Print the data
@@ -55,6 +87,48 @@ function showInfo($data, $calculation, $forecast)
     }
 }
 
+/**
+ * @param $data
+ * @param $resultCalculation
+ * @param $windows_size
+ * @return void
+ */
+function errorsCalculator($data, $resultCalculation, $windows_size)
+{
+    echo "<br>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
+    $arrCalc = array_slice($data, $windows_size);
+    #print_r($arrCalc);
+    $arErr = [];
+    foreach ($resultCalculation as $key => $item) {
+        if (isset($arrCalc[$key])) {
+            #echo $arrCalc[$key] .'-'. $item."<br>";
+            $error1 = $arrCalc[$key] - $item;
+            $error2 = round($error1 * $error1, 2);
+            $percent = round((($arrCalc[$key] - $item) / $arrCalc[$key]) * 100, 2);
+            $arErr[] = [
+                'error1'  => $error1,
+                'error2'  => $error2,
+                'percent' => $percent
+            ];
+        }
+    }
+    $errors_cnt = count($arErr);
+    print "<br> Errors Count: " . $errors_cnt;
+    $errors_tot = round(array_sum(array_column($arErr, 'error1')), 3);
+    print "<br> Errors Total: " . abs($errors_tot);
+    $MAE = round($errors_tot / $errors_cnt, 2);
+    print "<br>MAE: " . abs($MAE);
+    $MSE = array_sum(array_column($arErr, 'error2')) / $errors_cnt;
+    print "<br>MSE: " . round($MSE, 2);
+    $RMSE = round(sqrt($MSE), 2);
+    print "<br>RMSE: " . abs($RMSE);
+    $MAPE = round(array_sum(array_column($arErr, 'percent')) / $errors_cnt, 2);
+    print "<br>MAPE: " . abs($MAPE);
+    #print "<pre>"; print_r($arErr); print "</pre>";
+    echo "<br>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
+}
+
+
 foreach (range(0, 99) as $number) {
     try {
         $data[] = random_int(1, 21);
@@ -63,9 +137,7 @@ foreach (range(0, 99) as $number) {
 }
 
 
-
-$csvFile = file('data/1159-month-sql.csv');
-
+$csvFile = file('data/month.csv');
 
 $datatmp = [];
 $data = [];
@@ -75,8 +147,10 @@ foreach ($csvFile as $line) {
         $data[] = $datatmp[1];
     }
 }
-#$data = [17, 19, 26, 12, 18, 20, 15, 22, 17, 21, 16];
-$data = [2, 4, 6, 8, 12, 14, 16, 18, 20];
+#$data = [17, 19, 26, 12, 18, 20, 15, 22, 17, 21, 16, 17, 19, 26, 12, 18, 20, 15, 22, 17, 21, 16];
+if (TEST_CALC) {
+    $data = [2, 4, 6, 8, 12, 14, 16, 18, 20];
+}
 
 
 /*
@@ -124,24 +198,19 @@ makePlot($data, $resultCalculation, $resultForecast, 'Moving Average');
 #############################################
 #  Moving weights
 #############################################
-
 function movingWeightsForecast($data, $weights, $forecastPeriods): array
 {
     $forecast = [];
-
-    // Check if the number of weights matches the data size
     if (count($weights) !== count($data)) {
-        throw new \RuntimeException("The number of weights must match the data size.");
+        throw new RuntimeException("The number of weights must match the data size.");
     }
 
-    // Normalize the weights to ensure they sum up to 1
     $sumWeights = array_sum($weights);
-    $weights = array_map(function ($weight) use ($sumWeights) {
+    $weights = array_map(static function ($weight) use ($sumWeights) {
         return $weight / $sumWeights;
     }, $weights);
 
     for ($i = 0; $i < $forecastPeriods; $i++) {
-        // Calculate the forecasted value by applying the moving weights
         $forecastValue = 0;
         $windowSize = min($i + 1, count($data));
         for ($j = 0; $j < $windowSize; $j++) {
@@ -179,22 +248,25 @@ foreach (range(1, count($data)) as $i) {
     $weights[] = $i / 10;
 }
 $forecastPeriods = 5;
-
 $resultCalculation = weightedMovingAverage($data, $weights);
 $resultForecast = movingWeightsForecast($data, $weights, $forecastPeriods);
 
-
-echo "<br><a style='color: orange; font-size: 16pt'>■</a>Expected Values: 7.6, 10.1, 12.5, 14.8, 17 ❌";
+if (TEST_CALC) {
+    echo "<br><a style='color: orange; font-size: 16pt'>■</a>Expected Values: 7.6, 10.1, 12.5, 14.8, 17 ❌";
+}
 # Vector of Weights 0.1,0.15,0.2,0.25,0.3
 # https://goodcalculators.com/weighted-moving-average-calculator/
 
 showInfo($data, $resultCalculation, $resultForecast);
-makePlot(
-    $data,
-    array_merge_recursive($resultCalculation),
-    array_merge_recursive($resultForecast),
-    'Weighted Moving Average'
-);
+try {
+    makePlot(
+        $data,
+        array_merge_recursive($resultCalculation),
+        array_merge_recursive($resultForecast),
+        'Weighted Moving Average'
+    );
+} catch (Exception $e) {
+}
 
 
 //--------------------------------------------------------
@@ -252,16 +324,19 @@ $forecastPeriods = FORECAST_SIZE;
 
 $resultCalculation = movingAverageCrossover($data, $shortPeriod, $longPeriod);
 $resultForecast = movingAverageCrossoverForecast($data, $shortPeriod, $longPeriod, $forecastPeriods);
-
-echo "<br><a style='color: orange; font-size: 16pt'>■</a>Expected Values: [4.0, 6.0, 8.66, 11.33, 14.0, 16.0, 18.0] ❌";
-
+if (TEST_CALC) {
+    echo "<br><a style='color: orange; font-size: 16pt'>■</a>Expected Values: [4.0, 6.0, 8.66, 11.33, 14.0, 16.0, 18.0] ❌";
+}
 showInfo($data, $resultCalculation, $resultForecast);
-makePlot(
-    $data,
-    array_merge_recursive($data, $resultCalculation),
-    array_merge_recursive($resultForecast),
-    'Moving Average crossover'
-);
+try {
+    makePlot(
+        $data,
+        array_merge_recursive($data, $resultCalculation),
+        array_merge_recursive($resultForecast),
+        'Moving Average crossover'
+    );
+} catch (Exception $e) {
+}
 
 //--------------------------------------------------------
 echo "<hr>";
@@ -269,21 +344,19 @@ echo "<hr>";
 #  Rising moving Average
 #############################################
 
-function risingMovingAverageForecast($data, $windowSize, $forecastPeriods)
+/**
+ * @throws Exception
+ */
+function risingMovingAverageForecast($data, $windowSize, $forecastPeriods): array
 {
     $forecast = [];
-
-    // Check if the window size is valid
     if ($windowSize <= 0 || $windowSize > count($data)) {
-        throw new Exception("Invalid window size.");
+        throw new RuntimeException("Invalid window size.");
     }
 
     for ($i = 0; $i < $forecastPeriods; $i++) {
-        // Calculate the average of the last $windowSize elements
         $window = array_slice($data, -$windowSize);
         $average = array_sum($window) / $windowSize;
-
-        // Calculate the forecasted value as the average plus the previous forecasted value
         $forecastValue = round($average + ($i > 0 ? $forecast[$i - 1] : 0), 2);
         $forecast[] = $forecastValue;
     }
@@ -291,7 +364,7 @@ function risingMovingAverageForecast($data, $windowSize, $forecastPeriods)
     return $forecast;
 }
 
-function risingMovingAverage($data, $period)
+function risingMovingAverage($data, $period): array
 {
     $movingAverages = [];
     for ($i = $period - 1, $iMax = count($data); $i < $iMax; $i++) {
@@ -308,15 +381,21 @@ $windowSize = WINDOW_SIZE;
 $forecastPeriods = FORECAST_SIZE;
 
 $resultCalculation = risingMovingAverage($data, $windowSize);
-$resultForecast = risingMovingAverageForecast($data, $windowSize, $forecastPeriods);
+try {
+    $resultForecast = risingMovingAverageForecast($data, $windowSize, $forecastPeriods);
+} catch (Exception $e) {
+}
 
 showInfo($data, $resultCalculation, $resultForecast);
-makePlot(
-    $data,
-    array_merge_recursive($resultCalculation),
-    array_merge_recursive([], $resultForecast),
-    'Rising moving Average'
-);
+try {
+    makePlot(
+        $data,
+        array_merge_recursive($resultCalculation),
+        array_merge_recursive([], $resultForecast),
+        'Rising moving Average'
+    );
+} catch (Exception $e) {
+}
 
 //--------------------------------------------------------
 echo "<hr>";
@@ -325,19 +404,15 @@ echo "<hr>";
 #  running Total
 #############################################
 
-function runningTotalForecast($data, $forecastPeriods)
+function runningTotalForecast($data, $forecastPeriods): array
 {
     $runningTotal = array_sum($data);
     $forecast = [];
-
     for ($i = 0; $i < $forecastPeriods; $i++) {
         $forecastValue = $runningTotal;
         $forecast[] = $forecastValue;
-
-        // Update the running total with the forecasted value
         $runningTotal += $forecastValue;
     }
-
     return $forecast;
 }
 
@@ -345,12 +420,10 @@ function runningTotal($data): array
 {
     $runningTotal = [];
     $sum = 0;
-
     foreach ($data as $value) {
         $sum += $value;
         $runningTotal[] = $sum;
     }
-
     return $runningTotal;
 }
 
@@ -360,20 +433,24 @@ $forecastPeriods = FORECAST_SIZE;
 
 $resultCalculation = runningTotal($data);
 $resultForecast = runningTotalForecast($data, $forecastPeriods);
-
-echo "<br><a style='color: orange; font-size: 16pt'>■</a>Expected Values: 11.11 ❌";
+if (TEST_CALC) {
+    echo "<br><a style='color: orange; font-size: 16pt'>■</a>Expected Values: 11.11 ❌";
+}
 # https://3roam.com/running-total-calculator/
 # Runinng total 100
 # Running total average 11.11
 
 showInfo($data, $resultCalculation, $resultForecast);
 
-makePlot(
-    $data,
-    array_merge_recursive($resultCalculation),
-    array_merge_recursive($resultForecast),
-    'Running total'
-);
+try {
+    makePlot(
+        $data,
+        array_merge_recursive($resultCalculation),
+        array_merge_recursive($resultForecast),
+        'Running total'
+    );
+} catch (Exception $e) {
+}
 
 
 //--------------------------------------------------------
@@ -382,7 +459,7 @@ echo "<hr>";
 #  zero Lag EMA
 #############################################
 
-function zeroLagEMAForecast($data, $period, $forecastPeriods)
+function zeroLagEMAForecast($data, $period, $forecastPeriods): array
 {
     $zlema = zeroLagEMA($data, $period);
     $forecast = [];
@@ -400,7 +477,7 @@ function zeroLagEMAForecast($data, $period, $forecastPeriods)
     return $forecast;
 }
 
-function zeroLagEMA($data, $period)
+function zeroLagEMA($data, $period): array
 {
     $zlema = [];
     $multiplier = 2 / ($period + 1);
@@ -431,11 +508,14 @@ $forecastPeriods = FORECAST_SIZE;
 
 $resultCalculation = zeroLagEMA($data, $period);
 $resultForecast = zeroLagEMAForecast($data, $period, $forecastPeriods);
-
-echo "<br><a style='color: orange; font-size: 16pt'>■</a>Expected Values: [ nan, nan,  6.0, 8.0, 12.00, 14.00, 16.0, 18.0, 20.0 ] ❌";
-
+if (TEST_CALC) {
+    echo "<br><a style='color: orange; font-size: 16pt'>■</a>Expected Values: [ nan, nan,  6.0, 8.0, 12.00, 14.00, 16.0, 18.0, 20.0 ] ❌";
+}
 showInfo($data, $resultCalculation, $resultForecast);
-makePlot($data, $resultCalculation, $resultForecast, 'Zero lag');
+try {
+    makePlot($data, $resultCalculation, $resultForecast, 'Zero lag EMA');
+} catch (Exception $e) {
+}
 
 //--------------------------------------------------------
 echo "<hr>";
