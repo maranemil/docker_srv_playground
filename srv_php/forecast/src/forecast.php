@@ -152,6 +152,14 @@ if (TEST_CALC) {
     $data = [2, 4, 6, 8, 12, 14, 16, 18, 20];
 }
 
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 
 //--------------------------------------------------------
 echo "<hr>";
@@ -209,6 +217,14 @@ try {
 }
 errorsCalculator($data, $resultCalculation, WINDOW_SIZE);
 
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 
 //--------------------------------------------------------
 echo "<hr>";
@@ -263,6 +279,14 @@ try {
 }
 errorsCalculator($data, $resultCalculation, WINDOW_SIZE - 2);
 
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 
 //--------------------------------------------------------
 echo "<hr>";
@@ -320,6 +344,14 @@ try {
 }
 errorsCalculator($data, $resultCalculation, WINDOW_SIZE - 2);
 
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 
 //--------------------------------------------------------
 echo "<hr>";
@@ -391,6 +423,15 @@ try {
 }
 errorsCalculator($data, $resultCalculation, WINDOW_SIZE - 2);
 
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
 //--------------------------------------------------------
 echo "<hr>";
 #############################################
@@ -401,15 +442,12 @@ function cumulativeAverageForecast($data, $forecastPeriods)
 {
     $cumulativeAverage = cumulativeAverage($data);
     $forecast = [];
-
     $lastValue = end($data);
-
     for ($i = 0; $i < $forecastPeriods; $i++) {
         $forecastValue = round(($lastValue + $cumulativeAverage[count($cumulativeAverage) - 1]) / 2, 2);
         $forecast[] = $forecastValue;
         $lastValue = $forecastValue;
     }
-
     return $forecast;
 }
 
@@ -417,12 +455,10 @@ function cumulativeAverage($data): array
 {
     $cumulativeAverage = [];
     $sum = 0;
-
     foreach ($data as $index => $value) {
         $sum += $value;
         $cumulativeAverage[] = round($sum / ($index + 1), 2);
     }
-
     return $cumulativeAverage;
 }
 
