@@ -2,5 +2,51 @@ for i in *.java; do java $i; done
 
 
 
+#######################################################################
+Cast Double to Integer in Java
+#######################################################################
+
+https://stackoverflow.com/questions/9102318/cast-double-to-integer-in-java
+https://docs.oracle.com/javase/6/docs/api/java/lang/Number.html
+
+Double d = 5.25;
+Integer i = d.intValue(); // i becomes 5
+
+
+double d = 5.25;
+int i = (int) d;
+
+
+# (un)boxing
+// starting point
+Double myDouble = Double.valueOf(10.0);
+// step 1: unboxing
+double dbl = myDouble.doubleValue();
+// step 2: casting
+int intgr = (int) dbl;
+// step 3: boxing
+Integer val = Integer.valueOf(intgr);
+
+...
+
+double d = 9.5;
+int i = (int)d;
+//i = 9
+
+Double D = 9.5;
+int i = Integer.valueOf(D.intValue());
+//i = 9
+
+double d = 9.5;
+Long L = Math.round(d);
+int i = Integer.valueOf(L.intValue());
+//i = 10
+
+
+Double foo = 123.456;
+Integer bar = foo.intValue();
+
+
+
 
 

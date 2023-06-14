@@ -390,8 +390,67 @@ RUN set -eux; \
 	sha1='a355d1b975405a391c4a78f988d656b375683fb2'; \
 
 
+#######################################################################
+Empty continuation lines will become errors in a future release.
+#######################################################################
+
+https://stackoverflow.com/questions/46708053/empty-continuation-lines-will-become-errors-how-should-i-comment-my-dockerfil
+https://github.com/laradock/laradock/issues/1164
+https://github.com/moby/moby/issues/35387
+
+FROM busybox
+RUN \
+  # install foo
+  echo "install foo"; \
+
+FROM ubuntu:xenial
+RUN echo \
+        # descriptive comment
+        hello
+
+FROM jenkins/jenkins:2.89.4-alpine
+USER root
+RUN apk update && \
+
+    # Deploy awscli
+    apk add --no-cache tzdata
 
 
+RUN if [ ${INSTALL_SOAP} = true ]; then \
+    # Install the soap extension
+    apt-get update -yqq && \
+    apt-get -y install libxml2-dev php-soap && \
+    docker-php-ext-install soap \
+;fi
+
+#######################################################################
+W: --force-yes is deprecated, use one of the options starting with --allow instead.
+#######################################################################
+
+https://northerntech.atlassian.net/browse/CFE-2360
+https://github.com/jontewks/puppeteer-heroku-buildpack/issues/29
+https://github.com/raspiblitz/raspiblitz/issues/58
+https://askubuntu.com/questions/708107/bypass-the-yes-prompt-in-apt-get-install-but-only-authorized-packages
+https://superuser.com/questions/1438031/ubuntu-18-command-apt-get-dist-upgrade-qq-force-yes-deprecated
+https://stackoverflow.com/questions/33370297/apt-get-update-non-interactive
+https://askubuntu.com/questions/929968/what-does-there-are-problems-and-y-was-used-without-force-yes-mean
+
+If you're using apt version 1.1 you can also use --allow-downgrades. Before 1.1 --force-yes is the only option.
+
+apt -v
+apt 1.8.2.3 (amd64)
 
 
+can use starting with --allow
+--allow-downgrades
+--allow-remove-essential
+--allow-change-held-packages
+--allow-unauthenticated
 
+
+#######################################################################
+wp versions
+#######################################################################
+
+wp 6.0.2 - php 7.4.32
+wp 6.2.2 - php 8.0.29
