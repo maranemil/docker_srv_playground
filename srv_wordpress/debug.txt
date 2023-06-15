@@ -454,3 +454,20 @@ wp versions
 
 wp 6.0.2 - php 7.4.32
 wp 6.2.2 - php 8.0.29
+
+#######################################################################
+playground wordpress
+#######################################################################
+https://developer.wordpress.org/playground/
+https://marketplace.visualstudio.com/items?itemName=WordPressPlayground.wordpress-playground
+https://github.com/WordPress/playground-tools/tree/trunk/packages/wp-now
+https://developer.wordpress.org/playground/demo/
+https://github.com/WordPress/wordpress-playground
+https://web.dev/wordpress-playground/
+
+#######################################################################
+Download WordPress 6.2.2
+#######################################################################
+https://wordpress.org/download/
+
+Recommend PHP 7.4 or greater and MySQL 5.7 or MariaDB version 10.3 or greater.
