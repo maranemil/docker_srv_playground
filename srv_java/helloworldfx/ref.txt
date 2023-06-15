@@ -1,0 +1,126 @@
+sudo apt-get install openjdk-11-jre
+sudo apt install mvn
+sudo apt install gradle
+
+
+java -version
+openjdk version "11.0.19" 2023-04-18
+OpenJDK Runtime Environment (build 11.0.19+7-post-Ubuntu-0ubuntu122.04.1)
+OpenJDK 64-Bit Server VM (build 11.0.19+7-post-Ubuntu-0ubuntu122.04.1, mixed mode, sharing)
+
+
+mvn -v
+Apache Maven 3.6.3
+Maven home: /usr/share/maven
+Java version: 11.0.19, vendor: Ubuntu, runtime: /usr/lib/jvm/java-11-openjdk-amd64
+Default locale: de_DE, platform encoding: UTF-8
+OS name: "linux", version: "5.15.0-73-generic", arch: "amd64", family: "unix"
+
+
+gradle -v
+Gradle 4.4.1
+Groovy:       2.4.21
+Ant:          Apache Ant(TM) version 1.10.12 compiled on January 17 1970
+JVM:          11.0.19 (Ubuntu 11.0.19+7-post-Ubuntu-0ubuntu122.04.1)
+OS:           Linux 5.15.0-73-generic amd64
+
+
+gradle tasks
+gradle tasks --all
+gradle build
+
+
+https://spring.io/guides/gs/gradle/#scratch
+https://spring.io/guides/gs/gradle/
+https://www.tutorialspoint.com/gradle/gradle_quick_guide.htm
+https://gradle.org/install/
+https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html
+https://maven.apache.org/plugins/index.html
+
+https://openjfx.io/openjfx-docs/#gradle
+https://openjfx.io/openjfx-docs/#maven
+https://github.com/openjfx/samples/blob/master/HelloFX/Maven/hellofx/pom.xml
+https://jdk.java.net/20/
+https://github.com/openjfx/samples/blob/master/HelloFX/Gradle/hellofx/src/main/java/HelloFX.java
+https://github.com/openjfx/javafx-gradle-plugin
+https://github.com/openjfx/javafx-gradle-plugin
+https://www.quickprogrammingtips.com/java/how-to-develop-javafx-programs-using-eclipse-and-gradle.html
+https://plugins.gradle.org/plugin/org.openjfx.javafxplugin
+https://kofler.info/javafx-programm-mit-gradle/
+https://foojay.io/today/building-javafx-with-gradle/
+https://www.petrikainulainen.net/programming/testing/junit-5-tutorial-running-unit-tests-with-gradle/
+https://www.baeldung.com/junit-5-gradle
+https://mvnrepository.com/artifact/junit/junit/4.4
+https://www.vogella.com/tutorials/JUnit/article.html
+
+
+apt search ^openjdk- --names-only
+
+sudo apt-get install openjdk-8-jre
+sudo apt-get install openjdk-11-jre
+sudo apt-get install openjdk-11-jdk-headless
+sudo apt-get install openjdk-17-jre
+sudo apt-get install openjdk-18-jre
+sudo apt-get install openjdk-19-jre
+
+apt search openjfx --names-only
+sudo apt-get install openjfx
+
+## java -jar myJar.jar --module-path /path/to/javafx-sdk-14/lib --add-modules javafx.controls,javafx.fxml
+
+
+
+sudo apt install plocate
+locate javafx
+
+/usr/share/openjfx/lib/javafx.base.jar
+/usr/share/openjfx/lib/javafx.controls.jar
+/usr/share/openjfx/lib/javafx.fxml.jar
+/usr/share/openjfx/lib/javafx.graphics.jar
+/usr/share/openjfx/lib/javafx.media.jar
+/usr/share/openjfx/lib/javafx.properties
+/usr/share/openjfx/lib/javafx.swing.jar
+/usr/share/openjfx/lib/javafx.web.jar
+
+/usr/share/java/javafx-controls.jar
+/usr/share/java/javafx-fxml-11.jar
+/usr/share/java/javafx-fxml.jar
+/usr/share/java/javafx-graphics-11.jar
+/usr/share/java/javafx-graphics.jar
+/usr/share/java/javafx-media-11.jar
+/usr/share/java/javafx-media.jar
+/usr/share/java/javafx-swing-11.jar
+/usr/share/java/javafx-swing.jar
+/usr/share/java/javafx-web-11.jar
+/usr/share/java/javafx-web.jar
+
+
+locate java | grep -i  sdk
+
+https://wiki.openjdk.org/display/OpenJFX/Building+OpenJFX
+https://mvnrepository.com/artifact/org.openjfx
+https://gluonhq.com/products/javafx/
+https://openjdk.org/jeps/343
+
+
+https://download2.gluonhq.com/openjfx/20.0.1/openjfx-20.0.1_linux-x64_bin-sdk.zip
+
+gradle build
+# gradlew jar java -jar build/libs/javafx11-1.0-SNAPSHOT.jar
+
+https://www.joda.org/joda-time/dependency-info.html
+https://stackoverflow.com/questions/52569724/javafx-11-create-a-jar-file-with-gradle
+https://foojay.io/today/building-javafx-with-gradle/
+https://itecnote.com/tecnote/java-using-javafx-controller-without-fxml/
+https://openjfx.io/openjfx-docs/#gradle
+https://www.jetbrains.com/help/idea/javafx.html#create-project
+https://skeoop.github.io/javafx/Getting-Started
+https://www.jetbrains.com/help/idea/opening-fxml-files-in-javafx-scene-builder.html
+https://javabeginners.de/Frameworks/JavaFX/FXML.php
+https://pragmatic-coding.hashnode.dev/how-to-write-a-javafx-screen-without-fxmlscene-builder
+https://stackoverflow.com/questions/47198457/error3-26-java-package-javafx-application-does-not-exist
+https://github.com/gluonhq/scenebuilder/wiki/Basic-JavaFX-project-with-Scene-Builder
+https://github.com/openjdk/jfx
+https://coderanch.com/t/747804/java/JavaFX-runtime-components-missing
+https://repo1.maven.org/maven2/joda-time/joda-time/2.0/
+https://www.jetbrains.com/help/idea/javafx.html#troubleshoot
