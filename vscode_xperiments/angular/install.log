@@ -1,0 +1,41 @@
+
+# https://angular.io/tutorial/first-app
+# https://angular.io/tutorial/first-app/first-app-lesson-01
+# https://angular.io/start
+# https://angular.io/
+
+
+# sudo apt install nodejs
+# sudo apt install npm
+
+
+
+node --version
+
+npm install -g @angular/cli
+npm install -g npm@9.8.1
+
+IDE
+https://code.visualstudio.com/
+https://marketplace.visualstudio.com/items?itemName=Angular.ng-template
+
+angular install demo project
+wget https://angular.io/generated/zips/first-app-lesson-00/first-app-lesson-00.zip
+npm install
+npm audit fix --force
+
+ng serve
+ng serve --port 3000
+ng serve --port 4401 --open
+
+Node.js version v12.22.9 detected.
+The Angular CLI requires a minimum Node.js version of either v14.20, v16.14 or v18.10.
+
+ng -v
+sudo apt install nodejs
+sudo apt autoremove
+
+nvm install 14
+nvm use 14
+nvm -v
+nvm install latest

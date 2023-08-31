@@ -1,0 +1,22 @@
+version: '3'
+services:
+  app:
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    #ports:
+    #  - 3000:3000
+    volumes:
+      - ./app:/app
+    environment:
+      - NODE_ENV=development
+
+
+# gen with https://chataigpt.org/
+
+# docker-compose -f "docker-compose.yml" up -d --build
+# docker exec -it angular_prj_app_1  bash
+
+
+# docker run --rm -it -p 3000:3000/tcp angular_prj_app:latest
