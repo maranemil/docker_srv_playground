@@ -77,10 +77,26 @@ https://pytorch.org/
 https://pytorch.org/tutorials/
 https://pytorch.org/docs/stable/index.html
 https://pytorch.org/tutorials/
+https://pytorch.org/audio/stable/index.html
+https://pytorch.org/audio/stable/tutorials/audio_io_tutorial.html
+https://pytorch.org/audio/stable/tutorials/audio_resampling_tutorial.html
+https://pytorch.org/vision/stable/index.html
 
 https://www.tensorflow.org/
 https://www.tensorflow.org/tutorials
 https://www.tensorflow.org/tutorials/audio/music_generation
+
+https://keras.io/
+https://keras.io/examples/
+https://keras.io/getting_started/
+
+https://scikit-learn.org/stable/
+https://scikit-image.org/
+https://scikit-image.org/docs/stable/auto_examples/
+https://scikit-learn.org/stable/tutorial/index.html
+https://www.scikit-video.org/stable/
+https://pypi.org/project/scikit-sound/
+https://work.thaslwanter.at/sksound/html/
 
 
 
