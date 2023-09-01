@@ -71,8 +71,16 @@ https://www.openstack.org/
 
 https://martinfowler.com/bliki/ContractTest.html
 
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 
+https://pytorch.org/
+https://pytorch.org/tutorials/
+https://pytorch.org/docs/stable/index.html
+https://pytorch.org/tutorials/
 
+https://www.tensorflow.org/
+https://www.tensorflow.org/tutorials
+https://www.tensorflow.org/tutorials/audio/music_generation
 
 
 
