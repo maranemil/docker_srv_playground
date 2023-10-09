@@ -1,0 +1,156 @@
+http://docs.fitnesse.org/FrontPage
+http://fitnesse.org/FitNesseDownload
+https://github.com/unclebob/fitnesse
+
+java -jar fitnesse-standalone.jar -p 8022
+
+----------------------------------------------------------------------
+
+https://cucumber.io/docs/guides/10-minute-tutorial/?lang=java
+https://cucumber.io/docs/gherkin/
+https://cucumber.io/docs/cucumber/
+
+----------------------------------------------------------------------
+
+https://www.javatpoint.com/cucumber-testing
+https://plugins.jenkins.io/cucumber-reports/
+https://www.perfecto.io/blog/bdd-testing-frameworks
+https://codeception.com/
+https://github.com/gradle/gradle
+https://gradle.org/
+https://mvnrepository.com/
+https://maven.apache.org/what-is-maven.html
+https://central.sonatype.com/?smo=true
+https://maven.google.com/web/index.html
+https://www.jetbrains.com/help/idea/maven-repositories.html
+
+----------------------------------------------------------------------
+
+https://mqtt.org/
+https://mqtt.org/software/
+
+https://web.dev/progressive-web-apps/
+https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps
+
+----------------------------------------------------------------------
+
+sudo apt-get update -y
+sudo apt-get install -y git-lfs
+git lfs install
+git lfs pull
+https://git-lfs.com/
+
+----------------------------------------------------------------------
+
+docker-compose version
+docker-compose version 1.29.2, build unknown
+docker-py version: 5.0.3
+CPython version: 3.11.4
+OpenSSL version: OpenSSL 3.0.8 7 Feb 2023
+
+----------------------------------------------------------------------
+
+https://github.com/nodesource/distributions
+
+sudo apt update && sudo apt upgrade -y
+sudo apt-get install nodejs -y
+node --version
+v18.13.0
+
+sudo apt remove nodejs npm
+sudo apt remove npm
+sudo apt autoremove
+
+Download and import the Nodesource GPG key
+
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl gnupg
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+
+NODE_MAJOR=20
+echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+
+sudo apt-get update
+sudo apt-get install nodejs -y
+node --version
+v20.8.0
+
+how to remove ...
+
+apt-get purge nodejs &&\
+rm -r /etc/apt/sources.list.d/nodesource.list &&\
+rm -r /etc/apt/keyrings/nodesource.gpg
+
+----------------------------------------------------------------------
+
+https://classic.yarnpkg.com/lang/en/docs/install/#debian-stable
+sudo npm install -g yarn
+npm install --global yarn
+npm install -g npm@10.2.0
+
+----------------------------------------------------------------------
+
+engine Unsupported engine
+npm ERR! engine Not compatible with your version of node/npm: npm@10.2.0
+npm ERR! notsup Not compatible with your version of node/npm: npm@10.2.0
+npm ERR! notsup Required: {"node":"^18.17.0 || >=20.5.0"}
+npm ERR! notsup Actual:   {"npm":"9.4.2","node":"v18.13.0"}
+nodejs ist schon die neueste Version (18.13.0+dfsg1-1ubuntu2).
+
+----------------------------------------------------------------------
+
+sudo apt-get install openjdk-17-jdk
+java -version
+javac -version
+sudo update-alternatives --config java
+sudo update-alternatives --config javac
+sudo apt install maven
+
+ll /etc/hosts
+ll /etc/timezone
+ll /etc/localtime
+
+----------------------------------------------------------------------
+
+https://dannorth.net/introducing-bdd/
+https://site.mockito.org/
+
+----------------------------------------------------------------------
+
+https://docs.gitea.com/next/administration/config-cheat-sheet
+https://docs.gitea.com/development/oauth2-provider#scopes
+https://docs.gitea.com/next/development/api-usage
+https://docs.gitea.com/next/usage/repo-mirror
+
+https://www.jetbrains.com/help/idea/maven-repositories.html
+https://www.jetbrains.com/help/idea/discover-intellij-idea.html
+https://www.jetbrains.com/help/youtrack/cloud/integration-with-gitea.html#enable-youtrack-integration-gitea
+https://www.jetbrains.com/help/youtrack/cloud/integration-with-gitea.html#configure-gitea-integration
+
+https://docs.renovatebot.com/modules/platform/gitea/
+https://dexidp.io/docs/connectors/gitea/
+
+curl -X POST https://url/bar -H 'api-key: 234==' -H 'Content-Type: application/json' -d @Download/foo.json
+
+----------------------------------------------------------------------
+https://docs.docker.com/compose/install/standalone/
+get last docker composer version
+
+docker-compose version
+docker-compose version 1.29.2, build unknown
+
+sudo apt remove docker-compose
+curl -SL https://github.com/docker/compose/releases/download/v2.20.3/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+sudo chmod 777 /usr/local/bin/docker-compose
+docker-compose version
+Docker Compose version v2.20.3
+
+
+
+
+
+
+
+
+
