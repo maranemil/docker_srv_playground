@@ -149,6 +149,147 @@ Docker Compose version v2.20.3
 
 
 
+########################################################
+maven
+########################################################
+
+https://maven.apache.org/guides/mini/guide-encryption.html
+https://docs.bytesafe.dev/package-managers/maven/
+https://docs.gitlab.com/ee/user/packages/maven_repository/
+https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry
+https://maven.apache.org/ref/3.9.5/maven-settings/settings.html
+
+########################################################
+rebase idea
+########################################################
+
+git -c credential.helper= -c core.quotepath=false -c log.showSignature=false fetch origin --recurse-submodules=no --progress --prune
+git -c credential.helper= -c core.quotepath=false -c log.showSignature=false merge origin/master --no-stat -v
+
+########################################################
+zsh
+########################################################
+
+# ll equivalent
+ls -lGaf
+
+zsh
+https://wiki.ubuntuusers.de/Zsh/
+https://linux.die.net/man/1/zsh
+https://github.com/ohmyzsh/ohmyzsh/wiki/Cheatsheet
+https://www.easeus.de/ressource/zsh-befehl-nicht-gefunden.html
+https://www.sitepoint.com/zsh-commands-plugins-aliases-tools/
+https://zsh.sourceforge.io/Doc/Release/Shell-Builtin-Commands.html
+https://opensource.com/article/19/9/getting-started-zsh
+
+take my-project replaces mkdir my-project && cd my-project
+.. is an alias for cd ..
+md	mkdir -p
+rd	rmdir
+cd / ~	cd to your home directory
+..	cd ..
+
+########################################################
+########################################################
+https://docs.docker.com/compose/install/linux/
+
+
+########################################################
+bugs plugins
+########################################################
+
+http://fitnesse.org/FitNesseDownload
+java -jar fitnesse-standalone.jar -p 8022
+http://localhost:8022/FitNesse.ReleaseNotes
+
+https://plugins.jetbrains.com/plugin/7908-fitnesse
+https://plugins.jetbrains.com/plugin/7973-sonarlint
+https://plugins.jetbrains.com/plugin/14014-spotbugs
+
+http://fitnesse.org/FitNesse.FullReferenceGuide.UserGuide
+http://fitnesse.org/FitNesse.FullReferenceGuide.UserGuide.AcceptanceTests
+http://fitnesse.org/FitNesse.FullReferenceGuide.UserGuide.WritingAcceptanceTests
+http://fitnesse.org/FitNesse.FullReferenceGuide.UserGuide.WritingAcceptanceTests.FitFramework
+http://fitnesse.org/FitNesse.FullReferenceGuide.UserGuide.WritingAcceptanceTests.SliM
+http://fitnesse.org/FitNesse.FullReferenceGuide.UserGuide.DeliveringTheRightSystem
+http://fitnesse.org/FitNesse.FullReferenceGuide.UserGuide.TwoMinuteExample
+http://fitnesse.org/FitNesse.FullReferenceGuide.UserGuide.TwoMinuteExample
+
+
+package org.example.division;
+
+public class Main {
+    public static void main(String[] args) {
+        Division division = new Division();
+        division.setNumerator(4);
+        division.setDenominator(2);
+        System.out.println(division.quotient());
+    }
+}
+
+java/org/example/division/Division.java
+org/example/division/Division.java
+/home/demos/IdeaProjects/untitled/src/main/java/org/example/division/Division.java
+
+package org.example.division;
+
+public class Division {
+    private double numerator, denominator;
+
+    public void setNumerator(double numerator) {
+        this.numerator = numerator;
+    }
+
+    public void setDenominator(double denominator) {
+        this.denominator = denominator;
+    }
+
+    public double quotient() {
+        return numerator/denominator;
+    }
+}
+
+
+Division.wiki
+----------------------
+---
+Test
+---
+
+|eg.Division|
+|numerator|denominator|quotient?|
+|10       |2          |5        |
+|12.6     |3          |4.2      |
+|100      |4          |33       |
+
+
+
+########################################################
+docker
+########################################################
+docker-compose -f some/docker-compose.yml up -d
+docker-compose version
+
+sudo dnf install -y docker-compose-plugin
+sudo apt install -y docker-compose-plugin
+
+https://docs.docker.com/compose/install/linux/
+https://github.com/serversideup/financial-freedom/blob/main/CONTRIBUTING.md
+https://docs.docker.com/compose/reference/
+type docker
+
+########################################################
+kubectl
+########################################################
+https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
+https://ddev.readthedocs.io/en/latest/
+
+kubectl create -f my-app-deployment.yaml
+kubectl create -f ./pod.json
+kubectl create -f docker-registry.yaml --edit -o json
+
+
+
 
 
 
