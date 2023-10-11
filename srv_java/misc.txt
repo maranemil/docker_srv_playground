@@ -264,6 +264,65 @@ Test
 
 
 
+
+
+
+########################################################
+FitNesse Wiki-page
+########################################################
+
+https://www.youtube.com/watch?v=KQa3kJIyOS8
+https://www.youtube.com/watch?v=qW1Kogyw-II
+https://www.youtube.com/watch?v=BQXSXFT1tPQ
+https://www.youtube.com/watch?v=lnFElwPFNAs&list=PLcuhxuDMZ3WaErM29adye2oE9--hK3oAb
+
+http://fitnesse.org/FitNesse.FullReferenceGuide.UserGuide.WritingAcceptanceTests
+http://fitnesse.org/FitNesse.FullReferenceGuide.UserGuide.WritingAcceptanceTests.FitFramework
+http://fitnesse.org/FitNesse.FullReferenceGuide.UserGuide
+http://fitnesse.org/FitNesse.FullReferenceGuide.UserGuide.WritingAcceptanceTests.SliM
+
+
+!c !2 Title
+!c !2 !style_blue[Title]
+!3 !style_olive[Title]
+!style_darkOrange[Text]
+!style_code[Text]
+
+----
+validationPage
+----
+
+test:
+
+!define TEST_SYSTEM {slim}
+!path /java/project/build/classes/
+
+!|import|
+|fitnessexample|
+
+!|Simple Calc|
+||first|second|sum?|diff?|
+|4|5|9.0|-1.0|
+|4|4|8.0|0.0|
+|10|0|10.0|10.0|
+|1|2|>2|>5|
+|3|4|5<_<8|>5|
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ########################################################
 docker
 ########################################################
@@ -277,6 +336,8 @@ https://docs.docker.com/compose/install/linux/
 https://github.com/serversideup/financial-freedom/blob/main/CONTRIBUTING.md
 https://docs.docker.com/compose/reference/
 type docker
+
+
 
 ########################################################
 kubectl
