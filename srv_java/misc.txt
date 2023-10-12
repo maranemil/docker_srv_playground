@@ -146,9 +146,6 @@ sudo chmod 777 /usr/local/bin/docker-compose
 docker-compose version
 Docker Compose version v2.20.3
 
-
-
-
 ########################################################
 maven
 ########################################################
@@ -165,6 +162,7 @@ rebase idea
 
 git -c credential.helper= -c core.quotepath=false -c log.showSignature=false fetch origin --recurse-submodules=no --progress --prune
 git -c credential.helper= -c core.quotepath=false -c log.showSignature=false merge origin/master --no-stat -v
+git pull --rebase origin master
 
 ########################################################
 zsh
@@ -262,11 +260,6 @@ Test
 |12.6     |3          |4.2      |
 |100      |4          |33       |
 
-
-
-
-
-
 ########################################################
 FitNesse Wiki-page
 ########################################################
@@ -308,6 +301,25 @@ test:
 |1|2|>2|>5|
 |3|4|5<_<8|>5|
 
+----------------------------------------------
+
+!define TEST_SYSTEM {slim}
+!style_right(ValidationPage)
+
+properties > change static to test
+https://www.youtube.com/watch?v=BQXSXFT1tPQ&list=PLcuhxuDMZ3WaErM29adye2oE9--hK3oAb&index=5
+
+https://martinfowler.com/bliki/GivenWhenThen.html
+
+Feature: User trades stocks
+  Scenario: User requests a sell before close of trading
+    Given I have 100 shares of MSFT stock
+       And I have 150 shares of APPL stock
+       And the time is before close of trading
+    When I ask to sell 20 shares of MSFT stock
+     Then I should have 80 shares of MSFT stock
+      And I should have 150 shares of APPL stock
+      And a sell order for 20 shares of MSFT stock should have been executed
 
 
 
@@ -317,37 +329,6 @@ test:
 
 
 
-
-
-
-
-
-
-########################################################
-docker
-########################################################
-docker-compose -f some/docker-compose.yml up -d
-docker-compose version
-
-sudo dnf install -y docker-compose-plugin
-sudo apt install -y docker-compose-plugin
-
-https://docs.docker.com/compose/install/linux/
-https://github.com/serversideup/financial-freedom/blob/main/CONTRIBUTING.md
-https://docs.docker.com/compose/reference/
-type docker
-
-
-
-########################################################
-kubectl
-########################################################
-https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
-https://ddev.readthedocs.io/en/latest/
-
-kubectl create -f my-app-deployment.yaml
-kubectl create -f ./pod.json
-kubectl create -f docker-registry.yaml --edit -o json
 
 
 
