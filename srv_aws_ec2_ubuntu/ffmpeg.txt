@@ -1,0 +1,7 @@
+https://aws.amazon.com/blogs/architecture/overview-of-data-transfer-costs-for-common-architectures/
+https://aws.amazon.com/blogs/media/processing-user-generated-content-using-aws-lambda-and-ffmpeg/
+https://aws.amazon.com/blogs/opensource/optimized-video-encoding-with-ffmpeg-on-aws-graviton-processors/
+https://aws.amazon.com/de/ec2/pricing/on-demand/
+https://aws.amazon.com/ec2/graviton/
+https://calculator.aws/#/
+https://calculator.aws/#/estimate
