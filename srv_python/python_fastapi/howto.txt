@@ -1,0 +1,178 @@
+
+#################################################
+FastAPI in docker
+#################################################
+
+
+https://dev.to/sc0v0ne/docker-communicate-between-containers-5ge5
+https://fastapi.tiangolo.com/deployment/docker/?h=docker
+https://hub.docker.com/_/ubuntu
+https://github.com/sc0v0ne/communicate_between_containers
+
+
+Dockerfile
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+FROM ubuntu:20.04
+
+WORKDIR /application
+
+RUN apt-get update && apt-get install -y \
+    python3.8 \
+    python3-pip
+
+COPY ./requirements.txt /application/requirements.txt
+COPY ./app /application/app
+RUN pip install --no-cache-dir --upgrade -r /application/requirements.txt
+
+RUN mkdir -p /application/logs
+
+
+docker-compose.yml
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+version: '3'
+
+services:
+
+  container_ubuntu_1:
+    container_name: ubuntu_1
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    entrypoint: ['/bin/sh', '-c']
+    command:
+      - |
+        uvicorn app.main:app --host 0.0.0.0 --port 9100
+    ports:
+      - '9100:9100'
+    volumes:
+      - volume_between_containers:/application/logs
+  container_ubuntu_2:
+    container_name: ubuntu_2
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    entrypoint: ['/bin/sh', '-c']
+    command:
+      - |
+        uvicorn app.main:app --host 0.0.0.0 --port 9200
+    ports:
+      - '9200:9200'
+    volumes:
+      - volume_between_containers:/application/logs
+
+volumes:
+  volume_between_containers:
+
+
+requirements.txt
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fastapi>=0.68.0,<0.69.0
+pydantic>=1.8.0,<2.0.0
+uvicorn>=0.15.0,<0.16.0
+
+
+
+
+app/main.py
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+from fastapi import FastAPI
+app = FastAPI()
+@app.get("/")
+def service_only():
+    return {"message": "On"}
+
+
+
+
+
+
+start_service.sh
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+docker compose -f docker-compose.yml up --build -d
+
+stop_service.sh
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+docker compose down --remove-orphans
+
+
+#################################################
+FastAPI in docker
+#################################################
+
+https://fastapi.tiangolo.com/deployment/docker/?h=docker
+
+
+
+main.py
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+from typing import Union
+from fastapi import FastAPI
+app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int, q: Union[str, None] = None):
+    return {"item_id": item_id, "q": q}
+
+
+
+
+Dockerfile
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+FROM python:3.9
+#
+WORKDIR /code
+#
+COPY ./requirements.txt /code/requirements.txt
+#
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+#
+COPY ./app /code/app
+#
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+
+
+
+.
+├── app
+│   ├── __init__.py
+│   └── main.py
+├── Dockerfile
+└── requirements.txt
+
+
+
+
+
+Docker Image with Poetry
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+FROM python:3.9 as requirements-stage
+#
+WORKDIR /tmp
+#
+RUN pip install poetry
+#
+COPY ./pyproject.toml ./poetry.lock* /tmp/
+#
+RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
+#
+FROM python:3.9
+#
+WORKDIR /code
+#
+COPY --from=requirements-stage /tmp/requirements.txt /code/requirements.txt
+#
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+#
+COPY ./app /code/app
+#
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+
+
+
