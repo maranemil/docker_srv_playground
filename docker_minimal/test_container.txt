@@ -1,4 +1,8 @@
-
+#############################################################
+#
+# Quick run
+#
+#############################################################
 
 docker run -it ubuntu /bin/bash
 docker run -it --rm ubuntu /bin/bash
@@ -19,4 +23,85 @@ Distributor ID:	Ubuntu
 Description:	Ubuntu 24.04 LTS
 Release:	24.04
 Codename:	noble
+
+#############################################################
+#
+# Tags
+#
+#############################################################
+
+https://hub.docker.com/_/ubuntu/tags
+
+docker pull ubuntu:24.04
+docker pull ubuntu:23.10
+docker pull ubuntu:22.04
+docker pull ubuntu:20.04
+docker pull ubuntu:23.04
+docker pull ubuntu:22.10
+docker pull ubuntu:18.04
+docker pull ubuntu:16.04
+docker pull ubuntu:14.04
+docker pull ubuntu:21.10
+docker pull ubuntu:21.04
+docker pull ubuntu:20.10
+docker pull ubuntu:19.10
+docker pull ubuntu:19.04
+docker pull ubuntu:18.10
+docker pull ubuntu:17.10
+docker pull ubuntu:17.04
+docker pull ubuntu:16.10
+docker pull ubuntu:14.04.5
+docker pull ubuntu:12.04
+docker pull ubuntu:12.04.5
+docker pull ubuntu:15.10
+docker pull ubuntu:14.04.4
+docker pull ubuntu:15.04
+docker pull ubuntu:14.04.3
+docker pull ubuntu:12.10
+docker pull ubuntu:14.04.1
+docker pull ubuntu:10.04
+docker pull ubuntu:13.10
+docker pull ubuntu:13.04
+docker pull ubuntu:14.04.2
+docker pull ubuntu:14.10
+
+https://hub.docker.com/_/debian
+
+docker pull debian:latest
+docker pull debian:12.5-slim
+docker pull debian:12.5
+docker pull debian:12-slim
+docker pull debian:12
+docker pull debian:11.9-slim
+docker pull debian:11.9
+docker pull debian:11-slim
+docker pull debian:11
+docker pull debian:10.13-slim
+docker pull debian:10.13
+docker pull debian:10-slim
+docker pull debian:10
+docker pull debian:12.4-slim
+docker pull debian:12.4
+docker pull debian:11.8
+docker pull debian:12.2-slim
+docker pull debian:12.2
+docker pull debian:12.1-slim
+docker pull debian:12.1
+docker pull debian:11.7-slim
+docker pull debian:11.7
+docker pull debian:12.0-slim
+docker pull debian:12.0
+docker pull debian:11.6-slim
+docker pull debian:11.6
+docker pull debian:11.5-slim
+docker pull debian:11.5
+docker pull debian:11.4-slim
+docker pull debian:11.4
+docker pull debian:10.12-slim
+docker pull debian:10.12
+docker pull debian:9.13-slim
+docker pull debian:9.13
+docker pull debian:9
+docker pull debian:8.11-slim
+docker pull debian:8.11
 
