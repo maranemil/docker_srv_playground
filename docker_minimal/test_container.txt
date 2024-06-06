@@ -14,6 +14,10 @@ docker run -it --rm -v ./src:/app ubuntu:20.04 /bin/bash;
 docker run --name ubuntu_local -it --rm -v ./src:/app ubuntu:23.04 /bin/bash;
 docker exec -it ubuntu_local bash
 
+docker stop ubuntu_local
+docker start ubuntu_local
+docker restart ubuntu_local
+
 apt update
 apt install wget git nano curl -y
 apt-get update && apt-get install -y lsb-release && apt-get clean all
