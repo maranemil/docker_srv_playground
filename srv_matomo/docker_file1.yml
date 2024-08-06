@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+
+  db:
+    image: mariadb:10.8
+    #command: --max-allowed-packet=64MB
+    restart: always
+    volumes:
+      - db:/var/lib/mysql:ro  # Z
+    #environment:
+    #  - MYSQL_ROOT_PASSWORD=password123
+    #  - MARIADB_AUTO_UPGRADE=1
+    #  - MARIADB_DISABLE_UPGRADE_BACKUP=1
+    env_file:
+      - .env
+
+  app:
+    image: matomo:5.1.0
+    restart: always
+    volumes:
+      - matomo:/var/www/html:rw # z
+    environment:
+      - MATOMO_DATABASE_HOST=db
+    ports:
+      - "8080:80"
+    env_file:
+      - .env
+
+volumes:
+  db:
+  matomo:
