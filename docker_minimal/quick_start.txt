@@ -1,0 +1,111 @@
+
+
+# convert following yaml into cli command
+
+
+services:
+  node:
+    image: "node:22"
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./:/home/node/app
+    ports: # use if it is necessary to expose the container to the host machine
+      - "8888:8888"
+    command: ["npm", "start"]
+
+
+
+docker run \
+  -d \
+  --name node-app \
+  --user node \
+  --workdir /home/node/app \
+  -e NODE_ENV=production \
+  -v "$(pwd)":/home/node/app \
+  -p 8888:8888 \
+  node:22 \
+  npm start
+
+
+docker run -d --name node-app --user node --workdir /home/node/app -e NODE_ENV=production -v "$(pwd)":/home/node/app -p 8888:8888 node:22 npm start
+
+docker run -it --rm --name my-running-script -v "$PWD":/usr/src/app -w /usr/src/app node:22 node script.js
+
+docker run -it --rm --name my-running-script -v "$PWD":/usr/src/app -w /usr/src/app node:22 node script.js
+
+
+https://www.docker.com/blog/how-to-dockerize-react-app/
+https://docs.docker.com/guides/nodejs/containerize/#generate-a-dockerfile
+https://github.com/nodejs/docker-node
+https://github.com/nodejs/docker-node/blob/main/README.md#how-to-use-this-image
+https://hub.docker.com/_/node
+
+https://create-react-app.dev/docs/deployment/
+https://code.visualstudio.com/docs/nodejs/reactjs-tutorial
+https://www.digitalocean.com/community/developer-center/how-to-deploy-your-react-app-using-container-registry
+https://code.visualstudio.com/docs/containers/quickstart-node
+https://docs.docker.com/reference/samples/react/
+https://mherman.org/blog/dockerizing-a-react-app/
+https://www.geeksforgeeks.org/devops/how-to-dockerize-a-reactjs-app/
+https://docs.docker.com/engine/network/
+-----------------------------------------------
+https://hub.docker.com/_/golang
+
+$ docker run --name golang --rm -v "$PWD":/usr/src/myapp -w /usr/src/myapp golang:1.25 go build -v
+$ docker run --name golang --rm -v "$PWD":/usr/src/myapp -w /usr/src/myapp golang:1.25 make
+$ docker run --name golang --rm -v "$PWD":/usr/src/myapp -w /usr/src/myapp -e GOOS=windows -e GOARCH=386 golang:1.25 go build -v
+$ docker run --name golang --rm -it -v "$PWD":/usr/src/myapp -w /usr/src/myapp golang:1.25 bash
+$ for GOOS in darwin linux; do
+>   for GOARCH in 386 amd64; do
+>     export GOOS GOARCH
+>     go build -v -o myapp-$GOOS-$GOARCH
+>   done
+> done
+
+
+
+https://hub.docker.com/_/php
+$ docker run -it --rm --name my-running-script -v "$PWD":/usr/src/myapp -w /usr/src/myapp php:8.2-cli php your-script.php
+$ docker run -d -p 80:80 --name my-apache-php-app -v "$PWD":/var/www/html php:7.2-apache
+
+
+https://hub.docker.com/_/python
+$ docker run -it --rm --name my-running-script -v "$PWD":/usr/src/myapp -w /usr/src/myapp python:3 python your-daemon-or-script.py
+$ docker run -it --rm --name my-running-script -v "$PWD":/usr/src/myapp -w /usr/src/myapp python:2 python your-daemon-or-script.py
+
+
+https://hub.docker.com/_/bash
+docker run -it --name bash --rm bash:4.4
+docker run -it --name bash --rm -v /path/to/script.sh:/script.sh:ro bash:4.4 bash /script.sh
+docker run -it --name bash --rm -v /path/to/script.sh:/script.sh:ro bash:3.2 bash /script.sh
+
+
+https://hub.docker.com/_/busybox
+docker run -it --name busybox --rm busybox bash
+
+
+https://hub.docker.com/_/alpine
+docker run -it --rm --name alpine alpine:3.14 bash
+docker run -it --rm --name alpine ubuntu:20.04 bash
+
+https://hub.docker.com/_/ubuntu
+docker run -it --rm --name ubuntu ubuntu:latest bash
+
+https://hub.docker.com/_/debian
+docker run -it --rm  --name debian debian:latest bash
+docker run -it --rm  --name debian debian:bullseye bash
+docker run -it --rm  --name debian debian:10 bash
+docker run -it --rm  --name debian debian:buster bash
+
+
+https://hub.docker.com/_/rockylinux
+docker pull rockylinux:8.4
+docker run -it --rm --name rockylinux rockylinux:8.4 bash
+
+
+https://hub.docker.com/_/oraclelinux
+oraclelinux:7 and oraclelinux:7-slim
+oraclelinux:8 and oraclelinux:8-slim
