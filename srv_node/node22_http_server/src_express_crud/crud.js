@@ -1,5 +1,5 @@
 // npm install express sqlite3 body-parser ejs
-// node clud.js
+// node crud.js
 
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
