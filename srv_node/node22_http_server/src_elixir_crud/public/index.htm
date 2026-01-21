@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elixir.js + SQLite CRUD</title>
+ 
+    <script src="https://cdn.jsdelivr.net/npm/mind-elixir@5.6.1/dist/MindElixir.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/mind-elixir@5.6.1/dist/MindElixir.min.css" rel="stylesheet">
+
+
+</head>
+<body>
+    <h1>User Management</h1>
+    <div id="app"></div>
+
+    <script>
+        const app = new Elixir('#app', {
+            users: [],
+            newUser: { name: '', email: '' },
+
+            async fetchUsers() {
+                const response = await fetch('/users');
+                this.users = await response.json();
+            },
+
+            async addUser() {
+                await fetch('/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(this.newUser),
+                });
+                this.newUser = { name: '', email: '' };
+                this.fetchUsers();
+            },
+
+            async deleteUser(id) {
+                await fetch(`/users/${id}`, { method: 'DELETE' });
+                this.fetchUsers();
+            },
+
+            render() {
+                return `
+                    <form onsubmit="this.addUser(); return false;">
+                        <input type="text" placeholder="Name" bind="newUser.name" required />
+                        <input type="email" placeholder="Email" bind="newUser.email" required />
+                        <button type="submit">Add User</button>
+                    </form>
+                    <ul>
+                        ${this.users.map(user => `
+                            <li>
+                                ${user.name} (${user.email})
+                                <button onclick="this.deleteUser(${user.id})">Delete</button>
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+            }
+        });
+
+        app.fetchUsers();
+    </script>
+</body>
+</html>
