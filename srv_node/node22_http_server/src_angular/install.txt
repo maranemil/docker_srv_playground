@@ -67,7 +67,29 @@ npm install @awesome-cordova-plugins/sqlite
 
 
 
--------------------------
+
+---------------------------------------------------------------------------
+services 
+
+
+https://v17.angular.io/guide/architecture-services
+https://v17.angular.io/tutorial/tour-of-heroes/toh-pt4
+https://v17.angular.io/tutorial/tour-of-heroes/toh-pt6
+https://stackblitz.com/edit/angular-with-axios?file=polyfills.ts
+
+
+https://axios-http.com/docs/intro
+https://angular.dev/guide/di
+https://angular.dev/guide/di/creating-and-using-services
+https://angular.dev/tutorials/first-app/09-services
+https://angular.dev/guide/http/making-requests
+https://angular.dev/api/common/http/withFetch
+https://rapidapi.com/guides/use-axios-angular
+https://www.npmjs.com/package/axios
+https://angular.dev/api/common/http/FetchBackend
+https://randomuser.me/api/
+
+---------------------------------------------------------------------------
 
 
 npm init
