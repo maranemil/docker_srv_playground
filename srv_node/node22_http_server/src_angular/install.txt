@@ -1,0 +1,101 @@
+https://v17.angular.io/tutorial/tour-of-heroes/toh-pt0
+https://v17.angular.io/start/start-forms
+https://v17.angular.io/tutorial/tour-of-heroes/toh-pt5
+https://v17.angular.io/guide/router
+https://angular.dev/guide/routing/show-routes-with-outlets
+
+https://gist.github.com/angular-academy-devs/a07ec9690d06d7b9b62303b6593f3f5f
+https://medium.com/ngconf/troubleshooting-angular-routing-bc96c59fe49b
+https://angular.dev/guide/routing/common-router-tasks
+https://angular.love/angular-router-everything-you-need-to-know-about
+https://angular.dev/guide/components/programmatic-rendering
+https://www.rx-angular.io/docs/template/performance-issues/rendering-issues-in-angular
+
+docker run -it --rm --name my-running-script  --network=host -p 3000:3000 -v "$PWD":/usr/src/app -w /usr/src/app node:22 bash
+
+
+rm -rf node_module
+npm init
+npm install -g @angular/cli
+npm install -g @ionic/cli --force
+#cd app
+#ng serve
+#ng new
+#ng new --no-standalone
+ng new angular-todo
+cd angular-todo
+ng serve --open
+http://localhost:4200/
+
+ng generate component home
+ng generate component form
+ng generate component list
+ng generate service sqlite
+code  .
+sudo chmod 0777 -R ../src/
+
+npm install --save @capacitor-community/sqlite
+
+https://rxdb.info/capacitor-database.html
+https://github.com/capacitor-community/sqlite
+
+still possible to create a module-based app by using the --no-standalone flag :
+ng new --no-standalone
+ng g module app
+ng generate module app
+# ng g component new-module/new-component
+# ng g component nameComponent --module=app.module.ts
+# ng g component nameComponent --module=app --dry-run
+# ng g component foo/fooList --module=foo.module.ts
+# ng g c user/userComponent -m user.module
+# ng g c componentName -m ModuleName
+
+# ng g m moduleName --routing
+# cd moduleName
+# ng g c componentName --module=moduleName.module.ts --flat
+
+# ng g m modules/media
+# ng g c modules/media/picPick --module=modules/media/media.module.ts
+
+ 
+ng new routing-app
+ng generate component first
+ng generate component second
+
+# ngErrorMessage: 'No provider found for `Sqlite`.',
+npm install @awesome-cordova-plugins/sqlite
+
+
+
+-------------------------
+
+
+npm init
+#npm install @capacitor-community/sqlite
+npm install sqlite3 
+npm install @ionic/angular
+npm install @angular/forms
+npm install -g ionic@latest
+npm audit fix --force
+
+npm i -D -E @angular/cli
+ng run app:serve --host=localhost --port=8100
+npm audit fix
+
+To update, run: npm uninstall -g ionic
+ Then run: npm i -g @ionic/cli
+
+npm install
+ng build
+npm install --save-dev @angular/cli@latest
+ng serve -o
+
+ionic init
+ionic serve
+
+ng new hello-world
+cd hello-world
+ng serve
+
+rm -rf node_module
+npm install
