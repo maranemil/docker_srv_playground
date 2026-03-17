@@ -1,0 +1,62 @@
+
+
+-----------------
+#vuejs 
+
+# start node container
+docker run -it --rm --name my-running-script  --network=host -p 3000:3000 -v "$PWD":/usr/src/app -w /usr/src/app node:22 bash
+
+npm install -g npm@11.11.1
+
+npm install
+
+
+https://cli.vuejs.org/guide/creating-a-project.html#vue-create
+npm create vue@latest
+#vue create hello-world
+
+cd tst
+npm install
+npm run format
+npm run dev
+
+git init && git add -A && git commit -m "initial commit"
+
+Local:  
+http://localhost:5173/
+http://localhost:5173/__devtools__/
+
+--------------------
+cli
+https://cli.vuejs.org/guide/installation.html
+https://cli.vuejs.org/guide/creating-a-project.html#using-the-gui
+
+npm install -g @vue/cli
+vue --version
+npm update -g @vue/cli
+
+vue create --help
+
+vue ui
+http://localhost:8000/project/select
+http://localhost:8000/dependencies
+
+vue create hello-world
+
+
+ref docs
+https://code.visualstudio.com/
+https://github.com/vuejs/language-tools
+https://vitest.dev/
+https://www.cypress.io/#create
+https://playwright.dev/
+https://pinia.vuejs.org/
+https://router.vuejs.org/
+https://test-utils.vuejs.org/
+https://github.com/vuejs/devtools
+https://github.com/vuejs/awesome-vue
+https://vuejs.org/
+https://vuejs.org/guide/introduction.html
+https://vuejs.org/guide/quick-start
+
+

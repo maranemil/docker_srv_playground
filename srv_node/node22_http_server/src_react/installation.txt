@@ -1,0 +1,32 @@
+#react 
+
+# start node container
+docker run -it --rm --name my-running-script  --network=host -p 3000:3000 -v "$PWD":/usr/src/app -w /usr/src/app node:22 bash
+
+ 
+https://react.dev/learn/creating-a-react-app
+https://react.dev/learn/build-a-react-app-from-scratch
+https://create-react-app.dev/docs/getting-started/
+
+# create react project
+npx create-next-app@latest
+# npx create-react-app@latest my-app
+# npm init react-app my-app
+
+# To update run
+npm install -g npm@11.11.1
+
+# create react router
+npx create-react-router@latest
+
+....
+
+# using vite
+npm create vite@latest my-app -- --template react-ts
+
+cd myapp/
+npm run build
+npm run start
+
+- Local:         http://localhost:3000
+- Network:       http://192.168.2.168:3000
