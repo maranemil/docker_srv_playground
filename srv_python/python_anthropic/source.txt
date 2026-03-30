@@ -1,0 +1,14 @@
+https://www.freecodecamp.org/news/docker-container-doctor-how-i-built-an-ai-agent-that-monitors-and-fixes-my-containers/
+
+
+curl http://localhost:8080/health
+
+
+requirements.txt:
+
+docker==7.0.0
+anthropic>=0.28.0
+python-dotenv==1.0.0
+flask==3.0.0
+requests==2.31.0
+
