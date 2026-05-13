@@ -1,0 +1,126 @@
+# Source - https://stackoverflow.com/a/79335998
+# Posted by Aleksander Eriksen
+# Retrieved 2026-05-13, License - CC BY-SA 4.0
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    env_file:
+      - .env
+    environment:
+      PGDATA: /var/lib/postgresql/data
+      PGUSER: ${POSTGRES_USER}
+      PGDATABASE: ${POSTGRES_DB}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT}:5432"
+
+volumes:
+  db-data: {}
+
+
+--------------------------------------------------------------------
+# Source - https://stackoverflow.com/a/76640843
+# Posted by Daniel S., modified by community. See post 'Timeline' for change history
+# Retrieved 2026-05-13, License - CC BY-SA 4.0
+
+version: '3'
+
+services:
+
+  db:
+    image: postgres:15.3-alpine3.18
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes: 
+      - ./db:/var/lib/postgresql/data
+      - ./create-db.sql:/docker-entrypoint-initdb.d/create_database.sql
+    networks:
+      - backnet
+
+--------------------------------------------------------------------
+# Source - https://stackoverflow.com/a/75246287
+# Posted by e741af0d41bc74bf854041f1fbdbf, modified by community. See post 'Timeline' for change history
+# Retrieved 2026-05-13, License - CC BY-SA 4.0
+
+services:
+  db:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: /data/postgres
+      POSTGRES_DB: bank
+    volumes:
+      - db:/data/postgres
+    ports:
+      - "5332:5432"
+    networks:
+      - db
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d postgres" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+networks:
+  db:
+    driver: bridge
+
+volumes:
+  db:
+
+
+--------------------------------------------------------------------
+# Use postgres/example user/password credentials
+
+services:
+  db:
+    image: postgres
+    restart: always
+    # set shared memory limit when using docker compose
+    shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes:
+    #  - type: tmpfs
+    #    target: /dev/shm
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
+    environment:
+      POSTGRES_PASSWORD: example
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+
+--------------------------------------------------------------------
+compose docker
+$ docker run -it --rm --network some-network postgres psql -h some-postgres -U postgres
+psql (14.3)
+Type "help" for help.
+
+postgres=# SELECT 1;
+ ?column? 
+----------
+        1
+(1 row)
+
+--------------------------------------------------------------------
