@@ -124,3 +124,12 @@ postgres=# SELECT 1;
 (1 row)
 
 --------------------------------------------------------------------
+
+$ docker run -it --rm --user "$(id -u):$(id -g)" -v /etc/passwd:/etc/passwd:ro -e POSTGRES_PASSWORD=mysecretpassword postgres
+The files belonging to this database system will be owned by user "jsmith".
+...
+
+https://hub.docker.com/_/postgres
+https://stackoverflow.com/questions/75246059/create-a-postgres-database-within-a-docker-compose-yml-file
+
+--------------------------------------------------------------------
