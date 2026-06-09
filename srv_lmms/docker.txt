@@ -1,0 +1,14 @@
+
+Windows Powershell
+
+
+docker --version
+docker run -it --name ubuntu-app ubuntu:24.04 bash
+docker run -it --rm --name ubuntu-app -v "C:/Examplefolder:/srv/app" ubuntu:24.04 bash
+apt update
+apt install lmms 
+apt install ffmpeg
+for i in *.mmpz; do taskset -c 0-11:2 lmms --allowroot render "$i" -o "$i"_out; done
+for i in *.mmpz; do lmms --allowroot render "$i" -o "$i"_out; done
+for i in *.wav; do ffmpeg -i "$i"  -b:a 96k -y "$i".mp3; done && rm *.wav
+
