@@ -1,0 +1,113 @@
+
+
+# start jupyter
+# docker run --rm -p 10000:8888 jupyter/scipy-notebook
+# http://127.0.0.1:10000/
+
+python code
+
+# import
+import numpy as np
+import scipy.io.wavfile as wav
+import cmath
+import math
+import scipy.integrate as integrate 
+from scipy.fftpack import fft, fftshift
+
+# download file 
+url = 'https://github.com/pdx-cs-sound/wavs/raw/refs/heads/main/'
+import requests
+fname = 'car-horn.wav'
+url = url + fname
+r = requests.get(url)
+open(fname , 'wb').write(r.content)
+
+
+# 1. Load your audio file
+# Replace 'your_audio.wav' with the path to your actual mono audio file
+sample_rate, data = wav.read(fname)
+
+# Normalize 16-bit or 32-bit audio data to floating-point values between -1.0 and 1.0
+if data.dtype == np.int16:
+    data = data.astype(np.float32) / 32768.0
+elif data.dtype == np.int32:
+    data = data.astype(np.float32) / 2147483648.0
+
+# Take a short slice of the audio to inspect (e.g., first 1024 samples)
+N = 2048
+audio_segment = data[:N]
+
+# 2. Perform the Fast Fourier Transform (FFT)
+fft_coefficients = np.fft.fft(audio_segment)
+frequencies = np.fft.fftfreq(N, d=1/sample_rate)
+
+# 3. Extract the Cosine (Real) and Sine (Imaginary) formula weights
+# FFT results are mirrored; we only need the positive frequencies (first half)
+half_N = N // 2
+
+print(f"{'Freq (Hz)':<42} | {'Cosine Component Formula':<45} | {'Sine Component Formula':<15}")
+print("-" * 90)
+t = 0.5
+x = ""
+for k in range(1, half_N):
+    freq = round(frequencies[k],2)
+    #print(freq)
+    if(k>10):
+        break
+    
+    # Scale coefficients by 2/N to match physical amplitudes
+    # Real part maps directly to Cosine, negative Imaginary maps to Sine
+    A_k = (2.0 / N) * fft_coefficients[k].real
+    B_k = -(2.0 / N) * fft_coefficients[k].imag
+    coefficient = 0.1
+    
+    # Filter out negligible ambient noise or silence
+    if abs(A_k).all():
+        cos_str = np.sum(abs(A_k)  + np.sin(2 * np.pi * int(freq)))
+        sin_str = np.sum(abs(B_k)  + np.sin(2 * np.pi * int(freq)))
+ 
+        x = x + f"sinew(t * {freq}  * exp(-t * .1)) * exp(-t * .3)"        
+        print(f"{freq:<42.1f} | {cos_str:<45} | {sin_str:<15}")
+print("-" * 90)
+print(x)
+
+
+Output
+Freq (Hz)                                  | Cosine Component Formula                      | Sine Component Formula
+------------------------------------------------------------------------------------------
+23.4                                       | 0.0064545126698878925                         | 0.002197764270082451
+46.9                                       | 0.004908839711027561                          | 0.001470556868369763
+70.3                                       | 0.0017605366231552644                         | 0.006382241035650808
+93.8                                       | 0.004171742880580732                          | 0.0023250659921052698
+117.2                                      | 0.004081449872718217                          | 0.0009779921418792558
+140.6                                      | 0.006061178451079124                          | 0.002212702488990089
+164.1                                      | 0.004440721203312054                          | 0.0006708846561655052
+187.5                                      | 0.004279632990109277                          | 0.0012056251513605737
+210.9                                      | 0.0033841307046757045                         | 0.0018915169449722619
+234.4                                      | 0.005677688985253618                          | 0.0012177157943596248
+------------------------------------------------------------------------------------------
+
+sinew(t * 23.44  * exp(-t * .1)) * exp(-t * .3)sinew(t * 46.88  * exp(-t * .1)) * exp(-t * .3)sinew(t * 70.31  
+* exp(-t * .1)) * exp(-t * .3)sinew(t * 93.75  * exp(-t * .1)) * exp(-t * .3)sinew(t * 117.19  * exp(-t * .1)) 
+* exp(-t * .3)sinew(t * 140.62  * exp(-t * .1)) * exp(-t * .3)sinew(t * 164.06  * exp(-t * .1)) * exp(-t * .3) sinew(t * 187.5  * exp(-t * .1)) 
+* exp(-t * .3) sinew(t * 210.94  * exp(-t * .1)) * exp(-t * .3) sinew(t * 234.38  * exp(-t * .1)) * exp(-t * .3)
+
+
+
+
+
+
+Examples:
+
+
+sinew(t * 129.2  * exp(-t * .1)) * exp(-t * .3)sinew(t * 150.73  * exp(-t * .1)) * exp(-t * .3)sinew(t * 193.8  * exp(-t * .1)) * exp(-t * .3) 
+
+
+sinew(t * 129.2  * exp(-t * .1)) * exp(-t * .3)sinew(t * 150.73  * exp(-t * .1)) * exp(-t * .3)sinew(t * 193.8  * exp(-t * .1)) * exp(-t * .3) + squarew(3)
+
+
+
+4*sinew(t * 23.44  * exp(-t * .1)) * exp(-t * .3)sinew(t * 46.88  * exp(-t * .1)) * exp(-t * .3)sinew(t * 70.31  
+* exp(-t * .1)) * exp(-t * .3)sinew(t * 93.75  * exp(-t * .1)) * exp(-t * .3)sinew(t * 117.19  * exp(-t * .1)) 
+* exp(-t * .3)sinew(t * 140.62  * exp(-t * .1)) * exp(-t * .3)sinew(t * 164.06  * exp(-t * .1)) * exp(-t * .3)sinew(t * 187.5  * exp(-t * .1)) 
+* exp(-t * .3)sinew(t * 210.94  * exp(-t * .1)) * exp(-t * .3)sinew(t * 234.38  * exp(-t * .1)) * exp(-t * .3)   
