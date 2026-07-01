@@ -2,6 +2,7 @@
 
 # start jupyter
 # docker run --rm -p 10000:8888 jupyter/scipy-notebook
+# docker run --rm -p 10000:8888 jupyter/datascience-notebook
 # http://127.0.0.1:10000/
 
 python code
