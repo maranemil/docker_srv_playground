@@ -19,9 +19,14 @@ from scipy.fftpack import fft, fftshift
 url = 'https://github.com/pdx-cs-sound/wavs/raw/refs/heads/main/'
 import requests
 fname = 'car-horn.wav'
-url = url + fname
-r = requests.get(url)
-open(fname , 'wb').write(r.content)
+
+
+if os.path.isfile(fname):
+    print ("skip download")
+else:
+    url = url + fname
+    r = requests.get(url)
+    open(fname , 'wb').write(r.content)
 
 
 # 1. Load your audio file

@@ -1,0 +1,38 @@
+# import
+import numpy as np
+import scipy.io.wavfile as wav
+import cmath
+import math 
+import os.path
+import random
+
+"""
+docker run --rm -p 10000:8888 jupyter/scipy-notebook
+
+"""
+
+
+
+print(f"{'Freq (Hz)':<42} | {'Cosine Component Formula':<45} | {'Sine Component Formula':<15}")
+print("-" * 90)
+t = 0.5
+x = ""
+for k in range(1, 10): 
+    if(k>random.randint(2, 5)):
+        break
+
+    eval = ['sin,''sinew', 'trianglew', 'squarew', 'saww',
+    'abs', 'sin', 'cos', 'tan', 'cot', 'asin', 'acos', 'atan', 'atan2', 'sinh', 'cosh', 'tanh', 'asinh', 'acosh', 'atanh', 'sinc', 'hypot',
+    'exp', 'log', 'log2', 'log10', 'logn', 'pow', 'sqrt', 'min', 'max', 'floor', 'ceil', 'round', 'trunc', 'frac', 'avg', 'sgn', 'mod']
+    
+    # Filter out negligible ambient noise or silence
+    if abs(A_k).all():
+        randnum = random.randint(1, 9);
+        randomunicos = random.uniform(0.5, 7.5)
+        randomunisin = random.uniform(0.5, 7.5)
+        randomfreq = random.randint(41, 227)
+        #round(random.uniform(33.33, 66.66), 2)
+        x = x + f"{eval[random.randint(0, 13)]}(t * {randomfreq}  * exp(-t * .1)) * exp(-t * .{randnum})"
+        print(f"{randomfreq:<42.1f} | {randomunicos:<45} | {randomunisin:<15}")
+print("-" * 90)
+print(x)
