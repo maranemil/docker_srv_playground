@@ -1,0 +1,22 @@
+
+import numpy as np
+from numpy.fft import fft, ifft, fftshift
+
+pnts = 10
+y = np.random.randn(pnts) # noise
+print(y)
+
+spec = fftshift(fft(y)) # complex spectrum of noise
+print(spec)
+phase_initial = np.arctan2(spec.imag, spec.real)
+spec_pow = spec * spec.conj() # power spectrum (phase info lost)
+
+phase = 2*np.pi * np.random.rand(pnts//2) - np.pi # random positive frequency phase
+p = 2*np.pi * np.random.rand(1) - np.pi # Nyquist frequency phase
+phase = np.concatenate((p, -1*phase[:0:-1], phase)) # full phase (impose symmetry)
+print(p)
+print(phase)
+
+
+
+# https://www.programiz.com/python-programming/online-compiler/
