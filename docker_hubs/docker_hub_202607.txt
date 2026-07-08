@@ -1,0 +1,309 @@
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+NET
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://hub.docker.com/hardened-images/catalog/dhi/dotnet/guides
+
+# Run a .NET application (runtime variant)
+docker run --rm dhi.io/dotnet:<tag>
+
+# Start an interactive development container (SDK variant)
+docker run --rm -it --entrypoint bash dhi.io/dotnet:<tag>-sdk
+
+# Check entry point and user configuration
+docker image inspect dhi.io/dotnet:8 --format='{{.Config.Entrypoint}}'
+docker image inspect dhi.io/dotnet:8 --format='{{.Config.Cmd}}'
+docker image inspect dhi.io/dotnet:8 --format='{{.Config.User}}'
+
+# Compare image sizes
+docker images | grep dotnet
+
+
+Build and run a .NET console application
+
+
+# Build stage using SDK variant
+FROM dhi.io/dotnet:8-sdk AS build
+WORKDIR /src
+COPY *.csproj .
+RUN dotnet restore
+COPY . .
+RUN dotnet publish -c Release -o /app
+
+# Runtime stage using minimal runtime variant
+FROM dhi.io/dotnet:8
+WORKDIR /app
+COPY --from=build /app .
+ENTRYPOINT ["dotnet", "YourApp.dll"]
+
+docker build -t my-console-app .
+docker run --rm my-console-app
+
+...
+ASP.NET Core web application
+
+# Build stage
+FROM dhi.io/dotnet:8-sdk AS build
+WORKDIR /src
+COPY MyWebApp/*.csproj ./MyWebApp/
+RUN dotnet restore MyWebApp/MyWebApp.csproj
+COPY . .
+RUN dotnet publish MyWebApp/MyWebApp.csproj -c Release -o /app
+
+# Runtime stage for web apps
+FROM dhi.io/aspnetcore:8
+WORKDIR /app
+COPY --from=build /app .
+EXPOSE 8080
+ENTRYPOINT ["dotnet", "MyWebApp.dll"]
+
+
+# Configure your ASP.NET Core application for nonroot user compatibility:
+// In Program.cs, ensure proper port configuration
+var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+
+app.MapGet("/", () => "Hello World from DHI .NET Web App!");
+app.MapGet("/health", () => new { status = "healthy", timestamp = DateTime.UtcNow });
+
+// Use port 8080 (nonroot user compatible)
+app.Run("http://0.0.0.0:8080");
+
+
+# Build and run commands:
+docker build -t my-web-app .
+docker run -d --name my-web-app -p 8080:8080 my-web-app
+
+# Test endpoints
+curl http://localhost:8080/
+curl http://localhost:8080/health
+
+# Clean up
+docker stop my-web-app && docker rm my-web-app
+
+.....
+
+
+Development container with volume mounting
+
+# Start an interactive development environment
+docker run --rm -it \
+  -v $(pwd):/workspace \
+  -w /workspace \
+  dhi.io/dotnet:8-sdk \
+  bash
+
+
+# Create a new project
+dotnet new console -n MyApp
+cd MyApp
+
+# Add packages
+dotnet add package Newtonsoft.Json
+
+# Build and run
+dotnet build
+dotnet run
+
+# Run tests
+dotnet test
+
+# Publish for production
+
+dotnet publish -c Release -o ./publish
+
+# For quick development tasks without entering the container:
+
+
+# Create a new project from outside the container
+docker run --rm -v $(pwd):/workspace -w /workspace \
+  dhi.io/dotnet:8-sdk \
+  dotnet new web -n MyWebApp
+
+# Build the project
+docker run --rm -v $(pwd):/workspace -w /workspace \
+  dhi.io/dotnet:8-sdk \
+  dotnet build MyWebApp
+
+# Create and run a simple console application
+docker run --rm -v $(pwd):/workspace -w /workspace \
+  dhi.io/dotnet:8-sdk \
+  dotnet new console -n HelloWorld
+
+docker run --rm -v $(pwd):/workspace -w /workspace \
+  dhi.io/dotnet:8-sdk \
+  dotnet run --project HelloWorld
+
+
+...
+
+Running pre-built applications
+
+
+# Create and build a console application using SDK
+docker run --rm -v $(pwd):/workspace -w /workspace \
+  dhi.io/dotnet:8-sdk \
+  dotnet new console -n MyApp
+
+docker run --rm -v $(pwd):/workspace -w /workspace \
+  dhi.io/dotnet:8-sdk \
+  dotnet build MyApp
+
+# Run the built application using runtime image (note the full path to the compiled DLL)
+docker run --rm -v $(pwd):/workspace -w /workspace \
+  dhi.io/dotnet:8 \
+  dotnet MyApp/bin/Debug/net8.0/MyApp.dll
+
+
+
+# Available variants include:
+
+8: .NET 8 runtime only
+8-sdk: .NET 8 SDK for development and building
+9: .NET 9 runtime only
+9-sdk: .NET 9 SDK for development and building
+For ASP.NET Core application, use the separate DHI ASP.NET Core repository:
+
+dhi.io/aspnetcore:8: ASP.NET Core 8 runtime
+dhi.io/aspnetcore:9: ASP.NET Core 9 runtime
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+debian
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://hub.docker.com/_/debian
+
+docker pull debian:trixie-backports
+$ docker run -it --rm debian bash
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+BusyBox
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://hub.docker.com/hardened-images/catalog/dhi/busybox
+
+
+$ docker run -it --rm dhi.io/busybox:latest bash
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Debian Base
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://hub.docker.com/hardened-images/catalog/dhi/debian-base
+
+
+docker run -it --rm dhi.io/debian-base:latest
+
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Start an ASP.NET Core instance
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+https://hub.docker.com/hardened-images/catalog/dhi/aspnetcore/guides
+
+docker run --rm dhi.io/aspnetcore:<tag> dotnet --info
+docker run -p 8080:8080 dhi.io/aspnetcore:<tag> dotnet /app/myapp.dll
+
+
+Build and run a simple web API
+
+# Create a new web API project using DHI's SDK
+docker run -v $(pwd):/app -w /app dhi.io/dotnet:8-sdk \
+  dotnet new webapi -n MyApi --no-https
+
+# Build the application using DHI's SDK
+docker run -v $(pwd):/app -w /app dhi.io/dotnet:8-sdk \
+  dotnet publish MyApi -c Release -o ./published
+
+# Run with DHI runtime (note: this is a web API, so it needs proper setup)
+docker run -v $(pwd)/published:/app -p 8080:8080 dhi.io/aspnetcore:8 dotnet /app/MyApi.dll
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Amazon Elastic Container Service Agent
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://hub.docker.com/r/amazon/amazon-ecs-agent
+
+docker stop ecs-agent
+docker rm ecs-agent
+docker pull amazon/amazon-ecs-agent:latest
+
+
+docker run --name ecs-agent -d -v /var/run/docker.sock:/var/run/docker.sock -v /var/log/ecs/:/log -v /var/lib/ecs/data:/data -p 127.0.0.1:51678:51678 -e ECS_LOGFILE=/log/ecs-agent.log -e ECS_LOGLEVEL=info -e ECS_DATADIR=/data amazon/amazon-ecs-agent:latest
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ubuntu
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://hub.docker.com/_/ubuntu
+
+
+docker run -it --rm debian bash
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+amazonlinux
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://hub.docker.com/_/amazonlinux
+
+docker pull amazonlinux
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://hub.docker.com/mcp
+https://hub.docker.com/u/library
+https://hub.docker.com/u/ai
+
+https://hub.docker.com/r/ai/llama3.1, 15 GB, docker model pull ai/llama3.1:8B-F16
+https://hub.docker.com/r/ai/gemma4  , 5.7 GB., docker pull ai/gemma4
+https://hub.docker.com/r/ai/qwen3.6  , 17.3 GB, docker model pull ai/qwen3.6:27B
+https://hub.docker.com/r/ai/kimi-k2.6 , 544.5 GB
+https://hub.docker.com/r/ai/qwen3.5, 5.6 GB, docker model pull ai/qwen3.5:9B-UD-Q4_K_XL
+https://hub.docker.com/r/ai/stable-diffusion, 2.6 GB, docker model pull ai/stable-diffusion:Q4
+https://hub.docker.com/r/ai/gpt-oss, 11.1 GB, docker model pull ai/gpt-oss:20B
+https://hub.docker.com/r/ai/kimi-k2, 601.9 GB, 
+https://hub.docker.com/r/ai/qwen3-vl, 5.9 GB, docker model pull ai/qwen3-vl
+https://hub.docker.com/r/ai/qwen3, 7.5 GB, docker model pull ai/qwen3:4B-F16
+https://hub.docker.com/r/ai/qwen2.5, 4.1 GB, docker model pull ai/qwen2.5:7B-Q4_0
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+node
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://hub.docker.com/_/node
+
+docker pull node:trixie-slim
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+amazoncorretto OpenJDK
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://hub.docker.com/_/amazoncorretto
+
+docker pull amazoncorretto
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+alpine
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://hub.docker.com/_/alpine
+
+docker pull alpine:3.23.5
+
+
+Use like you would any other base image:
+
+FROM alpine:3.14
+RUN apk add --no-cache mysql-client
+ENTRYPOINT ["mysql"]
+This example has a virtual image size of only 36.8MB. Compare that to our good friend Ubuntu:
+
+FROM ubuntu:20.04
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends mysql-client \
+    && rm -rf /var/lib/apt/lists/*
+ENTRYPOINT ["mysql"]
+
+
+
