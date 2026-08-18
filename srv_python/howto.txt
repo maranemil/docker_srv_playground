@@ -92,3 +92,51 @@ services:
 
 
 
+##########################################################
+deploying-a-python-application-to-docker
+##########################################################
+
+https://medium.com/@mjrod/deploying-a-python-application-to-docker-4478787c2add
+
+mkdir hello-py && cd hello-py
+mkdir server && cd server && touch main.py
+
+from flask import Flask
+app = Flask(__name__)
+@app.route("/")
+def home():
+    return print("hello, py!")
+if __name__ == "__main__":
+    app.run(debug=True)
+
+
+# Linux & macOS
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Windows
+py -3 -m venv .venv
+.venv\scripts\activate
+
+python -m pip install flask
+pip freeze > requirements.txt
+python -m flask run
+http://localhost:5000
+
+touch Dockerfile
+FROM python:3.9.13-slim-buster
+WORKDIR /hello-py
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
+COPY . .
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+
+docker build --tag hello-py
+docker run -d -p 5001:5000 hello-py
+
+
+docker login --username=mjrod
+docker tag hello-py mjrod/hello-py
+docker push mjrod/hello-py
+docker pull mjrod/hello-py:latest
+docker run -d -p 5000:5000 --name=hello-py mjrod/hello-py
