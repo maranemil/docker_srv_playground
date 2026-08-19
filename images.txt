@@ -101,3 +101,38 @@ Remove all images
 docker rmi $(docker images -q)
 
 
+#################################################
+export import save load
+#################################################
+
+
+https://docs.docker.com/reference/cli/docker/container/export/
+https://www.geeksforgeeks.org/devops/export-and-import-docker-containers-and-images/
+
+docker run" is equivalent of "docker create" + "docker start".
+docker export 30edce203817 | bzip2 > /tmp/docker_image.tar.bz2
+
+docker export foo_data_1 > foo.tar
+docker inspect foo_data_1
+tar -tf foo.tar
+
+
+CONTAINER
+docker export red_panda > latest.tar
+docker export --output="latest.tar" red_panda
+docker export <container_id> -o <filename>.tar
+docker import <filename>.tar <new_image_name>
+
+IMAGE
+https://docs.docker.com/reference/cli/docker/image/import/
+ docker import /path/to/exampleimage.tgz
+docker load < HDP_2.5_docker.tar
+
+IMAGE
+https://docs.docker.com/reference/cli/docker/image/save/
+docker save busybox > busybox.tar
+ls -sh busybox.tar
+docker save --output busybox.tar busybox
+ls -sh busybox.tar
+ls -sh busybox.tar
+docker save -o fedora-latest.tar fedora:latest
