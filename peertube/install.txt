@@ -1,0 +1,108 @@
+https://docs.joinpeertube.org/install/any-os
+https://docs.joinpeertube.org/install/docker
+https://docs.joinpeertube.org/install/unofficial
+https://henrywithu.com/peertube-v3-installation/
+https://docs.joinpeertube.org/support/doc/dependencies
+https://docs.joinpeertube.org/support/doc/dependencies#debian-ubuntu-and-derivatives
+https://docs.joinpeertube.org/use/channel-sync
+https://github.com/PabloCastellano/PeerTube-1/blob/develop/support/doc/tools.md
+https://docs.joinpeertube.org/use/library#change-ownership-of-a-video
+
+
+
+
+docker compose version # Must be > 2.x.x
+
+
+cd /your/peertube/directory
+curl https://raw.githubusercontent.com/chocobozzz/PeerTube/master/support/docker/production/docker-compose.yml > docker-compose.yml
+curl https://raw.githubusercontent.com/Chocobozzz/PeerTube/master/support/docker/production/.env > .env
+sudo nano docker-compose.yml
+sudo nano .env
+
+
+In the downloaded example .env, you must replace:
+
+<MY POSTGRES USERNAME>
+<MY POSTGRES PASSWORD>
+<MY DOMAIN> without 'https://'
+<MY EMAIL ADDRESS>
+<MY PEERTUBE SECRET>
+
+
+Install the template that the nginx container will use. 
+The container will generate the configuration by replacing ${WEBSERVER_HOST} and ${PEERTUBE_HOST} using your docker compose env file.
+
+mkdir -p docker-volume/nginx docker-volume/nginx-logs
+curl https://raw.githubusercontent.com/Chocobozzz/PeerTube/master/support/nginx/peertube > docker-volume/nginx/peertube
+
+mkdir -p docker-volume/certbot
+docker run -it --rm --name certbot -p 80:80 -v "$(pwd)/docker-volume/certbot/conf:/etc/letsencrypt" certbot/certbot certonly --standalone
+
+docker compose up
+
+docker compose exec -u peertube peertube npm run reset-password -- -u root
+
+docker compose logs peertube | grep -A1 root
+cat ./docker-volume/opendkim/keys/*/*.txt
+
+# Upgrade 
+
+cd /your/peertube/directory
+docker compose pull
+docker compose down -v
+
+mv docker-volume/nginx/peertube docker-volume/nginx/peertube.bak
+curl https://raw.githubusercontent.com/Chocobozzz/PeerTube/master/support/nginx/peertube > docker-volume/nginx/peertube
+
+docker compose up -d
+
+
+# Upgrade PostgreSQL container
+
+cd /docker-compose/directory
+mkdir -p backups
+docker compose stop peertube webserver certbot
+docker compose exec -it postgres /bin/bash
+
+export PGUSER="$POSTGRES_USER"
+export PGDATABASE="$POSTGRES_DB"
+export PGPASSWORD="$POSTGRES_PASSWORD"
+pg_dumpall > "/tmp/pg.dump"
+
+exit
+
+docker compose cp postgres:/tmp/pg.dump backups/pg.dump
+
+docker compose stop postgres
+mv ./docker-volume/db ./docker-volume/db.bak
+mkdir ./docker-volume/db && chmod 700 ./docker-volume/db
+
+Upgrade your PostgreSQL container version (for example replace postgres:13-alpine by postgres:17-alpine):
+vim docker-compose.yml
+
+docker compose pull
+docker compose up -d postgres
+docker compose logs -f postgres
+docker compose cp "backups/pg.dump" postgres:/tmp/pg.dump
+docker compose exec -it postgres /bin/bash
+
+export PGUSER="$POSTGRES_USER"
+export PGDATABASE="$POSTGRES_DB"
+export PGPASSWORD="$POSTGRES_PASSWORD"
+psql -U "$POSTGRES_USER" -c "SELECT version();"
+psql -U "$POSTGRES_USER" -f /tmp/pg.dump
+psql -U "$POSTGRES_USER" -c "ALTER USER $POSTGRES_USER WITH PASSWORD '$POSTGRES_PASSWORD';"
+
+exit
+
+docker compose up -d peertube webserver certbot
+docker compose logs -f peertube
+
+rm -rf ./docker-volume/db.bak backups
+
+# Build
+
+git clone https://github.com/chocobozzz/PeerTube /tmp/peertube
+cd /tmp/peertube
+docker build . -f ./support/docker/production/Dockerfile

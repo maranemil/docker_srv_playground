@@ -1,0 +1,30 @@
+
+https://pi-hole.net/
+https://docs.pi-hole.net/main/
+https://docs.pi-hole.net/main/basic-install/
+https://docs.pi-hole.net/main/prerequisites/
+https://github.com/pi-hole/docker-pi-hole/#running-pi-hole-docker
+https://docs.pi-hole.net/docker/
+
+docker run --name pihole -p 53:53/tcp -p 53:53/udp -p 80:80/tcp -p 443:443/tcp -e TZ=Europe/London -e FTLCONF_webserver_api_password="correct horse battery staple" -e FTLCONF_dns_listeningMode=all -v ./etc-pihole:/etc/pihole -v ./etc-dnsmasq.d:/etc/dnsmasq.d --cap-add NET_ADMIN --restart unless-stopped pihole/pihole:latest
+
+failed to bind host port 0.0.0.0:53/tcp: address already in use
+https://discourse.pi-hole.net/t/docker-unable-to-bind-to-port-53/45082/14
+sudo lsof -i :53
+sudo lsof -i -P -n | grep LISTEN
+systemctl disable systemd-resolved.service
+systemctl stop systemd-resolved
+
+Now you have port 53 open, but no dns configured for your host. To fix that, you need to edit '/etc/resolv.conf' and add the dns address. This is an example with a common dns address:
+sudo nano /etc/resolv.conf
+nameserver 8.8.8.8
+
+If you have another nameserver in that file, I would comment it to prevent issues.
+Once pihole docker container gets running, you can change the dns server of your host to localhost, as you are binding port 53 to the host machine. Change again '/etc/resolv.conf' like this
+sudo nano /etc/resolv.conf
+nameserver 127.0.0.1
+
+docker start pihole
+docker exec -it pihole bash
+
+# github will not work 
