@@ -28,3 +28,32 @@ docker start pihole
 docker exec -it pihole bash
 
 # github will not work 
+
+################# ERRR ##########################
+
+docker unhealthy container
+communications error to 127.0.0.1#53: connection refused\n;; no servers could be reached
+
+docker inspect --format "{{json .State.Health }}" pihole | jq
+
+
+1. The Quick Temporary Fix (Get Internet Back)
+sudo nano /etc/resolv.conf
+nameserver 8.8.8.8
+nameserver 1.1.1.1
+
+
+2. Permanent Solutions (Depending on your Setup)
+sudo systemctl unmask systemd-resolved
+sudo systemctl enable systemd-resolved
+sudo systemctl start systemd-resolved
+sudo unlink /etc/resolv.conf
+sudo ln -s /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+
+
+
+Scenario B: You are trying to run a local DNS service (Pi-hole, AdGuard, or Unbound)
+sudo systemctl status pihole-FTL
+sudo systemctl status unbound
+sudo ss -tulpn | grep :53
+
