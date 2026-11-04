@@ -57,3 +57,44 @@ sudo systemctl status pihole-FTL
 sudo systemctl status unbound
 sudo ss -tulpn | grep :53
 
+#################
+
+change password
+
+sudo docker exec -it pihole pihole setpassword
+pihole-FTL --config webserver.api.password
+
+docker logs pihole
+docker logs pihole | grep -A 4 -B 2 pass
+docker inspect pihole | grep -B 4 pass
+cat /etc/pihole/pihole.toml | grep -A 4 pass
+
+
+sqlite3 /etc/pihole/pihole-FTL.db "SELECT * FROM queries LIMIT 10;"
+sudo pihole-FTL sqlite3 /etc/pihole/pihole-FTL.db "SELECT * FROM queries LIMIT 10;"
+sudo pihole-FTL sqlite3 /etc/pihole/pihole-FTL.db "SELECT name FROM sqlite_schema WHERE  type ='table' AND name NOT LIKE 'sqlite_%';"
+sudo pihole-FTL sqlite3 /etc/pihole/pihole-FTL.db "SELECT * FROM ftl LIMIT 10;"
+sudo pihole-FTL sqlite3 /etc/pihole/gravity.db "SELECT name FROM sqlite_schema WHERE  type ='table' AND name NOT LIKE 'sqlite_%';"
+sudo pihole-FTL sqlite3 /etc/pihole/gravity.db "SELECT * FROM client LIMIT 10;"
+
+sudo sqlite3 /etc/pihole/pihole-FTL.db
+sudo sqlite3 /etc/pihole/pihole-FTL.db ".backup /home/pi/pihole-FTL_backup.db"
+
+ls -lh /etc/pihole/pihole-FTL.db
+
+cat /etc/pihole/dnsmasq.conf
+
+docker exec -it pihole bash
+pihole setpassword
+pihole -v
+
+http://127.0.0.1/admin/network
+
+
+https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+https://github.com/stevejenkins/pi-hole-lists/
+https://github.com/stevejenkins/pi-hole-lists/blob/main/blocklists.txt
+https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/pro.txt
+https://github.com/topics/pihole-blocklists
+
