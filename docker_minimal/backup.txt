@@ -1,0 +1,128 @@
+# Save docker images
+
+
+Quick version (bash / macOS / Linux)
+-----------------------------
+mkdir -p docker-images
+docker images --format '{{.Repository}}:{{.Tag}}' | grep -v '<none>' | while read -r img; do
+  name=$(echo "$img" | tr '/:@' '___')
+  echo "Saving $img"
+  docker save -o "docker-images/${name}.tar" "$img"
+done
+
+
+
+restore
+-----------------------------
+for f in docker-images/*.tar*; do
+  echo "Loading $f"
+  docker load -i "$f"
+done
+
+https://docs.docker.com/reference/cli/docker/image/save/
+https://docs.docker.com/reference/cli/docker/image/load/
+
+# Create a backup that can then be used with docker load.
+docker save busybox > busybox.tar
+ls -sh busybox.tar
+docker save --output busybox.tar busybox
+ls -sh busybox.tar
+docker save -o fedora-all.tar fedora
+docker save -o fedora-latest.tar fedora:latest
+
+# Save an image to a tar.gz file using gzip
+docker save myimage:latest | gzip > myimage_latest.tar.gz
+
+# Cherry-pick particular tags
+docker save -o ubuntu.tar ubuntu:lucid ubuntu:saucy
+
+docker pull --platform=linux/riscv64 alpine:latest
+docker image save --platform=linux/riscv64 -o alpine-riscv.tar alpine:latest
+ls -lh image.tar
+
+docker image ls --tree
+
+docker image ls
+docker load < busybox.tar.gz
+docker load --input fedora.tar
+docker image load -i image.tar --platform=linux/amd64
+
+---------------------------------------
+
+# Save everything into one archive
+-----------------------------
+docker save -o all-images.tar $(docker images --format '{{.Repository}}:{{.Tag}}' | grep -v '<none>')
+
+
+# Compressed (usually much smaller):
+-----------------------------
+docker save $(docker images --format '{{.Repository}}:{{.Tag}}' | grep -v '<none>') | gzip > all-images.tar.gz
+
+
+# Save each image as its own file
+-----------------------------
+mkdir -p docker-images
+docker images --format '{{.Repository}}:{{.Tag}}' | grep -v '<none>' | while read -r img; do
+  file=$(echo "$img" | tr '/:' '__')
+  docker save -o "docker-images/${file}.tar" "$img"
+done
+
+
+# Restore
+-----------------------------
+docker load -i all-images.tar
+# or
+gunzip -c all-images.tar.gz | docker load
+
+
+# restore a whole folder
+-----------------------------
+for f in docker-images/*.tar; do docker load -i "$f"; done
+
+
+# Straight to another machine over SSH:
+-----------------------------
+docker save $(docker images --format '{{.Repository}}:{{.Tag}}' | grep -v '<none>') \
+  | gzip | ssh user@host 'gunzip | docker load'
+
+  
+PowerShell (Windows)
+-----------------------------
+$images = docker images --format "{{.Repository}}:{{.Tag}}" | Where-Object { $_ -notmatch "<none>" }
+docker save -o all-images.tar $images
+
+
+
+Dangling / untagged images
+-----------------------------
+docker images -f dangling=true -q | while read -r id; do
+  docker save -o "docker-images/dangling_${id}.tar" "$id"
+done
+
+
+
+Windows PowerShell
+-----------------------------
+$out = "docker-images"
+New-Item -ItemType Directory -Force -Path $out | Out-Null
+
+docker images --format "{{.Repository}}:{{.Tag}}" |
+  Where-Object { $_ -notmatch "<none>" } |
+  ForEach-Object {
+    $name = $_ -replace '[/:@]', '_'
+    Write-Host "Saving $_"
+    docker save -o "$out\$name.tar" $_
+  }
+
+
+
+
+  
+
+
+
+
+
+
+
+
