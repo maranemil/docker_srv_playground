@@ -1,3 +1,28 @@
+
+https://docs.docker.com/reference/cli/docker/container/run/
+
+docker image ls
+docker image rm rocm/rocm-terminal:latest
+docker image rm rocm/pytorch:rocm10.0_ubuntu24.04_py3.11_pytorch_release_2.13.0
+
+mkdir -p docker-images
+cd docker-images/
+docker save -o ubuntu_latest.tar  ubuntu:latest
+docker save -o debian_latest.tar  debian:latest
+docker save -o docker_latest.tar  docker:latest
+docker save -o jupyter-scipy_latest.tar  jupyter/scipy-notebook:latest 
+docker save -o ollama_latest.tar  ollama/ollama:latest 
+docker save -o python3_10_latest.tar python:3.10 
+docker save -o pihole_latest.tar pihole/pihole:latest
+
+docker run --rm -it --pid=host alpine
+docker run -t -i --mount type=bind,src=/data,dst=/data busybox sh
+docker run -p 127.0.0.1:80:8080/tcp nginx:alpine
+docker run  --rm  --network=host  -it --name python3agate  -v ./src:/app python:3.10  bash #
+docker run --rm -it --pid=host   -v ./src:/app   rocm/rocm-terminal:latest bash
+
+-------------------------------------------------------
+
 # Save docker images
 
 
